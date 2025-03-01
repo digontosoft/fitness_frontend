@@ -1,0 +1,31 @@
+import { cartOne,cartTwo,cartThree,cartFour,cartFive,cartSix,cartSeven } from "../assets/index";
+export const NutrationData=[
+    {
+        _id:1,
+        icon:cartOne,
+    },
+    {
+        _id:2,
+        icon:cartTwo,
+    },
+    {
+        _id:3,
+        icon:cartThree,
+    },
+    {
+        _id:4,
+        icon:cartFour,
+    },
+    {
+        _id:5,
+        icon:cartFive,
+    },
+    {
+        _id:6,
+        icon:cartSix,
+    },
+    {
+        _id:7,
+        icon:cartSeven,
+    },
+]

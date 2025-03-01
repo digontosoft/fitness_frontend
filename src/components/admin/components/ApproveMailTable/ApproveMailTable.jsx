@@ -1,0 +1,255 @@
+import * as React from "react";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { ArrowUpDown, Trash } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import AddMail from "./AddMail";
+import { fetchEmail } from "@/api/fetchEmail";
+import { updateEmailStatus } from "@/api/updateData";
+import axios from "axios";
+import { toast } from "sonner";
+import { deleteEmail } from "@/api/deleteData";
+import { base_url } from "@/api/baseUrl";
+
+export function ApproveMailTable() {
+  const [sorting, setSorting] = React.useState([]);
+  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [columnVisibility, setColumnVisibility] = React.useState({});
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [emails, setEmails] = React.useState([]);
+
+  const columns = [
+    {
+      accessorKey: "email",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Email
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("email")}</div>
+      ),
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => (
+        <div className="flex space-x-2">
+          <Button
+            className="bg-customBg"
+            size="sm"
+            onClick={() => handleDelete(row.original)}
+          >
+            <Trash />
+          </Button>
+          <Button
+            // variant="secondary"
+            className="border bg-white hover:bg-white"
+            size="sm"
+            onClick={() => handleStatus(row.original)}
+          >
+            {row.original.isActive === true ? (
+              <span className="text-red-500">Deactivate</span>
+            ) : (
+              <span className="text-green-500">Activate</span>
+            )}
+          </Button>
+        </div>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+  ];
+
+  const handleStatus = async (rowData) => {
+    const updatedStatus = !rowData.isActive;
+    const data = {
+      ...rowData,
+      isActive: updatedStatus,
+    };
+
+    try {
+      const response = await axios.patch(
+        `${base_url}/update-approved-mail`,
+        data
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setEmails((prevEmails) =>
+          prevEmails.map((email) =>
+            email._id === rowData._id
+              ? { ...email, isActive: updatedStatus }
+              : email
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status.");
+    }
+  };
+
+  const handleDelete = async (rowData) => {
+    try {
+      await deleteEmail(rowData);
+      setEmails((prevEmails) =>
+        prevEmails.filter((email) => email._id !== rowData._id)
+      );
+    } catch (error) {
+      console.error("Error deleting email:", error);
+    }
+  };
+
+  const table = useReactTable({
+    data: emails,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${base_url}/approved-mail`);
+      console.log("emails:", response.data);
+      setEmails(response.data.approvedEmail);
+    } catch (error) {
+      console.error("Error fetching email:", error);
+      throw error;
+    }
+  };
+  React.useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <div className="w-full" dir="ltr">
+      <div className="flex items-center justify-between py-4">
+        <Input
+          placeholder="Filter emails..."
+          value={table.getColumn("email")?.getFilterValue() ?? ""}
+          onChange={(event) =>
+            table.getColumn("email")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <AddMail setEmails={fetchData} />
+      </div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={!table.getCanPreviousPage()}
+          onClick={() => table.previousPage()}
+        >
+          Previous
+        </Button>
+        <div className="flex items-center space-x-2">
+          {Array.from({ length: table.getPageCount() }, (_, index) => (
+            <Button
+              key={index}
+              className={`${
+                table.getState().pagination.pageIndex === index
+                  ? "bg-customBg"
+                  : "bg-white text-black border hover:text-white"
+              }`}
+              size="sm"
+              onClick={() => table.setPageIndex(index)}
+            >
+              {index + 1}
+            </Button>
+          ))}
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={!table.getCanNextPage()}
+          onClick={() => table.nextPage()}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,62 @@
+import React from "react";
+import { courseOne, courseTwo, courseThree, courseFour } from "@/assets";
+import CourseCart from "./CourseCart";
+
+const courseData = [
+  {
+    _id: 1,
+    image: courseThree,
+    courseTitle: "חכם בסופר",
+    courseParagraph:
+      "קורס קצר וקליל שיתן לכם כלים סופר חשובים להתנהלות נכונה בסופר ימקד אתכם לקנייה חכמה וצריכת חלבון גבוהה יותר.",
+    paid: false,
+  },
+  {
+    _id: 2,
+    image: courseTwo,
+    courseTitle: "חכם במטבח",
+    courseParagraph:
+      "קורס קצר וקליל שיתן לכם כלים סופר חשובים להתנהלות נכונה בסופר ימקד אתכם לקנייה חכמה וצריכת חלבון גבוהה יותר.",
+    paid: false,
+  },
+
+  {
+    _id: 3,
+    image: courseOne,
+    courseTitle: "ספר המתכונים",
+    courseParagraph:
+      "קורס קצר וקליל שיתן לכם כלים סופר חשובים להתנהלות נכונה בסופר ימקד אתכם לקנייה חכמה וצריכת חלבון גבוהה יותר.",
+    paid: false,
+  },
+  {
+    _id: 4,
+    image: courseFour,
+    courseTitle: "תזונה ואימונים",
+    courseParagraph:
+      "קורס קצר וקליל שיתן לכם כלים סופר חשובים להתנהלות נכונה בסופר ימקד אתכם לקנייה חכמה וצריכת חלבון גבוהה יותר.",
+    paid: true,
+  },
+];
+const CourseGroup = () => {
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div
+        className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-10 pb-10 justify-items-center items-center"
+        dir="rtl"
+      >
+        {courseData?.map((item) => (
+          <CourseCart
+            key={item._id}
+            _id={item._id}
+            image={item.image}
+            courseTitle={item.courseTitle}
+            courseParagraph={item.courseParagraph}
+            paid={item.paid}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default CourseGroup;
