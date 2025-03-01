@@ -1,0 +1,40 @@
+name: Deploy Frontend to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: SSH into EC2 and deploy the frontend
+      - name: Deploy to AWS EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            # Update and install necessary packages
+            sudo apt-get update -y
+            sudo apt-get install -y nginx
+
+            # Go to the frontend directory, pull latest code, and build
+            cd ~/frontend
+            git pull origin main
+            npm install
+            npm run build
+
+            # Copy build to Nginx's public directory
+            sudo cp -r ~/frontend/build/* /var/www/html/
+
+            # Restart Nginx to serve the updated frontend
+            sudo systemctl restart nginx
