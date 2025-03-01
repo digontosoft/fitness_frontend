@@ -1,5 +1,5 @@
 import React from "react";
-import PersonalNutrationCart from "./personalNutrationCart";
+import PersonalNutrationCart from "./PersonalNutrationCart.jsx";
 import { cartFour } from "@/assets";
 const personalNutrationData = [
   {
