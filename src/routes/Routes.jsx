@@ -45,6 +45,7 @@ import AddNutrition from "@/pages/admin/managenutritionguides/AddNutrition";
 import NutritionLists from "@/pages/admin/managenutritionguides/NutritionLists";
 import EditNutrition from "@/pages/admin/managenutritionguides/EditNutrition";
 import NutritionDetails from "@/pages/admin/managenutritionguides/NutritionDetails";
+import ThankYou from "@/pages/thankyou/Thankyou";
 export const routes = createBrowserRouter([
   {
     element: (
@@ -267,5 +268,9 @@ export const routes = createBrowserRouter([
   {
     path: "/loading",
     element: <GlobalLoading />,
+  },
+  {
+    path: "/thankyou",
+    element: <ThankYou />,
   },
 ]);
