@@ -7,7 +7,7 @@ const CourseList = () => {
   return (
     <div>
       <WorkOutListBaground bgImg={excersizeBg} />
-      <Title tilte={"מאגר תרגילים"} />
+      <Title tilte={"ספריית תרגילים"} />
       <CourseListGroup />
     </div>
   );

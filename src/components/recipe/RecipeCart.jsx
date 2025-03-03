@@ -1,6 +1,5 @@
-import React from "react";
 import { RecipeBookCart } from "@/assets";
-const RecipeCart = () => {
+const RecipeCart = ({ recipe }) => {
   return (
     <div className="flex flex-col justify-center items-center pb-10  px-4">
       <img className="pb-10" src={RecipeBookCart} alt="" />

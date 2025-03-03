@@ -25,7 +25,7 @@ const TraineerUi = ({ userId }) => {
     <div className="space-y-12">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
-        <span>{user?.firstName + " " + user?.lastName}</span>
+        {userId ? <span>{user?.firstName + " " + user?.lastName}</span> : <></>}
       </div>
       <div className="flex items-center justify-center gap-5">
         <TraineeRightCard />

@@ -7,7 +7,7 @@ const Course = () => {
   return (
     <div className="">
       <WorkOutListBaground bgImg={courseBg} />
-      <CourseTitle title={"הקורסים של פיטל"} />
+      <CourseTitle title={"קורסים"} />
       <CourseGroup />
     </div>
   );

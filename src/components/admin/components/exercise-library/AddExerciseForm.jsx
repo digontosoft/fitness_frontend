@@ -115,7 +115,7 @@ const AddExerciseForm = ({ exerciseId }) => {
             type="submit"
             className=" text-white px-4 md:px-8 py-2 rounded-full bg-custom-radial"
           >
-            הוסף תרגיל למאגר
+            {exerciseId ? " עדכון תרגיל" : " הוסף תרגיל למאגר"}
           </Button>
         </div>
       </form>

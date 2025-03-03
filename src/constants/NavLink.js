@@ -21,8 +21,8 @@ export const traineeLink = [
   },
   {
     _id: 3,
-    title: "קורסים",
-    link: "/courses",
+    title: "תרגילים",
+    link: "/exercise-library",
     icon: Course,
   },
   {
@@ -42,6 +42,12 @@ export const traineeLink = [
     title: "מדריך תזונה",
     link: "/nutrition-guide",
     icon: NutrationGuide,
+  },
+  {
+    _id: 7,
+    title: "קורסים",
+    link: "/courses",
+    icon: Course,
   },
 ];
 export const adminLink = [

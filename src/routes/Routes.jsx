@@ -95,15 +95,15 @@ export const routes = createBrowserRouter([
             element: <WorkOutList />,
           },
           {
-            path: "/courses",
+            path: "/exercise-library",
             element: <CourseList />,
           },
           {
-            path: "/course",
+            path: "/courses",
             element: <Course />,
           },
           {
-            path: "startTraining",
+            path: "/startTraining",
             element: <StartTraining />,
           },
           {
@@ -119,11 +119,11 @@ export const routes = createBrowserRouter([
             element: <ActionCourseCart />,
           },
           {
-            path: "/progress-course-cart",
+            path: "/personal-workout/:id",
             element: <ProgressCourseCart />,
           },
           {
-            path: "/supermarket",
+            path: "/supermarket/:id",
             element: <Supermarket />,
           },
           {

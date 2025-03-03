@@ -3,7 +3,11 @@ import React from "react";
 const WorkOutListBaground = ({ bgImg }) => {
   return (
     <div>
-      <img className="w-full h-[300px] md:h-full " src={bgImg} alt="" />
+      <img
+        className="w-full h-[400px] object-cover object-center"
+        src={bgImg}
+        alt=""
+      />
     </div>
   );
 };

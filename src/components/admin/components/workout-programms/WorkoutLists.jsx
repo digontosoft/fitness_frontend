@@ -164,7 +164,7 @@ export default function WorkoutLists({ workoutId }) {
         />
         <Link to="/dashboard/workout-programme">
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            הוסף תרגיל חדש
+            הוסף אימון חדש
           </Button>
         </Link>
       </div>
