@@ -33,7 +33,7 @@ jobs:
           script: |
             cd ~/frontend/fitness_frontend
             git pull origin main
-            rm -rf node_modules package-lock.json
+            rm -rf node_modules package-lock.json dist
             npm cache clean --force
             npm install
             npm run build
