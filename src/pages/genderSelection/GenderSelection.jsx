@@ -40,7 +40,7 @@ const GenderSelection = () => {
             localStorage.setItem("authToken", token);
             localStorage.setItem("userInfo", JSON.stringify(userData));
             if (
-              userData?.userType === "recipe" &&
+              userData?.userType === "admin" &&
               userData?.isNewUser === false
             ) {
               navigate("/dashboard");
