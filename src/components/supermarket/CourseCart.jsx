@@ -1,6 +1,3 @@
-import React from "react";
-import ReactPlayer from "react-player";
-
 const CourseCart = ({ video }) => {
   return (
     <div className="w-full px-4">
@@ -9,19 +6,15 @@ const CourseCart = ({ video }) => {
       </h1>
       <div className="w-full flex justify-center">
         <div className="w-full md:w-3/4 lg:w-2/3">
-          {/* <ReactPlayer
-            url={video?.videoLink}
-            width="100%"
-            height="400px"
-            controls
-            className="rounded-xl border border-gray-200 shadow-lg overflow-hidden"
-          /> */}
-          <iframe
-            src={video?.videoLink}
-            width="100%"
-            height="400px"
-            allow="autoplay"
-          ></iframe>
+          <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
+            <iframe
+              src={video?.videoLink}
+              className=" w-full h-full object-center"
+              frameBorder="0"
+              allow="autoplay"
+              style={{ aspectRatio: "16/9" }}
+            ></iframe>
+          </div>
         </div>
       </div>
     </div>
