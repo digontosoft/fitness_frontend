@@ -1,16 +1,9 @@
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 export function WelcomeModal({ isModalOpen, setIsModalOpen }) {
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <DialogContent className="sm:max-w-[739px] h-[546px] rounded-full border-none">
+      <DialogContent className="sm:max-w-[739px] sm:h-[546px] border-none">
         <div className="space-y-5">
           <div className="flex flex-col items-center justify-center space-y-2">
             <h1 className="text-2xl font-bold" dir="rtl">

@@ -45,6 +45,7 @@ import AddNutrition from "@/pages/admin/managenutritionguides/AddNutrition";
 import NutritionLists from "@/pages/admin/managenutritionguides/NutritionLists";
 import EditNutrition from "@/pages/admin/managenutritionguides/EditNutrition";
 import NutritionDetails from "@/pages/admin/managenutritionguides/NutritionDetails";
+import ThankYou from "@/pages/thankyou/Thankyou";
 export const routes = createBrowserRouter([
   {
     element: (
@@ -94,15 +95,15 @@ export const routes = createBrowserRouter([
             element: <WorkOutList />,
           },
           {
-            path: "/courses",
+            path: "/exercise-library",
             element: <CourseList />,
           },
           {
-            path: "/course",
+            path: "/courses",
             element: <Course />,
           },
           {
-            path: "startTraining",
+            path: "/startTraining",
             element: <StartTraining />,
           },
           {
@@ -118,11 +119,11 @@ export const routes = createBrowserRouter([
             element: <ActionCourseCart />,
           },
           {
-            path: "/progress-course-cart",
+            path: "/personal-workout/:id",
             element: <ProgressCourseCart />,
           },
           {
-            path: "/supermarket",
+            path: "/supermarket/:id",
             element: <Supermarket />,
           },
           {
@@ -267,5 +268,9 @@ export const routes = createBrowserRouter([
   {
     path: "/loading",
     element: <GlobalLoading />,
+  },
+  {
+    path: "/thankyou",
+    element: <ThankYou />,
   },
 ]);

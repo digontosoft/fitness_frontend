@@ -3,7 +3,6 @@ import CourseContent from "@/components/courseList/CourseContent";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 import LastExercise from "@/components/startTraining/LastExercise";
 import Title from "@/components/measurements/Tilte";
-import React from "react";
 import ExcersizeInput from "@/components/startTraining/ExcersizeInput";
 const StartTraining = () => {
   return (

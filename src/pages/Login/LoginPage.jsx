@@ -44,12 +44,12 @@ const LoginPage = () => {
       </div>
       <div className="flex flex-col justify-center items-center gap-8 w-full">
         <LoginButton
-          role="admin"
+          role="trainee"
           text="התחברות מהירה באמצעות גוגל"
           className="bg-[#151515] hover:bg-gray-700 transition duration-300 px-2"
         />
         <LoginButton
-          role="trainee"
+          role="recipe"
           text="התחברות ללקוחות ספר המתכונים"
           className="w-full bg-gradient-to-tr from-[#FD4753] to-[#940019] hover:opacity-80 transition duration-300 px-4"
         />

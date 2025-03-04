@@ -171,7 +171,7 @@ export function TrainingList({ userId }) {
         />
         <Link to="/dashboard/trining-program">
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            הוסף תרגיל חדש
+            הוסף אימון חדש
           </Button>
         </Link>
       </div>

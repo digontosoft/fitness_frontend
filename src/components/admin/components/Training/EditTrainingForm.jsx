@@ -175,52 +175,61 @@ const EditTrainingForm = ({ trainingId, userId }) => {
             {workout.exercises.map((ex, exIndex) => (
               <div key={exIndex}>
                 <p className="col-span-1 font-medium">{ex.name}</p>
-                <div className="grid grid-cols-3 gap-4">
-                  <input
-                    type="number"
-                    value={ex.sets}
-                    onChange={(e) => {
-                      const updatedExercises = [...workout.exercises];
-                      updatedExercises[exIndex].sets = e.target.value;
-                      setSelectedTrainingExercises((prev) => {
-                        const updated = [...prev];
-                        updated[wIndex].exercises = updatedExercises;
-                        return updated;
-                      });
-                    }}
-                    className="border rounded p-2 w-full"
-                    placeholder="Sets"
-                  />
-                  <input
-                    type="number"
-                    value={ex.reps}
-                    onChange={(e) => {
-                      const updatedExercises = [...workout.exercises];
-                      updatedExercises[exIndex].reps = e.target.value;
-                      setSelectedTrainingExercises((prev) => {
-                        const updated = [...prev];
-                        updated[wIndex].exercises = updatedExercises;
-                        return updated;
-                      });
-                    }}
-                    className="border rounded p-2 w-full"
-                    placeholder="Reps"
-                  />
-                  <input
-                    type="text"
-                    value={ex.manipulation}
-                    onChange={(e) => {
-                      const updatedExercises = [...workout.exercises];
-                      updatedExercises[exIndex].manipulation = e.target.value;
-                      setSelectedTrainingExercises((prev) => {
-                        const updated = [...prev];
-                        updated[wIndex].exercises = updatedExercises;
-                        return updated;
-                      });
-                    }}
-                    className="border rounded p-2 w-full"
-                    placeholder="Manipulation"
-                  />
+                <div className="grid grid-cols-3 gap-4 mt-4">
+                  <div className="space-y-2">
+                    <label htmlFor="sets">Sets</label>
+                    <input
+                      type="number"
+                      value={ex.sets}
+                      onChange={(e) => {
+                        const updatedExercises = [...workout.exercises];
+                        updatedExercises[exIndex].sets = e.target.value;
+                        setSelectedTrainingExercises((prev) => {
+                          const updated = [...prev];
+                          updated[wIndex].exercises = updatedExercises;
+                          return updated;
+                        });
+                      }}
+                      className="border rounded p-2 w-full"
+                      placeholder="Sets"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="reps">Reps</label>
+                    <input
+                      type="number"
+                      value={ex.reps}
+                      onChange={(e) => {
+                        const updatedExercises = [...workout.exercises];
+                        updatedExercises[exIndex].reps = e.target.value;
+                        setSelectedTrainingExercises((prev) => {
+                          const updated = [...prev];
+                          updated[wIndex].exercises = updatedExercises;
+                          return updated;
+                        });
+                      }}
+                      className="border rounded p-2 w-full"
+                      placeholder="Reps"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="manipulation">Manipulation</label>
+                    <input
+                      type="text"
+                      value={ex.manipulation}
+                      onChange={(e) => {
+                        const updatedExercises = [...workout.exercises];
+                        updatedExercises[exIndex].manipulation = e.target.value;
+                        setSelectedTrainingExercises((prev) => {
+                          const updated = [...prev];
+                          updated[wIndex].exercises = updatedExercises;
+                          return updated;
+                        });
+                      }}
+                      className="border rounded p-2 w-full"
+                      placeholder="Manipulation"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
@@ -232,7 +241,7 @@ const EditTrainingForm = ({ trainingId, userId }) => {
             type="submit"
             className="bg-customBg text-white px-4 py-2 rounded-full"
           >
-            Update Training
+            {userId ? "Assign Training" : " Update Training"}
           </Button>
         </div>
       </form>

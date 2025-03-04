@@ -145,7 +145,7 @@ const EditNutrition = () => {
                   type="submit"
                   className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
                 >
-                  {id ? "Add Nutrition Menu" : "Add Nutrition Guide"}
+                  {id ? "עדכון תפריט תזונה" : "הוסף מדריך תזונה"}
                 </Button>
               </div>
             </form>

@@ -165,9 +165,9 @@ export function NutritionList() {
           }
           className="max-w-sm"
         />
-        <Link to="/dashboard/exercise-library">
+        <Link to="/dashboard/add-nutrition-guide">
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            הוסף תרגיל חדש
+            הוסף תזונה חדשה
           </Button>
         </Link>
       </div>

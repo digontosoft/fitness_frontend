@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { courseOne, courseTwo, courseThree, courseFour } from "@/assets";
 import CourseCart from "./CourseCart";
+import axios from "axios";
+import { base_url } from "@/api/baseUrl";
 
 const courseData = [
   {
@@ -38,21 +40,30 @@ const courseData = [
   },
 ];
 const CourseGroup = () => {
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        axios.get(`${base_url}/course`).then((res) => {
+          if (res.status === 200) {
+            setCourses(res.data.data);
+            console.log("courses:", res?.data.data);
+          }
+        });
+      } catch (err) {
+        console.log("courses:", err);
+      }
+    };
+    fetchCourses();
+  }, []);
   return (
     <div className="max-w-6xl mx-auto">
       <div
         className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-10 pb-10 justify-items-center items-center"
         dir="rtl"
       >
-        {courseData?.map((item) => (
-          <CourseCart
-            key={item._id}
-            _id={item._id}
-            image={item.image}
-            courseTitle={item.courseTitle}
-            courseParagraph={item.courseParagraph}
-            paid={item.paid}
-          />
+        {courses?.map((course) => (
+          <CourseCart key={course._id} course={course} />
         ))}
       </div>
     </div>
