@@ -6,15 +6,27 @@ const CourseCart = ({ video }) => {
       </h1>
       <div className="w-full flex justify-center">
         <div className="w-full md:w-3/4 lg:w-2/3">
-          <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
-            <iframe
-              src={video?.videoLink}
-              className=" w-full h-full object-center"
-              frameBorder="0"
-              allow="autoplay"
-              style={{ aspectRatio: "16/9" }}
-            ></iframe>
-          </div>
+          <iframe
+            src={video?.videoLink}
+            // src={
+            //   "https://res.cloudinary.com/dt3qrt76n/video/upload/v1716032300/Videos/Course_Status_Programming_Hero_9_ivnnxe.mp4"
+            // }
+            width="100%"
+            height="500px"
+            allow="autoplay"
+            className="aspect-video overflow-hidden object-cover"
+          ></iframe>
+
+          {/* <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/iajv8y-6n3Q?si=BR-YRbRtp3r8r_hG"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe> */}
         </div>
       </div>
     </div>

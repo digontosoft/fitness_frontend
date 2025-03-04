@@ -28,7 +28,7 @@ const CourseGroup = () => {
         className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-10 pb-10 justify-items-center items-center"
         dir="rtl"
       >
-        <div className="relative w-80 bg-white shadow-md rounded-2xl p-4 overflow-hidden">
+        <div className="relative w-80 h-[450px] bg-white shadow-md rounded-2xl p-4 overflow-hidden">
           {/* Card Content */}
           <div className="flex flex-col justify-between items-center gap-6 relative z-10">
             <img src={cartFor} alt="Course" className="rounded-xl" />
