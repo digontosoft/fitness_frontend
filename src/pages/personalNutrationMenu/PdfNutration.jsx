@@ -4,7 +4,7 @@ import Loading from "@/components/common/Loading";
 import ParsonalPdf from "@/components/nutritionGuides/personalNutration/ParsonalPdf";
 import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const PdfNutration = () => {
