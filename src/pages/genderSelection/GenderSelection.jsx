@@ -1,4 +1,3 @@
-import { verifyToken } from "@/constants/verifyToken";
 import { female, man, bodyBuilder } from "../../assets/index";
 import { Button } from "@/components/ui/button";
 import { useContext, useState } from "react";
@@ -14,11 +13,7 @@ const GenderSelection = () => {
   const [loading, setLoading] = useState(false);
   const { setUserInfo } = useContext(UserInfoContext);
   const navigate = useNavigate();
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("token");
-
-  const { id } = verifyToken(token);
-  // console.log("userId:", id._id);
+  const id = JSON.parse(localStorage.getItem("userInfo"));
 
   const handleGenderSelection = (value) => {
     setGender(value);
@@ -37,21 +32,7 @@ const GenderSelection = () => {
           if (response.status === 200) {
             const userData = response.data.data;
             setUserInfo(userData);
-            localStorage.setItem("authToken", token);
-            localStorage.setItem("userInfo", JSON.stringify(userData));
-            if (
-              userData?.userType === "admin" &&
-              userData?.isNewUser === false
-            ) {
-              navigate("/dashboard");
-            } else if (
-              userData?.userType === "trainee" &&
-              userData?.isNewUser === false
-            ) {
-              navigate("/");
-            } else {
-              navigate("/regulation");
-            }
+            navigate("/regulation");
           }
         });
     } catch (err) {

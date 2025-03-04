@@ -98,10 +98,10 @@ export const routes = createBrowserRouter([
             path: "/exercise-library",
             element: <CourseList />,
           },
-          {
-            path: "/courses",
-            element: <Course />,
-          },
+          // {
+          //   path: "/courses",
+          //   element: <Course />,
+          // },
           {
             path: "/startTraining",
             element: <StartTraining />,
@@ -110,10 +110,10 @@ export const routes = createBrowserRouter([
             path: "/worklistVideo",
             element: <WorkOutListVideo />,
           },
-          {
-            path: "/recipe",
-            element: <RecipeBook />,
-          },
+          // {
+          //   path: "/recipe",
+          //   element: <RecipeBook />,
+          // },
           {
             path: "/action-course-cart",
             element: <ActionCourseCart />,
@@ -122,10 +122,10 @@ export const routes = createBrowserRouter([
             path: "/personal-workout/:id",
             element: <ProgressCourseCart />,
           },
-          {
-            path: "/supermarket/:id",
-            element: <Supermarket />,
-          },
+          // {
+          //   path: "/supermarket/:id",
+          //   element: <Supermarket />,
+          // },
           {
             path: "/superTwo",
             element: <SuperMarketTwo />,
@@ -250,6 +250,23 @@ export const routes = createBrowserRouter([
             element: <EditTraining />,
           },
         ],
+      },
+    ],
+  },
+  {
+    element: <Main />,
+    children: [
+      {
+        path: "/recipe",
+        element: <RecipeBook />,
+      },
+      {
+        path: "/courses",
+        element: <Course />,
+      },
+      {
+        path: "/supermarket/:id",
+        element: <Supermarket />,
       },
     ],
   },

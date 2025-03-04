@@ -47,7 +47,7 @@ const CourseCart = ({ course }) => {
           <img src={course?.image} alt={course?.title} className="rounded-xl" />
 
           <div className="flex justify-center items-center flex-col gap-4 text-[#0A2533]">
-            <h1 className="text-2xl font-bold text-center">{course?.titke}</h1>
+            <h1 className="text-2xl font-bold text-center">{course?.title}</h1>
             <p className="text-sm font-normal text-center">
               {course?.description}
             </p>

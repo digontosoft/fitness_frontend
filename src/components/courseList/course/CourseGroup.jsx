@@ -1,44 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { courseOne, courseTwo, courseThree, courseFour } from "@/assets";
+import { useEffect, useState } from "react";
 import CourseCart from "./CourseCart";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 
-const courseData = [
-  {
-    _id: 1,
-    image: courseThree,
-    courseTitle: "חכם בסופר",
-    courseParagraph:
-      "קורס קצר וקליל שיתן לכם כלים סופר חשובים להתנהלות נכונה בסופר ימקד אתכם לקנייה חכמה וצריכת חלבון גבוהה יותר.",
-    paid: false,
-  },
-  {
-    _id: 2,
-    image: courseTwo,
-    courseTitle: "חכם במטבח",
-    courseParagraph:
-      "קורס קצר וקליל שיתן לכם כלים סופר חשובים להתנהלות נכונה בסופר ימקד אתכם לקנייה חכמה וצריכת חלבון גבוהה יותר.",
-    paid: false,
-  },
-
-  {
-    _id: 3,
-    image: courseOne,
-    courseTitle: "ספר המתכונים",
-    courseParagraph:
-      "קורס קצר וקליל שיתן לכם כלים סופר חשובים להתנהלות נכונה בסופר ימקד אתכם לקנייה חכמה וצריכת חלבון גבוהה יותר.",
-    paid: false,
-  },
-  {
-    _id: 4,
-    image: courseFour,
-    courseTitle: "תזונה ואימונים",
-    courseParagraph:
-      "קורס קצר וקליל שיתן לכם כלים סופר חשובים להתנהלות נכונה בסופר ימקד אתכם לקנייה חכמה וצריכת חלבון גבוהה יותר.",
-    paid: true,
-  },
-];
 const CourseGroup = () => {
   const [courses, setCourses] = useState([]);
   useEffect(() => {

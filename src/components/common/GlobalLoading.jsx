@@ -1,17 +1,26 @@
+import { verifyToken } from "@/constants/verifyToken";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const GlobalLoading = () => {
   const navigate = useNavigate();
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+
+  const { id } = verifyToken(token);
+
+  localStorage.setItem("userInfo", JSON.stringify(id));
+  localStorage.setItem("authToken", JSON.stringify(token));
 
   useEffect(() => {
-    if (userDetails?.userType === "admin") {
+    if (id?.userType === "admin") {
       navigate("/dashboard");
-    } else if (userDetails?.userType === "trainee") {
-      navigate("/");
+    } else if (id?.userType === "trainee") {
+      id?.isNewUser ? navigate("/gender") : navigate("/");
+    } else {
+      navigate("/recipe");
     }
-  }, [userDetails, navigate]);
+  }, [id, navigate]);
 
   return (
     <div className="flex justify-center items-center w-full h-screen bg-white">

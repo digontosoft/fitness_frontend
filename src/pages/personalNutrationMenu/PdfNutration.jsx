@@ -33,9 +33,11 @@ const PdfNutration = () => {
     return <p className="text-red-500">{error}</p>;
   }
   return (
-    <div>
+    <div className="w-full">
       <WorkOutListBaground bgImg={personalNutrationBg} />
-      <ParsonalPdf data={singleData} />
+      <div className="flex items-center justify-center">
+        <ParsonalPdf data={singleData} />
+      </div>
     </div>
   );
 };
