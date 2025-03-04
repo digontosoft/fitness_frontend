@@ -31,24 +31,24 @@ export const traineeLink = [
     link: "/measurements",
     icon: Measurement,
   },
+  // {
+  //   _id: 5,
+  //   title: "מתכונים",
+  //   link: "/recipe",
+  //   icon: ReceipeUser,
+  // },
   {
     _id: 5,
-    title: "מתכונים",
-    link: "/recipe",
-    icon: ReceipeUser,
-  },
-  {
-    _id: 6,
     title: "מדריך תזונה",
     link: "/nutrition-guide",
     icon: NutrationGuide,
   },
-  {
-    _id: 7,
-    title: "קורסים",
-    link: "/courses",
-    icon: Course,
-  },
+  // {
+  //   _id: 7,
+  //   title: "קורסים",
+  //   link: "/courses",
+  //   icon: Course,
+  // },
 ];
 export const adminLink = [
   {
@@ -121,38 +121,14 @@ export const adminLink = [
 export const recipeLink = [
   {
     _id: 1,
-    title: "Home",
-    link: "/",
-    icon: NutrationGuide,
+    title: "מתכונים",
+    link: "/recipe",
+    icon: ReceipeUser,
   },
-  // {
-  //   _id: 7,
-  //   title: "Home",
-  //   link: "/dashboard",
-  //   icon: NutrationGuide,
-  // },
-  // {
-  //   _id: 8,
-  //   title: "Workout Programm",
-  //   link: "/dashboard/workout-programme",
-  //   icon: NutrationGuide,
-  // },
-  // {
-  //   _id: 9,
-  //   title: "Exercise Library",
-  //   link: "/dashboard/exercise-library",
-  //   icon: NutrationGuide,
-  // },
-  // {
-  //   _id: 10,
-  //   title: "Trainer",
-  //   link: "/dashboard/traineer",
-  //   icon: NutrationGuide,
-  // },
-  // {
-  //   _id: 11,
-  //   title: "Measurement Women",
-  //   link: "/measurement-women",
-  //   icon: NutrationGuide,
-  // },
+  {
+    _id: 2,
+    title: "קורסים",
+    link: "/courses",
+    icon: Course,
+  },
 ];

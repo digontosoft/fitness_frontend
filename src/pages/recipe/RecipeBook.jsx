@@ -1,11 +1,9 @@
 import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
 import { RecipeBookBg } from "@/assets";
-import Title from "@/components/measurements/Tilte";
-import RecipeParagraph from "@/components/recipe/RecipeParagraph";
-import RecipeCart from "@/components/recipe/RecipeCart";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+import ParsonalPdf from "@/components/nutritionGuides/personalNutration/ParsonalPdf";
 const RecipeBook = () => {
   const [recipeBook, setRecipeBook] = useState([]);
   const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -23,22 +21,19 @@ const RecipeBook = () => {
     };
     fetchRecipeBook();
   }, []);
+
   return (
     <div>
       <WorkOutListBaground bgImg={RecipeBookBg} />
-      {/* <Title tilte={"ספר המתכונים"} />
-      <RecipeParagraph /> */}
-      {user?.userType === "trainer"
+      {user?.userType === "recipe"
         ? recipeBook
             .filter((item) => item.type === "normalUser")
             .map((recipe) => (
               <div
                 key={recipe?._id}
-                className="flex flex-col items-center justify-center"
+                className="flex flex-col items-center justify-center w-full"
               >
-                <Title tilte={recipe?.title} />
-                <p>{recipe?.description}</p>
-                <RecipeCart recipe={recipe} />
+                <ParsonalPdf data={recipe} />
               </div>
             ))
         : recipeBook
@@ -46,11 +41,9 @@ const RecipeBook = () => {
             .map((recipe) => (
               <div
                 key={recipe?._id}
-                className="flex flex-col items-center justify-center"
+                className="flex flex-col items-center justify-center max-w-5xl mx-auto"
               >
-                <Title tilte={recipe?.title} />
-                <p>{recipe?.description}</p>
-                <RecipeCart recipe={recipe} />
+                <ParsonalPdf data={recipe} />
               </div>
             ))}
     </div>

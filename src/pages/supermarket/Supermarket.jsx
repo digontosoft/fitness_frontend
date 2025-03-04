@@ -1,6 +1,5 @@
 import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
-import React, { useEffect, useState } from "react";
-import { supermarket } from "@/assets";
+import { useEffect, useState } from "react";
 import SuperTitle from "@/components/supermarket/SuperTitle";
 import CourseGroup from "@/components/supermarket/CourseGroup";
 import { useParams } from "react-router-dom";
@@ -28,7 +27,7 @@ const Supermarket = () => {
     <div className="">
       <WorkOutListBaground bgImg={course?.image} />
       <div className="bg-white ">
-        <SuperTitle title={course?.title} />
+        <SuperTitle title={course?.title} description={course?.description} />
         <CourseGroup course={course} />
       </div>
     </div>

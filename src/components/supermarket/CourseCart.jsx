@@ -1,6 +1,3 @@
-import React from "react";
-import ReactPlayer from "react-player";
-
 const CourseCart = ({ video }) => {
   return (
     <div className="w-full px-4">
@@ -9,19 +6,27 @@ const CourseCart = ({ video }) => {
       </h1>
       <div className="w-full flex justify-center">
         <div className="w-full md:w-3/4 lg:w-2/3">
-          {/* <ReactPlayer
-            url={video?.videoLink}
-            width="100%"
-            height="400px"
-            controls
-            className="rounded-xl border border-gray-200 shadow-lg overflow-hidden"
-          /> */}
           <iframe
             src={video?.videoLink}
+            // src={
+            //   "https://res.cloudinary.com/dt3qrt76n/video/upload/v1716032300/Videos/Course_Status_Programming_Hero_9_ivnnxe.mp4"
+            // }
             width="100%"
-            height="400px"
+            height="500px"
             allow="autoplay"
+            className="aspect-video overflow-hidden object-cover"
           ></iframe>
+
+          {/* <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/iajv8y-6n3Q?si=BR-YRbRtp3r8r_hG"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe> */}
         </div>
       </div>
     </div>
