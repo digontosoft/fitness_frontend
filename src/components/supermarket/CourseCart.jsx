@@ -9,13 +9,19 @@ const CourseCart = ({ video }) => {
       </h1>
       <div className="w-full flex justify-center">
         <div className="w-full md:w-3/4 lg:w-2/3">
-          <ReactPlayer
+          {/* <ReactPlayer
             url={video?.videoLink}
             width="100%"
             height="400px"
             controls
             className="rounded-xl border border-gray-200 shadow-lg overflow-hidden"
-          />
+          /> */}
+          <iframe
+            src={video?.videoLink}
+            width="100%"
+            height="400px"
+            allow="autoplay"
+          ></iframe>
         </div>
       </div>
     </div>
