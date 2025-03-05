@@ -5,6 +5,7 @@ import { CiMenuFries } from "react-icons/ci";
 import { adminLink, recipeLink, traineeLink } from "@/constants/NavLink";
 import { redLogo } from "../assets/index";
 import { NavLink } from "react-router-dom";
+import { LogOut } from "lucide-react";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userInfo"));
@@ -13,11 +14,20 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
+  // const logout = () => {
+  //   localStorage.removeItem("userInfo");
+  //   localStorage.removeItem("authToken");
+  // };
+
   return (
     <nav className="bg-transparent md:bg-white shadow-md ">
       <div className="container mx-auto flex items-center justify-between p-4">
         {/* Logo */}
         <div className="text-xl font-bold text-gray-800 hidden md:flex">
+          {/* <a href="" className="flex items-center space-x-2" onClick={logout}>
+            <span>Logout</span>
+            <LogOut className="w-5 h-5" />
+          </a> */}
           {userType === "admin" ? (
             <>
               <a

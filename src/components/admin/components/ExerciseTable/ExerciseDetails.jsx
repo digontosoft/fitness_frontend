@@ -47,7 +47,7 @@ export default function ExerciseDetails({ exerciseId }) {
             ></iframe> */}
             <iframe
               className="w-full h-full"
-              src={`https://www.youtube.com/embed/${exerciseData?.video_url}?autoplay=0&rel=0`}
+              src={`${exerciseData?.video_url}`}
               title="Exercise Video"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
