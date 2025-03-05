@@ -122,10 +122,7 @@ export const routes = createBrowserRouter([
             path: "/personal-workout/:id",
             element: <ProgressCourseCart />,
           },
-          // {
-          //   path: "/supermarket/:id",
-          //   element: <Supermarket />,
-          // },
+
           {
             path: "/superTwo",
             element: <SuperMarketTwo />,

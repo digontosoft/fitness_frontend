@@ -1,6 +1,3 @@
-import React from "react";
-import ReactPlayer from "react-player";
-
 const CourseCart = ({ video }) => {
   console.log("vdeo link", video.videoLink);
   return (
@@ -9,7 +6,7 @@ const CourseCart = ({ video }) => {
         {video?.videoTitle}
       </h1>
       <div className="w-full flex justify-center">
-        <div className="w-full md:w-3/4 lg:w-2/3  ">
+        <div className="w-full md:w-3/4 lg:w-2/3">
           <iframe
             src={video?.videoLink}
             // src={
