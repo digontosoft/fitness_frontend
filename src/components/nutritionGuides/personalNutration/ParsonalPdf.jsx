@@ -1,10 +1,7 @@
 import { base_url } from "@/api/baseUrl";
+import { useEffect, useState } from "react";
 
 const ParsonalPdf = ({ data }) => {
-  console.log("pdf data", data);
-  if (!data)
-    return <p className="text-center text-lg font-medium">No Data Available</p>;
-
   const pdfUrl = `${base_url}/${data?.pdf_link}`;
 
   return (

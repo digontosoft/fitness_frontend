@@ -13,21 +13,21 @@ const Footer = () => {
               <img src={tiktok} alt="tiktok" />
             </div>
           </div>
-          <div className="flex flex-col gap-6 md:flex-row md:gap-6 text-white justify-center items-center">
-            <div className="flex gap-6 font-medium">
-              <a href="#">הסכם ליווי</a>
+        </div>
+        <div className="flex md:flex-row text-white justify-center items-center">
+          <a href="#">הסכם ליווי</a>
+          {/* <div className="flex gap-6 font-medium">
               <a href="#">לינק נוסף</a>
             </div>
             <div className="flex gap-6 font-medium">
               <a href="#">לינק נוסף</a>
               <a href="#">לינק נוסף</a>
-            </div>
-          </div>
+            </div> */}
         </div>
         <div className="flex  flex-col justify-between items-center gap-2">
           <img className="hidden md:block w-15 h-14" src={whiteLogo} alt="" />
           <p className="text-xs font-medium text-white">
-          כל הזכויות שמורות לטל מועלם Fital 2024
+            כל הזכויות שמורות לטל מועלם Fital 2024
           </p>
         </div>
       </div>
