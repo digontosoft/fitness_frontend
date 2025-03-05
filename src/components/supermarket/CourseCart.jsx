@@ -16,7 +16,7 @@ const CourseCart = ({ video }) => {
             controls
             className="rounded-xl border border-gray-200 shadow-lg overflow-hidden"
           /> */}
-          <iframe src={video?.videoLink} width="100%" height="400px" allow="autoplay"></iframe>
+          <iframe src={video?.videoLink.replace("/view", "/preview")}   style={{ pointerEvents: 'none' }} width="100%" height="400px" allow="autoplay"></iframe>
         </div>
       </div>
     </div>
