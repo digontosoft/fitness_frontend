@@ -4,7 +4,7 @@ import Loading from "@/components/common/Loading";
 import ParsonalPdf from "@/components/nutritionGuides/personalNutration/ParsonalPdf";
 import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const PdfNutration = () => {
@@ -33,9 +33,11 @@ const PdfNutration = () => {
     return <p className="text-red-500">{error}</p>;
   }
   return (
-    <div>
+    <div className="w-full">
       <WorkOutListBaground bgImg={personalNutrationBg} />
-      <ParsonalPdf data={singleData} />
+      <div className="flex items-center justify-center">
+        <ParsonalPdf data={singleData} />
+      </div>
     </div>
   );
 };

@@ -1,5 +1,3 @@
-import React from "react";
-import { superMarketData } from "@/constants/supermarketData";
 import CourseCart from "./CourseCart";
 const CourseGroup = ({ course }) => {
   return (

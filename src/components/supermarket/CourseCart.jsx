@@ -1,6 +1,3 @@
-import React from "react";
-import ReactPlayer from "react-player";
-
 const CourseCart = ({ video }) => {
   return (
     <div className="w-full px-4">
@@ -9,14 +6,21 @@ const CourseCart = ({ video }) => {
       </h1>
       <div className="w-full flex justify-center">
         <div className="w-full md:w-3/4 lg:w-2/3">
-          {/* <ReactPlayer
-            url={video?.videoLink}
-            width="100%"
-            height="400px"
-            controls
-            className="rounded-xl border border-gray-200 shadow-lg overflow-hidden"
-          /> */}
-          <iframe src={video?.videoLink.replace("/view", "/preview")}   style={{ pointerEvents: 'none' }} width="100%" height="400px" allow="autoplay"></iframe>
+          <div
+            className="voomly-embed"
+            data-id={video?.videoLink}
+            data-ratio="0.562500"
+            data-type="v"
+            data-skin-color="rgba(209,43,40,1)"
+            data-shadow=""
+            style={{
+              width: "100%",
+              aspectRatio: "0.5625 / 1",
+              background:
+                "linear-gradient(45deg, rgb(142, 150, 164) 0%, rgb(201, 208, 222) 100%)",
+              borderRadius: "10px",
+            }}
+          ></div>
         </div>
       </div>
     </div>
