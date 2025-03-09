@@ -1,11 +1,15 @@
-import React from "react";
+import { base_url } from "@/api/baseUrl";
 
 const WorkOutListBaground = ({ bgImg }) => {
+  // const coverImage = `${base_url}/${bgImg}`;
+  const coverImage = bgImg?.startsWith("uploads")
+    ? ` ${base_url}/${bgImg}`
+    : bgImg;
   return (
     <div>
       <img
         className="w-full h-[400px] object-cover object-center"
-        src={bgImg}
+        src={coverImage}
         alt=""
       />
     </div>

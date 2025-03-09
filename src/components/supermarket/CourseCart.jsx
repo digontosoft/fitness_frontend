@@ -1,7 +1,7 @@
 const CourseCart = ({ video }) => {
   return (
     <div className="w-full px-4">
-      <h1 className="text-center py-6 text-2xl font-bold">
+      <h1 className="text-center py-6 text-2xl font-bold" dir="rtl">
         {video?.videoTitle}
       </h1>
       <div className="w-full flex justify-center">
