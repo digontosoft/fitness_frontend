@@ -27,6 +27,9 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  const traineeUsers = users.filter((user) => user.userType === "trainee");
+  const recipeUsers = users.filter((user) => user.userType === "recipe");
+
   const handleSelectUser = (selectedUser) => {
     if (selectedUser.length > 0) {
       navigate(`/dashboard/traineer/${selectedUser[0]._id}`);
@@ -39,13 +42,23 @@ const Dashboard = () => {
       justify-center space-y-8"
       >
         <Title tilte="ניהול מתאמנים" />
-        <div className="flex items-center gap-5">
-          <div className="flex items-center justify-center w-9 h-9 bg-custom-radial rounded-full">
-            <span className="text-sm font-bold leading-5 text-white text-center w-">
-              120
-            </span>
+        <div className="flex items-center justify-center gap-x-5">
+          <div className="flex items-center gap-5">
+            <div className="flex items-center justify-center w-9 h-9 bg-custom-radial rounded-full">
+              <span className="text-sm font-bold leading-5 text-white text-center">
+                {traineeUsers?.length}
+              </span>
+            </div>
+            <span>משתמשים מתאמנים</span>
           </div>
-          <span>מתאמנים רשומים</span>
+          <div className="flex items-center gap-5">
+            <div className="flex items-center justify-center w-9 h-9 bg-custom-radial rounded-full">
+              <span className="text-sm font-bold leading-5 text-white text-center">
+                {recipeUsers?.length}
+              </span>
+            </div>
+            <span>משתמשי מתכונים</span>
+          </div>
         </div>
         {/* <SearchBox inputClass="md:w-[335px] md:h-[54px]" /> */}
         <Select
