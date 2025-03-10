@@ -79,8 +79,6 @@ const EditTrainingForm = ({ trainingId, userId }) => {
       const payload = {
         name: data.name,
         description: data.description,
-        user_id: userId,
-        training_id: trainingId,
         workouts: selectedTrainingExercises.map((workout) => ({
           workout: workout._id,
           exercises: workout.exercises.map((ex) => ({
@@ -92,12 +90,12 @@ const EditTrainingForm = ({ trainingId, userId }) => {
         })),
       };
       console.log("assignTraining", payload);
-      // axios.post(`${base_url}/assign-training`, payload).then((response) => {
-      //   if (response.status === 201) {
-      //     toast.success("Assigned Training to User successfully!");
-      //     // navigate("/dashboard/training-list");
-      //   }
-      // });
+      axios.post(`${base_url}/training`, payload).then((response) => {
+        if (response.status === 201) {
+          toast.success("Assigned Training to User successfully!");
+          // navigate("/dashboard/training-list");
+        }
+      });
     } catch (error) {
       console.error("Error updating training:", error);
       toast.error("Failed Assigned Training.");
