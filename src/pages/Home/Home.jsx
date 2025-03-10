@@ -5,10 +5,18 @@ import RightCard from "@/components/home/RightCard";
 import { WelcomeModal } from "@/components/home/WelcomeModal";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { TaskModal } from "./TaskModal";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskModalOpen, setIsTaskModalOpen] = useState(false);
   const [userTasks, setUserTasks] = useState([]);
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  const handleOpenModal = (task = null) => {
+    setSelectedTask(task);
+    setIsTaskModalOpen(true);
+  };
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
@@ -54,11 +62,21 @@ const Home = () => {
           </h1>
           <div className="mx-w-6xl mx-auto flex items-center justify-between gap-10 md:pt-20 py-10 flex-col md:flex-row">
             {userTasks.map((task) => (
-              <ArrowGroup task={task} key={task?._id} />
+              <ArrowGroup
+                onclick={handleOpenModal}
+                task={task}
+                key={task?._id}
+              />
             ))}
           </div>
         </div>
       </div>
+      <TaskModal
+        isModalOpen={taskModalOpen}
+        setIsModalOpen={setIsTaskModalOpen}
+        selectedTask={selectedTask}
+        user_id={user?._id}
+      />
     </div>
   );
 };

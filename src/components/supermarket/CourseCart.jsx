@@ -1,4 +1,5 @@
 const CourseCart = ({ video }) => {
+  console.log("vdeo link", video.videoLink);
   return (
     <div className="w-full px-4">
       <h1 className="text-center py-6 text-2xl font-bold" dir="rtl">

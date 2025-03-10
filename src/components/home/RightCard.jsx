@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Ractanglebg,
   Ellipse,
@@ -8,17 +9,46 @@ import {
   men2,
   Ellipse88,
 } from "../../assets/index";
+import axios from "axios";
+import { base_url } from "@/api/baseUrl";
 
 const RightCard = ({ user }) => {
-  const progress = user?.step_average;
+  const [userSteps, setUserSteps] = useState({});
+  const progress = userSteps?.step_average;
   const strokeWidth = 4;
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (progress / 100) * circumference;
+  const offset =
+    circumference - (progress / userSteps?.step_target) * circumference;
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userDetails?.gender;
+  useEffect(() => {
+    const fetchUserSteps = async () => {
+      try {
+        await axios
+          .get(`${base_url}/get-user-steps-vs-target/${user?._id}`)
+          .then((response) => {
+            if (response.status === 200) {
+              const userData = response.data.data;
+              setUserSteps(userData);
+              console.log("info:", response.data.data);
+            }
+          });
+      } catch (err) {
+        // toast.error(err.response.data.message);
+        console.log("error:", err);
+      }
+    };
+    fetchUserSteps();
+  }, [user?._id]);
+  // const handleOpenModal = () => {
+  //   console.log("hello this is open modal function");
+  // };
   return (
-    <div className="w-72 h-48 bg-gradient-to-tr from-[#0A0A0A] via-[#343434] to-[#0A0A0A] p-2 rounded-2xl relative">
+    <div
+      // onClick={handleOpenModal}
+      className="w-72 h-48 bg-gradient-to-tr from-[#0A0A0A] via-[#343434] to-[#0A0A0A] p-2 rounded-2xl relative"
+    >
       <div
         className="absolute top-0 left-0 w-full h-full"
         style={{
@@ -95,8 +125,10 @@ const RightCard = ({ user }) => {
       <div className="flex flex-col items-end justify-end pr-4 absolute bottom-5 right-0">
         <div>
           <span className="text-white">
-            {user?.step_target} /{" "}
-            <span className="text-2xl font-semibold">{user?.step_average}</span>
+            {userSteps?.step_target} /{" "}
+            <span className="text-2xl font-semibold">
+              {userSteps?.step_average}
+            </span>
             <h1 className="text-sm font-semibold text-right">צעדים</h1>
           </span>
         </div>
