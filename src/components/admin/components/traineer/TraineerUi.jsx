@@ -10,16 +10,21 @@ import TraineeLeftCard from "./TraineeLeftCard";
 import { useEffect, useState } from "react";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    axios
-      .get(`${base_url}/getUser/${userId}`)
-      .then((res) => setUser(res?.data?.data));
-  }, [userId]);
+    const getUser = async () => {
+      try {
+        const response = await axios.get(`${base_url}/getUser/${userId}`);
+        setUser(response.data.data);
+      } catch (error) {
+        
+      }
+    }
+    getUser()
+  },[userId])
 
   return (
     <div className="space-y-12">
