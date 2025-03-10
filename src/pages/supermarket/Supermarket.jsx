@@ -25,7 +25,7 @@ const Supermarket = () => {
   }, [id]);
   return (
     <div className="">
-      <WorkOutListBaground bgImg={course?.image} />
+      <WorkOutListBaground bgImg={course?.cover} />
       <div className="bg-white ">
         <SuperTitle title={course?.title} description={course?.description} />
         <CourseGroup course={course} />

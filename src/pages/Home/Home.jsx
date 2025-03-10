@@ -12,7 +12,12 @@ const Home = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   return (
     <div className="min-h-screen">
-      <WelcomeModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      {user?.isNewUser && (
+        <WelcomeModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
       <div className="flex flex-col items-center justify-center pt-20">
         <h6 className="text-sm font normal text-gray-500">בוקר טוב</h6>
         <h1 className="text-4xl font-bold">

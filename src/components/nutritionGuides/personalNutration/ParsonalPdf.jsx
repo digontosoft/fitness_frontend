@@ -16,7 +16,9 @@ const ParsonalPdf = ({ data }) => {
       <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
         {data?.title}
       </h2>
-      <p className="text-center text-gray-700 mb-4">{data?.description}</p>
+      <p className="text-center text-gray-700 mb-4" dir="rtl">
+        {data?.description}
+      </p>
 
       <div className="relative w-full border border-gray-300 rounded-lg overflow-hidden">
         <Worker workerUrl={pdfjs.GlobalWorkerOptions.workerSrc}>

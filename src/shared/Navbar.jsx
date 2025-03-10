@@ -5,6 +5,7 @@ import { CiMenuFries } from "react-icons/ci";
 import { adminLink, recipeLink, traineeLink } from "@/constants/NavLink";
 import { redLogo } from "../assets/index";
 import { NavLink } from "react-router-dom";
+import { LogOut } from "lucide-react";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userInfo"));
@@ -13,11 +14,20 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
+  const logout = () => {
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("authToken");
+  };
+
   return (
     <nav className="bg-transparent md:bg-white shadow-md ">
       <div className="container mx-auto flex items-center justify-between p-4">
         {/* Logo */}
-        <div className="text-xl font-bold text-gray-800 hidden md:flex">
+        <a href="" className="flex items-center space-x-2" onClick={logout}>
+          <span dir="rtl">התנתק</span>
+          <LogOut className="w-5 h-5" />
+        </a>
+        {/* <div className="text-xl font-bold text-gray-800 hidden md:flex">
           {userType === "admin" ? (
             <>
               <a
@@ -78,7 +88,7 @@ const Navbar = () => {
           ) : (
             <></>
           )}
-        </div>
+        </div> */}
         {userType === "admin" ? (
           <div className="hidden md:flex justify-between items-center space-x-9">
             {adminLink.map(({ _id, title, link, icon: Icon }) => (
@@ -158,91 +168,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {/* {isOpen && (
-        <div className="md:hidden bg-transparent ">
-          <div className="space-y-2 p-4">
-            {userType === "admin" ? (
-              <div className="hidden md:flex justify-between items-center space-x-9">
-                {adminLink.map(({ _id, title, link, icon: Icon }) => (
-                  <NavLink
-                    key={_id}
-                    to={link}
-                    className={({ isActive }) =>
-                      `flex flex-col text-gray-600 hover:text-gray-900 font-semibold ${
-                        isActive
-                          ? "text-red-500"
-                          : "text-gray-600 hover:text-gray-900"
-                      }`
-                    }
-                  >
-                    <div className="flex gap-1">
-                      <img
-                        src={Icon}
-                        alt={`${title} icon`}
-                        className="w-5 h-5"
-                      />
-                      <span>{title}</span>
-                    </div>
-                  </NavLink>
-                ))}
-              </div>
-            ) : userType === "trainee" ? (
-              <div className="hidden md:flex justify-between items-center space-x-9">
-                {traineeLink.map(({ _id, title, link, icon: Icon }) => (
-                  <NavLink
-                    key={_id}
-                    to={link}
-                    className={({ isActive }) =>
-                      `flex flex-col text-gray-600 hover:text-gray-900 font-semibold ${
-                        isActive
-                          ? "text-red-500"
-                          : "text-gray-600 hover:text-gray-900"
-                      }`
-                    }
-                  >
-                    <div className="flex gap-1">
-                      <img
-                        src={Icon}
-                        alt={`${title} icon`}
-                        className="w-5 h-5"
-                      />
-                      <span>{title}</span>
-                    </div>
-                  </NavLink>
-                ))}
-              </div>
-            ) : userType === "recipe" ? (
-              <div className="hidden md:flex justify-between items-center space-x-9">
-                {recipeLink.map(({ _id, title, link, icon: Icon }) => (
-                  <NavLink
-                    key={_id}
-                    to={link}
-                    className={({ isActive }) =>
-                      `flex flex-col text-gray-600 hover:text-gray-900 font-semibold ${
-                        isActive
-                          ? "text-red-500"
-                          : "text-gray-600 hover:text-gray-900"
-                      }`
-                    }
-                  >
-                    <div className="flex gap-1">
-                      <img
-                        src={Icon}
-                        alt={`${title} icon`}
-                        className="w-5 h-5"
-                      />
-                      <span>{title}</span>
-                    </div>
-                  </NavLink>
-                ))}
-              </div>
-            ) : (
-              <div>No valid user type or token found.</div>
-            )}
-          </div>
-        </div>
-      )} */}
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white p-4 shadow-md">

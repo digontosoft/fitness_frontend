@@ -251,7 +251,12 @@ export const routes = createBrowserRouter([
     ],
   },
   {
-    element: <Main />,
+    element: (
+      <ProtectedRoutes>
+        {" "}
+        <Main />
+      </ProtectedRoutes>
+    ),
     children: [
       {
         path: "/recipe",
