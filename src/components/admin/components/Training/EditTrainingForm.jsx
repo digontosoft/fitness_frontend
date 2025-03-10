@@ -7,6 +7,13 @@ import Select from "react-dropdown-select";
 import { Button } from "@/components/ui/button";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { base_url } from "@/api/baseUrl";
+import {
+  Select as ShadSelect,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const EditTrainingForm = ({ trainingId, userId }) => {
   const [trainingExercises, setTrainingExercises] = useState([]);
@@ -84,12 +91,13 @@ const EditTrainingForm = ({ trainingId, userId }) => {
           })),
         })),
       };
-      axios.post(`${base_url}/assign-training`, payload).then((response) => {
-        if (response.status === 201) {
-          toast.success("Assigned Training to User successfully!");
-          // navigate("/dashboard/training-list");
-        }
-      });
+      console.log("assignTraining", payload);
+      // axios.post(`${base_url}/assign-training`, payload).then((response) => {
+      //   if (response.status === 201) {
+      //     toast.success("Assigned Training to User successfully!");
+      //     // navigate("/dashboard/training-list");
+      //   }
+      // });
     } catch (error) {
       console.error("Error updating training:", error);
       toast.error("Failed Assigned Training.");
@@ -174,7 +182,9 @@ const EditTrainingForm = ({ trainingId, userId }) => {
             <h3 className="font-semibold">{workout.name}</h3>
             {workout.exercises.map((ex, exIndex) => (
               <div key={exIndex}>
-                <p className="col-span-1 font-medium">{ex.name}</p>
+                <p className="col-span-1 font-medium">
+                  {ex?.exercise_id?.name}
+                </p>
                 <div className="grid grid-cols-3 gap-4 mt-4">
                   <div className="space-y-2">
                     <label htmlFor="sets">Sets</label>
@@ -214,7 +224,7 @@ const EditTrainingForm = ({ trainingId, userId }) => {
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="manipulation">Manipulation</label>
-                    <input
+                    {/* <input
                       type="text"
                       value={ex.manipulation}
                       onChange={(e) => {
@@ -228,7 +238,29 @@ const EditTrainingForm = ({ trainingId, userId }) => {
                       }}
                       className="border rounded p-2 w-full"
                       placeholder="Manipulation"
-                    />
+                    /> */}
+                    <ShadSelect
+                      defaultValue={ex.manipulation}
+                      onValueChange={(value) => {
+                        const updatedExercises = [...workout.exercises];
+                        updatedExercises[exIndex].manipulation = value;
+                        setSelectedTrainingExercises((prev) => {
+                          const updated = [...prev];
+                          updated[wIndex].exercises = updatedExercises;
+                          return updated;
+                        });
+                      }}
+                    >
+                      <SelectTrigger className="border rounded p-2 w-full">
+                        <SelectValue className="uppercase">
+                          {ex.manipulation}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Superset">Superset</SelectItem>
+                        <SelectItem value="DropSet">Drop Set</SelectItem>
+                      </SelectContent>
+                    </ShadSelect>
                   </div>
                 </div>
               </div>
