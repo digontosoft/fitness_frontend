@@ -98,10 +98,7 @@ export const routes = createBrowserRouter([
             path: "/exercise-library",
             element: <CourseList />,
           },
-          // {
-          //   path: "/courses",
-          //   element: <Course />,
-          // },
+
           {
             path: "/startTraining",
             element: <StartTraining />,
@@ -115,7 +112,7 @@ export const routes = createBrowserRouter([
           //   element: <RecipeBook />,
           // },
           {
-            path: "/action-course-cart",
+            path: "/action-course-cart/:id",
             element: <ActionCourseCart />,
           },
           {
