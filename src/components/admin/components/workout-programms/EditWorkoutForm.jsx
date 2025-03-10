@@ -6,8 +6,15 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Select from "react-dropdown-select";
-import AddExercise from "./AddExercise";
 import { useNavigate } from "react-router-dom";
+import {
+  Select as ShadSelect,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const EditWorkoutForm = ({ workoutId }) => {
   const [exercises, setExercises] = useState([]);
@@ -60,7 +67,7 @@ const EditWorkoutForm = ({ workoutId }) => {
         manipulation: ex.manipulation,
       })),
     };
-
+    console.log("editWorkoutForm", workoutData);
     axios
       .put(`${base_url}/workout/${workoutId}`, workoutData)
       .then((response) => {
@@ -163,12 +170,29 @@ const EditWorkoutForm = ({ workoutId }) => {
                   <label htmlFor={`manipulation-${exercise._id}`}>
                     Manipulation
                   </label>
-                  <input
-                    id={`manipulation-${exercise._id}`}
-                    type="text"
-                    className="w-full border border-red-200 h-10 px-2"
-                    {...register(`exercises.${index}.manipulation`)}
-                  />
+                  <div className="flex flex-col space-y-2">
+                    <ShadSelect
+                      value={exercise.manipulation}
+                      onValueChange={(selectedValue) =>
+                        setValue(
+                          `exercises.${index}.manipulation`,
+                          selectedValue
+                        )
+                      }
+                    >
+                      <SelectTrigger className="w-full border border-red-200">
+                        <SelectValue placeholder="Select a manipulation">
+                          {exercise.manipulation || "Select a manipulation"}{" "}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="superset">Superset</SelectItem>
+                          <SelectItem value="dropset">Dropset</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </ShadSelect>
+                  </div>
                 </div>
               </div>
             </div>

@@ -10,6 +10,7 @@ const Home = () => {
     setIsModalOpen(true);
   }, []);
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  console.log(user);
   return (
     <div className="min-h-screen">
       {user?.isNewUser && (
@@ -25,7 +26,7 @@ const Home = () => {
         </h1>
         <div className="pt-20 flex gap-10 md:flex-row flex-col-reverse">
           <LeftCard />
-          <RightCard />
+          <RightCard user={user} />
         </div>
         <div className="pt-24 flex flex-col justify-end md:justify-center items-center ">
           <h1 className="text-xl font-bold text-[#0A2533] text-end md:text-center ">

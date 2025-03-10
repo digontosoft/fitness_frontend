@@ -9,8 +9,8 @@ import {
   Ellipse88,
 } from "../../assets/index";
 
-const RightCard = () => {
-  const progress = 30;
+const RightCard = ({ user }) => {
+  const progress = user?.step_average;
   const strokeWidth = 4;
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
@@ -95,7 +95,8 @@ const RightCard = () => {
       <div className="flex flex-col items-end justify-end pr-4 absolute bottom-5 right-0">
         <div>
           <span className="text-white">
-            10,000 / <span className="text-2xl font-semibold">3,500</span>
+            {user?.step_target} /{" "}
+            <span className="text-2xl font-semibold">{user?.step_average}</span>
             <h1 className="text-sm font-semibold text-right">צעדים</h1>
           </span>
         </div>

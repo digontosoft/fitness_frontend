@@ -69,7 +69,7 @@ const AddWorkoutForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4">
           <DynamicInputField
-            className="min-w-[350px]"
+            className="min-w-[400px]"
             id="name"
             type="text"
             label="שם האימון"
@@ -80,7 +80,7 @@ const AddWorkoutForm = () => {
           />
 
           <DynamicInputField
-            className="min-w-[350px]"
+            className="min-w-[400px]"
             id="description"
             type="text"
             label="דגשים מיוחדים (במידה ויש)"

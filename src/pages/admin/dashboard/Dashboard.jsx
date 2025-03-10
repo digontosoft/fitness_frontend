@@ -1,10 +1,8 @@
 import AdminArrowCard from "@/components/admin/components/ui/AdminArrowCard";
-import SearchBox from "@/components/common/SearchBox";
 import Title from "@/components/measurements/Tilte";
 import Container from "@/shared/Container";
 import { ArrowBurger, ArrowDumbel } from "@/assets";
-import { useContext, useEffect, useState } from "react";
-import { UserInfoContext } from "@/context";
+import { useEffect, useState } from "react";
 import { women1, women2 } from "@/assets/index";
 import Select from "react-dropdown-select";
 import axios from "axios";
