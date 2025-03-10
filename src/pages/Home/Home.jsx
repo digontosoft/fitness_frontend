@@ -1,16 +1,36 @@
+import { base_url } from "@/api/baseUrl";
 import ArrowGroup from "@/components/home/ArrowGroup";
 import LeftCard from "@/components/home/LeftCard";
 import RightCard from "@/components/home/RightCard";
 import { WelcomeModal } from "@/components/home/WelcomeModal";
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userTasks, setUserTasks] = useState([]);
   useEffect(() => {
     setIsModalOpen(true);
   }, []);
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  console.log(user);
+
+  useEffect(() => {
+    const fetchUserTask = async () => {
+      try {
+        await axios
+          .get(`${base_url}/get-user-task/${user._id}`)
+          .then((response) => {
+            if (response.status === 200) {
+              setUserTasks(response.data.data);
+              console.log("userTasks:", response?.data?.data);
+            }
+          });
+      } catch (error) {
+        console.error("Error fetching recipe book:", error);
+      }
+    };
+    fetchUserTask();
+  }, [user?._id]);
   return (
     <div className="min-h-screen">
       {user?.isNewUser && (
@@ -32,7 +52,11 @@ const Home = () => {
           <h1 className="text-xl font-bold text-[#0A2533] text-end md:text-center ">
             משימות
           </h1>
-          <ArrowGroup />
+          <div className="mx-w-6xl mx-auto flex items-center justify-between gap-10 md:pt-20 py-10 flex-col md:flex-row">
+            {userTasks.map((task) => (
+              <ArrowGroup task={task} key={task?._id} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
