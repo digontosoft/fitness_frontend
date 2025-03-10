@@ -17,8 +17,14 @@ const RightCard = () => {
   const offset = circumference - (progress / 100) * circumference;
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userDetails?.gender;
+  const handleOpenModal = () => {
+    console.log("hello this is open modal function");
+  };
   return (
-    <div className="w-72 h-48 bg-gradient-to-tr from-[#0A0A0A] via-[#343434] to-[#0A0A0A] p-2 rounded-2xl relative">
+    <div
+      onClick={handleOpenModal}
+      className="w-72 h-48 bg-gradient-to-tr from-[#0A0A0A] via-[#343434] to-[#0A0A0A] p-2 rounded-2xl relative"
+    >
       <div
         className="absolute top-0 left-0 w-full h-full"
         style={{
