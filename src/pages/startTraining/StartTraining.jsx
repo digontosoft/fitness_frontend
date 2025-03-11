@@ -9,12 +9,11 @@ import { useState } from "react";
 const StartTraining = () => {
   const location = useLocation();
   const workData = location.state.data;
+  console.log("exersize data:", workData);
   const { userTrainingExercise } = workData;
 
-  // State to track the current exercise index
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Functions to navigate between exercises
   const handleNext = () => {
     if (currentIndex < userTrainingExercise.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -35,7 +34,9 @@ const StartTraining = () => {
           videoUrl={userTrainingExercise[currentIndex]?.exercise_id?.video_url}
         />
         <CourseContent />
-        <LastExercise />
+        <LastExercise
+          currentExercise={userTrainingExercise[currentIndex] || {}}
+        />
         <ExcersizeInput
           exerciseData={userTrainingExercise[currentIndex]}
           onNext={handleNext}
