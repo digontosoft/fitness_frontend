@@ -1,11 +1,5 @@
-import React from "react";
 import ArrowCard from "./ArrowCard";
-import {
-  measurementRope,
-  ArrowBurger,
-  ArrowDumbel,
-  bodyBuilder3,
-} from "@/assets";
+import { bodyBuilder3 } from "@/assets";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
