@@ -13,6 +13,9 @@ const AddWorkoutForm = () => {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [exercises, setExercises] = useState([]);
   const [workoutExercises, setWorkoutExercises] = useState([]);
+  const [superset, setSuperset] = useState(false);
+  const [isSupersetSelected, setIsSupersetSelected] = useState(false);
+
   const navigate = useNavigate();
   const {
     register,
@@ -98,11 +101,24 @@ const AddWorkoutForm = () => {
             multi
             onChange={(values) => setSelectedExercises(values)}
           />
+          {/* {selectedExercises.map((exercise) => (
+            <AddExercise
+              key={exercise._id}
+              exercise={exercise}
+              onChange={(data) => handleExerciseChange(exercise._id, data)}
+              setSuperset={setSuperset}
+              superset={superset}
+            />
+          ))} */}
           {selectedExercises.map((exercise) => (
             <AddExercise
               key={exercise._id}
               exercise={exercise}
               onChange={(data) => handleExerciseChange(exercise._id, data)}
+              setSuperset={setSuperset}
+              superset={superset}
+              isSupersetSelected={isSupersetSelected}
+              setIsSupersetSelected={setIsSupersetSelected}
             />
           ))}
         </div>
@@ -111,6 +127,7 @@ const AddWorkoutForm = () => {
           <Button
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            disabled={superset}
           >
             Saving a new workout
           </Button>

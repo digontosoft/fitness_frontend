@@ -14,12 +14,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Trash } from "lucide-react";
 
 const EditTrainingForm = ({ trainingId, userId }) => {
   const [trainingExercises, setTrainingExercises] = useState([]);
+  const [addMoreExercise, setAddMoreExercise] = useState(false);
+  const [exercises, setExercises] = useState([]);
   const [selectedTrainingExercises, setSelectedTrainingExercises] = useState(
     []
   );
+  const [selectedExercises, setSelectedExercises] = useState([]);
+  const [isSupersetSelected, setIsSupersetSelected] = useState(false); // Track superset selection
+  const [assignButton, setAssignButton] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -30,6 +36,10 @@ const EditTrainingForm = ({ trainingId, userId }) => {
   } = useForm();
 
   const [user, setUser] = useState({});
+
+  const handleAssignButtonClick = (value) => {
+    setAssignButton(value);
+  };
 
   useEffect(() => {
     axios
@@ -51,7 +61,7 @@ const EditTrainingForm = ({ trainingId, userId }) => {
           const selectedWorkouts = trainingData.workouts.map((w) => ({
             _id: w.workout._id,
             name: w.workout.name,
-            exercises: w.exercises.map((ex, index) => ({
+            exercises: w.exercises.map((ex) => ({
               exercise_id: ex.exercise_id._id,
               name: ex.exercise_id.name,
               sets: ex.sets || 3,
@@ -61,6 +71,12 @@ const EditTrainingForm = ({ trainingId, userId }) => {
           }));
 
           setSelectedTrainingExercises(selectedWorkouts);
+
+          // Check if any exercise already has "Superset" selected
+          const hasSuperset = selectedWorkouts.some((workout) =>
+            workout.exercises.some((ex) => ex.manipulation === "Superset")
+          );
+          setIsSupersetSelected(hasSuperset);
         }
       })
       .catch((error) =>
@@ -74,11 +90,44 @@ const EditTrainingForm = ({ trainingId, userId }) => {
     });
   }, []);
 
+  useEffect(() => {
+    const fetchExercise = async () => {
+      try {
+        const response = await axios.get(`${base_url}/exercise`);
+        setExercises(response.data.data);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
+    fetchExercise();
+  }, []);
+
+  const addSelectedExercisesToWorkout = (wIndex) => {
+    setSelectedTrainingExercises((prev) => {
+      const updated = [...prev];
+      updated[wIndex].exercises = [
+        ...updated[wIndex].exercises,
+        ...selectedExercises.map((ex) => ({
+          exercise_id: ex._id,
+          name: ex.name,
+          sets: "", // No default value
+          reps: "", // No default value
+          manipulation: "", // No default value
+        })),
+      ];
+      return updated;
+    });
+    setSelectedExercises([]); // Clear selected exercises
+    setAddMoreExercise(false); // Hide the dropdown
+  };
+
   const assignTraining = (data) => {
     try {
       const payload = {
         name: data.name,
         description: data.description,
+        user_id: userId,
+        training_id: trainingId,
         workouts: selectedTrainingExercises.map((workout) => ({
           workout: workout._id,
           exercises: workout.exercises.map((ex) => ({
@@ -90,10 +139,10 @@ const EditTrainingForm = ({ trainingId, userId }) => {
         })),
       };
       console.log("assignTraining", payload);
-      axios.post(`${base_url}/training`, payload).then((response) => {
+      axios.post(`${base_url}/assign-training`, payload).then((response) => {
         if (response.status === 201) {
           toast.success("Assigned Training to User successfully!");
-          // navigate("/dashboard/training-list");
+          navigate("/dashboard/training-list");
         }
       });
     } catch (error) {
@@ -131,6 +180,14 @@ const EditTrainingForm = ({ trainingId, userId }) => {
     }
   };
 
+  const removeExercise = (wIndex, exIndex) => {
+    setSelectedTrainingExercises((prev) => {
+      const updated = [...prev];
+      updated[wIndex].exercises.splice(exIndex, 1);
+      return updated;
+    });
+  };
+
   const onSubmit = async (data) => {
     if (userId) {
       assignTraining(data);
@@ -140,7 +197,7 @@ const EditTrainingForm = ({ trainingId, userId }) => {
   };
 
   return (
-    <div className="py-10 w-[450px]">
+    <div className="py-10 w-[500px]">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <DynamicInputField
           id="name"
@@ -171,98 +228,127 @@ const EditTrainingForm = ({ trainingId, userId }) => {
           onChange={setSelectedTrainingExercises}
         />
 
+        {addMoreExercise && (
+          <Select
+            className="rounded-lg h-12"
+            direction="rtl"
+            options={exercises}
+            valueField="_id"
+            labelField="name"
+            multi
+            onChange={(values) => setSelectedExercises(values)}
+          />
+        )}
+
         {selectedTrainingExercises.map((workout, wIndex) => (
-          <div
-            key={wIndex}
-            className="border p-4 rounded-lg space-y-2"
-            dir="rtl"
-          >
+          <div key={wIndex} className="border p-4 rounded-lg" dir="rtl">
             <h3 className="font-semibold">{workout.name}</h3>
             {workout.exercises.map((ex, exIndex) => (
-              <div key={exIndex}>
-                <p className="col-span-1 font-medium">
-                  {ex?.exercise_id?.name}
-                </p>
-                <div className="grid grid-cols-3 gap-4 mt-4">
-                  <div className="space-y-2">
-                    <label htmlFor="sets">Sets</label>
-                    <input
-                      type="number"
-                      value={ex.sets}
-                      onChange={(e) => {
-                        const updatedExercises = [...workout.exercises];
-                        updatedExercises[exIndex].sets = e.target.value;
-                        setSelectedTrainingExercises((prev) => {
-                          const updated = [...prev];
-                          updated[wIndex].exercises = updatedExercises;
-                          return updated;
-                        });
-                      }}
-                      className="border rounded p-2 w-full"
-                      placeholder="Sets"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="reps">Reps</label>
-                    <input
-                      type="number"
-                      value={ex.reps}
-                      onChange={(e) => {
-                        const updatedExercises = [...workout.exercises];
-                        updatedExercises[exIndex].reps = e.target.value;
-                        setSelectedTrainingExercises((prev) => {
-                          const updated = [...prev];
-                          updated[wIndex].exercises = updatedExercises;
-                          return updated;
-                        });
-                      }}
-                      className="border rounded p-2 w-full"
-                      placeholder="Reps"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="manipulation">Manipulation</label>
-                    {/* <input
-                      type="text"
-                      value={ex.manipulation}
-                      onChange={(e) => {
-                        const updatedExercises = [...workout.exercises];
-                        updatedExercises[exIndex].manipulation = e.target.value;
-                        setSelectedTrainingExercises((prev) => {
-                          const updated = [...prev];
-                          updated[wIndex].exercises = updatedExercises;
-                          return updated;
-                        });
-                      }}
-                      className="border rounded p-2 w-full"
-                      placeholder="Manipulation"
-                    /> */}
-                    <ShadSelect
-                      defaultValue={ex.manipulation}
-                      onValueChange={(value) => {
-                        const updatedExercises = [...workout.exercises];
-                        updatedExercises[exIndex].manipulation = value;
-                        setSelectedTrainingExercises((prev) => {
-                          const updated = [...prev];
-                          updated[wIndex].exercises = updatedExercises;
-                          return updated;
-                        });
-                      }}
-                    >
-                      <SelectTrigger className="border rounded p-2 w-full">
-                        <SelectValue className="uppercase">
-                          {ex.manipulation}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Superset">Superset</SelectItem>
-                        <SelectItem value="DropSet">Drop Set</SelectItem>
-                      </SelectContent>
-                    </ShadSelect>
+              <div key={exIndex} className="flex items-center justify-between">
+                <div className="mt-16">
+                  <Trash
+                    onClick={() => removeExercise(wIndex, exIndex)}
+                    className="cursor-pointer text-red-500"
+                  />
+                </div>
+                <div>
+                  <p className="col-span-1 font-medium">{ex?.name}</p>
+                  <div className="grid grid-cols-3 gap-4 mt-4">
+                    <div className="space-y-2">
+                      <label htmlFor="sets">Sets</label>
+                      <input
+                        type="number"
+                        value={ex.sets}
+                        onChange={(e) => {
+                          const updatedExercises = [...workout.exercises];
+                          updatedExercises[exIndex].sets = e.target.value;
+                          setSelectedTrainingExercises((prev) => {
+                            const updated = [...prev];
+                            updated[wIndex].exercises = updatedExercises;
+                            return updated;
+                          });
+                        }}
+                        className="border rounded p-2 w-full"
+                        placeholder="Sets"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="reps">Reps</label>
+                      <input
+                        type="number"
+                        value={ex.reps}
+                        onChange={(e) => {
+                          const updatedExercises = [...workout.exercises];
+                          updatedExercises[exIndex].reps = e.target.value;
+                          setSelectedTrainingExercises((prev) => {
+                            const updated = [...prev];
+                            updated[wIndex].exercises = updatedExercises;
+                            return updated;
+                          });
+                        }}
+                        className="border rounded p-2 w-full"
+                        placeholder="Reps"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="manipulation">Manipulation</label>
+                      <ShadSelect
+                        value={ex.manipulation}
+                        onValueChange={(value) => {
+                          const updatedExercises = [...workout.exercises];
+                          updatedExercises[exIndex].manipulation = value;
+                          setSelectedTrainingExercises((prev) => {
+                            const updated = [...prev];
+                            updated[wIndex].exercises = updatedExercises;
+                            return updated;
+                          });
+
+                          // Disable "Superset" if it is selected
+                          if (value === "Superset") {
+                            setIsSupersetSelected(true);
+                          }
+                          handleAssignButtonClick(value);
+                        }}
+                      >
+                        <SelectTrigger className="border rounded p-2 w-full">
+                          <SelectValue placeholder="Select manipulation">
+                            {ex?.manipulation}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem
+                            value="Superset"
+                            disabled={isSupersetSelected}
+                          >
+                            Superset
+                          </SelectItem>
+                          <SelectItem value="DropSet">Drop Set</SelectItem>
+                        </SelectContent>
+                      </ShadSelect>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
+            <div className="my-5">
+              {selectedExercises.length > 0 && (
+                <Button
+                  type="button"
+                  onClick={() => addSelectedExercisesToWorkout(wIndex)}
+                  className="bg-customBg text-white px-4 py-2 rounded-full"
+                >
+                  Add Selected Exercises
+                </Button>
+              )}
+            </div>
+            <div className="flex justify-center ">
+              <div
+                className="bg-customBg text-white px-4 py-2 rounded-full my-4 cursor-pointer"
+                onClick={() => setAddMoreExercise(true)}
+              >
+                Add More Exercise
+              </div>
+            </div>
           </div>
         ))}
 
@@ -270,6 +356,7 @@ const EditTrainingForm = ({ trainingId, userId }) => {
           <Button
             type="submit"
             className="bg-customBg text-white px-4 py-2 rounded-full"
+            disabled={assignButton === "Superset"}
           >
             {userId ? "Assign Training" : " Update Training"}
           </Button>
