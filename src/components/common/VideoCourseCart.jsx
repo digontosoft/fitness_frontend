@@ -11,6 +11,7 @@ const VideoCourseCart = ({ exercise }) => {
       </Button>
       <div className="w-full flex  items-center justify-center">
         <h1 className="text-sm font-bold text-[#0A2533]">
+          {" "}
           {exercise?.exercise_id?.name}
         </h1>
       </div>
