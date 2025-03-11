@@ -46,6 +46,7 @@ import NutritionLists from "@/pages/admin/managenutritionguides/NutritionLists";
 import EditNutrition from "@/pages/admin/managenutritionguides/EditNutrition";
 import NutritionDetails from "@/pages/admin/managenutritionguides/NutritionDetails";
 import ThankYou from "@/pages/thankyou/Thankyou";
+
 export const routes = createBrowserRouter([
   {
     element: (
@@ -115,6 +116,7 @@ export const routes = createBrowserRouter([
             path: "/action-course-cart/:id",
             element: <ActionCourseCart />,
           },
+
           {
             path: "/personal-workout/:id",
             element: <ProgressCourseCart />,
