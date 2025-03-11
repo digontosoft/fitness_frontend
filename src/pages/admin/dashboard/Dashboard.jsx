@@ -21,6 +21,7 @@ const Dashboard = () => {
       throw error;
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -64,7 +65,7 @@ const Dashboard = () => {
           direction="rtl"
           valueField="_id"
           labelField={"firstName"}
-          options={users}
+          options={traineeUsers}
           searchBy={"firstName"}
           onChange={handleSelectUser}
         />

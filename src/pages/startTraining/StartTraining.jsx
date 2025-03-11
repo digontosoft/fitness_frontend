@@ -12,6 +12,7 @@ const StartTraining = () => {
   console.log("exersize data:", workData);
   const { userTrainingExercise } = workData;
 
+  // State to track the current exercise index
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {

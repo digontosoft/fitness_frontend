@@ -6,6 +6,13 @@ import { WelcomeModal } from "@/components/home/WelcomeModal";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { TaskModal } from "./TaskModal";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,15 +67,20 @@ const Home = () => {
           <h1 className="text-xl font-bold text-[#0A2533] text-end md:text-center ">
             משימות
           </h1>
-          <div className="mx-w-6xl mx-auto flex items-center justify-between gap-10 md:pt-20 py-10 flex-col md:flex-row">
-            {userTasks.map((task) => (
-              <ArrowGroup
-                onclick={handleOpenModal}
-                task={task}
-                key={task?._id}
-              />
-            ))}
-          </div>
+          <Carousel className="w-full max-w-6xl mt-5">
+            <CarouselContent className="-ml-1 flex">
+              {userTasks?.map((task) => (
+                <CarouselItem
+                  className="pl-2 md:pl-4 basis-1/3 flex-shrink-0 cursor-pointer"
+                  key={task?._id}
+                >
+                  <ArrowGroup onclick={handleOpenModal} task={task} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
       </div>
       <TaskModal
