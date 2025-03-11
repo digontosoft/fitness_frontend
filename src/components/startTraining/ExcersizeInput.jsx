@@ -2,7 +2,13 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const ExcersizeInput = () => {
+const ExcersizeInput = ({
+  exerciseData,
+  onNext,
+  onPrevious,
+  isFirst,
+  isLast,
+}) => {
   const {
     register,
     handleSubmit,
@@ -109,10 +115,16 @@ const ExcersizeInput = () => {
       </div>
 
       <div className="flex gap-2 flex-row-reverse md:gap-6 mt-20 justify-center items-center">
-        <Button className="bg-gradient-to-tr from-red-800 to-red-600 text-white font-bold text-xs px-8 md:px-10 rounded-full">
+        <Button
+          onClick={onNext}
+          className="bg-gradient-to-tr from-red-800 to-red-600 text-white font-bold text-xs px-8 md:px-10 rounded-full"
+        >
           סיים אימון
         </Button>
-        <Button className="bg-[#15151573] text-white font-bold text-xs px-6 md:px-8 rounded-full">
+        <Button
+          onClick={onPrevious}
+          className="bg-[#15151573] text-white font-bold text-xs px-6 md:px-8 rounded-full"
+        >
           לתרגיל הקודם
         </Button>
       </div>
