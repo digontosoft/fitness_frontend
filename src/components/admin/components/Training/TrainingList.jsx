@@ -40,34 +40,7 @@ export function TrainingList({ userId }) {
   const [training, setTraining] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedTraining, setSelectedTraining] = useState(null);
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-       const getUser = async () => {
-         try {
-            const response = await axios.get(`${base_url}/getUser/${userId}`);
-            setUser(response.data.data);
-         } catch (error) {
-          
-         }
-       }
-       getUser();
-  }, [userId]);
-
-  const updateStatus = async (userType) =>{ 
-    try {
-      await axios.post(`${base_url}/updateUserInfo`,{user_id:user._id,userType})
-      setUser((prevUser) => ({
-        ...prevUser,
-        userType
-      }));
-    } catch (error) {} 
     
-  }
-
-
-
-  
 
   const columns = [
     {
@@ -132,9 +105,7 @@ export function TrainingList({ userId }) {
                 </Button>
               </Link>
             )}
-            {userId && (
-              <Button className="bg-customBg" size="sm" onClick={() => updateStatus(user?.userType==='admin'?"trainer":"admin")} >{user?.userType==='admin'?"Make Trainer":"Make Admin"}</Button>
-            )}
+            
           </div>
         );
       },

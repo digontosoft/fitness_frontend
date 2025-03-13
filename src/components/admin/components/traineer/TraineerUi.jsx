@@ -10,6 +10,7 @@ import TraineeLeftCard from "./TraineeLeftCard";
 import { useEffect, useState } from "react";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
+import { toast } from "sonner";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState({});
@@ -26,11 +27,27 @@ const TraineerUi = ({ userId }) => {
     getUser()
   },[userId])
 
+  const updateStatus = async (userType) =>{ 
+    try {
+     const response = await axios.post(`${base_url}/updateUserInfo`,{user_id:user._id,userType})
+     if(response.status === 200){
+      toast.success("User Type Updated Successfully");
+      setUser((prevUser) => ({
+        ...prevUser,
+        userType
+      }));
+     }
+      
+    } catch (error) {} 
+    
+  }
+
   return (
     <div className="space-y-12">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
-        {userId ? <span>{user?.firstName + " " + user?.lastName}</span> : <></>}
+        <span className="flex items-center gap-2 flex-row-reverse">{userId ? <span>{user?.firstName + " " + user?.lastName}</span> : <></>} 
+        <Button className="bg-customBg" size="sm" onClick={() => updateStatus(user?.userType==='admin'?"trainer":"admin")} >{user?.userType==='admin'?"Make Trainer":"Make Admin"}</Button></span>
       </div>
       <div className="flex items-center justify-center gap-5">
         <TraineeRightCard />
