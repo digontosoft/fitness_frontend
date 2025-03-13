@@ -20,17 +20,26 @@ const TraineerUi = ({ userId }) => {
         const response = await axios.get(`${base_url}/getUser/${userId}`);
         setUser(response.data.data);
       } catch (error) {
-        
+        console.log(error);
       }
-    }
-    getUser()
-  },[userId])
+    };
+    getUser();
+  }, [userId]);
 
   return (
     <div className="space-y-12">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
-        {userId ? <span>{user?.firstName + " " + user?.lastName}</span> : <></>}
+        <div className="flex items-center justify-center gap-2">
+          <Button variant="default">Admin</Button>
+          <div>
+            {userId ? (
+              <span>{user?.firstName + " " + user?.lastName}</span>
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
       </div>
       <div className="flex items-center justify-center gap-5">
         <TraineeRightCard />

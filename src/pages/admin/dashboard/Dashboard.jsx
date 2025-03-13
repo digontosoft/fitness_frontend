@@ -10,6 +10,8 @@ import { base_url } from "@/api/baseUrl";
 import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
+  const [traineeUsers, setTraineeUsers] = useState([]);
+  const [recipeUsers, setRecipeUsers] = useState([]);
   const navigate = useNavigate();
   const fetchData = async () => {
     try {
@@ -23,11 +25,15 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    if (users?.length) {
+      setTraineeUsers(users.filter((user) => user.userType === "trainee"));
+      setRecipeUsers(users.filter((user) => user.userType === "recipe"));
+    }
+  }, [users]);
+
+  useEffect(() => {
     fetchData();
   }, []);
-
-  const traineeUsers = users.filter((user) => user.userType === "trainee");
-  const recipeUsers = users.filter((user) => user.userType === "recipe");
 
   const handleSelectUser = (selectedUser) => {
     if (selectedUser.length > 0) {
@@ -76,14 +82,26 @@ const Dashboard = () => {
           className="grid grid-cols-2 gap-4 items-center justify-center"
           // dir="ltr"
         >
-          <AdminArrowCard image={women1} title={"אישור מתאמנים חדשים"} />
-          <AdminArrowCard image={ArrowBurger} title={"ניהול מדריכי תזונה"} />
+          <AdminArrowCard
+            image={women1}
+            title={"אישור מתאמנים חדשים"}
+            link={"/dashboard/approve-email"}
+          />
+          <AdminArrowCard
+            image={ArrowBurger}
+            title={"ניהול מדריכי תזונה"}
+            link={"/dashboard/nutrition-lists"}
+          />
           <AdminArrowCard
             image={women2}
             title={"ניהול מתאמנים קיימים"}
-            link={"/dashboard/approve-email"}
+            link={"/dashboard/training-list"}
           />
-          <AdminArrowCard image={ArrowDumbel} title={"ניהול תרגילים"} />
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title={"ניהול תרגילים"}
+            link={"/dashboard/exercise-list"}
+          />
         </div>
       </div>
     </Container>

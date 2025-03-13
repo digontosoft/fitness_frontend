@@ -87,12 +87,12 @@ export const adminLink = [
     link: "/dashboard/traineer",
     icon: NutrationGuide,
   },
-  {
-    _id: 7,
-    title: "Measurement Women",
-    link: "/measurement-women",
-    icon: NutrationGuide,
-  },
+  // {
+  //   _id: 7,
+  //   title: "Measurement Women",
+  //   link: "/measurement-women",
+  //   icon: NutrationGuide,
+  // },
   {
     _id: 8,
     title: "Training Programm",

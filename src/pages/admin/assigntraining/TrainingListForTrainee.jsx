@@ -30,9 +30,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import TrainingDetails from "./TrainingDetails";
+import TrainingForTraineeDetails from "./TrainingForTraineeDetails";
+// import TrainingDetails from "./TrainingDetails";
 
-export function TrainingList({ userId }) {
+export function TrainingListForTrainee({ userId }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -77,7 +78,7 @@ export function TrainingList({ userId }) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          שם התרגיל
+          Training Name
           <ArrowUpDown />
         </Button>
       ),
@@ -92,7 +93,7 @@ export function TrainingList({ userId }) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          הוראות לתרגיל
+          Training Description
           <ArrowUpDown />
         </Button>
       ),
@@ -112,8 +113,8 @@ export function TrainingList({ userId }) {
         const trainingId = row.original._id;
         return (
           <div className="flex space-x-2">
-            <TrainingDetails trainingId={trainingId} />
-            <Link to={`/dashboard/edit-training/${row.original._id}`}>
+            <TrainingForTraineeDetails trainingId={trainingId} />
+            <Link to={`/dashboard/edit-training/${trainingId}/${userId}`}>
               <Button className="bg-black" size="sm">
                 <Edit />
               </Button>
@@ -125,24 +126,6 @@ export function TrainingList({ userId }) {
             >
               <Trash />
             </Button>
-            {/* {userId && (
-              <Link to={`/dashboard/assign-training/${trainingId}/${userId}`}>
-                <Button className="bg-black" size="sm">
-                  Assign Training
-                </Button>
-              </Link>
-            )}
-            {userId && (
-              <Button
-                className="bg-customBg"
-                size="sm"
-                onClick={() =>
-                  updateStatus(user?.userType === "admin" ? "trainer" : "admin")
-                }
-              >
-                {user?.userType === "admin" ? "Make Trainer" : "Make Admin"}
-              </Button>
-            )} */}
           </div>
         );
       },
@@ -172,8 +155,11 @@ export function TrainingList({ userId }) {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${base_url}/training`);
+      const response = await axios.get(
+        `${base_url}/get-training-by-user-id/${userId}`
+      );
       setTraining(response.data.data);
+      console.log("training-for-user", response.data.data);
     } catch (error) {
       console.error("Error fetching exercises:", error);
     }
@@ -202,7 +188,7 @@ export function TrainingList({ userId }) {
     <div className="w-full" dir="ltr">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="שם מסנן...."
+          placeholder="Filter by trainig name..."
           value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -211,7 +197,7 @@ export function TrainingList({ userId }) {
         />
         <Link to="/dashboard/trining-program">
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            הוסף אימון חדש
+            Assign New Training
           </Button>
         </Link>
       </div>
