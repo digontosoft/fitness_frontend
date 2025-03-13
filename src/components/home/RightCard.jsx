@@ -14,12 +14,13 @@ import { base_url } from "@/api/baseUrl";
 
 const RightCard = ({ user }) => {
   const [userSteps, setUserSteps] = useState({});
-  const progress = userSteps?.step_average;
+  const progress = userSteps?.step_average || 0;
+  const target = Math.max(userSteps?.step_target || 1, 1);
   const strokeWidth = 4;
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
-  const offset =
-    circumference - (progress / userSteps?.step_target) * circumference;
+  const parcentage = ((progress / target) * 100).toFixed(1);
+  const offset = circumference - (parcentage / 100) * circumference;
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userDetails?.gender;
   useEffect(() => {
@@ -35,20 +36,14 @@ const RightCard = ({ user }) => {
             }
           });
       } catch (err) {
-        // toast.error(err.response.data.message);
         console.log("error:", err);
       }
     };
     fetchUserSteps();
   }, [user?._id]);
-  // const handleOpenModal = () => {
-  //   console.log("hello this is open modal function");
-  // };
+
   return (
-    <div
-      // onClick={handleOpenModal}
-      className="w-72 h-48 bg-gradient-to-tr from-[#0A0A0A] via-[#343434] to-[#0A0A0A] p-2 rounded-2xl relative"
-    >
+    <div className="w-72 h-48 bg-gradient-to-tr from-[#0A0A0A] via-[#343434] to-[#0A0A0A] p-2 rounded-2xl relative">
       <div
         className="absolute top-0 left-0 w-full h-full"
         style={{
@@ -64,7 +59,6 @@ const RightCard = ({ user }) => {
                 viewBox="0 0 120 120"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                {/* Background Circle */}
                 <circle
                   cx="60"
                   cy="60"
@@ -73,7 +67,7 @@ const RightCard = ({ user }) => {
                   stroke="#CCFFC4"
                   strokeWidth={strokeWidth}
                 />
-                {/* Progress Circle */}
+
                 <circle
                   cx="60"
                   cy="60"
@@ -88,7 +82,7 @@ const RightCard = ({ user }) => {
               </svg>
               <div className="absolute text-center">
                 <p className="text-sm font-semibold text-green-500">
-                  {progress}%
+                  {parcentage}%
                 </p>
               </div>
             </div>
