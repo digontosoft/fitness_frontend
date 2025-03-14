@@ -240,8 +240,8 @@ export const routes = createBrowserRouter([
             element: <AssignTrainingList />,
           },
           {
-            path: "/dashboard/assign-training/:id/:userId",
-            element: <EditTraining />,
+            path: "/dashboard/assign-training/:userId",
+            element: <TriningProgram />,
           },
           {
             path: "/dashboard/edit-training/:id",

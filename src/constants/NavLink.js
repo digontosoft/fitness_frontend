@@ -75,12 +75,12 @@ export const adminLink = [
     link: "/dashboard/exercise-library",
     icon: NutrationGuide,
   },
-  {
-    _id: 5,
-    title: "Exercise List",
-    link: "/dashboard/exercise-list",
-    icon: NutrationGuide,
-  },
+  // {
+  //   _id: 5,
+  //   title: "Exercise List",
+  //   link: "/dashboard/exercise-list",
+  //   icon: NutrationGuide,
+  // },
   {
     _id: 6,
     title: "Trainer",
@@ -99,24 +99,24 @@ export const adminLink = [
     link: "/dashboard/trining-program",
     icon: NutrationGuide,
   },
-  {
-    _id: 9,
-    title: "Training List",
-    link: "/dashboard/training-list",
-    icon: NutrationGuide,
-  },
+  // {
+  //   _id: 9,
+  //   title: "Training List",
+  //   link: "/dashboard/training-list",
+  //   icon: NutrationGuide,
+  // },
   {
     _id: 10,
     title: "Add Nutrition Guide",
     link: "/dashboard/add-nutrition-guide",
     icon: NutrationGuide,
   },
-  {
-    _id: 11,
-    title: "Nutrition List",
-    link: "/dashboard/nutrition-lists",
-    icon: NutrationGuide,
-  },
+  // {
+  //   _id: 11,
+  //   title: "Nutrition List",
+  //   link: "/dashboard/nutrition-lists",
+  //   icon: NutrationGuide,
+  // },
 ];
 export const recipeLink = [
   {

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
 
-const AddTrainingForm = () => {
+const AddTrainingForm = ({ userId }) => {
   const [selectedTrainingExercises, setSelectedTrainingExercises] = useState(
     []
   );
