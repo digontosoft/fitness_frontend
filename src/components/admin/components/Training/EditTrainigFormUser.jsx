@@ -9,8 +9,8 @@ import { Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const EditTrainingForm = () => {
-  const { id } = useParams();
+const EditTrainingFormUser = () => {
+  const { trainingId, userId } = useParams();
   const [training, setTraining] = useState({});
   const [exerciseList, setExerciseList] = useState([]);
   const [workouts, setWorkouts] = useState([]);
@@ -30,7 +30,7 @@ const EditTrainingForm = () => {
         const [exerciseRes, workoutRes, trainingRes] = await Promise.all([
           axios.get(`${base_url}/exercise`),
           axios.get(`${base_url}/workout`),
-          axios.get(`${base_url}/training/${id}`),
+          axios.get(`${base_url}/get-training-by-id/${trainingId}`),
         ]);
 
         if (exerciseRes.status === 200) setExerciseList(exerciseRes.data.data);
@@ -42,14 +42,14 @@ const EditTrainingForm = () => {
     };
 
     fetchData();
-  }, [id]);
-  console.log("training:", training);
+  }, [trainingId]);
+
   // Add selected workout with exercises
   const handleAddWorkout = (selected) => {
     if (!selected.length) return;
     const newWorkout = selected[0];
 
-    if (training.workouts?.some((w) => w.workout?._id === newWorkout?._id)) {
+    if (training.workouts?.some((w) => w.workout._id === newWorkout._id)) {
       setSelectedWorkout(null);
       return;
     }
@@ -118,7 +118,7 @@ const EditTrainingForm = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log("trainingUpdate:", data);
+    console.log(data);
   };
 
   return (
@@ -130,7 +130,7 @@ const EditTrainingForm = () => {
           label="Training Name"
           placeholder="Enter training name..."
           register={register}
-          validation={{ required: !id && "Name is required" }}
+          validation={{ required: !userId && "Name is required" }}
           errors={errors}
           defaultValue={training?.name}
         />
@@ -141,7 +141,7 @@ const EditTrainingForm = () => {
           label="Description"
           placeholder="Enter description..."
           register={register}
-          validation={{ required: !id && "Description is required" }}
+          validation={{ required: !userId && "Description is required" }}
           errors={errors}
           defaultValue={training?.description}
         />
@@ -166,7 +166,7 @@ const EditTrainingForm = () => {
                   className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
                 >
                   <div>
-                    <p className="py-4">{ex?.name}</p>
+                    <p className="py-4">{ex?.exercise_id?.name}</p>
                     <div className="flex items-center justify-between gap-x-2">
                       <div className="flex flex-col items-center space-y-4">
                         <p>Sets</p>
@@ -226,4 +226,4 @@ const EditTrainingForm = () => {
   );
 };
 
-export default EditTrainingForm;
+export default EditTrainingFormUser;

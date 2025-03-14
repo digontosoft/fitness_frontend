@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
 
-const AddTrainingForm = () => {
+const AddTrainingForm = ({ userId }) => {
   const [selectedTrainingExercises, setSelectedTrainingExercises] = useState(
     []
   );
@@ -100,10 +100,10 @@ const AddTrainingForm = () => {
             className="min-w-[350px]"
             id="name"
             type="text"
-            label="שם האימון"
-            placeholder="Add שם האימון...."
+            label="Training Name"
+            placeholder="Add Training Name...."
             register={register}
-            validation={{ required: "שם האימון is required" }}
+            validation={{ required: "Training Name is required" }}
             errors={errors}
           />
 
@@ -111,10 +111,10 @@ const AddTrainingForm = () => {
             className="min-w-[350px]"
             id="description"
             type="text"
-            label="דגשים מיוחדים (במידה ויש)"
-            placeholder="דגשים מיוחדים (במידה ויש)..."
+            label="Training Description"
+            placeholder="Add Training Description...."
             register={register}
-            validation={{ required: "דגשים מיוחדים is required" }}
+            validation={{ required: "Training Description is required" }}
             errors={errors}
           />
 
@@ -207,7 +207,7 @@ const AddTrainingForm = () => {
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
           >
-            Saving a new training session
+            Save a new training session
           </Button>
         </div>
       </form>
