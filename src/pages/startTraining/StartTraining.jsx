@@ -4,7 +4,7 @@ import HeroVideo from "@/components/startTraining/HeroVideo";
 import LastExercise from "@/components/startTraining/LastExercise";
 import ExcersizeInput from "@/components/startTraining/ExcersizeInput";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonGroup from "@/components/startTraining/ButtonGroup";
 import Title from "@/components/measurements/Tilte";
 const StartTraining = () => {
@@ -13,40 +13,75 @@ const StartTraining = () => {
   const { userTrainingExercise = [] } = workData;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPrevious, setShowPrevious] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+  const [exerciseData, setExerciseData] = useState({});
+  const isSuperset =
+    userTrainingExercise[currentIndex]?.manipulation === "Superset";
 
-  // Find the next exercise index based on superset logic
+  // useEffect(() => {
+  //   console.log("Updated exerciseData:", exerciseData);
+  // }, [exerciseData]);
+
+  const handleInputChange = (courseId, value) => {
+    setExerciseData((prev) => ({
+      ...prev,
+      [courseId]: { ...prev[courseId], ...value },
+    }));
+  };
+
   const getNextIndex = () => {
     let nextIndex = currentIndex + 1;
-    if (
-      userTrainingExercise[nextIndex] &&
-      userTrainingExercise[nextIndex]?.isSuperset
-    ) {
-      nextIndex++; // Skip to next non-superset exercise
+
+    if (nextIndex < userTrainingExercise.length) {
+      return nextIndex;
     }
-    return nextIndex;
+
+    return currentIndex;
+  };
+
+  const getPreviousIndex = () => {
+    let prevIndex = currentIndex - 1;
+
+    if (prevIndex >= 0) {
+      return prevIndex;
+    }
+
+    return currentIndex;
   };
 
   const handleNext = () => {
-    if (currentIndex < userTrainingExercise.length - 1) {
-      setCurrentIndex(getNextIndex());
-      setShowPrevious(true); // Show previous button when moving forward
+    const nextIndex = getNextIndex();
+
+    if (nextIndex !== currentIndex) {
+      setCurrentIndex(nextIndex);
+      setShowPrevious(true);
+
+      if (nextIndex === userTrainingExercise.length - 1) {
+        setIsFinished(true);
+      }
     }
   };
 
   const handlePrevious = () => {
-    if (currentIndex > 0) {
-      let prevIndex = currentIndex - 1;
-      while (prevIndex > 0 && userTrainingExercise[prevIndex]?.isSuperset) {
-        prevIndex--; // Move back to the previous standalone exercise
-      }
+    const prevIndex = getPreviousIndex();
+
+    if (prevIndex !== currentIndex) {
       setCurrentIndex(prevIndex);
-      if (prevIndex === 0) setShowPrevious(false); // Hide previous button when at first exercise
+      setShowPrevious(prevIndex > 0);
+      setIsFinished(false);
     }
   };
 
-  // Determine if the current exercise is part of a superset
-  const isSuperset = userTrainingExercise[currentIndex]?.isSuperset || false;
+  const handleFinish = () => {
+    console.log("All exercise data on finish:", exerciseData);
+  };
 
+  const nextIndex = currentIndex + 1;
+  const currentExercise = userTrainingExercise[currentIndex] || {};
+  const courseId =
+    currentExercise?.exercise_id?._id || `course-${currentIndex}`;
+
+  // console.log("current index data", currentIndex);
   return (
     <div className="px-2">
       <CommonContainer>
@@ -65,16 +100,45 @@ const StartTraining = () => {
           />
           <ExcersizeInput
             exerciseData={userTrainingExercise[currentIndex]}
+            value={exerciseData[courseId] || {}}
+            onChange={(value) => handleInputChange(courseId, value)}
             onNext={handleNext}
             onPrevious={handlePrevious}
             isFirst={currentIndex === 0}
             isLast={currentIndex === userTrainingExercise.length - 1}
           />
+
+          {isSuperset && nextIndex < userTrainingExercise.length && (
+            <>
+              <Title
+                title={userTrainingExercise[nextIndex]?.exercise_id?.name}
+              />
+              <HeroVideo
+                videoUrl={
+                  userTrainingExercise[nextIndex]?.exercise_id?.video_url
+                }
+              />
+              <CourseContent />
+              <LastExercise
+                currentExercise={userTrainingExercise[nextIndex] || {}}
+              />
+              <ExcersizeInput
+                exerciseData={userTrainingExercise[currentIndex]}
+                value={exerciseData[courseId] || {}}
+                onChange={(value) => handleInputChange(courseId, value)}
+                onNext={handleNext}
+                onPrevious={handlePrevious}
+                isFirst={currentIndex === 0}
+                isLast={currentIndex === userTrainingExercise.length - 1}
+              />
+            </>
+          )}
         </>
         <ButtonGroup
-          onNext={handleNext}
+          onNext={isFinished ? handleFinish : handleNext}
           onPrevious={handlePrevious}
           showPrevious={showPrevious}
+          isFinished={isFinished}
         />
       </CommonContainer>
     </div>
