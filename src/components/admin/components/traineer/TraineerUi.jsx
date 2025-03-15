@@ -51,7 +51,11 @@ const TraineerUi = ({ userId }) => {
         <FormTitle title="ניהול מתאמנים" />
         <span className="flex items-center gap-2 flex-row-reverse">
           {userId ? (
-            <span>{user?.firstName + " " + user?.lastName}</span>
+            <span>
+              {user?.firstName && user?.lastName
+                ? `${user.firstName} ${user.lastName}`
+                : "Loading..."}
+            </span>
           ) : (
             <></>
           )}

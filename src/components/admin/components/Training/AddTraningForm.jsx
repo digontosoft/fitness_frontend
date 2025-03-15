@@ -272,7 +272,7 @@ const AddTrainingForm = () => {
                         <label htmlFor="manipulation">Manipulation</label>
                         <input
                           type="text"
-                          className="border rounded p-1 w-full"
+                          className="border rounded p-1 w-full  text-center placeholder:text-sm  "
                           value={exercise.manipulation}
                           onChange={(e) =>
                             handleExerciseChange(
