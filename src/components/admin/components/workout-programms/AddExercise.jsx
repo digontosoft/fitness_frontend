@@ -1,14 +1,21 @@
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectGroup,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
+// import { useState } from "react";
 
-// const AddExercise = ({ exercise, onChange, setSuperset, superset }) => {
+// const AddExercise = ({
+//   exercise,
+//   onChange,
+//   setSuperset,
+//   superset,
+//   isSupersetSelected,
+//   setIsSupersetSelected,
+// }) => {
 //   const [sets, setSets] = useState("");
 //   const [reps, setReps] = useState("");
 //   const [manipulation, setManipulation] = useState("");
@@ -19,6 +26,17 @@ import { useState } from "react";
 //       reps: parseInt(reps, 10),
 //       manipulation,
 //     });
+//   };
+
+//   const handleManipulationChange = (value) => {
+//     setManipulation(value);
+//     handleInputChange();
+//     if (value === "superset") {
+//       setSuperset(true);
+//       setIsSupersetSelected(true);
+//     } else {
+//       setSuperset(false);
+//     }
 //   };
 
 //   return (
@@ -51,20 +69,13 @@ import { useState } from "react";
 //         </div>
 //         <div className="flex flex-col space-y-2">
 //           <label htmlFor={`manipulation-${exercise?.name}`}>Manipulation</label>
-//           <Select
-//             value={manipulation}
-//             onValueChange={(value) => {
-//               setManipulation(value);
-//               handleInputChange();
-//               setSuperset(value === "superset" && true);
-//             }}
-//           >
+//           <Select value={manipulation} onValueChange={handleManipulationChange}>
 //             <SelectTrigger className="w-full border border-red-200">
 //               <SelectValue placeholder="Select a manipulation" />
 //             </SelectTrigger>
 //             <SelectContent>
 //               <SelectGroup>
-//                 <SelectItem value="superset" disabled={superset}>
+//                 <SelectItem value="superset" disabled={isSupersetSelected}>
 //                   Superset
 //                 </SelectItem>
 //                 <SelectItem value="dropset">Dropset</SelectItem>
@@ -78,6 +89,17 @@ import { useState } from "react";
 // };
 
 // export default AddExercise;
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const AddExercise = ({
   exercise,
@@ -99,7 +121,12 @@ const AddExercise = ({
     });
   };
 
-  const handleManipulationChange = (value) => {
+  const handleManipulationChange = (e) => {
+    const value = e.target.value.toLowerCase();
+    if (value === "superset" && isSupersetSelected) {
+      toast.error("Superset is already selected and cannot be added again.");
+      return;
+    }
     setManipulation(value);
     handleInputChange();
     if (value === "superset") {
@@ -140,19 +167,14 @@ const AddExercise = ({
         </div>
         <div className="flex flex-col space-y-2">
           <label htmlFor={`manipulation-${exercise?.name}`}>Manipulation</label>
-          <Select value={manipulation} onValueChange={handleManipulationChange}>
-            <SelectTrigger className="w-full border border-red-200">
-              <SelectValue placeholder="Select a manipulation" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="superset" disabled={isSupersetSelected}>
-                  Superset
-                </SelectItem>
-                <SelectItem value="dropset">Dropset</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <input
+            id={`manipulation-${exercise?.name}`}
+            type="text"
+            className="w-full border border-red-200 h-10 px-2 rounded-md"
+            value={manipulation}
+            onChange={handleManipulationChange}
+            onBlur={handleInputChange}
+          />
         </div>
       </div>
     </div>

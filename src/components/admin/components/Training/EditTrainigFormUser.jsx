@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const EditTrainingFormUser = ({ trainingId, userId }) => {
+  console.log(trainingId);
   // const { trainingId, userId } = useParams();
   const [training, setTraining] = useState({});
   const [exerciseList, setExerciseList] = useState([]);
@@ -137,13 +138,13 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
 
   const onSubmit = async () => {
     console.log("trainingUpdate:", training);
-    axios
-      .put(`${base_url}/update-user-training/${trainingId}`, training)
-      .then((res) => {
-        if (res.status === 200) {
-          toast.success("Training session updated successfully!");
-        }
-      });
+    // axios
+    //   .put(`${base_url}/update-user-training/${trainingId}`, training)
+    //   .then((res) => {
+    //     if (res.status === 200) {
+    //       toast.success("Training session updated successfully!");
+    //     }
+    //   });
   };
 
   return (
@@ -159,7 +160,6 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
           errors={errors}
           defaultValue={training?.name}
         />
-
         <DynamicInputField
           id="description"
           type="text"

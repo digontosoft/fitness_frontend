@@ -147,12 +147,9 @@ const EditTrainingForm = () => {
       description: training.description,
       workouts: (training.workouts || []).map((w) => ({
         workout: {
-          _id: w.workout?._id,
-          name: w.workout?.name,
-          description: w.workout?.description,
+          _id: w?._id, // Keep workout ID
           exercises: (w.exercises || []).map((ex) => ({
             _id: ex._id,
-            // Ensure exercise_id is sent as a plain string or object based on your schema:
             exercise_id:
               typeof ex.exercise_id === "object"
                 ? ex.exercise_id._id
@@ -165,11 +162,11 @@ const EditTrainingForm = () => {
       })),
     };
 
-    console.log("trainingUpdate:", payload);
+    console.log("trainingUpdate Payload:", JSON.stringify(payload, null, 2));
+
     try {
       await axios.put(`${base_url}/training/${id}`, payload);
       toast.success("Training session updated successfully!");
-      // navigate("/dashboard/training-list");
     } catch (error) {
       console.error("Error updating training:", error);
     }
