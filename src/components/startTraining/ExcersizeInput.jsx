@@ -1,7 +1,15 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-const ExcersizeInput = ({}) => {
+const ExcersizeInput = ({
+  onNext,
+  onPrevious,
+  exerciseData,
+  isFirst,
+  isLast,
+  value,
+  onChange,
+}) => {
   const {
     register,
     handleSubmit,
@@ -11,19 +19,16 @@ const ExcersizeInput = ({}) => {
   } = useForm();
 
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem("exerciseData"));
-    if (storedData) {
-      Object.keys(storedData).forEach((key) => setValue(key, storedData[key]));
+    if (value) {
+      setValue("exerciseName", value.exerciseName || "");
+      setValue("target", value.target || "");
+      setValue("lastSet", value.lastSet || "");
     }
-  }, [setValue]);
+  }, [value, setValue]);
 
-  // Save input values to localStorage when clicking next
-  const handleNext = () => {
-    const formData = getValues();
-    localStorage.setItem("exerciseData", JSON.stringify(formData));
-    onNext(); // Proceed to the next step
+  const handleInputChange = (field, val) => {
+    onChange({ ...getValues(), [field]: val });
   };
-
   return (
     <div className="w-96 py-20" dir="rtl">
       <div className="flex text-[#0A2533] text-xl font-bold justify-between items-center">
@@ -51,6 +56,8 @@ const ExcersizeInput = ({}) => {
                 className="border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#FD4753] focus:border-[#FD4753]"
                 {...register("exerciseName", {
                   required: "Exercise name is required",
+                  onChange: (e) =>
+                    handleInputChange("exerciseName", e.target.value),
                 })}
               />
               {errors.exerciseName && (
@@ -80,6 +87,7 @@ const ExcersizeInput = ({}) => {
                 className="border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#FD4753] focus:border-[#FD4753]"
                 {...register("target", {
                   required: "Target reps are required",
+                  onChange: (e) => handleInputChange("target", e.target.value),
                 })}
               />
               {errors.target && (
@@ -106,6 +114,7 @@ const ExcersizeInput = ({}) => {
                 className="border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#FD4753] focus:border-[#FD4753]"
                 {...register("lastSet", {
                   required: "Last set value is required",
+                  onChange: (e) => handleInputChange("lastSet", e.target.value),
                 })}
               />
               {errors.lastSet && (
