@@ -57,24 +57,24 @@ export const adminLink = [
     link: "/dashboard",
     icon: NutrationGuide,
   },
-  // {
-  //   _id: 2,
-  //   title: "Workout Programm",
-  //   link: "/dashboard/workout-programme",
-  //   icon: NutrationGuide,
-  // },
+  {
+    _id: 2,
+    title: "Workout Programm",
+    link: "/dashboard/workout-programme",
+    icon: NutrationGuide,
+  },
   {
     _id: 3,
     title: "Workout List",
     link: "/dashboard/workout-list",
     icon: NutrationGuide,
   },
-  // {
-  //   _id: 4,
-  //   title: "Exercise Library",
-  //   link: "/dashboard/exercise-library",
-  //   icon: NutrationGuide,
-  // },
+  {
+    _id: 4,
+    title: "Exercise Library",
+    link: "/dashboard/exercise-library",
+    icon: NutrationGuide,
+  },
   // {
   //   _id: 5,
   //   title: "Exercise List",

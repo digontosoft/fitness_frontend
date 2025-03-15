@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-dropdown-select";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { base_url } from "@/api/baseUrl";
@@ -18,6 +18,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
   const [exerciseSelectVisible, setExerciseSelectVisible] = useState({});
+  const navigate = useNavigate();
 
   //console.log("userId", userId);
 
@@ -47,7 +48,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
 
     fetchData();
   }, [trainingId]);
-  console.log("training-Data", exerciseList);
+  console.log("training-Data", training);
 
   // Add selected workout with exercises
   const handleAddWorkout = (selected) => {
@@ -125,6 +126,15 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       ),
     }));
   };
+
+  const handleRemoveWorkout = (workoutId) => {
+    console.log("Removing workout:", workoutId); // Debugging log
+    setTraining((prev) => ({
+      ...prev,
+      workouts: prev.workouts.filter((workout) => workout._id !== workoutId),
+    }));
+  };
+
   const handleSetChange = (workoutId, exerciseId, field, value) => {
     //  console.log("changeExercise:", exerciseId);
     setTraining((prev) => ({
@@ -150,16 +160,16 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       user_id: user_Id,
       training_id: trainingId,
       workouts: (training.workouts || []).map((w) => ({
-        workout: w._id,
+        workout: w?._id,
         // name: w.workout?.name,
         // description: w.workout?.description,
 
         exercises: (w.exercises || []).map((ex) => ({
-          _id: ex._id,
+          _id: ex?._id,
           // Ensure exercise_id is sent as a plain string or object based on your schema:
           exercise_id:
             typeof ex.exercise_id === "object"
-              ? ex.exercise_id._id
+              ? ex.exercise_id?._id
               : ex.exercise_id,
           sets: Number(ex.sets),
           reps: Number(ex.reps),
@@ -183,6 +193,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       );
       if (response.status === 200) {
         toast.success("Training session updated successfully!");
+        navigate(-1);
       }
     } catch (error) {
       console.log(error);
@@ -227,6 +238,13 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           {training?.workouts?.map((workout) => (
             <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
               <h1 className="font-semibold">{workout?.workout?.name}</h1>
+              <div className="flex items-center gap-x-2" dir="rtl">
+                <Trash
+                  className="cursor-pointer text-red-600"
+                  onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
+                />
+                Remove Workout
+              </div>
 
               {workout?.exercises?.map((ex) => (
                 <div
@@ -310,7 +328,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                     [workout._id]: true,
                   }))
                 }
-                className="mt-2 bg-customBg"
+                className="mt-2 bg-customBg flex mx-auto"
               >
                 Add More Exercise
               </Button>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-dropdown-select";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { base_url } from "@/api/baseUrl";
@@ -18,6 +18,7 @@ const EditTrainingForm = () => {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
   const [exerciseSelectVisible, setExerciseSelectVisible] = useState({});
+  const navigate = useNavigate();
 
   const {
     register,
@@ -44,6 +45,7 @@ const EditTrainingForm = () => {
 
     fetchData();
   }, [id]);
+
   //ok
   const handleAddWorkout = (selected) => {
     if (!selected.length) return;
@@ -173,7 +175,9 @@ const EditTrainingForm = () => {
     console.log("payload:", payload);
     try {
       const response = await axios.put(`${base_url}/training/${id}`, payload);
-      console.log("response:", response);
+      if (response.status === 200) {
+        navigate("/dashboard/training-list");
+      }
 
       toast.success("Training session updated successfully!");
     } catch (error) {
@@ -221,17 +225,22 @@ const EditTrainingForm = () => {
           {training?.workouts?.map((workout) => (
             <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
               <h1 className="font-semibold">{workout?.workout?.name}</h1>
-              <Trash
-                className="cursor-pointer text-red-600"
-                onClick={() => handleRemoveWorkout(workout._id)}
-              />
+              <div className="flex items-center gap-x-2" dir="rtl">
+                <Trash
+                  className="cursor-pointer text-red-600"
+                  onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
+                />
+                Remove Workout
+              </div>
               {workout?.exercises?.map((ex) => (
                 <div
                   key={ex._id}
                   className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
                 >
                   <div>
-                    <p className="py-4">{ex?.name}</p>
+                    <p className="py-4" dir="rtl">
+                      {ex?.name}
+                    </p>
                     <div className="flex items-center justify-between gap-x-2">
                       <div className="flex flex-col items-center space-y-4">
                         <p>Sets</p>
@@ -306,7 +315,7 @@ const EditTrainingForm = () => {
                     [workout._id]: true,
                   }))
                 }
-                className="mt-2"
+                className="mt-2 bg-customBg flex mx-auto"
               >
                 Add More Exercise
               </Button>
@@ -315,8 +324,14 @@ const EditTrainingForm = () => {
         </div>
 
         <div className="flex items-center justify-between">
-          <Button type="submit">Update Training</Button>
-          <Button type="button" onClick={() => setShowWorkoutSelect(true)}>
+          <Button type="submit" className=" bg-customBg">
+            Update Training
+          </Button>
+          <Button
+            type="button"
+            className=" bg-customBg"
+            onClick={() => setShowWorkoutSelect(true)}
+          >
             Add More Workout
           </Button>
         </div>

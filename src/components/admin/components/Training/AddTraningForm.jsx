@@ -216,7 +216,7 @@ const AddTrainingForm = () => {
           />
         </div>
 
-        <div className="space-y-4 w-[450px]">
+        <div className="space-y-4 w-[550px]">
           {selectedTrainingExercises.map((workout, workoutIndex) => (
             <div key={workout.workout} className="p-4 border rounded-lg">
               <h3 className="text-lg font-semibold">{workout.name}</h3>
@@ -227,7 +227,13 @@ const AddTrainingForm = () => {
                     className="p-3 border rounded-md"
                   >
                     <h4 className="font-medium">{exercise.name}</h4>
-                    <div className="grid grid-cols-4 gap-2 mt-2">
+                    <div className="flex items-center justify-center gap-2 mt-2">
+                      <Trash
+                        className="text-red-500 cursor-pointer"
+                        onClick={() =>
+                          handleRemoveExercise(workoutIndex, exerciseIndex)
+                        }
+                      />
                       <div>
                         <label htmlFor="sets">Sets</label>
                         <input
@@ -279,12 +285,6 @@ const AddTrainingForm = () => {
                           placeholder="Manipulation"
                         />
                       </div>
-                      <Trash
-                        className="text-red-500 cursor-pointer"
-                        onClick={() =>
-                          handleRemoveExercise(workoutIndex, exerciseIndex)
-                        }
-                      />
                     </div>
                   </div>
                 ))}
@@ -304,7 +304,7 @@ const AddTrainingForm = () => {
 
               <Button
                 type="button"
-                className="mt-5"
+                className="mt-5 bg-customBg"
                 onClick={() => handleAddMoreExercise(workoutIndex)}
               >
                 Add More Exercise
