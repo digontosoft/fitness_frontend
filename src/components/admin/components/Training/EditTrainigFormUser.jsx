@@ -10,9 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const EditTrainingFormUser = ({ trainingId, userId }) => {
-  console.log(trainingId);
-  // const { trainingId, userId } = useParams();
+const EditTrainingFormUser = ({ trainingId, user_Id }) => {
+  //const { trainingId, userId } = useParams();
   const [training, setTraining] = useState({});
   const [exerciseList, setExerciseList] = useState([]);
   const [workouts, setWorkouts] = useState([]);
@@ -20,10 +19,13 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
   const [exerciseSelectVisible, setExerciseSelectVisible] = useState({});
 
+  //console.log("userId", userId);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
 
     fetchData();
   }, [trainingId]);
-  console.log("training-Data", training);
+  console.log("training-Data", exerciseList);
 
   // Add selected workout with exercises
   const handleAddWorkout = (selected) => {
@@ -69,6 +71,8 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
       ],
     };
 
+    //console.log("updatedTraining 1:", updatedTraining);
+
     setTraining(updatedTraining);
     setSelectedWorkout(null);
     setShowWorkoutSelect(false);
@@ -76,6 +80,8 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
 
   // Add a new exercise to a specific workout
   const handleAddExercise = (workoutId, selected) => {
+    //console.log("selected", selected);
+
     if (!selected.length) return;
     const newExercise = selected[0];
 
@@ -89,7 +95,7 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
                 ...workout.exercises,
                 {
                   _id: newExercise._id,
-                  exercise_id: newExercise,
+                  exercise_id: newExercise._id,
                   sets: "",
                   reps: "",
                   manipulation: "",
@@ -120,7 +126,7 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
     }));
   };
   const handleSetChange = (workoutId, exerciseId, field, value) => {
-    console.log("changeExercise:", value);
+    //  console.log("changeExercise:", exerciseId);
     setTraining((prev) => ({
       ...prev,
       workouts: prev.workouts.map((workout) =>
@@ -136,16 +142,53 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
     }));
   };
 
+  console.log("Training", training);
+
   const onSubmit = async () => {
-    console.log("trainingUpdate:", training);
+    // console.log("payload", training);
+    const payload = {
+      user_id: user_Id,
+      training_id: trainingId,
+      workouts: (training.workouts || []).map((w) => ({
+        workout: w._id,
+        // name: w.workout?.name,
+        // description: w.workout?.description,
+
+        exercises: (w.exercises || []).map((ex) => ({
+          _id: ex._id,
+          // Ensure exercise_id is sent as a plain string or object based on your schema:
+          exercise_id:
+            typeof ex.exercise_id === "object"
+              ? ex.exercise_id._id
+              : ex.exercise_id,
+          sets: Number(ex.sets),
+          reps: Number(ex.reps),
+          manipulation: ex.manipulation,
+        })),
+      })),
+    };
+    console.log("Payload", payload);
+
     // axios
-    //   .put(`${base_url}/update-user-training/${trainingId}`, training)
+    //   .put(`${base_url}/update-user-training/${training._id}`, payload)
     //   .then((res) => {
     //     if (res.status === 200) {
     //       toast.success("Training session updated successfully!");
     //     }
-    //   });
+    //  });
+    try {
+      const response = await axios.put(
+        `${base_url}/update-user-training/${trainingId}`,
+        payload
+      );
+      if (response.status === 200) {
+        toast.success("Training session updated successfully!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+  //console.log("training-Data", training);
 
   return (
     <div className="py-10 w-[500px]">
@@ -156,7 +199,7 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
           label="Training Name"
           placeholder="Enter training name..."
           register={register}
-          validation={{ required: !userId && "Name is required" }}
+          validation={{ required: !user_Id && "Name is required" }}
           errors={errors}
           defaultValue={training?.name}
         />
@@ -166,7 +209,7 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
           label="Description"
           placeholder="Enter description..."
           register={register}
-          validation={{ required: !userId && "Description is required" }}
+          validation={{ required: !user_Id && "Description is required" }}
           errors={errors}
           defaultValue={training?.description}
         />
@@ -195,6 +238,7 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
                     <div className="flex items-center justify-between gap-x-2">
                       <div className="flex flex-col items-center space-y-4">
                         <p>Sets</p>
+
                         <Input
                           type="number"
                           defaultValue={ex?.sets}
@@ -259,6 +303,7 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
               )}
 
               <Button
+                type="button"
                 onClick={() =>
                   setExerciseSelectVisible((prev) => ({
                     ...prev,
@@ -279,6 +324,7 @@ const EditTrainingFormUser = ({ trainingId, userId }) => {
           </Button>
           <Button
             onClick={() => setShowWorkoutSelect(true)}
+            type="button"
             className="bg-customBg"
           >
             Add More Workout
