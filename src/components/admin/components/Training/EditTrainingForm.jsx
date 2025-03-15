@@ -44,8 +44,7 @@ const EditTrainingForm = () => {
 
     fetchData();
   }, [id]);
-  console.log("training:", training);
-  // Add selected workout with exercises
+  //ok
   const handleAddWorkout = (selected) => {
     if (!selected.length) return;
     const newWorkout = selected[0];
@@ -54,7 +53,7 @@ const EditTrainingForm = () => {
       setSelectedWorkout(null);
       return;
     }
-
+    //test
     const updatedTraining = {
       ...training,
       workouts: [
@@ -67,7 +66,10 @@ const EditTrainingForm = () => {
       ],
     };
 
+    //console.log("updatedTraining 1:", updatedTraining);
+
     setTraining(updatedTraining);
+
     setSelectedWorkout(null);
     setShowWorkoutSelect(false);
   };
@@ -80,6 +82,8 @@ const EditTrainingForm = () => {
     setTraining((prev) => ({
       ...prev,
       workouts: prev.workouts.map((workout) =>
+        //change prev Line
+
         workout._id === workoutId
           ? {
               ...workout,
@@ -117,6 +121,9 @@ const EditTrainingForm = () => {
       ),
     }));
   };
+
+  //console.log("Training:", training);
+
   const handleRemoveWorkout = (workoutId) => {
     setTraining((prev) => ({
       ...prev,
@@ -125,7 +132,7 @@ const EditTrainingForm = () => {
   };
 
   const handleSetChange = (workoutId, exerciseId, field, value) => {
-    console.log("changeExercise:", value);
+    // console.log("changeExercise:", value);
     setTraining((prev) => ({
       ...prev,
       workouts: prev.workouts.map((workout) =>
@@ -146,31 +153,32 @@ const EditTrainingForm = () => {
       name: training.name,
       description: training.description,
       workouts: (training.workouts || []).map((w) => ({
-        workout: {
-          _id: w.workout?._id,
-          name: w.workout?.name,
-          description: w.workout?.description,
-          exercises: (w.exercises || []).map((ex) => ({
-            _id: ex._id,
-            // Ensure exercise_id is sent as a plain string or object based on your schema:
-            exercise_id:
-              typeof ex.exercise_id === "object"
-                ? ex.exercise_id._id
-                : ex.exercise_id,
-            sets: ex.sets,
-            reps: ex.reps,
-            manipulation: ex.manipulation,
-          })),
-        },
+        workout: w._id,
+        // name: w.workout?.name,
+        // description: w.workout?.description,
+
+        exercises: (w.exercises || []).map((ex) => ({
+          _id: ex._id,
+          exercise_id:
+            typeof ex.exercise_id === "object"
+              ? ex.exercise_id._id
+              : ex.exercise_id,
+          sets: Number(ex.sets),
+          reps: Number(ex.reps),
+          manipulation: ex.manipulation,
+        })),
       })),
     };
 
-    console.log("trainingUpdate:", payload);
+    console.log("payload:", payload);
     try {
-      await axios.put(`${base_url}/training/${id}`, payload);
+      const response = await axios.put(`${base_url}/training/${id}`, payload);
+      console.log("response:", response);
+
       toast.success("Training session updated successfully!");
-      // navigate("/dashboard/training-list");
     } catch (error) {
+      console.log(error);
+
       console.error("Error updating training:", error);
     }
   };
@@ -291,6 +299,7 @@ const EditTrainingForm = () => {
               )}
 
               <Button
+                type="button"
                 onClick={() =>
                   setExerciseSelectVisible((prev) => ({
                     ...prev,
@@ -307,7 +316,7 @@ const EditTrainingForm = () => {
 
         <div className="flex items-center justify-between">
           <Button type="submit">Update Training</Button>
-          <Button onClick={() => setShowWorkoutSelect(true)}>
+          <Button type="button" onClick={() => setShowWorkoutSelect(true)}>
             Add More Workout
           </Button>
         </div>

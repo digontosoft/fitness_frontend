@@ -75,10 +75,10 @@ const AddWorkoutForm = () => {
             className="min-w-[400px]"
             id="name"
             type="text"
-            label="שם האימון"
-            placeholder="Add שם האימון...."
+            label="Workout Name"
+            placeholder="Add woukout name...."
             register={register}
-            validation={{ required: "שם האימון is required" }}
+            validation={{ required: "Workout name is required" }}
             errors={errors}
           />
 
@@ -86,10 +86,10 @@ const AddWorkoutForm = () => {
             className="min-w-[400px]"
             id="description"
             type="text"
-            label="דגשים מיוחדים (במידה ויש)"
-            placeholder="דגשים מיוחדים (במידה ויש)..."
+            label="Workout Description"
+            placeholder="Add Workout Description...."
             register={register}
-            validation={{ required: "דגשים מיוחדים is required" }}
+            validation={{ required: "Workout Description is required" }}
             errors={errors}
           />
           <Select
@@ -101,15 +101,6 @@ const AddWorkoutForm = () => {
             multi
             onChange={(values) => setSelectedExercises(values)}
           />
-          {/* {selectedExercises.map((exercise) => (
-            <AddExercise
-              key={exercise._id}
-              exercise={exercise}
-              onChange={(data) => handleExerciseChange(exercise._id, data)}
-              setSuperset={setSuperset}
-              superset={superset}
-            />
-          ))} */}
           {selectedExercises.map((exercise) => (
             <AddExercise
               key={exercise._id}
