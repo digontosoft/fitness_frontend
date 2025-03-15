@@ -15,7 +15,8 @@ const AddTrainingForm = () => {
   );
   const [trainingExercises, setTrainingExercises] = useState([]);
   const [exerciseList, setExerciseList] = useState([]);
-  const [addMoreExercise, setAddMoreExercise] = useState(null); // Track which workout is being modified
+  const [addMoreExercise, setAddMoreExercise] = useState(null);
+
   const navigate = useNavigate();
 
   const {
@@ -256,7 +257,7 @@ const AddTrainingForm = () => {
                         <label htmlFor="manipulation">Manipulation</label>
                         <input
                           type="text"
-                          className="border rounded p-1 w-full"
+                          className="border rounded p-1 w-full  text-center placeholder:text-sm  "
                           value={exercise.manipulation}
                           onChange={(e) =>
                             handleExerciseChange(
@@ -294,7 +295,7 @@ const AddTrainingForm = () => {
 
               <Button
                 type="button"
-                className="mt-5"
+                className="mt-5 bg-red-700"
                 onClick={() => handleAddMoreExercise(workoutIndex)}
               >
                 Add More Exercise
