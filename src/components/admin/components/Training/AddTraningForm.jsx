@@ -7,24 +7,26 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
+import { Trash } from "lucide-react";
 
-const AddTrainingForm = ({ userId }) => {
+const AddTrainingForm = () => {
   const [selectedTrainingExercises, setSelectedTrainingExercises] = useState(
     []
   );
   const [trainingExercises, setTrainingExercises] = useState([]);
+  const [exerciseList, setExerciseList] = useState([]);
+  const [addMoreExercise, setAddMoreExercise] = useState(null); // Track which workout is being modified
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm();
 
   useEffect(() => {
-    const fetchExercises = async () => {
+    const fetchWorkout = async () => {
       try {
         const response = await axios.get(`${base_url}/workout`);
         setTrainingExercises(response.data.data);
@@ -32,25 +34,62 @@ const AddTrainingForm = ({ userId }) => {
         console.error("Error fetching training exercises:", error);
       }
     };
+    fetchWorkout();
+  }, []);
+
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const response = await axios.get(`${base_url}/exercise`);
+        setExerciseList(response.data.data);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
     fetchExercises();
   }, []);
 
-  const handleWorkoutChange = (values) => {
-    // Update selected workouts and prefill exercises
-    const updatedExercises = values.map((workout) => ({
-      workout: workout._id,
-      name: workout.name, // Workout Name
-      exercises:
-        workout.exercises?.map((exercise) => ({
-          exercise_id: exercise.exercise_id?._id || exercise._id,
-          name: exercise.exercise_id?.name || exercise.name, // Exercise Name
-          sets: exercise.sets || 3,
-          reps: exercise.reps || 10,
-          manipulation: exercise.manipulation || "Default manipulation",
-        })) || [],
-    }));
+  // const handleWorkoutChange = (values) => {
+  //   const updatedExercises = values.map((workout) => ({
+  //     workout: workout._id,
+  //     name: workout.name,
+  //     exercises:
+  //       workout.exercises?.map((exercise) => ({
+  //         exercise_id: exercise.exercise_id?._id || exercise._id,
+  //         name: exercise.exercise_id?.name || exercise.name,
+  //         sets: exercise.sets || 3,
+  //         reps: exercise.reps || 10,
+  //         manipulation: exercise.manipulation || "Default manipulation",
+  //       })) || [],
+  //   }));
 
-    setSelectedTrainingExercises(updatedExercises);
+  //   setSelectedTrainingExercises(updatedExercises);
+  // };
+
+  const handleWorkoutChange = (values) => {
+    setSelectedTrainingExercises((prevWorkouts) => {
+      const newWorkouts = values.map((workout) => {
+        const existingWorkout = prevWorkouts.find(
+          (w) => w.workout === workout._id
+        );
+
+        return {
+          workout: workout._id,
+          name: workout.name,
+          exercises: existingWorkout
+            ? existingWorkout.exercises // Keep existing exercises
+            : workout.exercises?.map((exercise) => ({
+                exercise_id: exercise.exercise_id?._id || exercise._id,
+                name: exercise.exercise_id?.name || exercise.name,
+                sets: exercise.sets || 3,
+                reps: exercise.reps || 10,
+                manipulation: exercise.manipulation || "Default manipulation",
+              })) || [],
+        };
+      });
+
+      return newWorkouts;
+    });
   };
 
   const handleExerciseChange = (workoutIndex, exerciseIndex, field, value) => {
@@ -59,15 +98,53 @@ const AddTrainingForm = ({ userId }) => {
     setSelectedTrainingExercises(updatedWorkouts);
   };
 
+  const handleAddMoreExercise = (workoutIndex) => {
+    setAddMoreExercise(workoutIndex);
+  };
+
+  const handleNewExerciseSelection = (selectedExercises) => {
+    if (addMoreExercise === null) return;
+
+    setSelectedTrainingExercises((prevWorkouts) => {
+      const updatedWorkouts = [...prevWorkouts];
+      const workout = updatedWorkouts[addMoreExercise];
+
+      selectedExercises.forEach((exercise) => {
+        console.log("selectedex:", exercise);
+        workout.exercises.push({
+          exercise_id: exercise._id,
+          name: exercise.name,
+          sets: 0,
+          reps: 0,
+          manipulation: "",
+        });
+      });
+
+      return updatedWorkouts;
+    });
+
+    setAddMoreExercise(null);
+  };
+  const handleRemoveExercise = (workoutIndex, exerciseIndex) => {
+    setSelectedTrainingExercises((prevWorkouts) => {
+      const updatedWorkouts = [...prevWorkouts];
+      updatedWorkouts[workoutIndex].exercises = updatedWorkouts[
+        workoutIndex
+      ].exercises.filter((_, index) => index !== exerciseIndex);
+
+      return updatedWorkouts;
+    });
+  };
+
   const onSubmit = async (data) => {
     try {
       const payload = {
         name: data.name,
         description: data.description,
         workouts: selectedTrainingExercises.map((workout) => ({
-          workout: workout.workout, // Workout ID
+          workout: workout.workout,
           exercises: workout.exercises.map((exercise) => ({
-            exercise_id: exercise.exercise_id, // Exercise ID
+            exercise_id: exercise.exercise_id,
             sets: exercise.sets,
             reps: exercise.reps,
             manipulation: exercise.manipulation,
@@ -101,7 +178,7 @@ const AddTrainingForm = ({ userId }) => {
             id="name"
             type="text"
             label="Training Name"
-            placeholder="Add Training Name...."
+            placeholder="Add Training Name..."
             register={register}
             validation={{ required: "Training Name is required" }}
             errors={errors}
@@ -112,13 +189,12 @@ const AddTrainingForm = ({ userId }) => {
             id="description"
             type="text"
             label="Training Description"
-            placeholder="Add Training Description...."
+            placeholder="Add Training Description..."
             register={register}
             validation={{ required: "Training Description is required" }}
             errors={errors}
           />
 
-          {/* Workout Selection */}
           <Select
             className="rounded-lg h-12"
             direction="rtl"
@@ -130,7 +206,6 @@ const AddTrainingForm = ({ userId }) => {
           />
         </div>
 
-        {/* Selected Workouts and Exercises */}
         <div className="space-y-4 w-[450px]">
           {selectedTrainingExercises.map((workout, workoutIndex) => (
             <div key={workout.workout} className="p-4 border rounded-lg">
@@ -142,7 +217,7 @@ const AddTrainingForm = ({ userId }) => {
                     className="p-3 border rounded-md"
                   >
                     <h4 className="font-medium">{exercise.name}</h4>
-                    <div className="grid grid-cols-3 gap-2 mt-2">
+                    <div className="grid grid-cols-4 gap-2 mt-2">
                       <div>
                         <label htmlFor="sets">Sets</label>
                         <input
@@ -194,10 +269,36 @@ const AddTrainingForm = ({ userId }) => {
                           placeholder="Manipulation"
                         />
                       </div>
+                      <Trash
+                        className="text-red-500 cursor-pointer"
+                        onClick={() =>
+                          handleRemoveExercise(workoutIndex, exerciseIndex)
+                        }
+                      />
                     </div>
                   </div>
                 ))}
               </div>
+
+              {addMoreExercise === workoutIndex && (
+                <Select
+                  className="rounded-lg h-12 mt-3"
+                  direction="rtl"
+                  options={exerciseList}
+                  valueField="_id"
+                  labelField="name"
+                  multi
+                  onChange={handleNewExerciseSelection}
+                />
+              )}
+
+              <Button
+                type="button"
+                className="mt-5"
+                onClick={() => handleAddMoreExercise(workoutIndex)}
+              >
+                Add More Exercise
+              </Button>
             </div>
           ))}
         </div>

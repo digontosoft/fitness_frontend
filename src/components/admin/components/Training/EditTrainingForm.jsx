@@ -8,6 +8,7 @@ import { base_url } from "@/api/baseUrl";
 import { Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const EditTrainingForm = () => {
   const { id } = useParams();
@@ -71,7 +72,7 @@ const EditTrainingForm = () => {
     setShowWorkoutSelect(false);
   };
 
-  // Add a new exercise to a specific workout
+  // // Add a new exercise to a specific workout
   const handleAddExercise = (workoutId, selected) => {
     if (!selected.length) return;
     const newExercise = selected[0];
@@ -100,7 +101,7 @@ const EditTrainingForm = () => {
     setExerciseSelectVisible((prev) => ({ ...prev, [workoutId]: false }));
   };
 
-  // Remove an exercise from a workout
+  // // Remove an exercise from a workout
   const handleRemoveExercise = (workoutId, exerciseId) => {
     setTraining((prev) => ({
       ...prev,
@@ -116,9 +117,62 @@ const EditTrainingForm = () => {
       ),
     }));
   };
+  const handleRemoveWorkout = (workoutId) => {
+    setTraining((prev) => ({
+      ...prev,
+      workouts: prev.workouts.filter((workout) => workout._id !== workoutId),
+    }));
+  };
 
-  const onSubmit = async (data) => {
-    console.log("trainingUpdate:", data);
+  const handleSetChange = (workoutId, exerciseId, field, value) => {
+    console.log("changeExercise:", value);
+    setTraining((prev) => ({
+      ...prev,
+      workouts: prev.workouts.map((workout) =>
+        workout._id === workoutId
+          ? {
+              ...workout,
+              exercises: workout.exercises.map((ex) =>
+                ex._id === exerciseId ? { ...ex, [field]: value } : ex
+              ),
+            }
+          : workout
+      ),
+    }));
+  };
+
+  const onSubmit = async () => {
+    const payload = {
+      name: training.name,
+      description: training.description,
+      workouts: (training.workouts || []).map((w) => ({
+        workout: {
+          _id: w.workout?._id,
+          name: w.workout?.name,
+          description: w.workout?.description,
+          exercises: (w.exercises || []).map((ex) => ({
+            _id: ex._id,
+            // Ensure exercise_id is sent as a plain string or object based on your schema:
+            exercise_id:
+              typeof ex.exercise_id === "object"
+                ? ex.exercise_id._id
+                : ex.exercise_id,
+            sets: ex.sets,
+            reps: ex.reps,
+            manipulation: ex.manipulation,
+          })),
+        },
+      })),
+    };
+
+    console.log("trainingUpdate:", payload);
+    try {
+      await axios.put(`${base_url}/training/${id}`, payload);
+      toast.success("Training session updated successfully!");
+      // navigate("/dashboard/training-list");
+    } catch (error) {
+      console.error("Error updating training:", error);
+    }
   };
 
   return (
@@ -159,7 +213,10 @@ const EditTrainingForm = () => {
           {training?.workouts?.map((workout) => (
             <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
               <h1 className="font-semibold">{workout?.workout?.name}</h1>
-
+              <Trash
+                className="cursor-pointer text-red-600"
+                onClick={() => handleRemoveWorkout(workout._id)}
+              />
               {workout?.exercises?.map((ex) => (
                 <div
                   key={ex._id}
@@ -170,15 +227,48 @@ const EditTrainingForm = () => {
                     <div className="flex items-center justify-between gap-x-2">
                       <div className="flex flex-col items-center space-y-4">
                         <p>Sets</p>
-                        <Input type="number" defaultValue={ex?.sets} />
+                        <Input
+                          type="number"
+                          defaultValue={ex?.sets}
+                          onChange={(e) =>
+                            handleSetChange(
+                              workout._id,
+                              ex._id,
+                              "sets",
+                              e.target.value
+                            )
+                          }
+                        />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
                         <p>Reps</p>
-                        <Input type="number" defaultValue={ex?.reps} />
+                        <Input
+                          type="number"
+                          defaultValue={ex?.reps}
+                          onChange={(e) =>
+                            handleSetChange(
+                              workout._id,
+                              ex._id,
+                              "reps",
+                              e.target.value
+                            )
+                          }
+                        />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
                         <p>Manipulation</p>
-                        <Input type="text" defaultValue={ex?.manipulation} />
+                        <Input
+                          type="text"
+                          defaultValue={ex?.manipulation}
+                          onChange={(e) =>
+                            handleSetChange(
+                              workout._id,
+                              ex._id,
+                              "manipulation",
+                              e.target.value
+                            )
+                          }
+                        />
                       </div>
                     </div>
                   </div>

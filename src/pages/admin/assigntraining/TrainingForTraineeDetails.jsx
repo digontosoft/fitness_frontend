@@ -12,7 +12,7 @@ import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 
 export default function TrainingForTraineeDetails({ trainingId }) {
-  const [trainingData, setTrainingData] = useState(null);
+  const [trainingData, setTrainingData] = useState({});
 
   useEffect(() => {
     if (trainingId) {
@@ -26,6 +26,8 @@ export default function TrainingForTraineeDetails({ trainingId }) {
     }
   }, [trainingId]);
 
+  console.log("trainingData:", trainingData);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -33,7 +35,7 @@ export default function TrainingForTraineeDetails({ trainingId }) {
           <Eye />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl mx-auto p-6 rounded-lg">
+      <DialogContent className="sm:max-w-4xl max-h-[70vh] mx-auto p-6 rounded-lg overflow-y-scroll">
         {trainingData ? (
           <div className="flex flex-col items-center gap-6">
             <h2 className="text-xl font-bold text-gray-900">

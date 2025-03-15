@@ -8,9 +8,10 @@ import { base_url } from "@/api/baseUrl";
 import { Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
-const EditTrainingFormUser = () => {
-  const { trainingId, userId } = useParams();
+const EditTrainingFormUser = ({ trainingId, userId }) => {
+  // const { trainingId, userId } = useParams();
   const [training, setTraining] = useState({});
   const [exerciseList, setExerciseList] = useState([]);
   const [workouts, setWorkouts] = useState([]);
@@ -43,6 +44,7 @@ const EditTrainingFormUser = () => {
 
     fetchData();
   }, [trainingId]);
+  console.log("training-Data", training);
 
   // Add selected workout with exercises
   const handleAddWorkout = (selected) => {
@@ -116,9 +118,32 @@ const EditTrainingFormUser = () => {
       ),
     }));
   };
+  const handleSetChange = (workoutId, exerciseId, field, value) => {
+    console.log("changeExercise:", value);
+    setTraining((prev) => ({
+      ...prev,
+      workouts: prev.workouts.map((workout) =>
+        workout._id === workoutId
+          ? {
+              ...workout,
+              exercises: workout.exercises.map((ex) =>
+                ex._id === exerciseId ? { ...ex, [field]: value } : ex
+              ),
+            }
+          : workout
+      ),
+    }));
+  };
 
-  const onSubmit = async (data) => {
-    console.log(data);
+  const onSubmit = async () => {
+    console.log("trainingUpdate:", training);
+    axios
+      .put(`${base_url}/update-user-training/${trainingId}`, training)
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success("Training session updated successfully!");
+        }
+      });
   };
 
   return (
@@ -170,15 +195,48 @@ const EditTrainingFormUser = () => {
                     <div className="flex items-center justify-between gap-x-2">
                       <div className="flex flex-col items-center space-y-4">
                         <p>Sets</p>
-                        <Input type="number" defaultValue={ex?.sets} />
+                        <Input
+                          type="number"
+                          defaultValue={ex?.sets}
+                          onChange={(e) =>
+                            handleSetChange(
+                              workout._id,
+                              ex._id,
+                              "sets",
+                              e.target.value
+                            )
+                          }
+                        />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
                         <p>Reps</p>
-                        <Input type="number" defaultValue={ex?.reps} />
+                        <Input
+                          type="number"
+                          defaultValue={ex?.reps}
+                          onChange={(e) =>
+                            handleSetChange(
+                              workout._id,
+                              ex._id,
+                              "reps",
+                              e.target.value
+                            )
+                          }
+                        />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
                         <p>Manipulation</p>
-                        <Input type="text" defaultValue={ex?.manipulation} />
+                        <Input
+                          type="text"
+                          defaultValue={ex?.manipulation}
+                          onChange={(e) =>
+                            handleSetChange(
+                              workout._id,
+                              ex._id,
+                              "manipulation",
+                              e.target.value
+                            )
+                          }
+                        />
                       </div>
                     </div>
                   </div>
@@ -207,7 +265,7 @@ const EditTrainingFormUser = () => {
                     [workout._id]: true,
                   }))
                 }
-                className="mt-2"
+                className="mt-2 bg-customBg"
               >
                 Add More Exercise
               </Button>
@@ -216,8 +274,13 @@ const EditTrainingFormUser = () => {
         </div>
 
         <div className="flex items-center justify-between">
-          <Button type="submit">Update Training</Button>
-          <Button onClick={() => setShowWorkoutSelect(true)}>
+          <Button type="submit" className="bg-customBg">
+            Update Training
+          </Button>
+          <Button
+            onClick={() => setShowWorkoutSelect(true)}
+            className="bg-customBg"
+          >
             Add More Workout
           </Button>
         </div>

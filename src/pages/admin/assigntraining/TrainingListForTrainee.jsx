@@ -195,7 +195,7 @@ export function TrainingListForTrainee({ userId }) {
           }
           className="max-w-sm"
         />
-        <Link to="/dashboard/trining-program">
+        <Link to={`/dashboard/assign-training/${userId}`}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
             Assign New Training
           </Button>

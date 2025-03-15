@@ -25,7 +25,7 @@ export default function TrainingDetails({ trainingId }) {
   }, [trainingId]);
 
   return (
-    <Dialog>
+    <Dialog className="">
       <DialogTrigger asChild>
         <Button className="bg-customBg" size="sm">
           <Eye />

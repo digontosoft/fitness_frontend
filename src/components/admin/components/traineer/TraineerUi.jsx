@@ -84,7 +84,7 @@ const TraineerUi = ({ userId }) => {
         <AdminArrowCard
           image={ArrowDumbel}
           title="ניהול תוכנית אימון"
-          link={`/dashboard/training-list/${userId}`}
+          link={`/dashboard/assigned-training-list/${userId}`}
         />
       </div>
       <div className="flex items-center justify-center gap-5">

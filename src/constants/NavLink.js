@@ -96,7 +96,7 @@ export const adminLink = [
   {
     _id: 8,
     title: "Training Programm",
-    link: "/dashboard/trining-program",
+    link: "/dashboard/add-training-program",
     icon: NutrationGuide,
   },
   // {

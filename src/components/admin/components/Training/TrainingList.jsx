@@ -49,7 +49,7 @@ export function TrainingList({ userId }) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          שם התרגיל
+          Training Name
           <ArrowUpDown />
         </Button>
       ),
@@ -64,7 +64,7 @@ export function TrainingList({ userId }) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          הוראות לתרגיל
+          Training Description
           <ArrowUpDown />
         </Button>
       ),
@@ -182,9 +182,9 @@ export function TrainingList({ userId }) {
           }
           className="max-w-sm"
         />
-        <Link to="/dashboard/trining-program">
+        <Link to="/dashboard/add-training-program">
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            הוסף אימון חדש
+            Add New Training
           </Button>
         </Link>
       </div>
@@ -243,7 +243,7 @@ export function TrainingList({ userId }) {
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this exercise?</p>
+          <p>Are you sure you want to delete this training?</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
               Cancel

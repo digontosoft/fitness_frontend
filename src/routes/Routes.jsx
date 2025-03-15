@@ -48,6 +48,7 @@ import NutritionDetails from "@/pages/admin/managenutritionguides/NutritionDetai
 import ThankYou from "@/pages/thankyou/Thankyou";
 import AssignTrainingList from "@/pages/admin/assigntraining/AssignTrainingList";
 import EditTraineUser from "@/components/admin/components/Training/EditTraineUser";
+import AssignTraining from "@/pages/admin/assigntraining/AssignTraining";
 
 export const routes = createBrowserRouter([
   {
@@ -216,7 +217,7 @@ export const routes = createBrowserRouter([
             element: <EditWorkout />,
           },
           {
-            path: "/dashboard/trining-program",
+            path: "/dashboard/add-training-program",
             element: <TriningProgram />,
           },
           {
@@ -236,12 +237,12 @@ export const routes = createBrowserRouter([
             element: <TrainingLists />,
           },
           {
-            path: "/dashboard/training-list/:id",
+            path: "/dashboard/assigned-training-list/:id",
             element: <AssignTrainingList />,
           },
           {
             path: "/dashboard/assign-training/:userId",
-            element: <TriningProgram />,
+            element: <AssignTraining />,
           },
           {
             path: "/dashboard/edit-training/:id",
