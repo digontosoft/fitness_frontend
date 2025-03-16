@@ -95,7 +95,9 @@ const AddExerciseForm = ({ exerciseId }) => {
   };
 
   return (
-    <div className=" py-20" dir="rtl">
+    
+      <div className=" py-20" dir="rtl">
+      
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-ful grid gap-4">
           <DynamicInputField
@@ -187,6 +189,7 @@ const AddExerciseForm = ({ exerciseId }) => {
         </div>
       </form>
     </div>
+    
   );
 };
 
