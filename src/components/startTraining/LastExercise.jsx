@@ -1,7 +1,7 @@
 import React from "react";
 
 const LastExercise = ({ currentExercise }) => {
-  console.log("current excersize", currentExercise);
+  // console.log("current excersizeeeeeee", currentExercise?.manipulation);
   return (
     <div className="w-96 ">
       <p className="text-[#0A2533] text-xl font-bold text-start" dir="rtl">

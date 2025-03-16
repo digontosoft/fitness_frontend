@@ -29,9 +29,10 @@ const ExcersizeInput = ({
   const handleInputChange = (field, val) => {
     onChange({ ...getValues(), [field]: val });
   };
+  // console.log("exercise data", exerciseData);
   return (
     <div className="w-96 py-20" dir="rtl">
-      <div className="flex text-[#0A2533] text-xl font-bold justify-between items-center">
+      <div className="flex flex-row-reverse text-[#0A2533] text-xl font-bold justify-between items-center">
         <p>סט אחרון:</p>
         <p>יעד:</p>
       </div>
@@ -41,7 +42,7 @@ const ExcersizeInput = ({
           <div className="flex justify-between  w-80">
             <p className="text-xs font-bold text-[#000000] flex">
               סטים:
-              <span className="text-xs font-normal">4</span>
+              <span className="text-xs font-normal">{exerciseData?.sets}</span>
             </p>
             <div className="flex flex-col relative">
               <label
@@ -72,7 +73,7 @@ const ExcersizeInput = ({
           <div className="flex justify-between  w-80">
             <p className="text-xs font-bold text-[#000000] flex">
               חזרות:
-              <span className="text-xs font-normal">15</span>
+              <span className="text-xs font-normal">{exerciseData?.reps}</span>
             </p>
             <div className="flex flex-col relative">
               <label
@@ -100,13 +101,18 @@ const ExcersizeInput = ({
 
           {/* Input 3 */}
           <div className="flex justify-between  w-80">
-            <p className="text-xs font-bold text-[#000000] flex">משקל (ק׳׳ג)</p>
+            <p className="text-xs font-bold text-[#000000] flex">
+              מניפולציה:
+              <span className="text-xs font-normal">
+                :{exerciseData?.manipulation}
+              </span>
+            </p>
             <div className="flex flex-col relative">
               <label
                 htmlFor="lastSet"
                 className=" absolute px-1 text-sm font-medium text-[#7F7F7F]  bg-white -top-2.5 left-[30%]"
               >
-                משקל
+                מניפולציה
               </label>
               <input
                 id="lastSet"

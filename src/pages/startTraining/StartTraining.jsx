@@ -16,7 +16,8 @@ const StartTraining = () => {
   const [isFinished, setIsFinished] = useState(false);
   const [exerciseData, setExerciseData] = useState({});
   const isSuperset =
-    userTrainingExercise[currentIndex]?.manipulation === "Superset";
+    userTrainingExercise[currentIndex]?.manipulation?.toLowerCase() ===
+    "superset";
 
   // useEffect(() => {
   //   console.log("Updated exerciseData:", exerciseData);
@@ -48,6 +49,19 @@ const StartTraining = () => {
 
     return currentIndex;
   };
+  // const getPreviousIndex = () => {
+  //   let prevIndex = currentIndex - 1;
+
+  //   if (
+  //     prevIndex > 0 &&
+  //     userTrainingExercise[prevIndex]?.manipulation?.toLowerCase() ===
+  //       "superset"
+  //   ) {
+  //     prevIndex--;
+  //   }
+
+  //   return prevIndex >= 0 ? prevIndex : 0;
+  // };
 
   const handleNext = () => {
     const nextIndex = getNextIndex();
@@ -94,12 +108,16 @@ const StartTraining = () => {
               userTrainingExercise[currentIndex]?.exercise_id?.video_url
             }
           />
-          <CourseContent />
+          <CourseContent
+            description={
+              userTrainingExercise[currentIndex]?.exercise_id?.description
+            }
+          />
           <LastExercise
             currentExercise={userTrainingExercise[currentIndex] || {}}
           />
           <ExcersizeInput
-            exerciseData={userTrainingExercise[currentIndex]}
+            exerciseData={userTrainingExercise[currentIndex] || {}}
             value={exerciseData[courseId] || {}}
             onChange={(value) => handleInputChange(courseId, value)}
             onNext={handleNext}
@@ -118,12 +136,16 @@ const StartTraining = () => {
                   userTrainingExercise[nextIndex]?.exercise_id?.video_url
                 }
               />
-              <CourseContent />
+              <CourseContent
+                description={
+                  userTrainingExercise[currentIndex]?.exercise_id?.description
+                }
+              />
               <LastExercise
-                currentExercise={userTrainingExercise[nextIndex] || {}}
+                currentExercise={userTrainingExercise[currentIndex] || {}}
               />
               <ExcersizeInput
-                exerciseData={userTrainingExercise[currentIndex]}
+                exerciseData={userTrainingExercise[currentIndex] || {}}
                 value={exerciseData[courseId] || {}}
                 onChange={(value) => handleInputChange(courseId, value)}
                 onNext={handleNext}
