@@ -14,6 +14,7 @@ const AddTrainingForm = () => {
   const [exerciseList, setExerciseList] = useState([]);
   const [addMoreExercise, setAddMoreExercise] = useState(null);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -53,6 +54,22 @@ const AddTrainingForm = () => {
   );
 
   useEffect(() => {
+    if (!trainingExercises) {
+      setIsButtonDisabled(false);
+      return;
+    }
+
+    const isAnyFieldEmpty = trainingExercises.workouts?.some((workout) =>
+      workout.exercises.some(
+        (exercise) =>
+          exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+      )
+    );
+
+    setIsButtonDisabled(isAnyFieldEmpty);
+  }, [trainingExercises]);
+
+  useEffect(() => {
     const fetchWorkout = async () => {
       try {
         const response = await axios.get(`${base_url}/workout`);
@@ -76,6 +93,8 @@ const AddTrainingForm = () => {
     fetchExercises();
   }, []);
 
+  console.log("selectedTrainingExercises", selectedTrainingExercises);
+
   const checkSupersetCompletion = () => {
     let incomplete = false;
     selectedTrainingExercises.forEach((workout) => {
@@ -96,21 +115,81 @@ const AddTrainingForm = () => {
     const exercise = workout.exercises[exerciseIndex];
 
     if (field === "manipulation" && value === "superset") {
+      // Check if there is already a superset in the workout
       const existingSuperset = workout.exercises.some(
         (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
       );
 
       if (existingSuperset) {
         toast.error("Only one superset is allowed per workout.");
+        setIsSupersetIncomplete(true);
         return;
+      } else {
+        setIsSupersetIncomplete(false);
       }
 
-      if (!exercise.manipulation.includes("superset")) {
-        setIsSupersetIncomplete(true);
+      // Check if this is the last exercise
+      const isLastExercise = exerciseIndex === workout.exercises.length - 1;
+
+      // If it's not the last exercise, check the next exercise
+      if (!isLastExercise) {
+        const nextExercise = workout.exercises[exerciseIndex + 1];
+        if (!nextExercise || nextExercise.manipulation !== "superset") {
+          // If the next exercise doesn't exist or isn't a superset, check if it has other manipulations
+          if (nextExercise && nextExercise.manipulation !== "superset") {
+            // If the next exercise has a different manipulation, it's allowed
+            setIsSupersetIncomplete(false);
+          } else {
+            // If there is no next exercise or it's not a superset, the superset is incomplete
+            setIsSupersetIncomplete(true);
+            toast.error("The next exercise must also be a superset.");
+            return;
+          }
+        }
+      } else {
+        // If it's the last exercise, allow creating a superset
+        setIsSupersetIncomplete(false);
       }
     }
 
+    // If the current exercise is being removed from superset, check the previous exercise
+    if (
+      field === "manipulation" &&
+      value !== "superset" &&
+      exercise.manipulation === "superset"
+    ) {
+      const previousExercise = workout.exercises[exerciseIndex - 1];
+      if (previousExercise && previousExercise.manipulation === "superset") {
+        setIsSupersetIncomplete(true);
+        toast.error(
+          "Cannot remove superset from this exercise as the previous exercise is a superset."
+        );
+        return;
+      }
+    }
+
+    // Update the exercise field
     exercise[field] = value;
+
+    // Check if the superset is complete after the update
+    if (field === "manipulation" && value === "superset") {
+      const nextExercise = workout.exercises[exerciseIndex + 1];
+      if (!nextExercise || nextExercise.manipulation !== "superset") {
+        // If there is no next exercise or it's not a superset, check if it has other manipulations
+        if (nextExercise && nextExercise.manipulation !== "superset") {
+          // If the next exercise has a different manipulation, it's allowed
+          setIsSupersetIncomplete(false);
+        } else {
+          // Otherwise, the superset is incomplete
+          setIsSupersetIncomplete(true);
+        }
+      } else {
+        setIsSupersetIncomplete(false);
+      }
+    } else {
+      setIsSupersetIncomplete(false);
+    }
+
     setSelectedTrainingExercises(updatedWorkouts);
   };
 
@@ -316,8 +395,12 @@ const AddTrainingForm = () => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
-            disabled={isSupersetIncomplete}
+            className={
+              isButtonDisabled || isSupersetIncomplete
+                ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
+                : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            }
+            disabled={isButtonDisabled || isSupersetIncomplete}
           >
             Save a new training session
           </Button>

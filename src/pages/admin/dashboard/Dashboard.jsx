@@ -25,7 +25,8 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (users?.length) {
+    if (users?.length > 0) {
+      // Only filter if users has data
       setTraineeUsers(users.filter((user) => user.userType === "trainee"));
       setRecipeUsers(users.filter((user) => user.userType === "recipe"));
     }
@@ -95,12 +96,22 @@ const Dashboard = () => {
           <AdminArrowCard
             image={women2}
             title={"ניהול מתאמנים קיימים"}
-            link={"/dashboard/training-list"}
+            link={"/dashboard/trainee-users-list"}
           />
           <AdminArrowCard
             image={ArrowDumbel}
             title={"ניהול תרגילים"}
             link={"/dashboard/exercise-list"}
+          />
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title={"Workout Management"}
+            link={"/dashboard/workout-list"}
+          />
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title={"Training Management"}
+            link={"/dashboard/training-list"}
           />
         </div>
       </div>

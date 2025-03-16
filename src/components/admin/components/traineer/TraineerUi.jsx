@@ -18,15 +18,19 @@ const TraineerUi = ({ userId }) => {
       try {
         const response = await axios.get(`${base_url}/getUser/${userId}`);
         setUser(response.data.data);
+        localStorage.setItem(
+          "firstName",
+          JSON.stringify(response.data.data.firstName)
+        );
+        localStorage.setItem(
+          "lastName",
+          JSON.stringify(response.data.data.lastName)
+        );
       } catch (error) {
         console.log(error);
       }
     };
     getUser();
-  }, [userId]);
-
-  useEffect(() => {
-    userId;
   }, [userId]);
 
   const updateStatus = async (userType) => {
@@ -45,20 +49,16 @@ const TraineerUi = ({ userId }) => {
     } catch (error) {}
   };
 
+  const userFirstName = JSON.parse(localStorage.getItem("firstName"));
+  const userLastName = JSON.parse(localStorage.getItem("lastName"));
+  const userName = userFirstName + " " + userLastName;
+
   return (
     <div className="space-y-12">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
         <span className="flex items-center gap-2 flex-row-reverse">
-          {userId ? (
-            <span>
-              {user?.firstName && user?.lastName
-                ? `${user.firstName} ${user.lastName}`
-                : "Loading..."}
-            </span>
-          ) : (
-            <></>
-          )}
+          {userName}
           <Button
             className="bg-customBg"
             size="sm"
