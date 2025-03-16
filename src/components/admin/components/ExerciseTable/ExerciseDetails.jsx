@@ -53,10 +53,17 @@ export default function ExerciseDetails({ exerciseId }) {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
+           
           </div>
           <h2 className="text-lg font-bold">{exerciseData?.name}</h2>
           <p className="text-sm text-gray-600 text-center px-4">
             {exerciseData?.description}
+          </p>
+          <p className="text-sm text-gray-600 text-center px-4">
+            {exerciseData?.body_part} : אזור בגוף
+          </p>
+          <p className="text-sm text-gray-600 text-center px-4">
+            {exerciseData?.equipment} : ציוד
           </p>
         </div>
         <DialogFooter>
