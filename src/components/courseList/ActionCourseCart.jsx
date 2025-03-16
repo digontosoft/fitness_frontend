@@ -13,7 +13,7 @@ const ActionCourseCart = () => {
 
   const workoutData = location.state.data;
 
-  // console.log("workout data from action page", workoutData);
+  console.log("workout data from action page", workoutData);
   const handleCourse = () => {
     navigate("/startTraining", { state: { data: workoutData } });
   };

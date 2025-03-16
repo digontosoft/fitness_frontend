@@ -95,7 +95,7 @@ const StartTraining = () => {
   const courseId =
     currentExercise?.exercise_id?._id || `course-${currentIndex}`;
 
-  // console.log("current index data", currentIndex);
+  console.log("current index data", currentIndex);
   return (
     <div className="px-2">
       <CommonContainer>

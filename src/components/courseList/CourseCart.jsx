@@ -1,9 +1,12 @@
 import cartBg from "../../assets/image/workoutList/Bg.png";
 import whiteLogo from "../../assets/image/whiteLogo.png";
 import icon from "../../assets/image/courseList/Bicep.png";
-const CourseCart = ({ exercise , handleOpen}) => {
+const CourseCart = ({ exercise, handleOpen }) => {
   return (
-    <div className="md:w-52 w-48 shadow-xl rounded-2xl p-3 mt-8 cursor-pointer"  >
+    <div
+      className="md:w-52 w-48 shadow-xl rounded-2xl p-3 mt-8 cursor-pointer"
+      onClick={() => handleOpen(exercise._id)}
+    >
       <div
         className="w-full h-40 rounded-2xl flex justify-center items-center "
         style={{
@@ -18,11 +21,11 @@ const CourseCart = ({ exercise , handleOpen}) => {
         <p className="text-[#0A2533]  text-sm font-bold text-end">
           {exercise?.name}
         </p>
-        <div className="flex gap-2  items-center flex-row-reverse"> 
+        <div className="flex gap-2  items-center flex-row-reverse">
           <img src={icon} alt="" />
           <p>{exercise.body_part}</p>
         </div>
-        <div className="flex gap-2  items-center flex-row-reverse"> 
+        <div className="flex gap-2  items-center flex-row-reverse">
           <img src={icon} alt="" />
           <p>{exercise?.equipment}</p>
         </div>
