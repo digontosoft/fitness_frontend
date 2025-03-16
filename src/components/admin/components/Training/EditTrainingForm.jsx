@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-dropdown-select";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { base_url } from "@/api/baseUrl";
@@ -18,7 +18,7 @@ const EditTrainingForm = () => {
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
   const [exerciseSelectVisible, setExerciseSelectVisible] = useState({});
-  
+  const navigate = useNavigate();
 
   const {
     register,
@@ -45,9 +45,9 @@ const EditTrainingForm = () => {
 
     fetchData();
   }, [id]);
- //ok
+
+  //ok
   const handleAddWorkout = (selected) => {
-    
     if (!selected.length) return;
     const newWorkout = selected[0];
 
@@ -69,15 +69,12 @@ const EditTrainingForm = () => {
     };
 
     //console.log("updatedTraining 1:", updatedTraining);
-    
 
     setTraining(updatedTraining);
-    
+
     setSelectedWorkout(null);
     setShowWorkoutSelect(false);
   };
-   
-  
 
   // // Add a new exercise to a specific workout
   const handleAddExercise = (workoutId, selected) => {
@@ -88,9 +85,9 @@ const EditTrainingForm = () => {
       ...prev,
       workouts: prev.workouts.map((workout) =>
         //change prev Line
-        
-         workout._id === workoutId
-           ? {
+
+        workout._id === workoutId
+          ? {
               ...workout,
               exercises: [
                 ...workout.exercises,
@@ -102,9 +99,9 @@ const EditTrainingForm = () => {
                   manipulation: "",
                 },
               ],
-             }
-           : workout
-       ),
+            }
+          : workout
+      ),
     }));
 
     setExerciseSelectVisible((prev) => ({ ...prev, [workoutId]: false }));
@@ -128,7 +125,7 @@ const EditTrainingForm = () => {
   };
 
   //console.log("Training:", training);
-  
+
   const handleRemoveWorkout = (workoutId) => {
     setTraining((prev) => ({
       ...prev,
@@ -136,11 +133,8 @@ const EditTrainingForm = () => {
     }));
   };
 
-
-  
-
   const handleSetChange = (workoutId, exerciseId, field, value) => {
-   // console.log("changeExercise:", value);
+    // console.log("changeExercise:", value);
     setTraining((prev) => ({
       ...prev,
       workouts: prev.workouts.map((workout) =>
@@ -156,46 +150,39 @@ const EditTrainingForm = () => {
     }));
   };
 
- 
-  
-
   const onSubmit = async () => {
     const payload = {
       name: training.name,
       description: training.description,
       workouts: (training.workouts || []).map((w) => ({
-        
-        
-        
-          workout: w._id,
-          // name: w.workout?.name,
-          // description: w.workout?.description,
-          
-          exercises: (w.exercises || []).map((ex) => ({
-            _id: ex._id,
-            // Ensure exercise_id is sent as a plain string or object based on your schema:
-            exercise_id:
-              typeof ex.exercise_id === "object"
-                ? ex.exercise_id._id
-                : ex.exercise_id,
-            sets: Number(ex.sets),
-            reps: Number(ex.reps),
-            manipulation: ex.manipulation,
-          })),
-        
+        workout: w._id,
+        // name: w.workout?.name,
+        // description: w.workout?.description,
+
+        exercises: (w.exercises || []).map((ex) => ({
+          _id: ex._id,
+          exercise_id:
+            typeof ex.exercise_id === "object"
+              ? ex.exercise_id._id
+              : ex.exercise_id,
+          sets: Number(ex.sets),
+          reps: Number(ex.reps),
+          manipulation: ex.manipulation,
+        })),
       })),
     };
 
     console.log("payload:", payload);
     try {
-     const response = await axios.put(`${base_url}/training/${id}`, payload);
-     console.log("response:", response);
-     
+      const response = await axios.put(`${base_url}/training/${id}`, payload);
+      if (response.status === 200) {
+        navigate("/dashboard/training-list");
+      }
+
       toast.success("Training session updated successfully!");
-      // navigate("/dashboard/training-list");
     } catch (error) {
       console.log(error);
-      
+
       console.error("Error updating training:", error);
     }
   };
@@ -238,17 +225,22 @@ const EditTrainingForm = () => {
           {training?.workouts?.map((workout) => (
             <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
               <h1 className="font-semibold">{workout?.workout?.name}</h1>
-              <Trash
-                className="cursor-pointer text-red-600"
-                onClick={() => handleRemoveWorkout(workout._id)}
-              />
+              <div className="flex items-center gap-x-2" dir="rtl">
+                <Trash
+                  className="cursor-pointer text-red-600"
+                  onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
+                />
+                Remove Workout
+              </div>
               {workout?.exercises?.map((ex) => (
                 <div
                   key={ex._id}
                   className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
                 >
                   <div>
-                    <p className="py-4">{ex?.name}</p>
+                    <p className="py-4" dir="rtl">
+                      {ex?.name}
+                    </p>
                     <div className="flex items-center justify-between gap-x-2">
                       <div className="flex flex-col items-center space-y-4">
                         <p>Sets</p>
@@ -315,14 +307,15 @@ const EditTrainingForm = () => {
                 />
               )}
 
-              <Button type="button"
+              <Button
+                type="button"
                 onClick={() =>
                   setExerciseSelectVisible((prev) => ({
                     ...prev,
                     [workout._id]: true,
                   }))
                 }
-                className="mt-2"
+                className="mt-2 bg-customBg flex mx-auto"
               >
                 Add More Exercise
               </Button>
@@ -331,8 +324,14 @@ const EditTrainingForm = () => {
         </div>
 
         <div className="flex items-center justify-between">
-          <Button type="submit">Update Training</Button>
-          <Button type="button" onClick={() => setShowWorkoutSelect(true)}>
+          <Button type="submit" className=" bg-customBg">
+            Update Training
+          </Button>
+          <Button
+            type="button"
+            className=" bg-customBg"
+            onClick={() => setShowWorkoutSelect(true)}
+          >
             Add More Workout
           </Button>
         </div>

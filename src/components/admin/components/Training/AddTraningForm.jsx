@@ -10,12 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { Trash } from "lucide-react";
 
 const AddTrainingForm = () => {
-  const [selectedTrainingExercises, setSelectedTrainingExercises] = useState(
-    []
-  );
   const [trainingExercises, setTrainingExercises] = useState([]);
   const [exerciseList, setExerciseList] = useState([]);
-  const [addMoreExercise, setAddMoreExercise] = useState(null); // Track which workout is being modified
+  const [addMoreExercise, setAddMoreExercise] = useState(null);
+  const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -24,6 +22,35 @@ const AddTrainingForm = () => {
     reset,
     formState: { errors },
   } = useForm();
+
+  const handleWorkoutChange = (values) => {
+    setSelectedTrainingExercises((prevWorkouts) => {
+      const newWorkouts = values.map((workout) => {
+        const existingWorkout = prevWorkouts.find(
+          (w) => w.workout === workout._id
+        );
+
+        return {
+          workout: workout._id,
+          name: workout.name,
+          exercises: existingWorkout
+            ? existingWorkout.exercises
+            : workout.exercises?.map((exercise) => ({
+                exercise_id: exercise.exercise_id?._id || exercise._id,
+                name: exercise.exercise_id?.name || exercise.name,
+                sets: exercise.sets || 3,
+                reps: exercise.reps || 10,
+                manipulation: exercise.manipulation || "Default manipulation",
+              })) || [],
+        };
+      });
+
+      return newWorkouts;
+    });
+  };
+  const [selectedTrainingExercises, setSelectedTrainingExercises] = useState(
+    []
+  );
 
   useEffect(() => {
     const fetchWorkout = async () => {
@@ -49,52 +76,41 @@ const AddTrainingForm = () => {
     fetchExercises();
   }, []);
 
-  // const handleWorkoutChange = (values) => {
-  //   const updatedExercises = values.map((workout) => ({
-  //     workout: workout._id,
-  //     name: workout.name,
-  //     exercises:
-  //       workout.exercises?.map((exercise) => ({
-  //         exercise_id: exercise.exercise_id?._id || exercise._id,
-  //         name: exercise.exercise_id?.name || exercise.name,
-  //         sets: exercise.sets || 3,
-  //         reps: exercise.reps || 10,
-  //         manipulation: exercise.manipulation || "Default manipulation",
-  //       })) || [],
-  //   }));
+  const checkSupersetCompletion = () => {
+    let incomplete = false;
+    selectedTrainingExercises.forEach((workout) => {
+      const supersetExercises = workout.exercises.filter(
+        (exercise) => exercise.manipulation === "superset"
+      );
 
-  //   setSelectedTrainingExercises(updatedExercises);
-  // };
-
-  const handleWorkoutChange = (values) => {
-    setSelectedTrainingExercises((prevWorkouts) => {
-      const newWorkouts = values.map((workout) => {
-        const existingWorkout = prevWorkouts.find(
-          (w) => w.workout === workout._id
-        );
-
-        return {
-          workout: workout._id,
-          name: workout.name,
-          exercises: existingWorkout
-            ? existingWorkout.exercises // Keep existing exercises
-            : workout.exercises?.map((exercise) => ({
-                exercise_id: exercise.exercise_id?._id || exercise._id,
-                name: exercise.exercise_id?.name || exercise.name,
-                sets: exercise.sets || 3,
-                reps: exercise.reps || 10,
-                manipulation: exercise.manipulation || "Default manipulation",
-              })) || [],
-        };
-      });
-
-      return newWorkouts;
+      if (supersetExercises.length === 1) {
+        incomplete = true;
+      }
     });
+    setIsSupersetIncomplete(incomplete);
   };
 
   const handleExerciseChange = (workoutIndex, exerciseIndex, field, value) => {
     const updatedWorkouts = [...selectedTrainingExercises];
-    updatedWorkouts[workoutIndex].exercises[exerciseIndex][field] = value;
+    const workout = updatedWorkouts[workoutIndex];
+    const exercise = workout.exercises[exerciseIndex];
+
+    if (field === "manipulation" && value === "superset") {
+      const existingSuperset = workout.exercises.some(
+        (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
+      );
+
+      if (existingSuperset) {
+        toast.error("Only one superset is allowed per workout.");
+        return;
+      }
+
+      if (!exercise.manipulation.includes("superset")) {
+        setIsSupersetIncomplete(true);
+      }
+    }
+
+    exercise[field] = value;
     setSelectedTrainingExercises(updatedWorkouts);
   };
 
@@ -110,30 +126,28 @@ const AddTrainingForm = () => {
       const workout = updatedWorkouts[addMoreExercise];
 
       selectedExercises.forEach((exercise) => {
-        console.log("selectedex:", exercise);
         workout.exercises.push({
           exercise_id: exercise._id,
           name: exercise.name,
-          sets: 0,
-          reps: 0,
-          manipulation: "",
+          sets: 3,
+          reps: 10,
+          manipulation: exercise.manipulation || "",
         });
       });
-
       return updatedWorkouts;
     });
 
+    setIsSupersetIncomplete(false);
     setAddMoreExercise(null);
   };
+
   const handleRemoveExercise = (workoutIndex, exerciseIndex) => {
     setSelectedTrainingExercises((prevWorkouts) => {
       const updatedWorkouts = [...prevWorkouts];
-      updatedWorkouts[workoutIndex].exercises = updatedWorkouts[
-        workoutIndex
-      ].exercises.filter((_, index) => index !== exerciseIndex);
-
+      updatedWorkouts[workoutIndex].exercises.splice(exerciseIndex, 1);
       return updatedWorkouts;
     });
+    checkSupersetCompletion();
   };
 
   const onSubmit = async (data) => {
@@ -152,13 +166,10 @@ const AddTrainingForm = () => {
         })),
       };
 
-      console.log("Payload:", payload);
-
       await axios.post(`${base_url}/training`, payload).then((response) => {
         if (response.status === 201) {
           toast.success("Training session saved successfully!");
           setSelectedTrainingExercises([]);
-          setTrainingExercises([]);
           reset();
           navigate("/dashboard/training-list");
         }
@@ -168,7 +179,6 @@ const AddTrainingForm = () => {
       toast.error("Failed to save training session.");
     }
   };
-
   return (
     <div className="py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -206,7 +216,7 @@ const AddTrainingForm = () => {
           />
         </div>
 
-        <div className="space-y-4 w-[450px]">
+        <div className="space-y-4 w-[550px]">
           {selectedTrainingExercises.map((workout, workoutIndex) => (
             <div key={workout.workout} className="p-4 border rounded-lg">
               <h3 className="text-lg font-semibold">{workout.name}</h3>
@@ -217,7 +227,13 @@ const AddTrainingForm = () => {
                     className="p-3 border rounded-md"
                   >
                     <h4 className="font-medium">{exercise.name}</h4>
-                    <div className="grid grid-cols-4 gap-2 mt-2">
+                    <div className="flex items-center justify-center gap-2 mt-2">
+                      <Trash
+                        className="text-red-500 cursor-pointer"
+                        onClick={() =>
+                          handleRemoveExercise(workoutIndex, exerciseIndex)
+                        }
+                      />
                       <div>
                         <label htmlFor="sets">Sets</label>
                         <input
@@ -256,7 +272,7 @@ const AddTrainingForm = () => {
                         <label htmlFor="manipulation">Manipulation</label>
                         <input
                           type="text"
-                          className="border rounded p-1 w-full"
+                          className="border rounded p-1 w-full  text-center placeholder:text-sm  "
                           value={exercise.manipulation}
                           onChange={(e) =>
                             handleExerciseChange(
@@ -269,12 +285,6 @@ const AddTrainingForm = () => {
                           placeholder="Manipulation"
                         />
                       </div>
-                      <Trash
-                        className="text-red-500 cursor-pointer"
-                        onClick={() =>
-                          handleRemoveExercise(workoutIndex, exerciseIndex)
-                        }
-                      />
                     </div>
                   </div>
                 ))}
@@ -294,7 +304,7 @@ const AddTrainingForm = () => {
 
               <Button
                 type="button"
-                className="mt-5"
+                className="mt-5 bg-customBg"
                 onClick={() => handleAddMoreExercise(workoutIndex)}
               >
                 Add More Exercise
@@ -307,6 +317,7 @@ const AddTrainingForm = () => {
           <Button
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            disabled={isSupersetIncomplete}
           >
             Save a new training session
           </Button>
