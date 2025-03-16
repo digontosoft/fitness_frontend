@@ -1,9 +1,9 @@
 import cartBg from "../../assets/image/workoutList/Bg.png";
 import whiteLogo from "../../assets/image/whiteLogo.png";
 import icon from "../../assets/image/courseList/Bicep.png";
-const CourseCart = ({ exercise }) => {
+const CourseCart = ({ exercise , handleOpen}) => {
   return (
-    <div className="md:w-52 w-48 shadow-xl rounded-2xl p-3 mt-8" >
+    <div className="md:w-52 w-48 shadow-xl rounded-2xl p-3 mt-8 cursor-pointer"  >
       <div
         className="w-full h-40 rounded-2xl flex justify-center items-center "
         style={{

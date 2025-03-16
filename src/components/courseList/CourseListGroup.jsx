@@ -165,7 +165,20 @@ export const CourseListGroup = () => {
     fetchExercise();
   }, [searchValue,page,totalPages]);
 
+  const [open, setOpen] = useState(false);
+  const [id,setId] = useState('');
+  
+
 //console.log("page",page,totalPages);
+
+const handleOpen = (id) =>{
+  console.log("id",id);
+  
+  setOpen(true)
+  setId(id)
+}
+
+console.log("id",id);
 
 
   return (
@@ -185,9 +198,11 @@ export const CourseListGroup = () => {
             key={exercise._id}
             _id={exercise._id}
             exercise={exercise}
+            onClick={()=>handleOpen(exercise._id)}
           />
         ))}
       </div>
+      {open && <ExerciseDetails open={open} setOpen={setOpen} exerciseId={id} />}
        {totalPages > 1 && <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage} />}
     </div>
   );

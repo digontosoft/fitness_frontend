@@ -12,6 +12,7 @@ import { Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
+import HeroVideo from "@/components/startTraining/HeroVideo";
 
 export default function ExerciseDetails({ exerciseId }) {
   const [exerciseData, setExerciseData] = useState({});
@@ -22,6 +23,8 @@ export default function ExerciseDetails({ exerciseId }) {
       }
     });
   }, [exerciseId]);
+  console.log(exerciseData);
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -45,14 +48,16 @@ export default function ExerciseDetails({ exerciseId }) {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe> */}
-            <iframe
+            {/* <iframe
               className="w-full h-full"
               src={`${exerciseData?.video_url}`}
               title="Exercise Video"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-            ></iframe>
+            ></iframe> */}
+            <HeroVideo videoUrl={exerciseData?.video_url} />
+
            
           </div>
           <h2 className="text-lg font-bold">{exerciseData?.name}</h2>
