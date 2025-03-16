@@ -24,7 +24,7 @@ export default function ExerciseDetails({ exerciseId }) {
     });
   }, [exerciseId]);
   console.log(exerciseData);
-  
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -40,25 +40,7 @@ export default function ExerciseDetails({ exerciseId }) {
         </DialogHeader>
         <div className="flex flex-col items-center gap-4">
           <div className="w-full aspect-video rounded-lg overflow-hidden">
-            {/* <iframe
-              className="w-full h-full"
-              src={exerciseData?.video_url}
-              title="Exercise Video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe> */}
-            {/* <iframe
-              className="w-full h-full"
-              src={`${exerciseData?.video_url}`}
-              title="Exercise Video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe> */}
             <HeroVideo videoUrl={exerciseData?.video_url} />
-
-           
           </div>
           <h2 className="text-lg font-bold">{exerciseData?.name}</h2>
           <p className="text-sm text-gray-600 text-center px-4">

@@ -36,8 +36,11 @@ const ActionCourseCart = () => {
           תרגילים:
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
-          {workoutData?.userTrainingExercise?.map((item) => (
-            <VideoCourseCart key={item?.exercise_id?._id} exercise={item} />
+          {workoutData?.userTrainingExercise?.map((item, index) => (
+            <VideoCourseCart
+              key={`${item?.exercise_id?._id}-${index}`}
+              exercise={item}
+            />
           ))}
         </div>
       </div>
