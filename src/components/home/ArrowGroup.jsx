@@ -15,6 +15,8 @@ const ArrowGroup = ({ task, onclick }) => {
           workoutId: task?.workout_id,
           taskId: task?._id,
         };
+
+        console.log("dependency", requestBody);
         const response = await axios.post(
           `${base_url}/get-user-workout-task`,
           requestBody

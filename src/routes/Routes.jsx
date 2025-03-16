@@ -112,10 +112,6 @@ export const routes = createBrowserRouter([
             path: "/worklistVideo",
             element: <WorkOutListVideo />,
           },
-          // {
-          //   path: "/recipe",
-          //   element: <RecipeBook />,
-          // },
           {
             path: "/action-course-cart/:id",
             element: <ActionCourseCart />,
