@@ -1,10 +1,8 @@
 import AdminArrowCard from "@/components/admin/components/ui/AdminArrowCard";
-import SearchBox from "@/components/common/SearchBox";
 import Title from "@/components/measurements/Tilte";
 import Container from "@/shared/Container";
 import { ArrowBurger, ArrowDumbel } from "@/assets";
-import { useContext, useEffect, useState } from "react";
-import { UserInfoContext } from "@/context";
+import { useEffect, useState } from "react";
 import { women1, women2 } from "@/assets/index";
 import Select from "react-dropdown-select";
 import axios from "axios";
@@ -12,6 +10,8 @@ import { base_url } from "@/api/baseUrl";
 import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
+  const [traineeUsers, setTraineeUsers] = useState([]);
+  const [recipeUsers, setRecipeUsers] = useState([]);
   const navigate = useNavigate();
   const fetchData = async () => {
     try {
@@ -23,12 +23,18 @@ const Dashboard = () => {
       throw error;
     }
   };
+
+  useEffect(() => {
+    if (users?.length > 0) {
+      // Only filter if users has data
+      setTraineeUsers(users.filter((user) => user.userType === "trainee"));
+      setRecipeUsers(users.filter((user) => user.userType === "recipe"));
+    }
+  }, [users]);
+
   useEffect(() => {
     fetchData();
   }, []);
-
-  const traineeUsers = users.filter((user) => user.userType === "trainee");
-  const recipeUsers = users.filter((user) => user.userType === "recipe");
 
   const handleSelectUser = (selectedUser) => {
     if (selectedUser.length > 0) {
@@ -66,7 +72,7 @@ const Dashboard = () => {
           direction="rtl"
           valueField="_id"
           labelField={"firstName"}
-          options={users}
+          options={traineeUsers}
           searchBy={"firstName"}
           onChange={handleSelectUser}
         />
@@ -77,14 +83,36 @@ const Dashboard = () => {
           className="grid grid-cols-2 gap-4 items-center justify-center"
           // dir="ltr"
         >
-          <AdminArrowCard image={women1} title={"אישור מתאמנים חדשים"} />
-          <AdminArrowCard image={ArrowBurger} title={"ניהול מדריכי תזונה"} />
+          <AdminArrowCard
+            image={women1}
+            title={"אישור מתאמנים חדשים"}
+            link={"/dashboard/approve-email"}
+          />
+          <AdminArrowCard
+            image={ArrowBurger}
+            title={"ניהול מדריכי תזונה"}
+            link={"/dashboard/nutrition-lists"}
+          />
           <AdminArrowCard
             image={women2}
             title={"ניהול מתאמנים קיימים"}
-            link={"/dashboard/approve-email"}
+            link={"/dashboard/trainee-users-list"}
           />
-          <AdminArrowCard image={ArrowDumbel} title={"ניהול תרגילים"} />
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title={"ניהול תרגילים"}
+            link={"/dashboard/exercise-list"}
+          />
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title={"Workout Management"}
+            link={"/dashboard/workout-list"}
+          />
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title={"Training Management"}
+            link={"/dashboard/training-list"}
+          />
         </div>
       </div>
     </Container>

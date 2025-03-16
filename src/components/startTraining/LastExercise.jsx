@@ -1,6 +1,7 @@
 import React from "react";
 
-const LastExercise = () => {
+const LastExercise = ({ currentExercise }) => {
+  // console.log("current excersizeeeeeee", currentExercise?.manipulation);
   return (
     <div className="w-96 ">
       <p className="text-[#0A2533] text-xl font-bold text-start" dir="rtl">
@@ -22,8 +23,9 @@ const LastExercise = () => {
           <p className="flex  items-center font-normal">
             <span className="font-bold">אימון:</span> N/A
           </p>
-          <p className="flex  items-center font-normal">
-            <span className="font-bold">מניפולציה:</span> N/A
+          <p className="flex  items-center font-normal ">
+            <span className="font-bold text-sm pl-1">מניפולציה:</span>
+            {currentExercise?.manipulation}
           </p>
           <p className="flex  items-center font-normal">
             <span className="font-bold">משקל שבוצע:</span> N/A

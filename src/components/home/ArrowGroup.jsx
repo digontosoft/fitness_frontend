@@ -1,32 +1,45 @@
-import React from "react";
 import ArrowCard from "./ArrowCard";
-import {
-  measurementRope,
-  ArrowBurger,
-  ArrowDumbel,
-  bodyBuilder3,
-} from "@/assets";
+import { bodyBuilder3 } from "@/assets";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { base_url } from "@/api/baseUrl";
 
-const ArrowGroup = () => {
+const ArrowGroup = ({ task, onclick }) => {
+  const navigate = useNavigate();
+
+  const handleClick = async () => {
+    if (task?.task_type === "workout") {
+      try {
+        const requestBody = {
+          userId: task?.user_id,
+          workoutId: task?.workout_id,
+          taskId: task?._id,
+        };
+
+        console.log("dependency", requestBody);
+        const response = await axios.post(
+          `${base_url}/get-user-workout-task`,
+          requestBody
+        );
+        if (response?.data) {
+          navigate(`/action-course-cart/${task?._id}`, {
+            state: response.data,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching workout task:", error);
+      }
+    } else {
+      onclick(task);
+    }
+  };
   return (
-    <div className=" mx-w-6xl mx-auto flex items-center justify-between gap-10 md:pt-20 py-10 flex-col md:flex-row">
-      <ArrowCard
-        tilte1={"שווה לצרף חברה"}
-        tilte={"לצפייה בסרטון"}
-        image={bodyBuilder3}
-      />
-      <ArrowCard tilte={"מעקב מדדים"} image={measurementRope} />
-      <ArrowCard
-        tilte={"מילוי יומן אכילה"}
-        tilte1={"הזנת נתונים של 3 ימים"}
-        image={ArrowBurger}
-      />
-      <ArrowCard
-        tilte={"החל אימון"}
-        tilte1={"שם האימון יהיה כאן"}
-        image={ArrowDumbel}
-      />
-    </div>
+    <ArrowCard
+      onClick={handleClick}
+      tilte={task?.task_name}
+      tilte1={task?.task_description}
+      image={bodyBuilder3}
+    />
   );
 };
 

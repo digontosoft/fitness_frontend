@@ -7,24 +7,70 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
+import { Trash } from "lucide-react";
 
 const AddTrainingForm = () => {
-  const [selectedTrainingExercises, setSelectedTrainingExercises] = useState(
-    []
-  );
   const [trainingExercises, setTrainingExercises] = useState([]);
+  const [exerciseList, setExerciseList] = useState([]);
+  const [addMoreExercise, setAddMoreExercise] = useState(null);
+  const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm();
 
+  const handleWorkoutChange = (values) => {
+    setSelectedTrainingExercises((prevWorkouts) => {
+      const newWorkouts = values.map((workout) => {
+        const existingWorkout = prevWorkouts.find(
+          (w) => w.workout === workout._id
+        );
+
+        return {
+          workout: workout._id,
+          name: workout.name,
+          exercises: existingWorkout
+            ? existingWorkout.exercises
+            : workout.exercises?.map((exercise) => ({
+                exercise_id: exercise.exercise_id?._id || exercise._id,
+                name: exercise.exercise_id?.name || exercise.name,
+                sets: exercise.sets || 3,
+                reps: exercise.reps || 10,
+                manipulation: exercise.manipulation || "Default manipulation",
+              })) || [],
+        };
+      });
+
+      return newWorkouts;
+    });
+  };
+  const [selectedTrainingExercises, setSelectedTrainingExercises] = useState(
+    []
+  );
+
   useEffect(() => {
-    const fetchExercises = async () => {
+    if (!trainingExercises) {
+      setIsButtonDisabled(false);
+      return;
+    }
+
+    const isAnyFieldEmpty = trainingExercises.workouts?.some((workout) =>
+      workout.exercises.some(
+        (exercise) =>
+          exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+      )
+    );
+
+    setIsButtonDisabled(isAnyFieldEmpty);
+  }, [trainingExercises]);
+
+  useEffect(() => {
+    const fetchWorkout = async () => {
       try {
         const response = await axios.get(`${base_url}/workout`);
         setTrainingExercises(response.data.data);
@@ -32,31 +78,155 @@ const AddTrainingForm = () => {
         console.error("Error fetching training exercises:", error);
       }
     };
+    fetchWorkout();
+  }, []);
+
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const response = await axios.get(`${base_url}/exercise`);
+        setExerciseList(response.data.data);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
     fetchExercises();
   }, []);
 
-  const handleWorkoutChange = (values) => {
-    // Update selected workouts and prefill exercises
-    const updatedExercises = values.map((workout) => ({
-      workout: workout._id,
-      name: workout.name, // Workout Name
-      exercises:
-        workout.exercises?.map((exercise) => ({
-          exercise_id: exercise.exercise_id?._id || exercise._id,
-          name: exercise.exercise_id?.name || exercise.name, // Exercise Name
-          sets: exercise.sets || 3,
-          reps: exercise.reps || 10,
-          manipulation: exercise.manipulation || "Default manipulation",
-        })) || [],
-    }));
+  console.log("selectedTrainingExercises", selectedTrainingExercises);
 
-    setSelectedTrainingExercises(updatedExercises);
+  const checkSupersetCompletion = () => {
+    let incomplete = false;
+    selectedTrainingExercises.forEach((workout) => {
+      const supersetExercises = workout.exercises.filter(
+        (exercise) => exercise.manipulation === "superset"
+      );
+
+      if (supersetExercises.length === 1) {
+        incomplete = true;
+      }
+    });
+    setIsSupersetIncomplete(incomplete);
   };
 
   const handleExerciseChange = (workoutIndex, exerciseIndex, field, value) => {
     const updatedWorkouts = [...selectedTrainingExercises];
-    updatedWorkouts[workoutIndex].exercises[exerciseIndex][field] = value;
+    const workout = updatedWorkouts[workoutIndex];
+    const exercise = workout.exercises[exerciseIndex];
+
+    if (field === "manipulation" && value === "superset") {
+      // Check if there is already a superset in the workout
+      const existingSuperset = workout.exercises.some(
+        (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
+      );
+
+      if (existingSuperset) {
+        toast.error("Only one superset is allowed per workout.");
+        setIsSupersetIncomplete(true);
+        return;
+      } else {
+        setIsSupersetIncomplete(false);
+      }
+
+      // Check if this is the last exercise
+      const isLastExercise = exerciseIndex === workout.exercises.length - 1;
+
+      // If it's not the last exercise, check the next exercise
+      if (!isLastExercise) {
+        const nextExercise = workout.exercises[exerciseIndex + 1];
+        if (!nextExercise || nextExercise.manipulation !== "superset") {
+          // If the next exercise doesn't exist or isn't a superset, check if it has other manipulations
+          if (nextExercise && nextExercise.manipulation !== "superset") {
+            // If the next exercise has a different manipulation, it's allowed
+            setIsSupersetIncomplete(false);
+          } else {
+            // If there is no next exercise or it's not a superset, the superset is incomplete
+            setIsSupersetIncomplete(true);
+            toast.error("The next exercise must also be a superset.");
+            return;
+          }
+        }
+      } else {
+        // If it's the last exercise, allow creating a superset
+        setIsSupersetIncomplete(false);
+      }
+    }
+
+    // If the current exercise is being removed from superset, check the previous exercise
+    if (
+      field === "manipulation" &&
+      value !== "superset" &&
+      exercise.manipulation === "superset"
+    ) {
+      const previousExercise = workout.exercises[exerciseIndex - 1];
+      if (previousExercise && previousExercise.manipulation === "superset") {
+        setIsSupersetIncomplete(true);
+        toast.error(
+          "Cannot remove superset from this exercise as the previous exercise is a superset."
+        );
+        return;
+      }
+    }
+
+    // Update the exercise field
+    exercise[field] = value;
+
+    // Check if the superset is complete after the update
+    if (field === "manipulation" && value === "superset") {
+      const nextExercise = workout.exercises[exerciseIndex + 1];
+      if (!nextExercise || nextExercise.manipulation !== "superset") {
+        // If there is no next exercise or it's not a superset, check if it has other manipulations
+        if (nextExercise && nextExercise.manipulation !== "superset") {
+          // If the next exercise has a different manipulation, it's allowed
+          setIsSupersetIncomplete(false);
+        } else {
+          // Otherwise, the superset is incomplete
+          setIsSupersetIncomplete(true);
+        }
+      } else {
+        setIsSupersetIncomplete(false);
+      }
+    } else {
+      setIsSupersetIncomplete(false);
+    }
+
     setSelectedTrainingExercises(updatedWorkouts);
+  };
+
+  const handleAddMoreExercise = (workoutIndex) => {
+    setAddMoreExercise(workoutIndex);
+  };
+
+  const handleNewExerciseSelection = (selectedExercises) => {
+    if (addMoreExercise === null) return;
+
+    setSelectedTrainingExercises((prevWorkouts) => {
+      const updatedWorkouts = [...prevWorkouts];
+      const workout = updatedWorkouts[addMoreExercise];
+
+      selectedExercises.forEach((exercise) => {
+        workout.exercises.push({
+          exercise_id: exercise._id,
+          name: exercise.name,
+          sets: 3,
+          reps: 10,
+          manipulation: exercise.manipulation || "",
+        });
+      });
+      return updatedWorkouts;
+    });
+
+    setIsSupersetIncomplete(false);
+    setAddMoreExercise(null);
+  };
+
+  const handleRemoveExercise = (workoutIndex, exerciseIndex) => {
+    setSelectedTrainingExercises((prevWorkouts) => {
+      const updatedWorkouts = [...prevWorkouts];
+      updatedWorkouts[workoutIndex].exercises.splice(exerciseIndex, 1);
+      return updatedWorkouts;
+    });
+    checkSupersetCompletion();
   };
 
   const onSubmit = async (data) => {
@@ -65,9 +235,9 @@ const AddTrainingForm = () => {
         name: data.name,
         description: data.description,
         workouts: selectedTrainingExercises.map((workout) => ({
-          workout: workout.workout, // Workout ID
+          workout: workout.workout,
           exercises: workout.exercises.map((exercise) => ({
-            exercise_id: exercise.exercise_id, // Exercise ID
+            exercise_id: exercise.exercise_id,
             sets: exercise.sets,
             reps: exercise.reps,
             manipulation: exercise.manipulation,
@@ -75,13 +245,10 @@ const AddTrainingForm = () => {
         })),
       };
 
-      console.log("Payload:", payload);
-
       await axios.post(`${base_url}/training`, payload).then((response) => {
         if (response.status === 201) {
           toast.success("Training session saved successfully!");
           setSelectedTrainingExercises([]);
-          setTrainingExercises([]);
           reset();
           navigate("/dashboard/training-list");
         }
@@ -91,7 +258,6 @@ const AddTrainingForm = () => {
       toast.error("Failed to save training session.");
     }
   };
-
   return (
     <div className="py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -100,10 +266,10 @@ const AddTrainingForm = () => {
             className="min-w-[350px]"
             id="name"
             type="text"
-            label="שם האימון"
-            placeholder="Add שם האימון...."
+            label="Training Name"
+            placeholder="Add Training Name..."
             register={register}
-            validation={{ required: "שם האימון is required" }}
+            validation={{ required: "Training Name is required" }}
             errors={errors}
           />
 
@@ -111,14 +277,13 @@ const AddTrainingForm = () => {
             className="min-w-[350px]"
             id="description"
             type="text"
-            label="דגשים מיוחדים (במידה ויש)"
-            placeholder="דגשים מיוחדים (במידה ויש)..."
+            label="Training Description"
+            placeholder="Add Training Description..."
             register={register}
-            validation={{ required: "דגשים מיוחדים is required" }}
+            validation={{ required: "Training Description is required" }}
             errors={errors}
           />
 
-          {/* Workout Selection */}
           <Select
             className="rounded-lg h-12"
             direction="rtl"
@@ -130,8 +295,7 @@ const AddTrainingForm = () => {
           />
         </div>
 
-        {/* Selected Workouts and Exercises */}
-        <div className="space-y-4 w-[450px]">
+        <div className="space-y-4 w-[550px]">
           {selectedTrainingExercises.map((workout, workoutIndex) => (
             <div key={workout.workout} className="p-4 border rounded-lg">
               <h3 className="text-lg font-semibold">{workout.name}</h3>
@@ -142,7 +306,13 @@ const AddTrainingForm = () => {
                     className="p-3 border rounded-md"
                   >
                     <h4 className="font-medium">{exercise.name}</h4>
-                    <div className="grid grid-cols-3 gap-2 mt-2">
+                    <div className="flex items-center justify-center gap-2 mt-2">
+                      <Trash
+                        className="text-red-500 cursor-pointer"
+                        onClick={() =>
+                          handleRemoveExercise(workoutIndex, exerciseIndex)
+                        }
+                      />
                       <div>
                         <label htmlFor="sets">Sets</label>
                         <input
@@ -181,7 +351,7 @@ const AddTrainingForm = () => {
                         <label htmlFor="manipulation">Manipulation</label>
                         <input
                           type="text"
-                          className="border rounded p-1 w-full"
+                          className="border rounded p-1 w-full  text-center placeholder:text-sm  "
                           value={exercise.manipulation}
                           onChange={(e) =>
                             handleExerciseChange(
@@ -198,6 +368,26 @@ const AddTrainingForm = () => {
                   </div>
                 ))}
               </div>
+
+              {addMoreExercise === workoutIndex && (
+                <Select
+                  className="rounded-lg h-12 mt-3"
+                  direction="rtl"
+                  options={exerciseList}
+                  valueField="_id"
+                  labelField="name"
+                  multi
+                  onChange={handleNewExerciseSelection}
+                />
+              )}
+
+              <Button
+                type="button"
+                className="mt-5 bg-customBg"
+                onClick={() => handleAddMoreExercise(workoutIndex)}
+              >
+                Add More Exercise
+              </Button>
             </div>
           ))}
         </div>
@@ -205,9 +395,14 @@ const AddTrainingForm = () => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            className={
+              isButtonDisabled || isSupersetIncomplete
+                ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
+                : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            }
+            disabled={isButtonDisabled || isSupersetIncomplete}
           >
-            Saving a new training session
+            Save a new training session
           </Button>
         </div>
       </form>

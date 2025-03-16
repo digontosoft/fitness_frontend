@@ -1,6 +1,4 @@
-import LeftCard from "@/components/home/LeftCard";
 import FormTitle from "../ui/FormTitle";
-import RightCard from "@/components/home/RightCard";
 import AdminArrowCard from "../ui/AdminArrowCard";
 import { ArrowDumbel, ArrowBurger } from "@/assets";
 import AdminArrowCardWithoutImage from "../ui/AdminArrowCardWithoutImage";
@@ -10,6 +8,7 @@ import TraineeLeftCard from "./TraineeLeftCard";
 import { useEffect, useState } from "react";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
+import { toast } from "sonner";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState({});
@@ -19,18 +18,57 @@ const TraineerUi = ({ userId }) => {
       try {
         const response = await axios.get(`${base_url}/getUser/${userId}`);
         setUser(response.data.data);
+        localStorage.setItem(
+          "firstName",
+          JSON.stringify(response.data.data.firstName)
+        );
+        localStorage.setItem(
+          "lastName",
+          JSON.stringify(response.data.data.lastName)
+        );
       } catch (error) {
-        
+        console.log(error);
       }
-    }
-    getUser()
-  },[userId])
+    };
+    getUser();
+  }, [userId]);
+
+  const updateStatus = async (userType) => {
+    try {
+      const response = await axios.post(`${base_url}/updateUserInfo`, {
+        user_id: user._id,
+        userType,
+      });
+      if (response.status === 200) {
+        toast.success("User Type Updated Successfully");
+        setUser((prevUser) => ({
+          ...prevUser,
+          userType,
+        }));
+      }
+    } catch (error) {}
+  };
+
+  const userFirstName = JSON.parse(localStorage.getItem("firstName"));
+  const userLastName = JSON.parse(localStorage.getItem("lastName"));
+  const userName = userFirstName + " " + userLastName;
 
   return (
     <div className="space-y-12">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
-        {userId ? <span>{user?.firstName + " " + user?.lastName}</span> : <></>}
+        <span className="flex items-center gap-2 flex-row-reverse">
+          {userName}
+          <Button
+            className="bg-customBg"
+            size="sm"
+            onClick={() =>
+              updateStatus(user?.userType === "admin" ? "trainee" : "admin")
+            }
+          >
+            {user?.userType === "admin" ? "Make Trainer" : "Make Admin"}
+          </Button>
+        </span>
       </div>
       <div className="flex items-center justify-center gap-5">
         <TraineeRightCard />
@@ -50,7 +88,7 @@ const TraineerUi = ({ userId }) => {
         <AdminArrowCard
           image={ArrowDumbel}
           title="ניהול תוכנית אימון"
-          link={`/dashboard/training-list/${userId}`}
+          link={`/dashboard/assigned-training-list/${userId}`}
         />
       </div>
       <div className="flex items-center justify-center gap-5">

@@ -1,0 +1,484 @@
+import { base_url } from "@/api/baseUrl";
+import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import Select from "react-dropdown-select";
+import { useNavigate } from "react-router-dom";
+import { Trash } from "lucide-react";
+import DynamicInputField from "@/components/measurements/DynamicInputField";
+
+const AssignTrainingForm = ({ user_id }) => {
+  const [selectedTraining, setSelectedTraining] = useState(null);
+  const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
+  const [showWorkoutDropdown, setShowWorkoutDropdown] = useState(false);
+  const [trainingList, setTrainingList] = useState([]);
+  const [exercise, setExercise] = useState([]);
+  const [workout, setWorkout] = useState([]);
+  const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+
+    formState: { errors },
+  } = useForm();
+
+  // Check if any field (sets, reps, or manipulation) is empty in any exercise
+  useEffect(() => {
+    if (!selectedTraining) {
+      setIsButtonDisabled(false);
+      return;
+    }
+
+    const isAnyFieldEmpty = selectedTraining.workouts?.some((workout) =>
+      workout.exercises.some(
+        (exercise) =>
+          exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+      )
+    );
+
+    setIsButtonDisabled(isAnyFieldEmpty);
+  }, [selectedTraining]);
+
+  // Fetch training sessions
+  useEffect(() => {
+    const fetchTraining = async () => {
+      try {
+        const response = await axios.get(`${base_url}/training`);
+        setTrainingList(response.data.data);
+      } catch (error) {
+        console.error("Error fetching training sessions:", error);
+      }
+    };
+    fetchTraining();
+  }, []);
+
+  // Fetch exercises
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const response = await axios.get(`${base_url}/exercise`);
+        setExercise(response.data.data);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
+    fetchExercises();
+  }, []);
+
+  // Fetch workouts
+  useEffect(() => {
+    const fetchWorkout = async () => {
+      try {
+        const response = await axios.get(`${base_url}/workout`);
+        setWorkout(response.data.data);
+      } catch (error) {
+        console.error("Error fetching workouts:", error);
+      }
+    };
+    fetchWorkout();
+  }, []);
+
+  // Handler to open the add exercise dropdown for a given workout.
+  const handleMoreExercise = (workoutIndex, e) => {
+    e.preventDefault();
+    setAddMoreExerciseIndex(workoutIndex);
+  };
+
+  const handleTrainingChange = (values) => {
+    if (values.length > 0) {
+      setSelectedTraining(values[0]);
+    } else {
+      setSelectedTraining(null);
+    }
+  };
+
+  //check if superset completion
+  const checkSupersetCompletion = () => {
+    let incomplete = false;
+    selectedTraining?.workouts.forEach((workout) => {
+      const supersetExercises = workout.exercises.filter(
+        (exercise) => exercise.manipulation === "superset"
+      );
+
+      if (supersetExercises.length === 1) {
+        incomplete = true;
+      }
+    });
+    setIsSupersetIncomplete(incomplete);
+  };
+
+  // When a user changes an exercise field, especially the manipulation field.
+  const handleExerciseChange = (workoutIndex, exerciseIndex, field, value) => {
+    const updatedWorkouts = [...selectedTraining.workouts];
+    const workout = updatedWorkouts[workoutIndex];
+    const exercise = workout.exercises[exerciseIndex];
+
+    if (field === "manipulation" && value === "superset") {
+      // Check if there is already a superset in the workout
+      const existingSuperset = workout.exercises.some(
+        (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
+      );
+
+      if (existingSuperset) {
+        toast.error("Only one superset is allowed per workout.");
+        setIsSupersetIncomplete(true);
+        return;
+      } else {
+        setIsSupersetIncomplete(false);
+      }
+
+      // Check if this is the last exercise
+      const isLastExercise = exerciseIndex === workout.exercises.length - 1;
+
+      // If it's not the last exercise, check the next exercise
+      if (!isLastExercise) {
+        const nextExercise = workout.exercises[exerciseIndex + 1];
+        if (!nextExercise || nextExercise.manipulation !== "superset") {
+          // If the next exercise doesn't exist or isn't a superset, check if it has other manipulations
+          if (nextExercise && nextExercise.manipulation !== "superset") {
+            // If the next exercise has a different manipulation, it's allowed
+            setIsSupersetIncomplete(false);
+          } else {
+            // If there is no next exercise or it's not a superset, the superset is incomplete
+            setIsSupersetIncomplete(true);
+            toast.error("The next exercise must also be a superset.");
+            return;
+          }
+        }
+      } else {
+        // If it's the last exercise, allow creating a superset
+        setIsSupersetIncomplete(false);
+      }
+    }
+
+    // If the current exercise is being removed from superset, check the previous exercise
+    if (
+      field === "manipulation" &&
+      value !== "superset" &&
+      exercise.manipulation === "superset"
+    ) {
+      const previousExercise = workout.exercises[exerciseIndex - 1];
+      if (previousExercise && previousExercise.manipulation === "superset") {
+        setIsSupersetIncomplete(true);
+        toast.error(
+          "Cannot remove superset from this exercise as the previous exercise is a superset."
+        );
+        return;
+      }
+    }
+
+    // Check if the superset is complete after the update
+    if (field === "manipulation" && value === "superset") {
+      const nextExercise = workout.exercises[exerciseIndex + 1];
+      if (!nextExercise || nextExercise.manipulation !== "superset") {
+        // If there is no next exercise or it's not a superset, check if it has other manipulations
+        if (nextExercise && nextExercise.manipulation !== "superset") {
+          // If the next exercise has a different manipulation, it's allowed
+          setIsSupersetIncomplete(false);
+        } else {
+          // Otherwise, the superset is incomplete
+          setIsSupersetIncomplete(true);
+        }
+      } else {
+        setIsSupersetIncomplete(false);
+      }
+    } else {
+      setIsSupersetIncomplete(false);
+    }
+
+    // setSelectedTraining(updatedWorkouts);
+    const updatedTraining = { ...selectedTraining };
+    updatedTraining.workouts[workoutIndex].exercises[exerciseIndex][field] =
+      value;
+    setSelectedTraining(updatedTraining);
+  };
+
+  // When new exercises are selected (for "Add More Exercise")
+  const handleNewExerciseSelection = (selectedExercises, workoutIndex) => {
+    if (!selectedTraining) return;
+    const updatedTraining = { ...selectedTraining };
+    const currentWorkout = updatedTraining.workouts[workoutIndex];
+
+    selectedExercises.forEach((exercise) => {
+      currentWorkout.exercises.push({
+        _id: exercise._id,
+        name: exercise.name,
+        sets: 0,
+        reps: 0,
+        manipulation: "",
+      });
+    });
+
+    setIsSupersetIncomplete(false);
+    setSelectedTraining(updatedTraining);
+    setAddMoreExerciseIndex(null);
+  };
+
+  const fetchWorkoutData = async (workoutId) => {
+    try {
+      const response = await axios.get(`${base_url}/workout/${workoutId}`);
+      return response.data.data;
+    } catch (error) {
+      console.error("Error fetching workout data:", error);
+      return null;
+    }
+  };
+
+  const handleAddWorkout = async (selectedWorkouts) => {
+    if (!selectedTraining || selectedWorkouts.length === 0) return;
+
+    const updatedTraining = { ...selectedTraining };
+
+    for (const workout of selectedWorkouts) {
+      const fullWorkoutData = await fetchWorkoutData(workout._id);
+      if (fullWorkoutData) {
+        updatedTraining.workouts.push({
+          _id: fullWorkoutData._id,
+          name: fullWorkoutData.name,
+          exercises: fullWorkoutData.exercises.map((exercise) => ({
+            _id: exercise._id,
+            name: exercise.name,
+            sets: exercise.sets || 3,
+            reps: exercise.reps || 10,
+            manipulation: exercise.manipulation || "normal",
+          })),
+        });
+      }
+    }
+
+    setSelectedTraining(updatedTraining);
+    setShowWorkoutDropdown(false);
+  };
+
+  const handleRemoveExercise = (workoutIndex, exerciseIndex) => {
+    if (!selectedTraining) return;
+    const updatedTraining = { ...selectedTraining };
+    updatedTraining.workouts[workoutIndex].exercises.splice(exerciseIndex, 1);
+    setSelectedTraining(updatedTraining);
+    checkSupersetCompletion();
+  };
+
+  const handleRemoveWorkout = (workoutIndex) => {
+    if (!selectedTraining) return;
+    const updatedTraining = { ...selectedTraining };
+    updatedTraining.workouts.splice(workoutIndex, 1);
+    setSelectedTraining(updatedTraining);
+  };
+
+  const onSubmit = async (data) => {
+    console.log("training name:", data);
+    try {
+      const formattedWorkouts = selectedTraining.workouts.map((workout) => ({
+        workout: workout._id,
+        exercises: workout.exercises.map((exercise) => ({
+          exercise_id: exercise._id,
+          sets: exercise.sets,
+          reps: exercise.reps,
+          manipulation: exercise.manipulation,
+        })),
+      }));
+
+      const payload = {
+        name: data.name || selectedTraining,
+        description: data.description || selectedTraining.description,
+        user_id,
+        training_id: selectedTraining._id,
+        workouts: formattedWorkouts,
+      };
+
+      console.log("assignTraining:", payload);
+
+      // const response = await axios.post(`${base_url}/assign-training`, payload);
+      // if (response.status === 201) {
+      //   toast.success("Training session updated successfully!");
+      //   navigate(`/dashboard/assigned-training-list/${user_id}`);
+      // }
+    } catch (error) {
+      console.error("Error updating training session:", error);
+      toast.error("Failed to update training session.");
+    }
+  };
+  return (
+    <div className="py-20" dir="rtl">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <Select
+          className="rounded-lg h-12 min-w-[400px] w-full"
+          direction="rtl"
+          options={trainingList}
+          valueField="_id"
+          labelField="name"
+          onChange={handleTrainingChange}
+        />
+
+        {selectedTraining && (
+          <div className="space-y-4">
+            <DynamicInputField
+              className="min-w-[350px]"
+              id="name"
+              type="text"
+              label="Training Name"
+              placeholder="Add Training Name..."
+              register={register}
+              validation={{ required: "Training Name is required" }}
+              errors={errors}
+              defaultValue={selectedTraining?.name}
+            />
+
+            <DynamicInputField
+              className="min-w-[350px]"
+              id="description"
+              type="text"
+              label="Training Description"
+              placeholder="Add Training Description..."
+              register={register}
+              validation={{ required: "Training Description is required" }}
+              errors={errors}
+              defaultValue={selectedTraining?.description}
+            />
+
+            {selectedTraining.workouts.map((workout, workoutIndex) => (
+              <div key={workout._id} className="border p-4 rounded-lg">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-bold">{workout.name}</h3>
+                  <Button
+                    type="button"
+                    className="text-white bg-customBg"
+                    onClick={() => handleRemoveWorkout(workoutIndex)}
+                  >
+                    <Trash className="mr-2 text-white cursor-pointer" /> Remove
+                    Workout
+                  </Button>
+                </div>
+                {workout.exercises.map((exercise, exerciseIndex) => (
+                  <div key={exercise._id} className="space-y-4 mt-4">
+                    <div className="space-y-4">
+                      <p>{exercise.name}</p>
+                    </div>
+                    <div className="flex items-center justify-center gap-4">
+                      <Trash
+                        className="text-red-500 hover:text-red-700 cursor-pointer"
+                        onClick={() =>
+                          handleRemoveExercise(workoutIndex, exerciseIndex)
+                        }
+                      >
+                        Remove Exercise
+                      </Trash>
+                      <input
+                        type="number"
+                        value={exercise.sets}
+                        onChange={(e) =>
+                          handleExerciseChange(
+                            workoutIndex,
+                            exerciseIndex,
+                            "sets",
+                            e.target.value
+                          )
+                        }
+                        className="border p-2 rounded"
+                      />
+                      <input
+                        type="number"
+                        value={exercise.reps}
+                        onChange={(e) =>
+                          handleExerciseChange(
+                            workoutIndex,
+                            exerciseIndex,
+                            "reps",
+                            e.target.value
+                          )
+                        }
+                        className="border p-2 rounded"
+                      />
+                      <input
+                        type="text"
+                        value={exercise.manipulation}
+                        onChange={(e) =>
+                          handleExerciseChange(
+                            workoutIndex,
+                            exerciseIndex,
+                            "manipulation",
+                            e.target.value
+                          )
+                        }
+                        className="border p-2 rounded"
+                        placeholder="normal or superset"
+                      />
+                    </div>
+                  </div>
+                ))}
+                <div className="my-4">
+                  {addMoreExerciseIndex === workoutIndex && (
+                    <Select
+                      className="rounded-lg h-12"
+                      direction="rtl"
+                      options={exercise}
+                      valueField="_id"
+                      labelField="name"
+                      multi
+                      onChange={(selected) =>
+                        handleNewExerciseSelection(selected, workoutIndex)
+                      }
+                    />
+                  )}
+                  <Button
+                    type="button"
+                    className="my-4 bg-customBg"
+                    onClick={(e) => handleMoreExercise(workoutIndex, e)}
+                  >
+                    Add More Exercise
+                  </Button>
+                </div>
+              </div>
+            ))}
+
+            {/* Add More Workout Button and Dropdown */}
+            <div className="my-4">
+              {showWorkoutDropdown && (
+                <Select
+                  className="rounded-lg h-12"
+                  direction="rtl"
+                  options={workout}
+                  valueField="_id"
+                  labelField="name"
+                  multi
+                  onChange={(selected) => handleAddWorkout(selected)}
+                />
+              )}
+              <Button
+                type="button"
+                className="my-4 bg-customBg"
+                onClick={() => setShowWorkoutDropdown(!showWorkoutDropdown)}
+              >
+                {showWorkoutDropdown
+                  ? "Hide Workout Dropdown"
+                  : "Add More Workout"}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        <div className="flex justify-center">
+          <Button
+            type="submit"
+            className={
+              isButtonDisabled || isSupersetIncomplete
+                ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
+                : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            }
+            disabled={isButtonDisabled || isSupersetIncomplete}
+          >
+            Assign Training
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default AssignTrainingForm;

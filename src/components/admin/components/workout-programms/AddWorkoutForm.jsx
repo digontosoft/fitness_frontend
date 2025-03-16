@@ -13,6 +13,9 @@ const AddWorkoutForm = () => {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [exercises, setExercises] = useState([]);
   const [workoutExercises, setWorkoutExercises] = useState([]);
+  const [superset, setSuperset] = useState(false);
+  const [isSupersetSelected, setIsSupersetSelected] = useState(false);
+
   const navigate = useNavigate();
   const {
     register,
@@ -69,24 +72,24 @@ const AddWorkoutForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4">
           <DynamicInputField
-            className="min-w-[350px]"
+            className="min-w-[400px]"
             id="name"
             type="text"
-            label="שם האימון"
-            placeholder="Add שם האימון...."
+            label="Workout Name"
+            placeholder="Add woukout name...."
             register={register}
-            validation={{ required: "שם האימון is required" }}
+            validation={{ required: "Workout name is required" }}
             errors={errors}
           />
 
           <DynamicInputField
-            className="min-w-[350px]"
+            className="min-w-[400px]"
             id="description"
             type="text"
-            label="דגשים מיוחדים (במידה ויש)"
-            placeholder="דגשים מיוחדים (במידה ויש)..."
+            label="Workout Description"
+            placeholder="Add Workout Description...."
             register={register}
-            validation={{ required: "דגשים מיוחדים is required" }}
+            validation={{ required: "Workout Description is required" }}
             errors={errors}
           />
           <Select
@@ -103,6 +106,10 @@ const AddWorkoutForm = () => {
               key={exercise._id}
               exercise={exercise}
               onChange={(data) => handleExerciseChange(exercise._id, data)}
+              setSuperset={setSuperset}
+              superset={superset}
+              isSupersetSelected={isSupersetSelected}
+              setIsSupersetSelected={setIsSupersetSelected}
             />
           ))}
         </div>
@@ -111,6 +118,7 @@ const AddWorkoutForm = () => {
           <Button
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            disabled={superset}
           >
             Saving a new workout
           </Button>

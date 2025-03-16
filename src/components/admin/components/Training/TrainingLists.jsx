@@ -7,7 +7,7 @@ const TrainingLists = () => {
   const { id } = useParams();
   return (
     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
-      <Title tilte="רשימת אימונים" />
+      <Title title={"Training List"} />
       <section className="grid  gap-5 h-full">
         <TrainingList userId={id} />
       </section>

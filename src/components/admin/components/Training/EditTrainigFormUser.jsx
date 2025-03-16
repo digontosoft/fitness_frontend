@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Select from "react-dropdown-select";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { base_url } from "@/api/baseUrl";
@@ -10,22 +10,24 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const EditTrainingForm = () => {
-  const { id } = useParams();
+const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   const [training, setTraining] = useState({});
   const [exerciseList, setExerciseList] = useState([]);
   const [workouts, setWorkouts] = useState([]);
   // const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
-  const [exerciseSelectVisible, setExerciseSelectVisible] = useState({});
+  const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const navigate = useNavigate();
+
+  //console.log("userId", userId);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   useEffect(() => {
@@ -50,7 +52,7 @@ const EditTrainingForm = () => {
         const [exerciseRes, workoutRes, trainingRes] = await Promise.all([
           axios.get(`${base_url}/exercise`),
           axios.get(`${base_url}/workout`),
-          axios.get(`${base_url}/training/${id}`),
+          axios.get(`${base_url}/get-training-by-id/${trainingId}`),
         ]);
 
         if (exerciseRes.status === 200) setExerciseList(exerciseRes.data.data);
@@ -62,18 +64,44 @@ const EditTrainingForm = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [trainingId]);
+  console.log("training-Data", training);
 
-  //ok
+  const handleMoreExercise = (workoutIndex, e) => {
+    e.preventDefault();
+    setAddMoreExerciseIndex(workoutIndex);
+  };
+
+  const handleNewExerciseSelection = (selectedExercises, workoutIndex) => {
+    if (!training) return;
+    const updatedTraining = { ...training };
+    const currentWorkout = updatedTraining.workouts[workoutIndex];
+
+    selectedExercises.forEach((exercise) => {
+      currentWorkout.exercises.push({
+        _id: exercise._id,
+        name: exercise.name,
+        sets: 0,
+        reps: 0,
+        manipulation: "",
+      });
+    });
+
+    setIsSupersetIncomplete(false);
+    setTraining(updatedTraining);
+    setAddMoreExerciseIndex(null);
+  };
+
+  // Add selected workout with exercises
   const handleAddWorkout = (selected) => {
     if (!selected.length) return;
     const newWorkout = selected[0];
 
-    if (training.workouts?.some((w) => w.workout?._id === newWorkout?._id)) {
+    if (training.workouts?.some((w) => w.workout._id === newWorkout._id)) {
       // setSelectedWorkout(null);
       return;
     }
-    //test
+
     const updatedTraining = {
       ...training,
       workouts: [
@@ -89,43 +117,42 @@ const EditTrainingForm = () => {
     //console.log("updatedTraining 1:", updatedTraining);
 
     setTraining(updatedTraining);
-
     // setSelectedWorkout(null);
     setShowWorkoutSelect(false);
   };
 
-  // // Add a new exercise to a specific workout
-  const handleAddExercise = (workoutId, selected) => {
-    if (!selected.length) return;
-    const newExercise = selected[0];
+  // Add a new exercise to a specific workout
+  // const handleAddExercise = (workoutId, selected) => {
+  //   //console.log("selected", selected);
 
-    setTraining((prev) => ({
-      ...prev,
-      workouts: prev.workouts.map((workout) =>
-        //change prev Line
+  //   if (!selected.length) return;
+  //   const newExercise = selected[0];
 
-        workout._id === workoutId
-          ? {
-              ...workout,
-              exercises: [
-                ...workout.exercises,
-                {
-                  _id: newExercise._id,
-                  exercise_id: newExercise,
-                  sets: "",
-                  reps: "",
-                  manipulation: "",
-                },
-              ],
-            }
-          : workout
-      ),
-    }));
+  //   setTraining((prev) => ({
+  //     ...prev,
+  //     workouts: prev.workouts.map((workout) =>
+  //       workout._id === workoutId
+  //         ? {
+  //             ...workout,
+  //             exercises: [
+  //               ...workout.exercises,
+  //               {
+  //                 _id: newExercise._id,
+  //                 exercise_id: newExercise._id,
+  //                 sets: "",
+  //                 reps: "",
+  //                 manipulation: "",
+  //               },
+  //             ],
+  //           }
+  //         : workout
+  //     ),
+  //   }));
 
-    setExerciseSelectVisible((prev) => ({ ...prev, [workoutId]: false }));
-  };
+  //   setExerciseSelectVisible((prev) => ({ ...prev, [workoutId]: false }));
+  // };
 
-  // // Remove an exercise from a workout
+  // Remove an exercise from a workout
   const handleRemoveExercise = (workoutId, exerciseId) => {
     setTraining((prev) => ({
       ...prev,
@@ -142,32 +169,13 @@ const EditTrainingForm = () => {
     }));
   };
 
-  //console.log("Training:", training);
-
   const handleRemoveWorkout = (workoutId) => {
+    console.log("Removing workout:", workoutId); // Debugging log
     setTraining((prev) => ({
       ...prev,
       workouts: prev.workouts.filter((workout) => workout._id !== workoutId),
     }));
   };
-
-  // const handleSetChange = (workoutId, exerciseId, field, value) => {
-  //   // console.log("changeExercise:", value);
-  //   setTraining((prev) => ({
-  //     ...prev,
-  //     workouts: prev.workouts.map((workout) =>
-  //       workout._id === workoutId
-  //         ? {
-  //             ...workout,
-  //             exercises: workout.exercises.map((ex) =>
-  //               ex._id === exerciseId ? { ...ex, [field]: value } : ex
-  //             ),
-  //           }
-  //         : workout
-  //     ),
-  //   }));
-  // };
-
   const handleExerciseChange = (workoutIndex, exerciseIndex, field, value) => {
     const updatedWorkouts = [...training.workouts];
     const workout = updatedWorkouts[workoutIndex];
@@ -255,20 +263,30 @@ const EditTrainingForm = () => {
     setTraining(updatedTraining);
   };
 
+  const isSupersetAlreadyUsed = (workoutIndex) => {
+    if (!training) return false;
+    const currentWorkout = training.workouts[workoutIndex];
+    return currentWorkout.exercises.some(
+      (ex) => ex.manipulation.trim().toLowerCase() === "superset"
+    );
+  };
+
   const onSubmit = async () => {
+    // console.log("payload", training);
     const payload = {
-      name: training.name,
-      description: training.description,
+      user_id: user_Id,
+      training_id: trainingId,
       workouts: (training.workouts || []).map((w) => ({
-        workout: w._id,
+        workout: w?._id,
         // name: w.workout?.name,
         // description: w.workout?.description,
 
         exercises: (w.exercises || []).map((ex) => ({
-          _id: ex._id,
+          _id: ex?._id,
+          // Ensure exercise_id is sent as a plain string or object based on your schema:
           exercise_id:
             typeof ex.exercise_id === "object"
-              ? ex.exercise_id._id
+              ? ex.exercise_id?._id
               : ex.exercise_id,
           sets: Number(ex.sets),
           reps: Number(ex.reps),
@@ -276,21 +294,29 @@ const EditTrainingForm = () => {
         })),
       })),
     };
+    console.log("Payload", payload);
 
-    console.log("payload:", payload);
-    try {
-      const response = await axios.put(`${base_url}/training/${id}`, payload);
-      if (response.status === 200) {
-        navigate("/dashboard/training-list");
-      }
-
-      toast.success("Training session updated successfully!");
-    } catch (error) {
-      console.log(error);
-
-      console.error("Error updating training:", error);
-    }
+    // axios
+    //   .put(`${base_url}/update-user-training/${training._id}`, payload)
+    //   .then((res) => {
+    //     if (res.status === 200) {
+    //       toast.success("Training session updated successfully!");
+    //     }
+    //  });
+    // try {
+    //   const response = await axios.put(
+    //     `${base_url}/update-user-training/${trainingId}`,
+    //     payload
+    //   );
+    //   if (response.status === 200) {
+    //     toast.success("Training session updated successfully!");
+    //     navigate(-1);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
+  //console.log("training-Data", training);
 
   return (
     <div className="py-10 w-[500px]">
@@ -301,18 +327,17 @@ const EditTrainingForm = () => {
           label="Training Name"
           placeholder="Enter training name..."
           register={register}
-          validation={{ required: !id && "Name is required" }}
+          validation={{ required: !user_Id && "Name is required" }}
           errors={errors}
           defaultValue={training?.name}
         />
-
         <DynamicInputField
           id="description"
           type="text"
           label="Description"
           placeholder="Enter description..."
           register={register}
-          validation={{ required: !id && "Description is required" }}
+          validation={{ required: !user_Id && "Description is required" }}
           errors={errors}
           defaultValue={training?.description}
         />
@@ -337,18 +362,18 @@ const EditTrainingForm = () => {
                 />
                 Remove Workout
               </div>
+
               {workout?.exercises?.map((ex, exerciseIndex) => (
                 <div
                   key={ex._id}
                   className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
                 >
                   <div>
-                    <p className="py-4" dir="rtl">
-                      {ex?.name}
-                    </p>
+                    <p className="py-4">{ex?.exercise_id?.name}</p>
                     <div className="flex items-center justify-between gap-x-2">
                       <div className="flex flex-col items-center space-y-4">
                         <p>Sets</p>
+
                         <Input
                           type="number"
                           defaultValue={ex?.sets}
@@ -401,25 +426,20 @@ const EditTrainingForm = () => {
                 </div>
               ))}
 
-              {exerciseSelectVisible[workout._id] && (
+              {addMoreExerciseIndex === workoutIndex && (
                 <Select
                   options={exerciseList}
                   valueField="_id"
                   labelField="name"
                   onChange={(selected) =>
-                    handleAddExercise(workout._id, selected)
+                    handleNewExerciseSelection(selected, workoutIndex)
                   }
                 />
               )}
 
               <Button
                 type="button"
-                onClick={() =>
-                  setExerciseSelectVisible((prev) => ({
-                    ...prev,
-                    [workout._id]: true,
-                  }))
-                }
+                onClick={(e) => handleMoreExercise(workoutIndex, e)}
                 className="mt-2 bg-customBg flex mx-auto"
               >
                 Add More Exercise
@@ -441,9 +461,9 @@ const EditTrainingForm = () => {
             Update Training
           </Button>
           <Button
-            type="button"
-            className=" bg-customBg"
             onClick={() => setShowWorkoutSelect(true)}
+            type="button"
+            className="bg-customBg"
           >
             Add More Workout
           </Button>
@@ -453,4 +473,4 @@ const EditTrainingForm = () => {
   );
 };
 
-export default EditTrainingForm;
+export default EditTrainingFormUser;

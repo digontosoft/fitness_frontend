@@ -24,7 +24,9 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between p-4">
         {/* Logo */}
         <a href="" className="flex items-center space-x-2" onClick={logout}>
-          <span dir="rtl">התנתק</span>
+          <span className="text-xl font-bold text-gray-800" dir="rtl">
+            התנתק
+          </span>
           <LogOut className="w-5 h-5" />
         </a>
         {/* <div className="text-xl font-bold text-gray-800 hidden md:flex">

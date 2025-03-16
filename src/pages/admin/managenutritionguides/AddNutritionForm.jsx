@@ -141,10 +141,18 @@ const AddNutritionForm = ({ userId }) => {
             className="min-w-[350px]"
             id="title"
             type="text"
-            label="שם האימון"
-            placeholder="Add שם האימון...."
+            label={userId ? "Nutrition Menu Name" : "Nutrition Guide Name"}
+            placeholder={
+              userId
+                ? "Add nutrition menu name..."
+                : "Add nutrition guide name..."
+            }
             register={register}
-            validation={{ required: "שם האימון is required" }}
+            validation={{
+              required: userId
+                ? "Nutrition menu name is required"
+                : "Nutrition guide name is required",
+            }}
             errors={errors}
           />
 
@@ -152,10 +160,22 @@ const AddNutritionForm = ({ userId }) => {
             className="min-w-[350px]"
             id="description"
             type="text"
-            label="דגשים מיוחדים (במידה ויש)"
-            placeholder="דגשים מיוחדים (במידה ויש)..."
+            label={
+              userId
+                ? "Nutrition Menu Description"
+                : "Nutrition Guide Description"
+            }
+            placeholder={
+              userId
+                ? "Add nutrition menu description..."
+                : "Add nutrition guide description..."
+            }
             register={register}
-            validation={{ required: "דגשים מיוחדים is required" }}
+            validation={{
+              required: userId
+                ? "Nutrition menu description is required"
+                : "Nutrition guide description is required",
+            }}
             errors={errors}
           />
 

@@ -46,6 +46,11 @@ import NutritionLists from "@/pages/admin/managenutritionguides/NutritionLists";
 import EditNutrition from "@/pages/admin/managenutritionguides/EditNutrition";
 import NutritionDetails from "@/pages/admin/managenutritionguides/NutritionDetails";
 import ThankYou from "@/pages/thankyou/Thankyou";
+import AssignTrainingList from "@/pages/admin/assigntraining/AssignTrainingList";
+import EditTraineUser from "@/components/admin/components/Training/EditTraineUser";
+import AssignTraining from "@/pages/admin/assigntraining/AssignTraining";
+import TraineeUsers from "@/pages/admin/traineeusers/TraineeUsers";
+
 export const routes = createBrowserRouter([
   {
     element: (
@@ -98,10 +103,7 @@ export const routes = createBrowserRouter([
             path: "/exercise-library",
             element: <CourseList />,
           },
-          // {
-          //   path: "/courses",
-          //   element: <Course />,
-          // },
+
           {
             path: "/startTraining",
             element: <StartTraining />,
@@ -110,22 +112,16 @@ export const routes = createBrowserRouter([
             path: "/worklistVideo",
             element: <WorkOutListVideo />,
           },
-          // {
-          //   path: "/recipe",
-          //   element: <RecipeBook />,
-          // },
           {
-            path: "/action-course-cart",
+            path: "/action-course-cart/:id",
             element: <ActionCourseCart />,
           },
+
           {
             path: "/personal-workout/:id",
             element: <ProgressCourseCart />,
           },
-          // {
-          //   path: "/supermarket/:id",
-          //   element: <Supermarket />,
-          // },
+
           {
             path: "/superTwo",
             element: <SuperMarketTwo />,
@@ -218,7 +214,7 @@ export const routes = createBrowserRouter([
             element: <EditWorkout />,
           },
           {
-            path: "/dashboard/trining-program",
+            path: "/dashboard/add-training-program",
             element: <TriningProgram />,
           },
           {
@@ -234,20 +230,28 @@ export const routes = createBrowserRouter([
             element: <Trainer />,
           },
           {
+            path: "/dashboard/trainee-users-list",
+            element: <TraineeUsers />,
+          },
+          {
             path: "/dashboard/training-list",
             element: <TrainingLists />,
           },
           {
-            path: "/dashboard/training-list/:id",
-            element: <TrainingLists />,
+            path: "/dashboard/assigned-training-list/:id",
+            element: <AssignTrainingList />,
           },
           {
-            path: "/dashboard/assign-training/:id/:userId",
-            element: <EditTraining />,
+            path: "/dashboard/assign-training/:userId",
+            element: <AssignTraining />,
           },
           {
             path: "/dashboard/edit-training/:id",
             element: <EditTraining />,
+          },
+          {
+            path: "/dashboard/edit-training/:trainingId/:userId",
+            element: <EditTraineUser />,
           },
         ],
       },

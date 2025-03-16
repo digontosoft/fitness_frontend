@@ -30,9 +30,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import TrainingDetails from "./TrainingDetails";
+import TrainingForTraineeDetails from "./TrainingForTraineeDetails";
+// import TrainingDetails from "./TrainingDetails";
 
-export function TrainingList({ userId }) {
+export function TrainingListForTrainee({ userId }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -40,6 +41,34 @@ export function TrainingList({ userId }) {
   const [training, setTraining] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedTraining, setSelectedTraining] = useState(null);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await axios.get(`${base_url}/getUser/${userId}`);
+        setUser(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
+  }, [userId]);
+
+  const updateStatus = async (userType) => {
+    try {
+      await axios.post(`${base_url}/updateUserInfo`, {
+        user_id: user._id,
+        userType,
+      });
+      setUser((prevUser) => ({
+        ...prevUser,
+        userType,
+      }));
+    } catch (error) {
+      error;
+    }
+  };
 
   const columns = [
     {
@@ -84,8 +113,8 @@ export function TrainingList({ userId }) {
         const trainingId = row.original._id;
         return (
           <div className="flex space-x-2">
-            <TrainingDetails trainingId={trainingId} />
-            <Link to={`/dashboard/edit-training/${row.original._id}`}>
+            <TrainingForTraineeDetails trainingId={trainingId} />
+            <Link to={`/dashboard/edit-training/${trainingId}/${userId}`}>
               <Button className="bg-black" size="sm">
                 <Edit />
               </Button>
@@ -97,26 +126,6 @@ export function TrainingList({ userId }) {
             >
               <Trash />
             </Button>
-
-            {/* {userId && (
-              <Link to={`/dashboard/assign-training/${trainingId}/${userId}`}>
-                <Button className="bg-black" size="sm">
-                  Assign Training
-                </Button>
-              </Link>
-            )}
-
-            {userId && (
-              <Button
-                className="bg-customBg"
-                size="sm"
-                onClick={() =>
-                  updateStatus(user?.userType === "admin" ? "trainer" : "admin")
-                }
-              >
-                {user?.userType === "admin" ? "Make Trainer" : "Make Admin"}
-              </Button>
-            )} */}
           </div>
         );
       },
@@ -146,8 +155,11 @@ export function TrainingList({ userId }) {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${base_url}/training`);
+      const response = await axios.get(
+        `${base_url}/get-training-by-user-id/${userId}`
+      );
       setTraining(response.data.data);
+      console.log("training-for-user", response.data.data);
     } catch (error) {
       console.error("Error fetching exercises:", error);
     }
@@ -176,16 +188,16 @@ export function TrainingList({ userId }) {
     <div className="w-full" dir="ltr">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="שם מסנן...."
+          placeholder="Filter by trainig name..."
           value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
-        <Link to="/dashboard/add-training-program">
+        <Link to={`/dashboard/assign-training/${userId}`}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            Add New Training
+            Assign New Training
           </Button>
         </Link>
       </div>
@@ -244,7 +256,7 @@ export function TrainingList({ userId }) {
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this training?</p>
+          <p>Are you sure you want to delete this exercise?</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
               Cancel
