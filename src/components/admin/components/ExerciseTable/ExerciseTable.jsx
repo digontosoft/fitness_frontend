@@ -30,6 +30,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { handler } from "tailwindcss-animate";
 
 export function ExerciseTable() {
   const [sorting, setSorting] = useState([]);
@@ -76,6 +77,36 @@ export function ExerciseTable() {
         return <div className="lowercase">{truncatedDescription}</div>;
       },
     },
+    {
+      accessorKey: "body_part",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+  אזור בגוף
+          <ArrowUpDown />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("body_part")}</div>
+      ),
+    },
+    {
+      accessorKey: "equipment",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+        ציוד
+          <ArrowUpDown />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("equipment")}</div>
+      )
+      },
     {
       accessorKey: "video_url",
       header: ({ column }) => (

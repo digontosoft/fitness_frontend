@@ -1035,8 +1035,11 @@ const AssignTrainingForm = ({ user_id }) => {
 
       console.log("assignTraining:", payload);
 
-      await axios.post(`${base_url}/assign-training`, payload);
-      toast.success("Training session updated successfully!");
+      const response = await axios.post(`${base_url}/assign-training`, payload);
+      if (response.status === 200) {
+        toast.success("Training session updated successfully!");
+        navigate(-1);
+      }
     } catch (error) {
       console.error("Error updating training session:", error);
       toast.error("Failed to update training session.");
@@ -1066,7 +1069,8 @@ const AssignTrainingForm = ({ user_id }) => {
                     className="text-white bg-customBg"
                     onClick={() => handleRemoveWorkout(workoutIndex)}
                   >
-                    <Trash className="mr-2 text-white" /> Remove Workout
+                    <Trash className="mr-2 text-white cursor-pointer" /> Remove
+                    Workout
                   </Button>
                 </div>
                 {workout.exercises.map((exercise, exerciseIndex) => (
@@ -1076,7 +1080,7 @@ const AssignTrainingForm = ({ user_id }) => {
                     </div>
                     <div className="flex items-center justify-center gap-4">
                       <Trash
-                        className="text-red-500 hover:text-red-700"
+                        className="text-red-500 hover:text-red-700 cursor-pointer"
                         onClick={() =>
                           handleRemoveExercise(workoutIndex, exerciseIndex)
                         }
