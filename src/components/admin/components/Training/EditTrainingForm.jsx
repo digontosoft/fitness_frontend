@@ -25,8 +25,13 @@ const EditTrainingForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    reset(training);
+  }, [training, reset]);
 
   useEffect(() => {
     if (!training) {
@@ -112,8 +117,8 @@ const EditTrainingForm = () => {
                 {
                   _id: newExercise._id,
                   exercise_id: newExercise,
-                  sets: "",
-                  reps: "",
+                  sets: 0,
+                  reps: 0,
                   manipulation: "",
                 },
               ],
@@ -189,6 +194,7 @@ const EditTrainingForm = () => {
 
       // Check if this is the last exercise
       const isLastExercise = exerciseIndex === workout.exercises.length - 1;
+      console.log("firstExercise", isLastExercise);
 
       // If it's not the last exercise, check the next exercise
       if (!isLastExercise) {
@@ -255,10 +261,10 @@ const EditTrainingForm = () => {
     setTraining(updatedTraining);
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     const payload = {
-      name: training.name,
-      description: training.description,
+      name: data.name,
+      description: data.description,
       workouts: (training.workouts || []).map((w) => ({
         workout: w._id,
         // name: w.workout?.name,

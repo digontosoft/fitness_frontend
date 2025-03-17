@@ -15,12 +15,14 @@ const AddWorkoutForm = () => {
   const [workoutExercises, setWorkoutExercises] = useState([]);
   const [superset, setSuperset] = useState(false);
   const [isSupersetSelected, setIsSupersetSelected] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -44,6 +46,15 @@ const AddWorkoutForm = () => {
       return [...updatedExercises, { exercise_id: exerciseId, ...data }];
     });
   };
+
+  // const validatedExercises = selectedExercises.map((ex) => ({
+  //   exercise_id: ex._id,
+  //   sets: ex.sets,
+  //   reps: ex.reps,
+  //   manipulation: ex.manipulation,
+  // }));
+
+  console.log("selectedExercises", selectedExercises);
 
   const onSubmit = async (data) => {
     const workoutData = {
@@ -112,6 +123,8 @@ const AddWorkoutForm = () => {
               superset={superset}
               isSupersetSelected={isSupersetSelected}
               setIsSupersetSelected={setIsSupersetSelected}
+              isButtonDisabled={isButtonDisabled}
+              setIsButtonDisabled={setIsButtonDisabled}
             />
           ))}
         </div>
@@ -120,7 +133,7 @@ const AddWorkoutForm = () => {
           <Button
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
-            disabled={superset}
+            disabled={superset || isButtonDisabled}
           >
             Saving a new workout
           </Button>

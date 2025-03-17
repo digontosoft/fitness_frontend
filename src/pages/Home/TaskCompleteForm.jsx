@@ -14,6 +14,7 @@ const TaskCompleteForm = ({ data }) => {
   const [previews, setPreviews] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const Gender = userDetails?.gender;
+  console.log("data:", data);
 
   const id = data.measurement_id;
 
@@ -168,6 +169,7 @@ const TaskCompleteForm = ({ data }) => {
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
+              defaultValue={data.leftThigh}
             />
             <DynamicInputField
               id="rightArm"
