@@ -25,10 +25,8 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (users?.length) {
-      setTraineeUsers(users.filter((user) => user.userType === "trainee"));
-      setRecipeUsers(users.filter((user) => user.userType === "recipe"));
-    }
+    setTraineeUsers(users.filter((user) => user.userType === "trainee"));
+    setRecipeUsers(users.filter((user) => user.userType === "recipe"));
   }, [users]);
 
   useEffect(() => {
