@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import DynamicInputField from "./DynamicInputField";
+
 import { upload } from "../../assets/index";
-import { Button } from "../ui/button";
+import DynamicInputField from "@/components/measurements/DynamicInputField";
+import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
-import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-const InputForm = ({ gender }) => {
-  const [files, setFiles] = useState([]);
+
+const MeasurementUpdate = () => {
+  const [files, setFiles] = useState([]); // Store multiple files
   const [previews, setPreviews] = useState([]);
+  const [measurementData, setMeasurementData] = useState({});
+  console.log("file name is", previews);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
-  const userId = userDetails._id;
+  console.log("user data from mesurement", userDetails._id);
   const Gender = userDetails?.gender;
-  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -21,44 +23,25 @@ const InputForm = ({ gender }) => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    const formData = new FormData();
-
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
-    });
-
-    if (files && files.length > 0) {
-      files.forEach((file, index) => {
-        formData.append(`photo1`, file);
-      });
-    }
-    // if (files && files.length > 0) {
-    //   files.forEach((file, index) => {
-    //     formData.append(`uploadedFile[${index}]`, file);
-    //   });
-    // }
-
-    formData.append("user_id", userId);
-
-    console.log("This is my form data:", Object.fromEntries(formData));
-
-    try {
-      const response = await axios.post(`${base_url}/measurement`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response.status === 201) {
-        toast.success("Measurment assign successfully");
-        navigate("/");
-        console.log("Success:", response.data);
+  useEffect(() => {
+    const fetchUserMeasurementData = async () => {
+      const response = await axios.get(
+        `${base_url}/measurement/${userDetails._id}`
+      );
+      console.log("measurement:", response.data);
+      if (response.status === 200) {
+        setMeasurementData(response.data);
       }
-    } catch (error) {
-      console.error("Error uploading form data:", error);
-    }
-  };
+    };
+    fetchUserMeasurementData();
+  }, [userDetails?._id]);
 
+  console.log("meas:", measurementData);
+
+  const onSubmit = (data) => {
+    const formData = { ...data, uploadedFile: files };
+    console.log("this my form data ", formData);
+  };
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -83,7 +66,7 @@ const InputForm = ({ gender }) => {
     if (validFiles.length > 0) {
       const totalFiles = files.length + validFiles.length;
       if (totalFiles > 4) {
-        toast.warning("You can upload up to 4 images only.");
+        alert("You can upload up to 4 images only.");
         return;
       }
       setFiles((prevFiles) => [...prevFiles, ...validFiles]);
@@ -118,7 +101,7 @@ const InputForm = ({ gender }) => {
         <div className="  w-full justify-center flex flex-col md:flex-row-reverse  gap-4">
           <div className="w-full">
             <DynamicInputField
-              id="thighl"
+              id="leftThigh"
               type="text"
               label="יירך שמאל"
               placeholder="הזן נתונים כאן..."
@@ -128,7 +111,7 @@ const InputForm = ({ gender }) => {
               watch={watch}
             />
             <DynamicInputField
-              id="armr"
+              id="rightArm"
               type="text"
               label="זרוע ימין"
               placeholder="הזן נתונים כאן..."
@@ -138,7 +121,7 @@ const InputForm = ({ gender }) => {
               watch={watch}
             />
             <DynamicInputField
-              id="arml"
+              id="leftArm"
               type="text"
               label="זרוע שמאל"
               placeholder="הזן נתונים כאן..."
@@ -148,29 +131,19 @@ const InputForm = ({ gender }) => {
               watch={watch}
             />
             <DynamicInputField
-              id="butt"
+              id="Butt"
               type="number"
-              label={gender === "male" ? "חָזֶה" : "קַת"}
+              label={Gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
               errors={errors}
               watch={watch}
             />
-            <DynamicInputField
-              id="date"
-              type="date"
-              label="תאריך"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
           </div>
           <div className="w-full">
             <DynamicInputField
-              id="renew_date"
+              id="selectedDate"
               type="date"
               label="תאריך"
               placeholder="הזן נתונים כאן..."
@@ -189,7 +162,7 @@ const InputForm = ({ gender }) => {
               errors={errors}
               watch={watch}
             />
-            {/* <DynamicInputField
+            <DynamicInputField
               id="chest"
               type="text"
               label="היקף חזה"
@@ -198,9 +171,9 @@ const InputForm = ({ gender }) => {
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
-            /> */}
+            />
             <DynamicInputField
-              id="thighr"
+              id="thigh right"
               type="text"
               label="ירך ימין "
               placeholder="הזן נתונים כאן..."
@@ -247,7 +220,6 @@ const InputForm = ({ gender }) => {
               <button
                 onClick={handleButtonClick}
                 className="bg-[#BF2033] hover:bg-red-500 text-white px-4 rounded-full mt-4"
-                type="button"
               >
                 העלאה
               </button>
@@ -307,4 +279,4 @@ const InputForm = ({ gender }) => {
   );
 };
 
-export default InputForm;
+export default MeasurementUpdate;

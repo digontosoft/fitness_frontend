@@ -12,6 +12,8 @@ export default {
         "custom-radial":
           "radial-gradient(108.22% 170.12% at 50% 50%, #CD2839 0%, #65040B 80%, #000000 100%)",
         customBg: "linear-gradient(to top right, #FD4753, #940019)",
+        customRadial:
+          "radial-gradient(62.54% 65.93% at 50.15% 58.14%, #404040 0%, #000000 100%)",
       },
       fontFamily: {
         hebbo: ["Hebbo", "sans-serif"],

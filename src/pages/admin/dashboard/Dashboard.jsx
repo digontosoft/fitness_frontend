@@ -31,6 +31,16 @@ const Dashboard = () => {
       setRecipeUsers(users.filter((user) => user.userType === "recipe"));
     }
   }, [users]);
+  useEffect(() => {
+    if (users?.length > 0) {
+      // Only filter if users has data
+      const traineeUsers = users.filter((user) => user.userType === "trainee");
+      const recipeUsers = users.filter((user) => user.userType === "recipe"); // Corrected variable name
+
+      localStorage.setItem("traineeUsers", JSON.stringify(traineeUsers.length));
+      localStorage.setItem("recipeUsers", JSON.stringify(recipeUsers.length));
+    }
+  }, [users]);
 
   useEffect(() => {
     fetchData();
@@ -41,6 +51,9 @@ const Dashboard = () => {
       navigate(`/dashboard/traineer/${selectedUser[0]._id}`);
     }
   };
+  const traineeUsersLength = JSON.parse(localStorage.getItem("traineeUsers"));
+  const recipeUsersLength = JSON.parse(localStorage.getItem("recipeUsers"));
+  console.log("traineeUsers", traineeUsersLength);
   return (
     <Container className="min-h-[72vh] my-10 sm:px-0 px-4">
       <div
@@ -52,7 +65,7 @@ const Dashboard = () => {
           <div className="flex items-center gap-5">
             <div className="flex items-center justify-center w-9 h-9 bg-custom-radial rounded-full">
               <span className="text-sm font-bold leading-5 text-white text-center">
-                {traineeUsers?.length}
+                {traineeUsersLength}
               </span>
             </div>
             <span>משתמשים מתאמנים</span>
@@ -60,7 +73,7 @@ const Dashboard = () => {
           <div className="flex items-center gap-5">
             <div className="flex items-center justify-center w-9 h-9 bg-custom-radial rounded-full">
               <span className="text-sm font-bold leading-5 text-white text-center">
-                {recipeUsers?.length}
+                {recipeUsersLength}
               </span>
             </div>
             <span>משתמשי מתכונים</span>

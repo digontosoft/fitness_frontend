@@ -5,7 +5,6 @@ const ProtectedRoutes = ({ children }) => {
   const userData = JSON.parse(localStorage.getItem("userInfo") || "{}");
   const userType = userData?.userType;
   const location = useLocation();
-  console.log("user info", userData);
 
   if (!token) {
     return <Navigate to="/login" state={{ from: location }} replace />;

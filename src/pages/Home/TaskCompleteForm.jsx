@@ -1,64 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import DynamicInputField from "./DynamicInputField";
+
 import { upload } from "../../assets/index";
-import { Button } from "../ui/button";
+
+import DynamicInputField from "@/components/measurements/DynamicInputField";
+import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-const InputForm = ({ gender }) => {
+
+const TaskCompleteForm = ({ data }) => {
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
-  const userId = userDetails._id;
   const Gender = userDetails?.gender;
-  const navigate = useNavigate();
+
+  const id = data.measurement_id;
+
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      mode: "task",
+      leftThigh: data.thighl,
+      rightThigh: data.thighr,
+      rightArm: data.armr,
+      leftArm: data.arml,
+      Butt: Gender === "male" ? data.chest : data.butt,
+      chest: data.chest,
+      waist: data.waist,
+      selectedDate: data.date,
+    },
+  });
 
-  const onSubmit = async (data) => {
-    const formData = new FormData();
-
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
-    });
-
-    if (files && files.length > 0) {
-      files.forEach((file, index) => {
-        formData.append(`photo1`, file);
-      });
+  useEffect(() => {
+    if (data.photo1 || data.photo2) {
+      setPreviews([data.photo1, data.photo2]);
     }
-    // if (files && files.length > 0) {
-    //   files.forEach((file, index) => {
-    //     formData.append(`uploadedFile[${index}]`, file);
-    //   });
-    // }
+  }, [data]);
 
-    formData.append("user_id", userId);
-
-    console.log("This is my form data:", Object.fromEntries(formData));
-
+  const onSubmit = async (formData) => {
+    const updatedFormData = { ...formData, uploadedFiles: files };
+    console.log("Updated form data: ", updatedFormData);
     try {
-      const response = await axios.post(`${base_url}/measurement`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response.status === 201) {
-        toast.success("Measurment assign successfully");
-        navigate("/");
-        console.log("Success:", response.data);
+      const response = await axios.put(
+        `${base_url}/measurement/${id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Measurement completed successfully!");
       }
     } catch (error) {
-      console.error("Error uploading form data:", error);
+      toast.error("Error updating measurement. Please try again.");
+      console.error("Error updating measurement:", error);
     }
   };
 
+  // const onSubmit = async (formData) => {
+  //   const updatedFormData = new FormData();
+
+  //   updatedFormData.append("mode", "task");
+  //   updatedFormData.append("date", formData.selectedDate);
+  //   updatedFormData.append("weight", formData.weight || "");
+  //   updatedFormData.append(
+  //     "body_fat_percentage",
+  //     formData.bodyFatPercentage || ""
+  //   );
+  //   updatedFormData.append("chest", formData.chest);
+  //   updatedFormData.append("butt", formData.Butt);
+  //   updatedFormData.append("waist", formData.waist);
+  //   updatedFormData.append("thighr", formData.rightThigh || "");
+  //   updatedFormData.append("thighl", formData.leftThigh);
+  //   updatedFormData.append("armr", formData.rightArm);
+  //   updatedFormData.append("arml", formData.leftArm);
+  //   files.forEach((file, index) => {
+  //     updatedFormData.append(`photo${index + 1}`, file);
+  //   });
+
+  //   try {
+  //     const response = await axios.put(
+  //       `${base_url}/measurement/${id}`,
+  //       updatedFormData,
+  //       {
+  //         headers: { "Content-Type": "multipart/form-data" },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       toast.success("Measurement completed successfully!");
+  //     }
+  //   } catch (error) {
+  //     toast.error("Error updating measurement. Please try again.");
+  //     console.error("Error updating measurement:", error);
+  //   }
+  // };
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -83,7 +125,7 @@ const InputForm = ({ gender }) => {
     if (validFiles.length > 0) {
       const totalFiles = files.length + validFiles.length;
       if (totalFiles > 4) {
-        toast.warning("You can upload up to 4 images only.");
+        alert("You can upload up to 4 images only.");
         return;
       }
       setFiles((prevFiles) => [...prevFiles, ...validFiles]);
@@ -113,12 +155,12 @@ const InputForm = ({ gender }) => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto justify-center  py-20" dir="rtl">
+    <div className="p-6 max-w-6xl mx-auto justify-center py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="  w-full justify-center flex flex-col md:flex-row-reverse  gap-4">
+        <div className="w-full justify-center flex flex-col md:flex-row-reverse gap-4">
           <div className="w-full">
             <DynamicInputField
-              id="thighl"
+              id="leftThigh"
               type="text"
               label="יירך שמאל"
               placeholder="הזן נתונים כאן..."
@@ -128,7 +170,7 @@ const InputForm = ({ gender }) => {
               watch={watch}
             />
             <DynamicInputField
-              id="armr"
+              id="rightArm"
               type="text"
               label="זרוע ימין"
               placeholder="הזן נתונים כאן..."
@@ -138,7 +180,7 @@ const InputForm = ({ gender }) => {
               watch={watch}
             />
             <DynamicInputField
-              id="arml"
+              id="leftArm"
               type="text"
               label="זרוע שמאל"
               placeholder="הזן נתונים כאן..."
@@ -148,29 +190,19 @@ const InputForm = ({ gender }) => {
               watch={watch}
             />
             <DynamicInputField
-              id="butt"
+              id="Butt"
               type="number"
-              label={gender === "male" ? "חָזֶה" : "קַת"}
+              label={Gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
               errors={errors}
               watch={watch}
             />
-            <DynamicInputField
-              id="date"
-              type="date"
-              label="תאריך"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
           </div>
           <div className="w-full">
             <DynamicInputField
-              id="renew_date"
+              id="selectedDate"
               type="date"
               label="תאריך"
               placeholder="הזן נתונים כאן..."
@@ -189,7 +221,7 @@ const InputForm = ({ gender }) => {
               errors={errors}
               watch={watch}
             />
-            {/* <DynamicInputField
+            <DynamicInputField
               id="chest"
               type="text"
               label="היקף חזה"
@@ -198,11 +230,11 @@ const InputForm = ({ gender }) => {
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
-            /> */}
+            />
             <DynamicInputField
-              id="thighr"
+              id="thigh right"
               type="text"
-              label="ירך ימין "
+              label="ירך ימין"
               placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: "שדה זה חובה" }}
@@ -211,9 +243,11 @@ const InputForm = ({ gender }) => {
             />
           </div>
         </div>
+
         <button className="underline text-black text-xl font-bold hover:text-blue-600">
           לצפייה במדריך המדדים
         </button>
+
         <div className="w-full flex justify-center items-center">
           <div className="w-full md:w-[60%] mt-6">
             <label className="block font-semibold text-sm text-[#333333] text-center">
@@ -245,9 +279,9 @@ const InputForm = ({ gender }) => {
 
               {/* Upload Button */}
               <button
+                type="button"
                 onClick={handleButtonClick}
                 className="bg-[#BF2033] hover:bg-red-500 text-white px-4 rounded-full mt-4"
-                type="button"
               >
                 העלאה
               </button>
@@ -269,7 +303,7 @@ const InputForm = ({ gender }) => {
                 {files.map((file, index) => (
                   <div
                     key={index}
-                    className="flex justify-between items-center  p-2 rounded-lg"
+                    className="flex justify-between items-center p-2 rounded-lg"
                   >
                     {/* Image Preview */}
                     {file.type.startsWith("image/") && (
@@ -307,4 +341,4 @@ const InputForm = ({ gender }) => {
   );
 };
 
-export default InputForm;
+export default TaskCompleteForm;

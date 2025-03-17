@@ -50,6 +50,8 @@ import AssignTrainingList from "@/pages/admin/assigntraining/AssignTrainingList"
 import EditTraineUser from "@/components/admin/components/Training/EditTraineUser";
 import AssignTraining from "@/pages/admin/assigntraining/AssignTraining";
 import TraineeUsers from "@/pages/admin/traineeusers/TraineeUsers";
+import Complete from "@/pages/Home/mesurementForm/Complete";
+import UpdateMesurement from "@/pages/Home/mesurementForm/UpdateMesurement";
 
 export const routes = createBrowserRouter([
   {
@@ -74,6 +76,14 @@ export const routes = createBrowserRouter([
           {
             path: "/measurements",
             element: <Measurements />,
+          },
+          {
+            path: "/mesurement-complete",
+            element: <Complete />,
+          },
+          {
+            path: "/mesurement-update",
+            element: <UpdateMesurement />,
           },
           {
             path: "/measurement-watch",
@@ -149,6 +159,10 @@ export const routes = createBrowserRouter([
             path: "/dashboard",
             element: <Dashboard />,
           },
+          // {
+          //   path: "/dashboard/mesurements/:id",
+          //   element: <Measurements />,
+          // },
           {
             path: "/dashboard/users",
             element: <Users />,
