@@ -3,8 +3,10 @@ import InputForm from "@/components/measurements/InputForm";
 import Title from "@/components/measurements/Tilte";
 
 import React from "react";
+import { useParams } from "react-router-dom";
 
 const Measurements = () => {
+  const { id } = useParams();
   return (
     <div>
       <VideoCart
@@ -13,7 +15,7 @@ const Measurements = () => {
         }
       />
       <Title tilte={"הזנת מדדים"} />
-      <InputForm />
+      <InputForm userId={id} />
     </div>
   );
 };
