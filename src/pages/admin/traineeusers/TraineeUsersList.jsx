@@ -22,7 +22,7 @@ import { base_url } from "@/api/baseUrl";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import ExerciseDetails from "./ExerciseDetails";
-import { deleteTraining } from "@/api/deleteData";
+import { deleteUser } from "@/api/deleteData";
 import {
   Dialog,
   DialogContent,
@@ -30,93 +30,94 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import TrainingDetails from "./TrainingDetails";
+import UserDetails from "./UserDetails";
+import { toast } from "sonner";
 
-export function TrainingList({ userId }) {
+export function TraineeUsersLists() {
+  const [users, setUsers] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
-  const [training, setTraining] = useState([]);
+  //   const [exercise, setExercise] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedTraining, setSelectedTraining] = useState(null);
-
+  const [selectedExercise, setSelectedExercise] = useState(null);
+  const [traineeUsers, setTraineeUsers] = useState([]);
   const columns = [
     {
-      accessorKey: "name",
+      accessorKey: "firstName",
       header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Training Name
+          Name
           <ArrowUpDown />
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("name")}</div>
+        <div className="lowercase">{row.getValue("firstName")}</div>
       ),
     },
     {
-      accessorKey: "description",
+      accessorKey: "email",
       header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Training Description
+          Email
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => {
-        const description = row.getValue("description") || "";
-        const truncatedDescription =
-          description.length > 100
-            ? description.slice(0, 100) + "..."
-            : description;
-        return <div className="lowercase">{truncatedDescription}</div>;
-      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("email")}</div>
+      ),
     },
     {
       id: "actions",
       header: "פעולות",
       cell: ({ row }) => {
-        const trainingId = row.original._id;
+        const userId = row.original._id;
+        console.log("row:", row);
         return (
           <div className="flex space-x-2">
-            <TrainingDetails trainingId={trainingId} />
-            <Link to={`/dashboard/edit-training/${row.original._id}`}>
-              <Button className="bg-black" size="sm">
-                <Edit />
+            <UserDetails userId={userId} />
+            {/* <Link to={`/dashboard/edit-exercise/${row.original._id}`}>
+            </Link> */}
+            <Button className="bg-black" size="sm">
+              <Edit />
+            </Button>
+            <Button
+              className="bg-customBg"
+              size="sm"
+              onClick={() => handleOpenDeleteModal(userId)}
+            >
+              <Trash />
+            </Button>
+            <Link to={`/dashboard/traineer/${userId}`}>
+              <Button
+                className="bg-customBg"
+                size="sm"
+                onClick={() => handleOpenDeleteModal(row.original)}
+              >
+                Managing Training
               </Button>
             </Link>
             <Button
               className="bg-customBg"
               size="sm"
-              onClick={() => handleOpenDeleteModal(trainingId)}
+              onClick={() =>
+                updateStatus(
+                  row.original.userType === "admin" ? "trainee" : "admin",
+                  userId
+                )
+              }
             >
-              <Trash />
+              {row.original.userType === "trainee"
+                ? "Make Admin"
+                : "Make Trainee"}
             </Button>
-
-            {/* {userId && (
-              <Link to={`/dashboard/assign-training/${trainingId}/${userId}`}>
-                <Button className="bg-black" size="sm">
-                  Assign Training
-                </Button>
-              </Link>
-            )}
-
-            {userId && (
-              <Button
-                className="bg-customBg"
-                size="sm"
-                onClick={() =>
-                  updateStatus(user?.userType === "admin" ? "trainer" : "admin")
-                }
-              >
-                {user?.userType === "admin" ? "Make Trainer" : "Make Admin"}
-              </Button>
-            )} */}
           </div>
         );
       },
@@ -125,40 +126,67 @@ export function TrainingList({ userId }) {
     },
   ];
 
-  const handleOpenDeleteModal = (trainingId) => {
-    setSelectedTraining(trainingId);
+  const handleOpenDeleteModal = (exercise) => {
+    setSelectedExercise(exercise);
     setDeleteModalOpen(true);
   };
 
   const handleDelete = async () => {
-    if (!selectedTraining) return;
+    if (!selectedExercise) return;
     try {
-      await deleteTraining(selectedTraining);
-      setTraining((prevTraining) =>
-        prevTraining.filter((e) => e._id !== selectedTraining)
+      const data = {
+        user_id: selectedExercise,
+        userStatus: "Inactive",
+      };
+      await deleteUser(data);
+      setUsers((prevUsers) =>
+        prevUsers.filter((e) => e._id !== selectedExercise)
       );
       setDeleteModalOpen(false);
-      setSelectedTraining(null);
+      setSelectedExercise(null);
     } catch (error) {
-      console.error("Error deleting training:", error);
+      console.error("Error deleting exercise:", error);
     }
   };
 
-  const fetchData = async () => {
+  const fetchUsers = async () => {
     try {
-      const response = await axios.get(`${base_url}/training`);
-      setTraining(response.data.data);
+      const response = await axios.get(`${base_url}/getUsers`);
+      console.log("Users:", response.data.data);
+      setUsers(response.data.data);
     } catch (error) {
-      console.error("Error fetching exercises:", error);
+      console.error("Error fetching email:", error);
+      throw error;
     }
   };
-
   useEffect(() => {
-    fetchData();
+    fetchUsers();
   }, []);
 
+  useEffect(() => {
+    if (users?.length) {
+      setTraineeUsers(users.filter((user) => user.userType === "trainee"));
+    }
+  }, [users]);
+
+  const updateStatus = async (userType, userId) => {
+    try {
+      const response = await axios.post(`${base_url}/updateUserInfo`, {
+        user_id: userId,
+        userType,
+      });
+
+      if (response.status === 200) {
+        toast.success("User Type Updated Successfully");
+        fetchUsers();
+      }
+    } catch (error) {
+      toast.error("Failed to update user type");
+    }
+  };
+
   const table = useReactTable({
-    data: training,
+    data: traineeUsers,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -170,24 +198,23 @@ export function TrainingList({ userId }) {
     onRowSelectionChange: setRowSelection,
     state: { sorting, columnFilters, columnVisibility, rowSelection },
   });
-  console.log(training);
 
   return (
     <div className="w-full" dir="ltr">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="שם מסנן...."
-          value={table.getColumn("name")?.getFilterValue() ?? ""}
+          placeholder="Filter name..."
+          value={table.getColumn("firstName")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("firstName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
-        <Link to="/dashboard/add-training-program">
+        {/* <Link to="/dashboard/exercise-library">
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            Add New Training
+            הוסף תרגיל חדש
           </Button>
-        </Link>
+        </Link> */}
       </div>
       <div className="rounded-md border">
         <Table>
@@ -244,7 +271,7 @@ export function TrainingList({ userId }) {
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this training?</p>
+          <p>Are you sure you want to delete this user?</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
               Cancel
@@ -255,6 +282,7 @@ export function TrainingList({ userId }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"

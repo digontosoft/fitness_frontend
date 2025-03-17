@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Select from "react-dropdown-select";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { base_url } from "@/api/baseUrl";
@@ -11,13 +11,14 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const EditTrainingFormUser = ({ trainingId, user_Id }) => {
-  //const { trainingId, userId } = useParams();
   const [training, setTraining] = useState({});
   const [exerciseList, setExerciseList] = useState([]);
   const [workouts, setWorkouts] = useState([]);
-  const [selectedWorkout, setSelectedWorkout] = useState(null);
+  // const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
-  const [exerciseSelectVisible, setExerciseSelectVisible] = useState({});
+  const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
+  const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const navigate = useNavigate();
 
   //console.log("userId", userId);
@@ -28,6 +29,22 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
     formState: { errors },
     reset,
   } = useForm();
+
+  useEffect(() => {
+    if (!training) {
+      setIsButtonDisabled(false);
+      return;
+    }
+
+    const isAnyFieldEmpty = training.workouts?.some((workout) =>
+      workout.exercises.some(
+        (exercise) =>
+          exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+      )
+    );
+
+    setIsButtonDisabled(isAnyFieldEmpty);
+  }, [training]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,13 +67,38 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   }, [trainingId]);
   console.log("training-Data", training);
 
+  const handleMoreExercise = (workoutIndex, e) => {
+    e.preventDefault();
+    setAddMoreExerciseIndex(workoutIndex);
+  };
+
+  const handleNewExerciseSelection = (selectedExercises, workoutIndex) => {
+    if (!training) return;
+    const updatedTraining = { ...training };
+    const currentWorkout = updatedTraining.workouts[workoutIndex];
+
+    selectedExercises.forEach((exercise) => {
+      currentWorkout.exercises.push({
+        _id: exercise._id,
+        name: exercise.name,
+        sets: 0,
+        reps: 0,
+        manipulation: "",
+      });
+    });
+
+    setIsSupersetIncomplete(false);
+    setTraining(updatedTraining);
+    setAddMoreExerciseIndex(null);
+  };
+
   // Add selected workout with exercises
   const handleAddWorkout = (selected) => {
     if (!selected.length) return;
     const newWorkout = selected[0];
 
     if (training.workouts?.some((w) => w.workout._id === newWorkout._id)) {
-      setSelectedWorkout(null);
+      // setSelectedWorkout(null);
       return;
     }
 
@@ -75,40 +117,40 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
     //console.log("updatedTraining 1:", updatedTraining);
 
     setTraining(updatedTraining);
-    setSelectedWorkout(null);
+    // setSelectedWorkout(null);
     setShowWorkoutSelect(false);
   };
 
   // Add a new exercise to a specific workout
-  const handleAddExercise = (workoutId, selected) => {
-    //console.log("selected", selected);
+  // const handleAddExercise = (workoutId, selected) => {
+  //   //console.log("selected", selected);
 
-    if (!selected.length) return;
-    const newExercise = selected[0];
+  //   if (!selected.length) return;
+  //   const newExercise = selected[0];
 
-    setTraining((prev) => ({
-      ...prev,
-      workouts: prev.workouts.map((workout) =>
-        workout._id === workoutId
-          ? {
-              ...workout,
-              exercises: [
-                ...workout.exercises,
-                {
-                  _id: newExercise._id,
-                  exercise_id: newExercise._id,
-                  sets: "",
-                  reps: "",
-                  manipulation: "",
-                },
-              ],
-            }
-          : workout
-      ),
-    }));
+  //   setTraining((prev) => ({
+  //     ...prev,
+  //     workouts: prev.workouts.map((workout) =>
+  //       workout._id === workoutId
+  //         ? {
+  //             ...workout,
+  //             exercises: [
+  //               ...workout.exercises,
+  //               {
+  //                 _id: newExercise._id,
+  //                 exercise_id: newExercise._id,
+  //                 sets: "",
+  //                 reps: "",
+  //                 manipulation: "",
+  //               },
+  //             ],
+  //           }
+  //         : workout
+  //     ),
+  //   }));
 
-    setExerciseSelectVisible((prev) => ({ ...prev, [workoutId]: false }));
-  };
+  //   setExerciseSelectVisible((prev) => ({ ...prev, [workoutId]: false }));
+  // };
 
   // Remove an exercise from a workout
   const handleRemoveExercise = (workoutId, exerciseId) => {
@@ -134,25 +176,100 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       workouts: prev.workouts.filter((workout) => workout._id !== workoutId),
     }));
   };
+  const handleExerciseChange = (workoutIndex, exerciseIndex, field, value) => {
+    const updatedWorkouts = [...training.workouts];
+    const workout = updatedWorkouts[workoutIndex];
+    const exercise = workout.exercises[exerciseIndex];
 
-  const handleSetChange = (workoutId, exerciseId, field, value) => {
-    //  console.log("changeExercise:", exerciseId);
-    setTraining((prev) => ({
-      ...prev,
-      workouts: prev.workouts.map((workout) =>
-        workout._id === workoutId
-          ? {
-              ...workout,
-              exercises: workout.exercises.map((ex) =>
-                ex._id === exerciseId ? { ...ex, [field]: value } : ex
-              ),
-            }
-          : workout
-      ),
-    }));
+    if (field === "manipulation" && value === "superset") {
+      // Check if there is already a superset in the workout
+      const existingSuperset = workout.exercises.some(
+        (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
+      );
+
+      if (existingSuperset) {
+        toast.error("Only one superset is allowed per workout.");
+        setIsSupersetIncomplete(true);
+        return;
+      } else {
+        setIsSupersetIncomplete(false);
+      }
+
+      // Check if this is the last exercise
+      const isLastExercise = exerciseIndex === workout.exercises.length - 1;
+
+      // If it's not the last exercise, check the next exercise
+      if (!isLastExercise) {
+        const nextExercise = workout.exercises[exerciseIndex + 1];
+        if (!nextExercise || nextExercise.manipulation !== "superset") {
+          // If the next exercise doesn't exist or isn't a superset, check if it has other manipulations
+          if (nextExercise && nextExercise.manipulation !== "superset") {
+            // If the next exercise has a different manipulation, it's allowed
+            setIsSupersetIncomplete(false);
+          } else {
+            // If there is no next exercise or it's not a superset, the superset is incomplete
+            setIsSupersetIncomplete(true);
+            toast.error("The next exercise must also be a superset.");
+            return;
+          }
+        }
+      } else {
+        // If it's the last exercise, allow creating a superset
+        setIsSupersetIncomplete(false);
+      }
+    }
+
+    // If the current exercise is being removed from superset, check the previous exercise
+    if (
+      field === "manipulation" &&
+      value !== "superset" &&
+      exercise.manipulation === "superset"
+    ) {
+      const previousExercise = workout.exercises[exerciseIndex - 1];
+      if (previousExercise && previousExercise.manipulation === "superset") {
+        setIsSupersetIncomplete(true);
+        toast.error(
+          "Cannot remove superset from this exercise as the previous exercise is a superset."
+        );
+        return;
+      }
+    }
+
+    // Update the exercise field
+    // exercise[field] = value;
+
+    // Check if the superset is complete after the update
+    if (field === "manipulation" && value === "superset") {
+      const nextExercise = workout.exercises[exerciseIndex + 1];
+      if (!nextExercise || nextExercise.manipulation !== "superset") {
+        // If there is no next exercise or it's not a superset, check if it has other manipulations
+        if (nextExercise && nextExercise.manipulation !== "superset") {
+          // If the next exercise has a different manipulation, it's allowed
+          setIsSupersetIncomplete(false);
+        } else {
+          // Otherwise, the superset is incomplete
+          setIsSupersetIncomplete(true);
+        }
+      } else {
+        setIsSupersetIncomplete(false);
+      }
+    } else {
+      setIsSupersetIncomplete(false);
+    }
+
+    const updatedTraining = { ...training };
+    updatedTraining.workouts[workoutIndex].exercises[exerciseIndex][field] =
+      value;
+    setTraining(updatedTraining);
   };
 
-  console.log("Training", training);
+  const isSupersetAlreadyUsed = (workoutIndex) => {
+    if (!training) return false;
+    const currentWorkout = training.workouts[workoutIndex];
+    return currentWorkout.exercises.some(
+      (ex) => ex.manipulation.trim().toLowerCase() === "superset"
+    );
+  };
 
   const onSubmit = async () => {
     // console.log("payload", training);
@@ -186,18 +303,18 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
     //       toast.success("Training session updated successfully!");
     //     }
     //  });
-    try {
-      const response = await axios.put(
-        `${base_url}/update-user-training/${trainingId}`,
-        payload
-      );
-      if (response.status === 200) {
-        toast.success("Training session updated successfully!");
-        navigate(-1);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const response = await axios.put(
+    //     `${base_url}/update-user-training/${trainingId}`,
+    //     payload
+    //   );
+    //   if (response.status === 200) {
+    //     toast.success("Training session updated successfully!");
+    //     navigate(-1);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
   //console.log("training-Data", training);
 
@@ -235,7 +352,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         )}
 
         <div className="my-5">
-          {training?.workouts?.map((workout) => (
+          {training?.workouts?.map((workout, workoutIndex) => (
             <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
               <h1 className="font-semibold">{workout?.workout?.name}</h1>
               <div className="flex items-center gap-x-2" dir="rtl">
@@ -246,7 +363,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                 Remove Workout
               </div>
 
-              {workout?.exercises?.map((ex) => (
+              {workout?.exercises?.map((ex, exerciseIndex) => (
                 <div
                   key={ex._id}
                   className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
@@ -261,9 +378,9 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                           type="number"
                           defaultValue={ex?.sets}
                           onChange={(e) =>
-                            handleSetChange(
-                              workout._id,
-                              ex._id,
+                            handleExerciseChange(
+                              workoutIndex,
+                              exerciseIndex,
                               "sets",
                               e.target.value
                             )
@@ -276,9 +393,9 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                           type="number"
                           defaultValue={ex?.reps}
                           onChange={(e) =>
-                            handleSetChange(
-                              workout._id,
-                              ex._id,
+                            handleExerciseChange(
+                              workoutIndex,
+                              exerciseIndex,
                               "reps",
                               e.target.value
                             )
@@ -291,9 +408,9 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                           type="text"
                           defaultValue={ex?.manipulation}
                           onChange={(e) =>
-                            handleSetChange(
-                              workout._id,
-                              ex._id,
+                            handleExerciseChange(
+                              workoutIndex,
+                              exerciseIndex,
                               "manipulation",
                               e.target.value
                             )
@@ -309,25 +426,20 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                 </div>
               ))}
 
-              {exerciseSelectVisible[workout._id] && (
+              {addMoreExerciseIndex === workoutIndex && (
                 <Select
                   options={exerciseList}
                   valueField="_id"
                   labelField="name"
                   onChange={(selected) =>
-                    handleAddExercise(workout._id, selected)
+                    handleNewExerciseSelection(selected, workoutIndex)
                   }
                 />
               )}
 
               <Button
                 type="button"
-                onClick={() =>
-                  setExerciseSelectVisible((prev) => ({
-                    ...prev,
-                    [workout._id]: true,
-                  }))
-                }
+                onClick={(e) => handleMoreExercise(workoutIndex, e)}
                 className="mt-2 bg-customBg flex mx-auto"
               >
                 Add More Exercise
@@ -337,7 +449,15 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         </div>
 
         <div className="flex items-center justify-between">
-          <Button type="submit" className="bg-customBg">
+          <Button
+            type="submit"
+            className={
+              isButtonDisabled || isSupersetIncomplete
+                ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
+                : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            }
+            disabled={isButtonDisabled || isSupersetIncomplete}
+          >
             Update Training
           </Button>
           <Button
