@@ -52,19 +52,21 @@ const AddWorkoutForm = () => {
       exercises: workoutExercises,
     };
 
-    try {
-      const response = await axios.post(`${base_url}/workout`, workoutData);
-      if (response.status === 201) {
-        toast.success("Workout created successfully");
-        reset();
-        setWorkoutExercises([]);
-        setSelectedExercises([]);
-        navigate("/dashboard/workout-list");
-      }
-    } catch (error) {
-      toast.error("Failed to create workout");
-      console.error(error);
-    }
+    console.log("workoutData", workoutData);
+
+    // try {
+    //   const response = await axios.post(`${base_url}/workout`, workoutData);
+    //   if (response.status === 201) {
+    //     toast.success("Workout created successfully");
+    //     reset();
+    //     setWorkoutExercises([]);
+    //     setSelectedExercises([]);
+    //     navigate("/dashboard/workout-list");
+    //   }
+    // } catch (error) {
+    //   toast.error("Failed to create workout");
+    //   console.error(error);
+    // }
   };
 
   return (

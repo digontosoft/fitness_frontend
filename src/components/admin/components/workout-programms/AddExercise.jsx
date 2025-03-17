@@ -90,14 +90,6 @@
 
 // export default AddExercise;
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useState } from "react";
 import { toast } from "sonner";
 

@@ -277,7 +277,7 @@ const AssignTrainingForm = ({ user_id }) => {
       const formattedWorkouts = selectedTraining.workouts.map((workout) => ({
         workout: workout._id,
         exercises: workout.exercises.map((exercise) => ({
-          exercise_id: exercise._id,
+          exercise_id: exercise?.exercise_id,
           sets: exercise.sets,
           reps: exercise.reps,
           manipulation: exercise.manipulation,
@@ -294,11 +294,11 @@ const AssignTrainingForm = ({ user_id }) => {
 
       console.log("assignTraining:", payload);
 
-      // const response = await axios.post(`${base_url}/assign-training`, payload);
-      // if (response.status === 201) {
-      //   toast.success("Training session updated successfully!");
-      //   navigate(`/dashboard/assigned-training-list/${user_id}`);
-      // }
+      const response = await axios.post(`${base_url}/assign-training`, payload);
+      if (response.status === 201) {
+        toast.success("Training session updated successfully!");
+        navigate(`/dashboard/assigned-training-list/${user_id}`);
+      }
     } catch (error) {
       console.error("Error updating training session:", error);
       toast.error("Failed to update training session.");

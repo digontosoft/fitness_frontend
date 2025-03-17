@@ -3,8 +3,11 @@ import { useForm } from "react-hook-form";
 import DynamicInputField from "./DynamicInputField";
 import { upload } from "../../assets/index";
 import { Button } from "../ui/button";
+import axios from "axios";
+import { base_url } from "@/api/baseUrl";
+import { toast } from "sonner";
 
-const InputForm = () => {
+const InputForm = ({ userId, gender }) => {
   const [files, setFiles] = useState([]); // Store multiple files
   const [previews, setPreviews] = useState([]);
   console.log("file name is", previews);
@@ -19,10 +22,49 @@ const InputForm = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    const formData = { ...data, uploadedFile: file };
-    console.log("this my form data ", formData);
+  // const onSubmit = (data) => {
+  //   const formData = { ...data, uploadedFile: files };
+  //   console.log("this my form data ", formData);
+  //   try {
+  //     axios.post(`${base_url}/measurement`);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+
+    // Append form fields
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
+    });
+
+    // Append files if available
+    if (files && files.length > 0) {
+      files.forEach((file, index) => {
+        formData.append(`uploadedFile[${index}]`, file);
+      });
+    }
+
+    formData.append("user_id", userId);
+
+    console.log("This is my form data:", Object.fromEntries(formData));
+
+    try {
+      const response = await axios.post(`${base_url}/measurement`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 201) {
+        toast.success("Measurment assign successfully");
+        console.log("Success:", response.data);
+      }
+    } catch (error) {
+      console.error("Error uploading form data:", error);
+    }
   };
+
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -47,7 +89,7 @@ const InputForm = () => {
     if (validFiles.length > 0) {
       const totalFiles = files.length + validFiles.length;
       if (totalFiles > 4) {
-        alert("You can upload up to 4 images only.");
+        toast.warning("You can upload up to 4 images only.");
         return;
       }
       setFiles((prevFiles) => [...prevFiles, ...validFiles]);
@@ -82,7 +124,7 @@ const InputForm = () => {
         <div className="  w-full justify-center flex flex-col md:flex-row-reverse  gap-4">
           <div className="w-full">
             <DynamicInputField
-              id="leftThigh"
+              id="thighl"
               type="text"
               label="יירך שמאל"
               placeholder="הזן נתונים כאן..."
@@ -92,7 +134,7 @@ const InputForm = () => {
               watch={watch}
             />
             <DynamicInputField
-              id="rightArm"
+              id="armr"
               type="text"
               label="זרוע ימין"
               placeholder="הזן נתונים כאן..."
@@ -102,7 +144,7 @@ const InputForm = () => {
               watch={watch}
             />
             <DynamicInputField
-              id="leftArm"
+              id="arml"
               type="text"
               label="זרוע שמאל"
               placeholder="הזן נתונים כאן..."
@@ -112,19 +154,29 @@ const InputForm = () => {
               watch={watch}
             />
             <DynamicInputField
-              id="Butt"
+              id="butt"
               type="number"
-              label={Gender === "male" ? "חָזֶה" : "קַת"}
+              label={gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
               errors={errors}
               watch={watch}
             />
+            <DynamicInputField
+              id="date"
+              type="date"
+              label="תאריך"
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{ required: "שדה זה חובה" }}
+              errors={errors}
+              watch={watch}
+            />
           </div>
           <div className="w-full">
             <DynamicInputField
-              id="selectedDate"
+              id="renew_date"
               type="date"
               label="תאריך"
               placeholder="הזן נתונים כאן..."
@@ -143,7 +195,7 @@ const InputForm = () => {
               errors={errors}
               watch={watch}
             />
-            <DynamicInputField
+            {/* <DynamicInputField
               id="chest"
               type="text"
               label="היקף חזה"
@@ -152,9 +204,9 @@ const InputForm = () => {
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
-            />
+            /> */}
             <DynamicInputField
-              id="thigh right"
+              id="thighr"
               type="text"
               label="ירך ימין "
               placeholder="הזן נתונים כאן..."
@@ -201,6 +253,7 @@ const InputForm = () => {
               <button
                 onClick={handleButtonClick}
                 className="bg-[#BF2033] hover:bg-red-500 text-white px-4 rounded-full mt-4"
+                type="button"
               >
                 העלאה
               </button>
