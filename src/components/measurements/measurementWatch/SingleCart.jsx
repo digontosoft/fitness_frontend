@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 
-const SingleCart = () => {
+const SingleCart = ({userId}) => {
   const getButtonClass = (data) => {
     if (data.green) {
       return "bg-green-400 hover:bg-green-500 text-white text-xs font-bold";
@@ -22,9 +22,8 @@ const SingleCart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${base_url}/measurement/calculate/67d6f2fe2899b65e6f5951bf`);
-        //const data = await response.json();
-        console.log("data",response);
+        const response = await axios.get(`${base_url}/measurement/calculate/${userId}`);
+     
         
         setData(response?.data);
       } catch (error) {
@@ -34,7 +33,7 @@ const SingleCart = () => {
     fetchData()
 
   }, []);
-  console.log("data",data);
+ 
   
 
   return (
