@@ -223,14 +223,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
-import {
-  Select as ShadSelect,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const EditWorkoutForm = ({ workoutId }) => {
   const [exercises, setExercises] = useState([]);
@@ -248,7 +240,7 @@ const EditWorkoutForm = ({ workoutId }) => {
   const exercisesForm = watch("exercises", []);
 
   const handleDisableUpdateButton = (value) => {
-    // setDisableUpdateButton(true);
+    setDisableUpdateButton(true);
     console.log(value);
   };
 
@@ -283,6 +275,17 @@ const EditWorkoutForm = ({ workoutId }) => {
     (exercise) => exercise.manipulation === "superset"
   );
 
+  const handleManipulationChange = (e) => {
+    const value = e.target.value.toLowerCase();
+    if (value === "superset" && isSupersetSelected) {
+      toast.error("Superset is already selected and cannot be added again.");
+      setDisableUpdateButton(true);
+      return;
+    } else {
+      setDisableUpdateButton(false);
+    }
+  };
+
   const onSubmit = (data) => {
     const workoutData = {
       name: data.name,
@@ -294,18 +297,18 @@ const EditWorkoutForm = ({ workoutId }) => {
         manipulation: ex.manipulation,
       })),
     };
-    axios
-      .put(`${base_url}/workout/${workoutId}`, workoutData)
-      .then((response) => {
-        if (response.status === 200) {
-          toast.success("Workout updated successfully");
-          navigate("/dashboard/workout-list");
-        }
-      })
-      .catch((error) => {
-        toast.error("Failed to update workout");
-        console.log(error);
-      });
+    // axios
+    //   .put(`${base_url}/workout/${workoutId}`, workoutData)
+    //   .then((response) => {
+    //     if (response.status === 200) {
+    //       toast.success("Workout updated successfully");
+    //       navigate("/dashboard/workout-list");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     toast.error("Failed to update workout");
+    //     console.log(error);
+    //   });
   };
 
   return (
@@ -396,36 +399,21 @@ const EditWorkoutForm = ({ workoutId }) => {
                   <label htmlFor={`manipulation-${exercise._id}`}>
                     Manipulation
                   </label>
-                  <ShadSelect
-                    value={exercise.manipulation}
-                    onValueChange={(selectedValue) => {
+                  <input
+                    type="text"
+                    value={exercise.manipulation || ""}
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
                       setValue(
                         `exercises.${index}.manipulation`,
                         selectedValue
-                      ),
-                        handleDisableUpdateButton(selectedValue);
+                      );
+                      handleDisableUpdateButton(selectedValue);
+                      handleManipulationChange(e);
                     }}
-                  >
-                    <SelectTrigger className="w-full border border-red-200">
-                      <SelectValue placeholder="Select a manipulation">
-                        {exercise.manipulation || "Select a manipulation"}{" "}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem
-                          value="superset"
-                          disabled={
-                            isSupersetSelected &&
-                            exercise.manipulation !== "superset"
-                          }
-                        >
-                          Superset
-                        </SelectItem>
-                        <SelectItem value="dropset">Dropset</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </ShadSelect>
+                    placeholder="Enter a manipulation"
+                    className="w-full border border-red-200 p-2 rounded"
+                  />
                 </div>
               </div>
             </div>
@@ -436,7 +424,7 @@ const EditWorkoutForm = ({ workoutId }) => {
           <Button
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
-            disabled={disableUpdateButton === "superset"}
+            disabled={disableUpdateButton}
           >
             Update Workout
           </Button>
