@@ -32,7 +32,7 @@ const MeasurementWomen = () => {
         .then((response) => {
           if (response.status === 200) {
             toast.success("Questionaries Upload successfully!!!");
-            navigate("/");
+            navigate("/measurements");
           }
         });
     } catch (err) {
