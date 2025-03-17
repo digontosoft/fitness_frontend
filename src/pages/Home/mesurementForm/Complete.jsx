@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 const Complete = () => {
   const locatin = useLocation();
   const data = locatin.state;
-  console.log("messsssssdadfdfdsfas", data);
+  console.log("", data);
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   return (
     <div className="">
