@@ -140,17 +140,50 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
 
 //export default PaginationComp;
 
+const bodyPartOptions = [
+  { label: "כל חלקי הגוף", value: "" },
+  {
+    label: "יד קדמית",
+    value: "יד קדמית",
+  },
+  {
+    label: "יד אחורית ",
+    value: "יד אחורית",
+  },
+  { label: "כתפיים", value: "כתפיים" },
+  { label: "חזה", value: "חזה" },
+  { label: "גב", value: "גב" },
+  { label: "רגליים", value: "רגליים" },
+  { label: "בטן", value: "בטן" },
+  { label: "ישבן", value: "ישבן" },
+  { label: "גב תחתון", value: "גב תחתון" },
+];
+
+const equipmentOptions = [
+  { label: "כל הציוד", value: "" },
+  { label: "ללא ציוד", value: "ללא ציוד" },
+  { label: "TRX", value: "TRX" },
+  { label: "גומיות", value: "גומיות" },
+  { label: "משקולות", value: "משקולות" },
+  { label: "מכונות", value: "מכונות" },
+  { label: "מוטות", value: "מוטות" },
+];
+
 export const CourseListGroup = () => {
   const [exercises, setExercises] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [body_part, setBodyPart] = useState('');
+  const [equipment, setEquipment] = useState('');
+
+  console.log(body_part, equipment);
 
   useEffect(() => {
     const fetchExercise = async () => {
       try {
         const response = await axios.get(
-          `${base_url}/exercise?search=${searchValue}&page=${page}`
+          `${base_url}/exercise?search=${searchValue}&page=${page}&body_part=${body_part}&equipment=${equipment}`
         );
         setExercises(response.data.data);
         setTotalPages(response.data.pagination.totalPages);
@@ -161,7 +194,7 @@ export const CourseListGroup = () => {
       }
     };
     fetchExercise();
-  }, [searchValue, page, totalPages]);
+  }, [searchValue, page, totalPages, body_part, equipment]);
 
   const [open, setOpen] = useState(false);
   const [id, setId] = useState("");
@@ -180,11 +213,26 @@ export const CourseListGroup = () => {
         <input
           type="text"
           placeholder="חפש"
-          className="w-56 rounded-lg h-12 border-2 p-2"
+          className="w-40 rounded-sm border-blue-500 h-12 border-2 p-2 focus:border-blue-400"
           dir="rtl"
           onChange={(e) => setSearchValue(e.target.value)}
         />
+          <Select
+        direction="rtl"
+        className="w-40 rounded-lg h-12 border-2 p-2"
+        placeholder="חיפוש חלק בגוף"
+        options={bodyPartOptions}
+        onChange={(e) => setBodyPart(e[0].value)}
+      />
+      <Select
+        direction="rtl"
+        options={equipmentOptions}
+        className="w-40 rounded-lg h-12 border-2 p-2"
+        placeholder="ציוד חיפוש"
+        onChange={(e) => setEquipment(e[0].value)}
+      />
       </div>
+    
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {exercises.map((exercise) => (
           <CourseCart

@@ -9,29 +9,31 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const bodyPartOptions = [
-  { label: '', value: "לבחור איבר בגוף" },
   {
-    label: "יד קדמית", value: "יד קדמית"},
-    {
-      label:"יד אחורית ", value: "יד אחורית"},
-      { label:"כתפיים", value: "כתפיים"},
-      { label:"חזה", value: "חזה"},
-      { label:"גב", value: "גב"},
-      { label:"רגליים", value: "רגליים"},
-      { label:"בטן", value: "בטן"},
-      { label:"ישבן", value: "ישבן"},
-      { label:"גב תחתון", value: "גב תחתון"}
-    
-]
+    label: "יד קדמית",
+    value: "יד קדמית",
+  },
+  {
+    label: "יד אחורית ",
+    value: "יד אחורית",
+  },
+  { label: "כתפיים", value: "כתפיים" },
+  { label: "חזה", value: "חזה" },
+  { label: "גב", value: "גב" },
+  { label: "רגליים", value: "רגליים" },
+  { label: "בטן", value: "בטן" },
+  { label: "ישבן", value: "ישבן" },
+  { label: "גב תחתון", value: "גב תחתון" },
+];
 
 const equipmentOptions = [
-  { label: '', value: "לבחור ציוד" },
   { label: "ללא ציוד", value: "ללא ציוד" },
   { label: "TRX", value: "TRX" },
   { label: "גומיות", value: "גומיות" },
   { label: "משקולות", value: "משקולות" },
   { label: "מכונות", value: "מכונות" },
-  { label: "מוטות", value: "מוטות" },]
+  { label: "מוטות", value: "מוטות" },
+];
 
 const AddExerciseForm = ({ exerciseId }) => {
   const [exerciseData, setExerciseData] = useState({});
@@ -86,7 +88,7 @@ const AddExerciseForm = ({ exerciseId }) => {
 
   const onSubmit = (data) => {
     console.log(data);
-    
+
     if (exerciseId) {
       updateExercise(data);
     } else {
@@ -95,9 +97,7 @@ const AddExerciseForm = ({ exerciseId }) => {
   };
 
   return (
-    
-      <div className=" py-20" dir="rtl">
-      
+    <div className=" py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-ful grid gap-4">
           <DynamicInputField
@@ -138,46 +138,71 @@ const AddExerciseForm = ({ exerciseId }) => {
             watch={watch}
             defaultValue={exerciseId ? exerciseData?.video_url : ""}
           />
-         
-         <div className="relative w-full mb-6">
-          <label className="absolute -top-3 right-4 px-2 text-gray-600 text-sm z-10 bg-white">אזור בגוף</label>
+
+          <div className="relative w-full mb-6">
+            <label className="absolute -top-3 right-4 px-2 text-gray-600 text-sm z-10 bg-white">
+              אזור בגוף
+            </label>
             <div className="relative">
-              <select name="" id="" 
-              {...register("body_part",{
-                required:"נדרש חלק בגוף"
-              })}
-              defaultValue={exerciseId ? exerciseData?.body_part : ""}
-              placeholder="בחר אזור בגוף" className={`w-full border ${errors.body_part ? "border-red-500" : "border-gray-300"} rounded-lg p-3 text-right focus:outline-none focus:ring-2 focus:ring-blue-500`}>
+              <select
+                name=""
+                id=""
+                {...register("body_part", {
+                  required: "נדרש חלק בגוף",
+                })}
+                defaultValue={exerciseId ? exerciseData?.body_part : ""}
+                placeholder="בחר אזור בגוף"
+                className={`w-full border ${
+                  errors.body_part ? "border-red-500" : "border-gray-300"
+                } rounded-lg p-3 text-right focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              >
+                {!exerciseId && <option value=""> לבחור איבר בגוף</option>}
                 {bodyPartOptions.map((option, index) => (
-                  <option key={index} value={option.value}>{option.label}</option>
+                  <option key={index} value={option.value}>
+                    {option.label}
+                  </option>
                 ))}
               </select>
               {errors.body_part && (
-      <p className="text-red-500 text-sm mt-1">{errors.body_part.message}</p>
-    )}
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.body_part.message}
+                </p>
+              )}
             </div>
-         </div>
-         <div className="relative w-full mb-6">
-          <label className="absolute -top-3 right-4 px-2 text-gray-600 text-sm z-10 bg-white">ציוד</label>
+          </div>
+          <div className="relative w-full mb-6">
+            <label className="absolute -top-3 right-4 px-2 text-gray-600 text-sm z-10 bg-white">
+              ציוד
+            </label>
             <div className="relative">
-              <select name="" id="" 
-              {...register("equipment",{
-                required: "נדרש ציוד"
-              })}
-              defaultValue={exerciseId ? exerciseData?.equipment : ""}
-              placeholder="לבחור ציוד" className={`w-full border ${errors.equipment ? "border-red-500" : "border-gray-300"} rounded-lg p-3 text-right focus:outline-none focus:ring-2 focus:ring-blue-500`}>
+              <select
+                name=""
+                id=""
+                {...register("equipment", {
+                  required: "נדרש ציוד",
+                })}
+                defaultValue={exerciseId ? exerciseData?.equipment : ""}
+                placeholder="לבחור ציוד"
+                className={`w-full border ${
+                  errors.equipment ? "border-red-500" : "border-gray-300"
+                } rounded-lg p-3 text-right focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              >
+                {!exerciseId && <option   value="" >לבחור ציוד</option>}
                 {equipmentOptions.map((option, index) => (
-                  <option key={index} value={option.value}>{option.label}</option>
+                  <option key={index} value={option.value}>
+                    {option.label}
+                  </option>
                 ))}
               </select>
               {errors.body_part && (
-      <p className="text-red-500 text-sm mt-1">{errors.equipment.message}</p>
-    )}
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.equipment.message}
+                </p>
+              )}
             </div>
-         </div>
+          </div>
         </div>
-        
-        
+
         {/* Submit Button */}
         <div className="flex justify-center">
           <Button
@@ -189,7 +214,6 @@ const AddExerciseForm = ({ exerciseId }) => {
         </div>
       </form>
     </div>
-    
   );
 };
 
