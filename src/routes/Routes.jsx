@@ -49,6 +49,7 @@ import ThankYou from "@/pages/thankyou/Thankyou";
 import AssignTrainingList from "@/pages/admin/assigntraining/AssignTrainingList";
 import EditTraineUser from "@/components/admin/components/Training/EditTraineUser";
 import AssignTraining from "@/pages/admin/assigntraining/AssignTraining";
+import TraineeUsers from "@/pages/admin/traineeusers/TraineeUsers";
 
 export const routes = createBrowserRouter([
   {
@@ -227,6 +228,10 @@ export const routes = createBrowserRouter([
           {
             path: "/dashboard/traineer/:id",
             element: <Trainer />,
+          },
+          {
+            path: "/dashboard/trainee-users-list",
+            element: <TraineeUsers />,
           },
           {
             path: "/dashboard/training-list",
