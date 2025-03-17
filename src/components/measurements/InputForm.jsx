@@ -42,9 +42,14 @@ const InputForm = ({ userId, gender }) => {
     // Append files if available
     if (files && files.length > 0) {
       files.forEach((file, index) => {
-        formData.append(`uploadedFile[${index}]`, file);
+        formData.append(`photo1`, file);
       });
     }
+    // if (files && files.length > 0) {
+    //   files.forEach((file, index) => {
+    //     formData.append(`photo1[${index}]`, file);
+    //   });
+    // }
 
     formData.append("user_id", userId);
 

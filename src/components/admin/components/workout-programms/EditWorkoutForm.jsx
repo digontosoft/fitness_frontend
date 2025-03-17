@@ -494,25 +494,42 @@ const EditWorkoutForm = ({ workoutId }) => {
     fetchSingleWorkout();
   }, [workoutId, reset, setValue]);
   const handleManipulationChange = (e, index, exercise) => {
-    const value = e.target.value.toLowerCase();
-
-    // Check if the user is trying to type "superset"
-    if (value.includes("superset")) {
-      if (hasSuperset) {
-        toast.error("You can only use 'superset' once in the workout.");
-        setDisableUpdateButton(true);
-        return;
-      } else {
-        setHasSuperset(true); // Mark "superset" as used
-      }
-    }
-
-    // Update the manipulation value for the specific exercise
-    setValue(`exercises.${index}.manipulation`, value);
-    setDisableUpdateButton(false);
+    // const value = e.target.value.toLowerCase();
+    // // Check if the user is trying to type "superset"
+    // if (value.includes("superset")) {
+    //   if (hasSuperset) {
+    //     toast.error("You can only use 'superset' once in the workout.");
+    //     setDisableUpdateButton(true);
+    //     return;
+    //   } else {
+    //     setHasSuperset(true); // Mark "superset" as used
+    //   }
+    // }
+    // // Update the manipulation value for the specific exercise
+    // setValue(`exercises.${index}.manipulation`, value);
+    // setDisableUpdateButton(false);
+    //  // Check if this is the last exercise
+    //  const lastManipulation = exercises[exercises.length - 1];
+    //  // If it's not the last exercise, check the next exercise
+    //  if (!lastManipulation) {
+    //    const nextExercise = exercises[index + 1];
+    //    if (!nextExercise || nextExercise.manipulation !== "superset") {
+    //      // If the next exercise doesn't exist or isn't a superset, check if it has other manipulations
+    //      if (nextExercise && nextExercise.manipulation !== "superset") {
+    //        // If the next exercise has a different manipulation, it's allowed
+    //        setIsSupersetIncomplete(false);
+    //      } else {
+    //        // If there is no next exercise or it's not a superset, the superset is incomplete
+    //        setIsSupersetIncomplete(true);
+    //        toast.error("The next exercise must also be a superset.");
+    //        return;
+    //      }
+    //    }
+    //  } else {
+    //    // If it's the last exercise, allow creating a superset
+    //    setIsSupersetIncomplete(false);
+    //  }
   };
-  const lastManipulation = exercises[exercises.length - 1];
-  console.log("last", lastManipulation); // Output: "drop set"
 
   const onSubmit = (data) => {
     const workoutData = {
