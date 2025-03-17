@@ -5,9 +5,13 @@ import { upload } from "../../assets/index";
 import { Button } from "../ui/button";
 
 const InputForm = () => {
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
-  console.log("file name is", preview);
+  const [files, setFiles] = useState([]); // Store multiple files
+  const [previews, setPreviews] = useState([]);
+  console.log("file name is", previews);
+  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  console.log("user data from mesurement", userDetails);
+  const Gender = userDetails?.gender;
+
   const {
     register,
     handleSubmit,
@@ -19,7 +23,6 @@ const InputForm = () => {
     const formData = { ...data, uploadedFile: file };
     console.log("this my form data ", formData);
   };
-
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -30,18 +33,28 @@ const InputForm = () => {
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && validateFile(droppedFile)) {
-      setFile(droppedFile);
-      setPreview(URL.createObjectURL(droppedFile));
-    }
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    handleFiles(droppedFiles);
   };
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile && validateFile(selectedFile)) {
-      setFile(selectedFile);
-      setPreview(URL.createObjectURL(selectedFile));
+    const selectedFiles = Array.from(e.target.files);
+    handleFiles(selectedFiles);
+  };
+
+  const handleFiles = (selectedFiles) => {
+    const validFiles = selectedFiles.filter(validateFile);
+    if (validFiles.length > 0) {
+      const totalFiles = files.length + validFiles.length;
+      if (totalFiles > 4) {
+        alert("You can upload up to 4 images only.");
+        return;
+      }
+      setFiles((prevFiles) => [...prevFiles, ...validFiles]);
+      setPreviews((prevPreviews) => [
+        ...prevPreviews,
+        ...validFiles.map((file) => URL.createObjectURL(file)),
+      ]);
     }
   };
 
@@ -53,9 +66,16 @@ const InputForm = () => {
     }
     return true;
   };
+
   const handleButtonClick = () => {
     document.getElementById("fileInput").click();
   };
+
+  const handleRemoveFile = (index) => {
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="p-6 max-w-6xl mx-auto justify-center  py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -94,10 +114,10 @@ const InputForm = () => {
             <DynamicInputField
               id="Butt"
               type="number"
-              label="קַת"
+              label={Gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
               register={register}
-              validation={{ required: "קַת" }}
+              validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
               errors={errors}
               watch={watch}
             />
@@ -149,41 +169,38 @@ const InputForm = () => {
           לצפייה במדריך המדדים
         </button>
         <div className="w-full flex justify-center items-center">
-          <div className=" w-full md:w-[60%] mt-6">
+          <div className="w-full md:w-[60%] mt-6">
             <label className="block font-semibold text-sm text-[#333333] text-center">
               העלאת תמונה (לא חובה אך מומלץ בחום)
             </label>
 
             {/* Drag-and-Drop Box */}
             <div
-              className="w-full   border-2 border-dashed border-gray-400 p-6 mt-2 text-center flex flex-col items-center "
+              className="w-full border-2 border-dashed border-gray-400 p-6 mt-2 text-center flex flex-col items-center"
               onDragOver={handleDragOver}
               onDragEnter={handleDragEnter}
               onDrop={handleDrop}
             >
               <div>
-                <img src={upload} alt="" />
+                <img src={upload} alt="Upload Icon" />
               </div>
               <p className="mb-2">בחר או גרור קובץ תמונה</p>
-              {/* Image Preview */}
 
-              {file && (
-                <div className="text-right my-4">
-                  <p className="text-gray-600 text-sm">{file.name}</p>
-                </div>
-              )}
-
-              {/* PDF Placeholder */}
-              {preview && file.type === "application/pdf" && (
-                <div className="w-24 h-24 bg-gray-200 flex items-center justify-center text-sm text-gray-600 border rounded-lg mb-4">
-                  PDF File
+              {/* File Names Inside Box */}
+              {files.length > 0 && (
+                <div className="text-center mt-2">
+                  {files.map((file, index) => (
+                    <p key={index} className="text-gray-600 text-sm">
+                      {file.name}
+                    </p>
+                  ))}
                 </div>
               )}
 
               {/* Upload Button */}
               <button
                 onClick={handleButtonClick}
-                className="bg-[#BF2033] hover:bg-red-500 text-white px-4 rounded-full"
+                className="bg-[#BF2033] hover:bg-red-500 text-white px-4 rounded-full mt-4"
               >
                 העלאה
               </button>
@@ -192,29 +209,40 @@ const InputForm = () => {
               <input
                 type="file"
                 id="fileInput"
-                accept="image/*,application/pdf"
+                accept="image/jpeg, image/png"
+                multiple
                 onChange={handleFileChange}
                 style={{ display: "none" }}
               />
             </div>
 
-            {/* Selected File Name */}
-            <div className="flex items-center justify-between mt-2  ">
-              {" "}
-              <div className="flex gap-1 items-center">
-                {preview && file.type.startsWith("image/") && (
-                  <div className=" flex justify-center items-center w-8 h-8 rounded-lg bg-red-600">
-                    <img
-                      src={preview}
-                      alt="Preview"
-                      className="w-6 h-6 object-cover border rounded-full "
-                    />
+            {/* Previews and Remove Buttons (Below Box) */}
+            {files.length > 0 && (
+              <div className="mt-4 flex flex-col gap-2">
+                {files.map((file, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center  p-2 rounded-lg"
+                  >
+                    {/* Image Preview */}
+                    {file.type.startsWith("image/") && (
+                      <img
+                        src={previews[index]}
+                        alt="Preview"
+                        className="w-10 h-10 object-cover border rounded-full"
+                      />
+                    )}
+
+                    <p
+                      className="underline text-sm text-[#000000] cursor-pointer"
+                      onClick={() => handleRemoveFile(index)}
+                    >
+                      הסרת תמונה
+                    </p>
                   </div>
-                )}
-                {file && <p>{file.name}</p>}
+                ))}
               </div>
-              <p className="underline text-sm text-[#000000]">הסרת תמונה</p>
-            </div>
+            )}
           </div>
         </div>
 
