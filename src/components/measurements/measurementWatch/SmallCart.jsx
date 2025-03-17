@@ -1,4 +1,4 @@
-import React from "react";
+import moment from "moment";
 
 const SmallCart = ({ data }) => {
   return (
@@ -10,15 +10,15 @@ const SmallCart = ({ data }) => {
             className="w-20 flex flex-col items-center justify-center   bg-white  shadow-md rounded-lg p-2  border-red-50"
           >
             <span className=" text-[#000000] text-sm font-bold">
-              {item.title}
+              {moment(item.date).get('month').toString()}
             </span>
 
             <span className="text-[#BF2033] text-2xl font-extrabold pt-4">
-              {item.time}
+              {item.data}
             </span>
 
             <span className="text-[#8C8C8C] text-[10px] font-normal">
-              {item.subtitle}
+              {"SM"}
             </span>
           </div>
         </div>
