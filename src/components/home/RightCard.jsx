@@ -13,7 +13,7 @@ import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 
 const RightCard = ({ user }) => {
-  const [userSteps, setUserSteps] = useState({});
+  const [userSteps, setUserSteps] = useState(null);
   const progress = userSteps?.step_average || 0;
   const target = Math.max(userSteps?.step_target || 1, 1);
   const strokeWidth = 4;
@@ -23,6 +23,7 @@ const RightCard = ({ user }) => {
   const offset = circumference - (parcentage / 100) * circumference;
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userDetails?.gender;
+
   useEffect(() => {
     const fetchUserSteps = async () => {
       try {

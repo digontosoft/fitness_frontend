@@ -182,6 +182,10 @@ export const routes = createBrowserRouter([
             element: <EditNutrition />,
           },
           {
+            path: "/dashboard/mesurements-watch",
+            element: <MeasurementsWatch />,
+          },
+          {
             path: "/dashboard/nutrition-details/:id",
             element: <NutritionDetails />,
           },
