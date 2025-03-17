@@ -9,7 +9,7 @@ const LeftCard = () => {
       style={{ backgroundImage: `url(${image})` }}
     >
       <div className="flex justify-between items-start">
-        <Link to="/measurements">
+        <Link to="/mesurement-update">
           <Button className="bg-black text-white text-xs border border-white rounded-full px-3 py-1 font-bold">
             להזנת המדדים
           </Button>

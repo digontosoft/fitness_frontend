@@ -1,13 +1,17 @@
-import InputForm from "@/components/measurements/InputForm";
 import Title from "@/components/measurements/Tilte";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 
 import React from "react";
+import TaskCompleteForm from "../TaskCompleteForm";
+import { useLocation } from "react-router-dom";
 
-const Measurements = () => {
+const Complete = () => {
+  const locatin = useLocation();
+  const data = locatin.state;
+  console.log("messsssssdadfdfdsfas", data);
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   return (
-    <div>
+    <div className="">
       <HeroVideo
         videoUrl={
           userInfo?.gender === "male"
@@ -16,9 +20,9 @@ const Measurements = () => {
         }
       />
       <Title tilte={"הזנת מדדים"} />
-      <InputForm />
+      <TaskCompleteForm data={data} />
     </div>
   );
 };
 
-export default Measurements;
+export default Complete;

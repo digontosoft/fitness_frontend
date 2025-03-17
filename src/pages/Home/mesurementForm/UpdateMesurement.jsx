@@ -1,10 +1,9 @@
-import InputForm from "@/components/measurements/InputForm";
 import Title from "@/components/measurements/Tilte";
 import HeroVideo from "@/components/startTraining/HeroVideo";
-
 import React from "react";
+import MeasurementUpdate from "../MeasurementUpdate";
 
-const Measurements = () => {
+const UpdateMesurement = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   return (
     <div>
@@ -16,9 +15,9 @@ const Measurements = () => {
         }
       />
       <Title tilte={"הזנת מדדים"} />
-      <InputForm />
+      <MeasurementUpdate />
     </div>
   );
 };
 
-export default Measurements;
+export default UpdateMesurement;
