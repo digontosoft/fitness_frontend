@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { upload } from "../../assets/index";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { base_url } from "@/api/baseUrl";
 
 const MeasurementUpdate = () => {
   const [files, setFiles] = useState([]); // Store multiple files
   const [previews, setPreviews] = useState([]);
+  const [measurementData, setMeasurementData] = useState({});
   console.log("file name is", previews);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
-  console.log("user data from mesurement", userDetails);
+  console.log("user data from mesurement", userDetails._id);
   const Gender = userDetails?.gender;
 
   const {
@@ -20,8 +23,23 @@ const MeasurementUpdate = () => {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    const fetchUserMeasurementData = async () => {
+      const response = await axios.get(
+        `${base_url}/measurement/${userDetails._id}`
+      );
+      console.log("measurement:", response.data);
+      if (response.status === 200) {
+        setMeasurementData(response.data);
+      }
+    };
+    fetchUserMeasurementData();
+  }, [userDetails?._id]);
+
+  console.log("meas:", measurementData);
+
   const onSubmit = (data) => {
-    const formData = { ...data, uploadedFile: file };
+    const formData = { ...data, uploadedFile: files };
     console.log("this my form data ", formData);
   };
   const handleDragOver = (e) => {
