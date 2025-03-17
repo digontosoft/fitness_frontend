@@ -245,14 +245,16 @@ const AddTrainingForm = () => {
         })),
       };
 
-      await axios.post(`${base_url}/training`, payload).then((response) => {
-        if (response.status === 201) {
-          toast.success("Training session saved successfully!");
-          setSelectedTrainingExercises([]);
-          reset();
-          navigate("/dashboard/training-list");
-        }
-      });
+      console.log("add training payload", payload);
+
+      // await axios.post(`${base_url}/training`, payload).then((response) => {
+      //   if (response.status === 201) {
+      //     toast.success("Training session saved successfully!");
+      //     setSelectedTrainingExercises([]);
+      //     reset();
+      //     navigate("/dashboard/training-list");
+      //   }
+      // });
     } catch (error) {
       console.error("Error submitting training session:", error);
       toast.error("Failed to save training session.");
