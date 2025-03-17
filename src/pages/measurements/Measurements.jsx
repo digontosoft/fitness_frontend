@@ -1,5 +1,5 @@
 import { base_url } from "@/api/baseUrl";
-import VideoCart from "@/components/common/VideoCart";
+
 import InputForm from "@/components/measurements/InputForm";
 import Title from "@/components/measurements/Tilte";
 import HeroVideo from "@/components/startTraining/HeroVideo";
