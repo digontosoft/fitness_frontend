@@ -25,11 +25,8 @@ const Measurements = () => {
     fetchData();
   }, [id]);
 
-  // console.log("user:", user);
-
   return (
     <div>
-      {/* <HeroVideo videoUrl={"https://www.youtube.com/watch?v=uUo9Bw5ytrI"} /> */}
       <HeroVideo
         videoUrl={
           user?.gender === "male"

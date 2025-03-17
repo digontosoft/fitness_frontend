@@ -8,13 +8,7 @@ const TraineeLeftCard = ({ userId }) => {
       className="w-72 h-48 bg-[#0A0A0A] p-2 rounded-2xl "
       style={{ backgroundImage: `url(${image})` }}
     >
-      <div className="flex justify-between items-start" dir="ltr">
-        <Link to={`/dashboard/mesurements/${userId}`}>
-          <Button className="bg-black text-white text-xs border border-white rounded-full px-3 py-1 font-bold">
-            להזנת המדדים
-          </Button>
-        </Link>
-      </div>
+      <div className="flex justify-between items-start" dir="ltr"></div>
     </div>
   );
 };

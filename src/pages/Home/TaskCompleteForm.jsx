@@ -1,29 +1,106 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { upload } from "../../assets/index";
 
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { base_url } from "@/api/baseUrl";
+import { toast } from "sonner";
 
 const TaskCompleteForm = ({ data }) => {
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const Gender = userDetails?.gender;
-  console.log("data from complter", data);
+
+  const id = data.measurement_id;
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      mode: "task",
+      leftThigh: data.thighl,
+      rightThigh: data.thighr,
+      rightArm: data.armr,
+      leftArm: data.arml,
+      Butt: Gender === "male" ? data.chest : data.butt,
+      chest: data.chest,
+      waist: data.waist,
+      selectedDate: data.date,
+    },
+  });
 
-  const onSubmit = (data) => {
-    const formData = { ...data, uploadedFile: file };
-    console.log("this my form data ", formData);
+  useEffect(() => {
+    if (data.photo1 || data.photo2) {
+      setPreviews([data.photo1, data.photo2]);
+    }
+  }, [data]);
+
+  const onSubmit = async (formData) => {
+    const updatedFormData = { ...formData, uploadedFiles: files };
+    console.log("Updated form data: ", updatedFormData);
+    try {
+      const response = await axios.put(
+        `${base_url}/measurement/${id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Measurement completed successfully!");
+      }
+    } catch (error) {
+      toast.error("Error updating measurement. Please try again.");
+      console.error("Error updating measurement:", error);
+    }
   };
+
+  // const onSubmit = async (formData) => {
+  //   const updatedFormData = new FormData();
+
+  //   updatedFormData.append("mode", "task");
+  //   updatedFormData.append("date", formData.selectedDate);
+  //   updatedFormData.append("weight", formData.weight || "");
+  //   updatedFormData.append(
+  //     "body_fat_percentage",
+  //     formData.bodyFatPercentage || ""
+  //   );
+  //   updatedFormData.append("chest", formData.chest);
+  //   updatedFormData.append("butt", formData.Butt);
+  //   updatedFormData.append("waist", formData.waist);
+  //   updatedFormData.append("thighr", formData.rightThigh || "");
+  //   updatedFormData.append("thighl", formData.leftThigh);
+  //   updatedFormData.append("armr", formData.rightArm);
+  //   updatedFormData.append("arml", formData.leftArm);
+  //   files.forEach((file, index) => {
+  //     updatedFormData.append(`photo${index + 1}`, file);
+  //   });
+
+  //   try {
+  //     const response = await axios.put(
+  //       `${base_url}/measurement/${id}`,
+  //       updatedFormData,
+  //       {
+  //         headers: { "Content-Type": "multipart/form-data" },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       toast.success("Measurement completed successfully!");
+  //     }
+  //   } catch (error) {
+  //     toast.error("Error updating measurement. Please try again.");
+  //     console.error("Error updating measurement:", error);
+  //   }
+  // };
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -78,9 +155,9 @@ const TaskCompleteForm = ({ data }) => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto justify-center  py-20" dir="rtl">
+    <div className="p-6 max-w-6xl mx-auto justify-center py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="  w-full justify-center flex flex-col md:flex-row-reverse  gap-4">
+        <div className="w-full justify-center flex flex-col md:flex-row-reverse gap-4">
           <div className="w-full">
             <DynamicInputField
               id="leftThigh"
@@ -157,7 +234,7 @@ const TaskCompleteForm = ({ data }) => {
             <DynamicInputField
               id="thigh right"
               type="text"
-              label="ירך ימין "
+              label="ירך ימין"
               placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: "שדה זה חובה" }}
@@ -166,9 +243,11 @@ const TaskCompleteForm = ({ data }) => {
             />
           </div>
         </div>
+
         <button className="underline text-black text-xl font-bold hover:text-blue-600">
           לצפייה במדריך המדדים
         </button>
+
         <div className="w-full flex justify-center items-center">
           <div className="w-full md:w-[60%] mt-6">
             <label className="block font-semibold text-sm text-[#333333] text-center">
@@ -200,6 +279,7 @@ const TaskCompleteForm = ({ data }) => {
 
               {/* Upload Button */}
               <button
+                type="button"
                 onClick={handleButtonClick}
                 className="bg-[#BF2033] hover:bg-red-500 text-white px-4 rounded-full mt-4"
               >
@@ -223,7 +303,7 @@ const TaskCompleteForm = ({ data }) => {
                 {files.map((file, index) => (
                   <div
                     key={index}
-                    className="flex justify-between items-center  p-2 rounded-lg"
+                    className="flex justify-between items-center p-2 rounded-lg"
                   >
                     {/* Image Preview */}
                     {file.type.startsWith("image/") && (

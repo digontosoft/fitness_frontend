@@ -6,15 +6,14 @@ import { Button } from "../ui/button";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import { toast } from "sonner";
-
-const InputForm = ({ userId, gender }) => {
-  const [files, setFiles] = useState([]); // Store multiple files
+import { useNavigate } from "react-router-dom";
+const InputForm = ({ gender }) => {
+  const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
-  console.log("file name is", previews);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
-  console.log("user data from mesurement", userDetails);
+  const userId = userDetails._id;
   const Gender = userDetails?.gender;
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -22,24 +21,13 @@ const InputForm = ({ userId, gender }) => {
     formState: { errors },
   } = useForm();
 
-  // const onSubmit = (data) => {
-  //   const formData = { ...data, uploadedFile: files };
-  //   console.log("this my form data ", formData);
-  //   try {
-  //     axios.post(`${base_url}/measurement`);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   const onSubmit = async (data) => {
     const formData = new FormData();
 
-    // Append form fields
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
     });
 
-    // Append files if available
     if (files && files.length > 0) {
       files.forEach((file, index) => {
         formData.append(`photo1`, file);
@@ -47,7 +35,11 @@ const InputForm = ({ userId, gender }) => {
     }
     // if (files && files.length > 0) {
     //   files.forEach((file, index) => {
+
     //     formData.append(`photo1[${index}]`, file);
+
+    //     formData.append(`uploadedFile[${index}]`, file);
+
     //   });
     // }
 
@@ -63,6 +55,7 @@ const InputForm = ({ userId, gender }) => {
       });
       if (response.status === 201) {
         toast.success("Measurment assign successfully");
+        navigate("/");
         console.log("Success:", response.data);
       }
     } catch (error) {
