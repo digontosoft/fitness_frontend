@@ -24,10 +24,12 @@ const Home = () => {
     setSelectedTask(task);
     setIsTaskModalOpen(true);
   };
+
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+
   useEffect(() => {
     setIsModalOpen(true);
-  }, []);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  }, [user?.isNewUser]);
 
   useEffect(() => {
     const fetchUserTask = async () => {

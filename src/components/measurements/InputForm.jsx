@@ -14,6 +14,7 @@ const InputForm = ({ gender }) => {
   const userId = userDetails._id;
   const Gender = userDetails?.gender;
   const navigate = useNavigate();
+  console.log("gender", Gender);
   const {
     register,
     handleSubmit,
@@ -152,9 +153,9 @@ const InputForm = ({ gender }) => {
               watch={watch}
             />
             <DynamicInputField
-              id="butt"
+              id={Gender === "male" ? "chest" : "butt"}
               type="number"
-              label={gender === "male" ? "חָזֶה" : "קַת"}
+              label={Gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
