@@ -24,9 +24,11 @@ const AssignTrainingForm = ({ user_id }) => {
   const {
     register,
     handleSubmit,
-
+    watch,
     formState: { errors },
   } = useForm();
+
+  console.log("trainingList", trainingList);
 
   // Check if any field (sets, reps, or manipulation) is empty in any exercise
   useEffect(() => {

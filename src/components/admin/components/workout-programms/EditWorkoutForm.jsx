@@ -461,6 +461,7 @@ const EditWorkoutForm = ({ workoutId }) => {
   } = useForm();
 
   const exercisesForm = watch("exercises", []);
+  console.log("exercisesForm", exercisesForm);
 
   useEffect(() => {
     const fetchExercise = async () => {
@@ -493,6 +494,23 @@ const EditWorkoutForm = ({ workoutId }) => {
     };
     fetchSingleWorkout();
   }, [workoutId, reset, setValue]);
+  // const handleManipulationChange = (e, index) => {
+  //   const value = e.target.value.toLowerCase();
+  //   // Check if the user is trying to type "superset"
+  //   if (value.includes("superset")) {
+  //     if (hasSuperset) {
+  //       toast.error("You can only use 'superset' once in the workout.");
+  //       setDisableUpdateButton(true);
+  //       return;
+  //     } else {
+  //       setHasSuperset(true); // Mark "superset" as used
+  //     }
+  //   }
+  //   // Update the manipulation value for the specific exercise
+  //   setValue(`exercises.${index}.manipulation`, value);
+  //   setDisableUpdateButton(false);
+  // };
+
   const handleManipulationChange = (e, index, exercise) => {
     const value = e.target.value.toLowerCase();
 
@@ -509,10 +527,17 @@ const EditWorkoutForm = ({ workoutId }) => {
 
     // Update the manipulation value for the specific exercise
     setValue(`exercises.${index}.manipulation`, value);
-    setDisableUpdateButton(false);
+
+    // Get all exercises and check if the last index has "superset"
+    // const exercises = getValues("exercises"); // Assuming you're using React Hook Form
+    const lastIndex = exercise.length - 1;
+
+    if (exercises[lastIndex]?.manipulation === "superset") {
+      setDisableUpdateButton(true);
+    } else {
+      setDisableUpdateButton(false);
+    }
   };
-  const lastManipulation = exercises[exercises.length - 1];
-  console.log("last", lastManipulation); // Output: "drop set"
 
   const onSubmit = (data) => {
     const workoutData = {
@@ -525,20 +550,25 @@ const EditWorkoutForm = ({ workoutId }) => {
         manipulation: ex.manipulation,
       })),
     };
-    // axios
-    //   .put(`${base_url}/workout/${workoutId}`, workoutData)
-    //   .then((response) => {
-    //     if (response.status === 200) {
-    //       toast.success("Workout updated successfully");
-    //       navigate("/dashboard/workout-list");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     toast.error("Failed to update workout");
-    //     console.log(error);
-    //   });
+    axios
+      .put(`${base_url}/workout/${workoutId}`, workoutData)
+      .then((response) => {
+        if (response.status === 200) {
+          toast.success("Workout updated successfully");
+          navigate("/dashboard/workout-list");
+        }
+      })
+      .catch((error) => {
+        toast.error("Failed to update workout");
+        console.log(error);
+      });
   };
-
+  const isFormValid = exercisesForm?.every(
+    (exercise) =>
+      exercise.sets > 0 &&
+      exercise.reps > 0 &&
+      exercise.manipulation?.trim() !== ""
+  );
   return (
     <div className="py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -646,7 +676,7 @@ const EditWorkoutForm = ({ workoutId }) => {
           <Button
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
-            disabled={disableUpdateButton}
+            disabled={disableUpdateButton || !isFormValid}
           >
             Update Workout
           </Button>

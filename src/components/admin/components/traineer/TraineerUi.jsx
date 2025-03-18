@@ -99,7 +99,8 @@ const TraineerUi = ({ userId }) => {
       <div className="flex items-center justify-center gap-5">
         <AdminArrowCardWithoutImage
           title="להורדת דוח מדדים אישי"
-          link={`/dashboard/mesurements-watch`}
+          link={`/dashboard/mesurements-watch?userId=${userId}` }
+
         />
         <AdminArrowCardWithoutImage title="מסמכים מקושרים להורדה" />
       </div>

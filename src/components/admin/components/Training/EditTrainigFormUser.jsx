@@ -303,18 +303,18 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
     //       toast.success("Training session updated successfully!");
     //     }
     //  });
-    // try {
-    //   const response = await axios.put(
-    //     `${base_url}/update-user-training/${trainingId}`,
-    //     payload
-    //   );
-    //   if (response.status === 200) {
-    //     toast.success("Training session updated successfully!");
-    //     navigate(-1);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const response = await axios.put(
+        `${base_url}/update-user-training/${trainingId}`,
+        payload
+      );
+      if (response.status === 200) {
+        toast.success("Training session updated successfully!");
+        navigate(-1);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   //console.log("training-Data", training);
 

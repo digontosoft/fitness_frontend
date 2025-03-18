@@ -53,13 +53,16 @@ const AddTrainingForm = () => {
     []
   );
 
+  console.log("addtraining", selectedTrainingExercises);
+
+  // Check if any field (sets, reps, or manipulation) is empty in any exercise
   useEffect(() => {
-    if (!trainingExercises) {
+    if (!selectedTrainingExercises) {
       setIsButtonDisabled(false);
       return;
     }
 
-    const isAnyFieldEmpty = trainingExercises.workouts?.some((workout) =>
+    const isAnyFieldEmpty = selectedTrainingExercises.some((workout) =>
       workout.exercises.some(
         (exercise) =>
           exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
@@ -67,7 +70,7 @@ const AddTrainingForm = () => {
     );
 
     setIsButtonDisabled(isAnyFieldEmpty);
-  }, [trainingExercises]);
+  }, [selectedTrainingExercises]);
 
   useEffect(() => {
     const fetchWorkout = async () => {
@@ -208,8 +211,8 @@ const AddTrainingForm = () => {
         workout.exercises.push({
           exercise_id: exercise._id,
           name: exercise.name,
-          sets: 3,
-          reps: 10,
+          sets: 0,
+          reps: 0,
           manipulation: exercise.manipulation || "",
         });
       });
@@ -247,14 +250,14 @@ const AddTrainingForm = () => {
 
       console.log("add training payload", payload);
 
-      // await axios.post(`${base_url}/training`, payload).then((response) => {
-      //   if (response.status === 201) {
-      //     toast.success("Training session saved successfully!");
-      //     setSelectedTrainingExercises([]);
-      //     reset();
-      //     navigate("/dashboard/training-list");
-      //   }
-      // });
+      await axios.post(`${base_url}/training`, payload).then((response) => {
+        if (response.status === 201) {
+          toast.success("Training session saved successfully!");
+          setSelectedTrainingExercises([]);
+          reset();
+          navigate("/dashboard/training-list");
+        }
+      });
     } catch (error) {
       console.error("Error submitting training session:", error);
       toast.error("Failed to save training session.");

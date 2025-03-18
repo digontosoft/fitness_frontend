@@ -6,7 +6,7 @@ import { base_url } from "@/api/baseUrl";
 
 const ArrowGroup = ({ task, onclick }) => {
   const navigate = useNavigate();
-
+  console.log("task", task);
   const handleClick = async () => {
     if (task?.task_type === "workout") {
       try {
