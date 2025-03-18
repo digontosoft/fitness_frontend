@@ -90,15 +90,7 @@
 
 // export default AddExercise;
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const AddExercise = ({
@@ -108,10 +100,17 @@ const AddExercise = ({
   superset,
   isSupersetSelected,
   setIsSupersetSelected,
+  setIsButtonDisabled,
 }) => {
-  const [sets, setSets] = useState("");
-  const [reps, setReps] = useState("");
+  const [sets, setSets] = useState(0);
+  const [reps, setReps] = useState(0);
   const [manipulation, setManipulation] = useState("");
+
+  useEffect(() => {
+    // Check if any of the fields are empty or 0
+    const isDisabled = sets === 0 || reps === 0 || manipulation === "";
+    setIsButtonDisabled(isDisabled);
+  }, [sets, reps, manipulation, setIsButtonDisabled]);
 
   const handleInputChange = () => {
     onChange({
@@ -123,17 +122,29 @@ const AddExercise = ({
 
   const handleManipulationChange = (e) => {
     const value = e.target.value.toLowerCase();
+
+    // Check if the user is trying to select "superset" and if it's already selected in another exercise
     if (value === "superset" && isSupersetSelected) {
-      toast.error("Superset is already selected and cannot be added again.");
+      toast.error("Superset can only be added to one exercise at a time.");
       return;
     }
+
+    // Update the manipulation state
     setManipulation(value);
+
+    // Handle any additional input changes
     handleInputChange();
+
+    // Update the superset state
     if (value === "superset") {
       setSuperset(true);
-      setIsSupersetSelected(true);
+      setIsSupersetSelected(true); // Mark that superset has been selected
     } else {
       setSuperset(false);
+      // If the user deselects "superset", mark it as not selected
+      if (manipulation === "superset") {
+        setIsSupersetSelected(false);
+      }
     }
   };
 

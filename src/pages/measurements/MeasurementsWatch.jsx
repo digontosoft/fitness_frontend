@@ -1,12 +1,20 @@
 import SingleCart from "@/components/measurements/measurementWatch/SingleCart";
 import Title from "@/components/measurements/measurementWatch/Title";
 import React from "react";
+import { useLocation, useParams } from "react-router-dom";
 
 const MeasurementsWatch = () => {
+  const location = useLocation();
+
+  // Create a URLSearchParams object to extract query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const userId = queryParams.get("userId");
+  
+  
   return (
     <div>
       <Title title={"מעקב מדדים"} />
-      <SingleCart />
+      <SingleCart userId={userId}/>
     </div>
   );
 };

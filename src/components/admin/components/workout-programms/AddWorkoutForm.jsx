@@ -15,12 +15,14 @@ const AddWorkoutForm = () => {
   const [workoutExercises, setWorkoutExercises] = useState([]);
   const [superset, setSuperset] = useState(false);
   const [isSupersetSelected, setIsSupersetSelected] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -45,6 +47,15 @@ const AddWorkoutForm = () => {
     });
   };
 
+  // const validatedExercises = selectedExercises.map((ex) => ({
+  //   exercise_id: ex._id,
+  //   sets: ex.sets,
+  //   reps: ex.reps,
+  //   manipulation: ex.manipulation,
+  // }));
+
+  console.log("selectedExercises", selectedExercises);
+
   const onSubmit = async (data) => {
     const workoutData = {
       name: data.name,
@@ -52,19 +63,21 @@ const AddWorkoutForm = () => {
       exercises: workoutExercises,
     };
 
-    try {
-      const response = await axios.post(`${base_url}/workout`, workoutData);
-      if (response.status === 201) {
-        toast.success("Workout created successfully");
-        reset();
-        setWorkoutExercises([]);
-        setSelectedExercises([]);
-        navigate("/dashboard/workout-list");
-      }
-    } catch (error) {
-      toast.error("Failed to create workout");
-      console.error(error);
-    }
+    console.log("workoutData", workoutData);
+
+    // try {
+    //   const response = await axios.post(`${base_url}/workout`, workoutData);
+    //   if (response.status === 201) {
+    //     toast.success("Workout created successfully");
+    //     reset();
+    //     setWorkoutExercises([]);
+    //     setSelectedExercises([]);
+    //     navigate("/dashboard/workout-list");
+    //   }
+    // } catch (error) {
+    //   toast.error("Failed to create workout");
+    //   console.error(error);
+    // }
   };
 
   return (
@@ -110,6 +123,8 @@ const AddWorkoutForm = () => {
               superset={superset}
               isSupersetSelected={isSupersetSelected}
               setIsSupersetSelected={setIsSupersetSelected}
+              isButtonDisabled={isButtonDisabled}
+              setIsButtonDisabled={setIsButtonDisabled}
             />
           ))}
         </div>
@@ -118,7 +133,7 @@ const AddWorkoutForm = () => {
           <Button
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
-            disabled={superset}
+            disabled={superset || isButtonDisabled}
           >
             Saving a new workout
           </Button>

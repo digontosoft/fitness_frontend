@@ -11,7 +11,8 @@ import axios from "axios";
 import { toast } from "sonner";
 
 const TraineerUi = ({ userId }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
+  console.log("user", user);
 
   useEffect(() => {
     const getUser = async () => {
@@ -70,9 +71,13 @@ const TraineerUi = ({ userId }) => {
           </Button>
         </span>
       </div>
-      <div className="flex items-center justify-center gap-5">
-        <TraineeRightCard />
-        <TraineeLeftCard />
+      <div className="flex items-center justify-center gap-5" dir="rtl">
+        <TraineeRightCard
+          gender={user?.gender}
+          stepAverage={user?.step_average}
+          stepTarget={user?.step_target}
+        />
+        <TraineeLeftCard userId={user?._id} />
       </div>
       <div className="flex items-center justify-center">
         <span className="text-xl font-bold leading-6 text-textColor text-center">
@@ -92,7 +97,11 @@ const TraineerUi = ({ userId }) => {
         />
       </div>
       <div className="flex items-center justify-center gap-5">
-        <AdminArrowCardWithoutImage title="להורדת דוח מדדים אישי" />
+        <AdminArrowCardWithoutImage
+          title="להורדת דוח מדדים אישי"
+          link={`/dashboard/mesurements-watch?userId=${userId}` }
+
+        />
         <AdminArrowCardWithoutImage title="מסמכים מקושרים להורדה" />
       </div>
       <div className="flex justify-center items-center">
