@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const TaskCompleteForm = ({ data }) => {
   const [files, setFiles] = useState([]);
@@ -41,25 +41,51 @@ const TaskCompleteForm = ({ data }) => {
     register,
     handleSubmit,
     watch,
+    reset,
     setValue,
+
     formState: { errors },
   } = useForm({
     defaultValues: {
-      mode: "task",
-      leftThigh: getMesurement.thighl,
-      rightThigh: getMesurement.thighr,
-      rightArm: getMesurement.armr,
-      leftArm: getMesurement.arml,
-      Butt: Gender === "male" ? getMesurement.chest : getMesurement.butt,
-      chest: getMesurement.chest,
-      waist: getMesurement.waist,
-      selectedDate: getMesurement.date,
+      mode: "create",
+      date: "",
+      renew_date: "",
+      weight: "",
+      body_fat_percentage: "",
+      thighl: "",
+      thighr: "",
+      armr: "",
+      arml: "",
+      butt: "",
+      chest: "",
+      waist: "",
     },
   });
 
   useEffect(() => {
-    if (getMesurement.photo1 || getMesurement.photo2) {
-      setPreviews([getMesurement.photo1, getMesurement.photo2]);
+    if (getMesurement) {
+      console.log(getMesurement.waist);
+      reset({
+        mode: "task",
+        date: getMesurement.date || "",
+        renew_date: getMesurement.renew_date || "",
+        weight: getMesurement.weight || "",
+        body_fat_percentage: getMesurement.body_fat_percentage || "",
+        thighl: getMesurement.thighl || "",
+        thighr: getMesurement.thighr || "",
+        armr: getMesurement.armr || "",
+        arml: getMesurement.arml || "",
+        chest: getMesurement.chest || "",
+        butt:
+          Gender === "male" ? getMesurement.chest : getMesurement.butt || "",
+        waist: getMesurement.waist || "",
+      });
+    }
+  }, [getMesurement, reset, Gender]);
+
+  useEffect(() => {
+    if (getMesurement?.photo1 || getMesurement?.photo2) {
+      setPreviews([getMesurement.photo1, getMesurement.photo2].filter(Boolean));
     }
   }, [getMesurement]);
 
@@ -112,15 +138,24 @@ const TaskCompleteForm = ({ data }) => {
         return;
       }
       setFiles((prevFiles) => [...prevFiles, ...validFiles]);
-      setPreviews((prevPreviews) => [
-        ...prevPreviews,
-        ...validFiles.map((file) => URL.createObjectURL(file)),
-      ]);
     }
   };
+  useEffect(() => {
+    const previewUrls = files
+      .filter((file) => file.type.startsWith("image/"))
+      .map((file) => URL.createObjectURL(file));
+
+    setPreviews(previewUrls);
+    return () => previewUrls.forEach((url) => URL.revokeObjectURL(url));
+  }, [files]);
 
   const validateFile = (file) => {
-    const validTypes = ["image/jpeg", "image/png", "application/pdf"];
+    const validTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "application/pdf",
+    ];
     if (!validTypes.includes(file.type)) {
       alert("Invalid file type. Please upload an image or PDF.");
       return false;
@@ -143,11 +178,74 @@ const TaskCompleteForm = ({ data }) => {
         <div className="w-full justify-center flex flex-col md:flex-row-reverse gap-4">
           <div className="w-full">
             <DynamicInputField
-              id="leftThigh"
-              type="text"
-              label="יירך שמאל"
+              id="body_fat_percentage"
+              type="number"
+              label="אחוז שומן בגוף"
               placeholder="הזן נתונים כאן..."
-              defaultValue={getMesurement.lth}
+              register={register}
+              validation={{ required: "שדה זה חובה" }}
+              errors={errors}
+              watch={watch}
+            />
+
+            <DynamicInputField
+              id="waist"
+              type="text"
+              label="היקף מותניים"
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{ required: "שדה זה חובה" }}
+              errors={errors}
+              watch={watch}
+            />
+            <DynamicInputField
+              id="thighr"
+              type="number"
+              label="ירך ימין"
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{ required: "שדה זה חובה" }}
+              errors={errors}
+              watch={watch}
+            />
+
+            <DynamicInputField
+              id="armr"
+              type="number"
+              label="זרוע ימין"
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{ required: "שדה זה חובה" }}
+              errors={errors}
+              watch={watch}
+            />
+            <DynamicInputField
+              id="arml"
+              type="number"
+              label="זרוע שמאל"
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{ required: "שדה זה חובה" }}
+              errors={errors}
+              watch={watch}
+            />
+            <DynamicInputField
+              id="thighl"
+              type="number"
+              label="ירך שמאל"
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{ required: "שדה זה חובה" }}
+              errors={errors}
+              watch={watch}
+            />
+          </div>
+          <div className="w-full">
+            <DynamicInputField
+              id="date"
+              type="date"
+              label="תאריך"
+              placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
@@ -158,7 +256,6 @@ const TaskCompleteForm = ({ data }) => {
               type="text"
               label="זרוע ימין"
               placeholder="הזן נתונים כאן..."
-              defaultValue={getMesurement.armr}
               register={register}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
@@ -169,7 +266,6 @@ const TaskCompleteForm = ({ data }) => {
               type="text"
               label="זרוע שמאל"
               placeholder="הזן נתונים כאן..."
-              defaultValue={getMesurement.thighl}
               register={register}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
@@ -180,68 +276,40 @@ const TaskCompleteForm = ({ data }) => {
               type="number"
               label={Gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
-              defaultValue={
-                Gender === "male" ? getMesurement.chest : getMesurement.butt
-              }
               register={register}
               validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
               errors={errors}
               watch={watch}
             />
-          </div>
-          <div className="w-full">
+
             <DynamicInputField
-              id="selectedDate"
-              type="date"
-              label="תאריך"
+              id="weight"
+              type="number"
+              label="משקל"
               placeholder="הזן נתונים כאן..."
               register={register}
-              defaultValue={getMesurement.date}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
             />
-            <DynamicInputField
-              id="waist"
-              type="text"
-              label="היקף מותניים"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              defaultValue={getMesurement.waist}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-            <DynamicInputField
-              id="chest"
-              type="text"
-              label={Gender === "male" ? "חָזֶה" : "קַת"}
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
-              defaultValue={
-                Gender === "male" ? getMesurement.chest : getMesurement.butt
-              }
-              errors={errors}
-              watch={watch}
-            />
+
             <DynamicInputField
               id="thigh right"
               type="text"
               label="ירך ימין"
               placeholder="הזן נתונים כאן..."
               register={register}
-              defaultValue={getMesurement.thighr}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
             />
           </div>
         </div>
-
-        <button className="underline text-black text-xl font-bold hover:text-blue-600">
-          לצפייה במדריך המדדים
-        </button>
+        <Link to="/mesurement-pdf">
+          <button className="underline text-black text-xl font-bold hover:text-blue-600">
+            לצפייה במדריך המדדים
+          </button>
+        </Link>
 
         <div className="w-full flex justify-center items-center">
           <div className="w-full md:w-[60%] mt-6">
@@ -272,7 +340,6 @@ const TaskCompleteForm = ({ data }) => {
                 </div>
               )}
 
-              {/* Upload Button */}
               <button
                 type="button"
                 onClick={handleButtonClick}
@@ -281,7 +348,6 @@ const TaskCompleteForm = ({ data }) => {
                 העלאה
               </button>
 
-              {/* Hidden File Input */}
               <input
                 type="file"
                 id="fileInput"
@@ -292,7 +358,6 @@ const TaskCompleteForm = ({ data }) => {
               />
             </div>
 
-            {/* Previews and Remove Buttons (Below Box) */}
             {files.length > 0 && (
               <div className="mt-4 flex flex-col gap-2">
                 {files.map((file, index) => (
