@@ -167,7 +167,7 @@ export function NutritionList() {
         />
         <Link to="/dashboard/add-nutrition-guide">
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            הוסף תזונה חדשה
+            Add Nutrition Guide
           </Button>
         </Link>
       </div>

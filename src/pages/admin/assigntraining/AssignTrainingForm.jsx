@@ -18,17 +18,16 @@ const AssignTrainingForm = ({ user_id }) => {
   const [workout, setWorkout] = useState([]);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
   console.log("trainingList", trainingList);
+  console.log("selectedTraining", selectedTraining);
 
   // Check if any field (sets, reps, or manipulation) is empty in any exercise
   useEffect(() => {
@@ -36,7 +35,6 @@ const AssignTrainingForm = ({ user_id }) => {
       setIsButtonDisabled(false);
       return;
     }
-
     const isAnyFieldEmpty = selectedTraining.workouts?.some((workout) =>
       workout.exercises.some(
         (exercise) =>
@@ -274,7 +272,7 @@ const AssignTrainingForm = ({ user_id }) => {
   };
 
   const onSubmit = async (data) => {
-    console.log("training name:", data);
+    // console.log("training name:", data);
     try {
       const formattedWorkouts = selectedTraining.workouts.map((workout) => ({
         workout: workout._id,
@@ -294,7 +292,7 @@ const AssignTrainingForm = ({ user_id }) => {
         workouts: formattedWorkouts,
       };
 
-      console.log("assignTraining:", payload);
+      // console.log("assignTraining:", payload);
 
       const response = await axios.post(`${base_url}/assign-training`, payload);
       if (response.status === 201) {

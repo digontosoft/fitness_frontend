@@ -31,24 +31,30 @@ export const traineeLink = [
     link: "/measurements",
     icon: Measurement,
   },
-  // {
-  //   _id: 5,
-  //   title: "מתכונים",
-  //   link: "/recipe",
-  //   icon: ReceipeUser,
-  // },
+  {
+    _id: 5,
+    title: "מתכונים",
+    link: "/recipe",
+    icon: ReceipeUser,
+  },
   {
     _id: 5,
     title: "מדריך תזונה",
     link: "/nutrition-guide",
     icon: NutrationGuide,
   },
-  // {
-  //   _id: 7,
-  //   title: "קורסים",
-  //   link: "/courses",
-  //   icon: Course,
-  // },
+  {
+    _id: 6,
+    title: "תפריטי תזונה אישיים",
+    link: "/personal-nutration",
+    icon: NutrationGuide,
+  },
+  {
+    _id: 7,
+    title: "קורסים",
+    link: "/courses",
+    icon: Course,
+  },
 ];
 export const adminLink = [
   {

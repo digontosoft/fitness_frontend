@@ -3,10 +3,13 @@ import CourseContent from "@/components/courseList/CourseContent";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 import LastExercise from "@/components/startTraining/LastExercise";
 import ExcersizeInput from "@/components/startTraining/ExcersizeInput";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ButtonGroup from "@/components/startTraining/ButtonGroup";
 import Title from "@/components/measurements/Tilte";
+import axios from "axios";
+import { toast } from "sonner";
+import { base_url } from "@/api/baseUrl";
 const StartTraining = () => {
   const location = useLocation();
   const workData = location.state?.data || {};
@@ -15,6 +18,7 @@ const StartTraining = () => {
   const [showPrevious, setShowPrevious] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [exerciseData, setExerciseData] = useState({});
+  const navigate = useNavigate()
   const isSuperset =
     userTrainingExercise[currentIndex]?.manipulation?.toLowerCase() ===
     "superset";
@@ -22,6 +26,9 @@ const StartTraining = () => {
   // useEffect(() => {
   //   console.log("Updated exerciseData:", exerciseData);
   // }, [exerciseData]);
+
+  
+  
 
   const handleInputChange = (courseId, value) => {
     setExerciseData((prev) => ({
@@ -86,9 +93,33 @@ const StartTraining = () => {
     }
   };
 
-  const handleFinish = () => {
-    console.log("All exercise data on finish:", exerciseData);
-  };
+  const handleFinish = async () => {
+    //console.log("All exercise data on finish:", exerciseData);
+    
+    const payload = {
+      task_id: workData.task_id, 
+      user_training_workout_id: workData.user_training_workout_id,
+      excerciseData:
+        Object.entries(exerciseData).map(([key, value]) => ({
+          exercise_id: key,     
+          sets_done: Number(value.sets_done),   // Convert to number
+          reps_done: Number(value.reps_done),   
+        }))
+    }
+    console.log("payload", payload);
+    
+   try {
+    const response = await axios.post(`${base_url}/complete-workout-task`, payload); 
+    if (response.status === 200) {
+      toast.success("Workout completed successfully!");
+      navigate("/")
+    
+  }
+   } catch (error) {
+    console.log(error);
+    
+   }
+};
 
   const nextIndex = currentIndex + 1;
   const currentExercise = userTrainingExercise[currentIndex] || {};
