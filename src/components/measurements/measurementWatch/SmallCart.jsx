@@ -9,11 +9,11 @@ const SmallCart = ({ data }) => {
           (
             <div
               key={index}
-              className="w-24 flex justify-center items-center bg-white bg-transparent bg-opacity-50 p-2 rounded-lg"
+              className="min-w-32 w-auto flex justify-center items-center bg-white bg-transparent bg-opacity-50 p-2 rounded-lg"
             >
               <div
                 key={index}
-                className="w-20 flex flex-col items-center justify-center   bg-white  shadow-md rounded-lg p-2  border-red-50"
+                className="min-w-28 w-auto flex flex-col items-center justify-center   bg-white  shadow-md rounded-lg p-2  border-red-50"
               >
                 <span className=" text-[#000000] text-sm font-bold text-center">
                   {moment(item?.date).format("DD/MMMM/YYYY")}

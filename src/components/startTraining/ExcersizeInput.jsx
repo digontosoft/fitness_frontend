@@ -20,8 +20,8 @@ const ExcersizeInput = ({
 
   useEffect(() => {
     if (value) {
-      setValue("exerciseName", value.exerciseName || "");
-      setValue("target", value.target || "");
+      setValue("sets_done", value.sets_done || "");
+      setValue("reps_done", value.reps_done || "");
       setValue("lastSet", value.lastSet || "");
     }
   }, [value, setValue]);
@@ -46,24 +46,24 @@ const ExcersizeInput = ({
             </p>
             <div className="flex flex-col relative">
               <label
-                htmlFor="exerciseName"
+                htmlFor="sets_done"
                 className="px-1 absolute text-sm font-medium text-[#7F7F7F]  bg-white -top-2.5 left-[35%]"
               >
                 סטים
               </label>
               <input
-                id="exerciseName"
-                type="text"
+                id="sets_done"
+                type="number"
                 className="border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#FD4753] focus:border-[#FD4753]"
-                {...register("exerciseName", {
+                {...register("sets_done", {
                   required: "Exercise name is required",
                   onChange: (e) =>
-                    handleInputChange("exerciseName", e.target.value),
+                    handleInputChange("sets_done", e.target.value),
                 })}
               />
-              {errors.exerciseName && (
+              {errors.sets_done && (
                 <p className="text-xs text-red-600 mt-1">
-                  {errors.exerciseName.message}
+                  {errors.sets_done.message}
                 </p>
               )}
             </div>
@@ -77,23 +77,23 @@ const ExcersizeInput = ({
             </p>
             <div className="flex flex-col relative">
               <label
-                htmlFor="target"
+                htmlFor="reps_done"
                 className="absolute px-1 text-sm font-medium text-[#7F7F7F]  bg-white -top-2.5 left-[30%]"
               >
                 חזרות
               </label>
               <input
-                id="target"
-                type="text"
+                id="reps_done"
+                type="number"
                 className="border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#FD4753] focus:border-[#FD4753]"
-                {...register("target", {
-                  required: "Target reps are required",
-                  onChange: (e) => handleInputChange("target", e.target.value),
+                {...register("reps_done", {
+                  required: "reps_done reps are required",
+                  onChange: (e) => handleInputChange("reps_done", e.target.value),
                 })}
               />
-              {errors.target && (
+              {errors.reps_done && (
                 <p className="text-xs text-red-600 mt-1">
-                  {errors.target.message}
+                  {errors.reps_done.message}
                 </p>
               )}
             </div>

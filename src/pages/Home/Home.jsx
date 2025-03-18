@@ -44,9 +44,10 @@ const Home = () => {
     setSelectedTask(task);
     setIsTaskModalOpen(true);
   };
+
   useEffect(() => {
     setIsModalOpen(true);
-  }, []);
+  }, [user?.isNewUser]);
 
   useEffect(() => {
     const fetchUserTask = async () => {
