@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 
-const SingleCart = ({userId}) => {
+const SingleCart = ({ userId }) => {
   const getButtonClass = (data) => {
     if (data.green) {
       return "bg-green-400 hover:bg-green-500 text-white text-xs font-bold";
@@ -17,24 +17,24 @@ const SingleCart = ({userId}) => {
     return "bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold";
   };
 
-  const [data,setData] = useState([]);
+  const [data, setData] = useState([]);
+
+  console.log("userId", data);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${base_url}/measurement/calculate/${userId}`);
-     
-        
+        const response = await axios.get(
+          `${base_url}/measurement/calculate/${userId}`
+        );
+
         setData(response?.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData()
-
+    fetchData();
   }, []);
- 
-  
 
   return (
     <div
