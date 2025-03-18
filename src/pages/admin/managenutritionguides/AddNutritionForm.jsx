@@ -137,7 +137,7 @@ const AddNutritionForm = ({ userId }) => {
 
     try {
       const formData = new FormData();
-      formData.append("user_id", userId); // Ensure userId is correctly appended
+      // formData.append("user_id", userId); // Ensure userId is correctly appended
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("file", data.file[0]);
