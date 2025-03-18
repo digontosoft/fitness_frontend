@@ -8,13 +8,32 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const TaskCompleteForm = ({ data }) => {
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const Gender = userDetails?.gender;
-  console.log("data:", data);
+  const Id = userDetails._id;
+  const [getMesurement, setMesurement] = useState([]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchMeasurement = async () => {
+      try {
+        const response = await axios.get(`${base_url}/measurement/${Id}`);
+        if (response.status === 200) {
+          setMesurement(response.data.data);
+        }
+      } catch (error) {
+        console.error("Measurement data not found", error);
+      }
+    };
+
+    if (Id) {
+      fetchMeasurement();
+    }
+  }, [Id]);
 
   const id = data.measurement_id;
 
@@ -27,26 +46,26 @@ const TaskCompleteForm = ({ data }) => {
   } = useForm({
     defaultValues: {
       mode: "task",
-      leftThigh: data.thighl,
-      rightThigh: data.thighr,
-      rightArm: data.armr,
-      leftArm: data.arml,
-      Butt: Gender === "male" ? data.chest : data.butt,
-      chest: data.chest,
-      waist: data.waist,
-      selectedDate: data.date,
+      leftThigh: getMesurement.thighl,
+      rightThigh: getMesurement.thighr,
+      rightArm: getMesurement.armr,
+      leftArm: getMesurement.arml,
+      Butt: Gender === "male" ? getMesurement.chest : getMesurement.butt,
+      chest: getMesurement.chest,
+      waist: getMesurement.waist,
+      selectedDate: getMesurement.date,
     },
   });
 
   useEffect(() => {
-    if (data.photo1 || data.photo2) {
-      setPreviews([data.photo1, data.photo2]);
+    if (getMesurement.photo1 || getMesurement.photo2) {
+      setPreviews([getMesurement.photo1, getMesurement.photo2]);
     }
-  }, [data]);
+  }, [getMesurement]);
 
   const onSubmit = async (formData) => {
     const updatedFormData = { ...formData, uploadedFiles: files };
-    console.log("Updated form data: ", updatedFormData);
+
     try {
       const response = await axios.put(
         `${base_url}/measurement/${id}`,
@@ -57,6 +76,7 @@ const TaskCompleteForm = ({ data }) => {
       );
       if (response.status === 200) {
         toast.success("Measurement completed successfully!");
+        navigate("/");
       }
     } catch (error) {
       toast.error("Error updating measurement. Please try again.");
@@ -64,44 +84,6 @@ const TaskCompleteForm = ({ data }) => {
     }
   };
 
-  // const onSubmit = async (formData) => {
-  //   const updatedFormData = new FormData();
-
-  //   updatedFormData.append("mode", "task");
-  //   updatedFormData.append("date", formData.selectedDate);
-  //   updatedFormData.append("weight", formData.weight || "");
-  //   updatedFormData.append(
-  //     "body_fat_percentage",
-  //     formData.bodyFatPercentage || ""
-  //   );
-  //   updatedFormData.append("chest", formData.chest);
-  //   updatedFormData.append("butt", formData.Butt);
-  //   updatedFormData.append("waist", formData.waist);
-  //   updatedFormData.append("thighr", formData.rightThigh || "");
-  //   updatedFormData.append("thighl", formData.leftThigh);
-  //   updatedFormData.append("armr", formData.rightArm);
-  //   updatedFormData.append("arml", formData.leftArm);
-  //   files.forEach((file, index) => {
-  //     updatedFormData.append(`photo${index + 1}`, file);
-  //   });
-
-  //   try {
-  //     const response = await axios.put(
-  //       `${base_url}/measurement/${id}`,
-  //       updatedFormData,
-  //       {
-  //         headers: { "Content-Type": "multipart/form-data" },
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       toast.success("Measurement completed successfully!");
-  //     }
-  //   } catch (error) {
-  //     toast.error("Error updating measurement. Please try again.");
-  //     console.error("Error updating measurement:", error);
-  //   }
-  // };
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -126,7 +108,7 @@ const TaskCompleteForm = ({ data }) => {
     if (validFiles.length > 0) {
       const totalFiles = files.length + validFiles.length;
       if (totalFiles > 4) {
-        alert("You can upload up to 4 images only.");
+        toast.warning("You can upload up to 4 images only.");
         return;
       }
       setFiles((prevFiles) => [...prevFiles, ...validFiles]);
@@ -165,17 +147,18 @@ const TaskCompleteForm = ({ data }) => {
               type="text"
               label="יירך שמאל"
               placeholder="הזן נתונים כאן..."
+              defaultValue={getMesurement.lth}
               register={register}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
-              defaultValue={data.leftThigh}
             />
             <DynamicInputField
               id="rightArm"
               type="text"
               label="זרוע ימין"
               placeholder="הזן נתונים כאן..."
+              defaultValue={getMesurement.armr}
               register={register}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
@@ -186,6 +169,7 @@ const TaskCompleteForm = ({ data }) => {
               type="text"
               label="זרוע שמאל"
               placeholder="הזן נתונים כאן..."
+              defaultValue={getMesurement.thighl}
               register={register}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
@@ -196,6 +180,9 @@ const TaskCompleteForm = ({ data }) => {
               type="number"
               label={Gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
+              defaultValue={
+                Gender === "male" ? getMesurement.chest : getMesurement.butt
+              }
               register={register}
               validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
               errors={errors}
@@ -209,6 +196,7 @@ const TaskCompleteForm = ({ data }) => {
               label="תאריך"
               placeholder="הזן נתונים כאן..."
               register={register}
+              defaultValue={getMesurement.date}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
@@ -219,6 +207,7 @@ const TaskCompleteForm = ({ data }) => {
               label="היקף מותניים"
               placeholder="הזן נתונים כאן..."
               register={register}
+              defaultValue={getMesurement.waist}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
@@ -226,10 +215,13 @@ const TaskCompleteForm = ({ data }) => {
             <DynamicInputField
               id="chest"
               type="text"
-              label="היקף חזה"
+              label={Gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
               register={register}
-              validation={{ required: "שדה זה חובה" }}
+              validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
+              defaultValue={
+                Gender === "male" ? getMesurement.chest : getMesurement.butt
+              }
               errors={errors}
               watch={watch}
             />
@@ -239,6 +231,7 @@ const TaskCompleteForm = ({ data }) => {
               label="ירך ימין"
               placeholder="הזן נתונים כאן..."
               register={register}
+              defaultValue={getMesurement.thighr}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}

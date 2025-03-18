@@ -19,13 +19,31 @@ const Home = () => {
   const [taskModalOpen, setIsTaskModalOpen] = useState(false);
   const [userTasks, setUserTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const Id = user._id;
+
+  const [getMesurement, setMesurement] = useState([]);
+  useEffect(() => {
+    const fetchMeasurement = async () => {
+      try {
+        const response = await axios.get(`${base_url}/measurement/${Id}`);
+        if (response.status === 200) {
+          setMesurement(response.data.data);
+        }
+      } catch (error) {
+        console.error("Measurement data not found", error);
+      }
+    };
+
+    if (Id) {
+      fetchMeasurement();
+    }
+  }, [Id]);
 
   const handleOpenModal = (task = null) => {
     setSelectedTask(task);
     setIsTaskModalOpen(true);
   };
-
-  const user = JSON.parse(localStorage.getItem("userInfo"));
 
   useEffect(() => {
     setIsModalOpen(true);
@@ -48,6 +66,7 @@ const Home = () => {
     };
     fetchUserTask();
   }, [user?._id]);
+  console.log("mesurement data", getMesurement);
   return (
     <div className="min-h-screen">
       {user?.isNewUser && (
@@ -62,7 +81,7 @@ const Home = () => {
           {user?.firstName} {user?.lastName}
         </h1>
         <div className="pt-20 flex gap-10 md:flex-row flex-col-reverse">
-          <LeftCard />
+          <LeftCard data={getMesurement} />
           <RightCard user={user} />
         </div>
         <div className="pt-24 flex flex-col justify-end md:justify-center items-center ">
