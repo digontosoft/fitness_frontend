@@ -1,7 +1,7 @@
-import { base_url } from "@/api/baseUrl";
+import { file_url } from "@/api/baseUrl";
 import { Link } from "react-router-dom";
 const CourseCart = ({ course }) => {
-  const imageUrl = `${base_url}/${course?.image}`;
+  const imageUrl = `${file_url}/${course?.image}`;
   return (
     <Link to={`/supermarket/${course?._id}`}>
       <div

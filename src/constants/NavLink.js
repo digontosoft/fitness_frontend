@@ -63,24 +63,24 @@ export const adminLink = [
     link: "/dashboard",
     icon: NutrationGuide,
   },
-  {
-    _id: 2,
-    title: "Workout Programm",
-    link: "/dashboard/workout-programme",
-    icon: NutrationGuide,
-  },
-  {
-    _id: 3,
-    title: "Workout List",
-    link: "/dashboard/workout-list",
-    icon: NutrationGuide,
-  },
-  {
-    _id: 4,
-    title: "Exercise Library",
-    link: "/dashboard/exercise-library",
-    icon: NutrationGuide,
-  },
+  // {
+  //   _id: 2,
+  //   title: "Workout Programm",
+  //   link: "/dashboard/workout-programme",
+  //   icon: NutrationGuide,
+  // },
+  // {
+  //   _id: 3,
+  //   title: "Workout List",
+  //   link: "/dashboard/workout-list",
+  //   icon: NutrationGuide,
+  // },
+  // {
+  //   _id: 4,
+  //   title: "Exercise Library",
+  //   link: "/dashboard/exercise-library",
+  //   icon: NutrationGuide,
+  // },
   // {
   //   _id: 5,
   //   title: "Exercise List",
@@ -99,30 +99,43 @@ export const adminLink = [
   //   link: "/measurement-women",
   //   icon: NutrationGuide,
   // },
-  {
-    _id: 8,
-    title: "Training Programm",
-    link: "/dashboard/add-training-program",
-    icon: NutrationGuide,
-  },
+  // {
+  //   _id: 8,
+  //   title: "Training Programm",
+  //   link: "/dashboard/add-training-program",
+  //   icon: NutrationGuide,
+  // },
   // {
   //   _id: 9,
   //   title: "Training List",
   //   link: "/dashboard/training-list",
   //   icon: NutrationGuide,
   // },
-  {
-    _id: 10,
-    title: "Add Nutrition Guide",
-    link: "/dashboard/add-nutrition-guide",
-    icon: NutrationGuide,
-  },
+  // {
+  //   _id: 10,
+  //   title: "Add Nutrition Guide",
+  //   link: "/dashboard/add-nutrition-guide",
+  //   icon: NutrationGuide,
+  // },
   // {
   //   _id: 11,
   //   title: "Nutrition List",
   //   link: "/dashboard/nutrition-lists",
   //   icon: NutrationGuide,
   // },
+
+  {
+    _id: 2,
+    title: "מתכונים",
+    link: "/dashboard/recipe",
+    icon: ReceipeUser,
+  },
+  {
+    _id: 3,
+    title: "קורסים",
+    link: "/dashboard/courses",
+    icon: Course,
+  },
 ];
 export const recipeLink = [
   {
