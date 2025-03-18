@@ -52,6 +52,7 @@ import AssignTraining from "@/pages/admin/assigntraining/AssignTraining";
 import TraineeUsers from "@/pages/admin/traineeusers/TraineeUsers";
 import Complete from "@/pages/Home/mesurementForm/Complete";
 import UpdateMesurement from "@/pages/Home/mesurementForm/UpdateMesurement";
+import MesurementPdf from "@/components/measurements/measurementWatch/MesurementPdf";
 
 export const routes = createBrowserRouter([
   {
@@ -92,6 +93,10 @@ export const routes = createBrowserRouter([
           {
             path: "/measurement-women",
             element: <MeasurementWomen />,
+          },
+          {
+            path: "/mesurement-pdf",
+            element: <MesurementPdf />,
           },
           {
             path: "/nutrition-guide",
@@ -270,6 +275,14 @@ export const routes = createBrowserRouter([
           {
             path: "/dashboard/edit-training/:trainingId/:userId",
             element: <EditTraineUser />,
+          },
+          {
+            path: "/dashboard/recipe",
+            element: <RecipeBook />,
+          },
+          {
+            path: "/dashboard/courses",
+            element: <Course />,
           },
         ],
       },

@@ -38,7 +38,7 @@ const LeftCard = ({ data }) => {
             </div>
             <div>
               <div className="flex items-center ">
-                <p className="text-sm text-white">מותניים:{data?.armr}</p>
+                <p className="text-sm text-white">מותניים:{data?.waist}</p>
                 <img src={iconTwo} alt="" />
               </div>
               <div className="flex items-center ">

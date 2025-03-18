@@ -292,7 +292,7 @@ const AssignTrainingForm = ({ user_id }) => {
         workouts: formattedWorkouts,
       };
 
-      // console.log("assignTraining:", payload);
+      console.log("assignTraining:", payload);
 
       const response = await axios.post(`${base_url}/assign-training`, payload);
       if (response.status === 201) {

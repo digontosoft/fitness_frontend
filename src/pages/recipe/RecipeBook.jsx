@@ -28,7 +28,7 @@ const RecipeBook = () => {
       <WorkOutListBaground bgImg={RecipeBookBg} />
       {user?.userType === "recipe"
         ? recipeBook
-            .filter((item) => item.type === "normalUser")
+            .filter((item) => item.type === "trainer")
             .map((recipe) => (
               <div
                 key={recipe?._id}
@@ -38,7 +38,7 @@ const RecipeBook = () => {
               </div>
             ))
         : recipeBook
-            .filter((item) => item.type === "trainer")
+            .filter((item) => item.type === "normalUser")
             .map((recipe) => (
               <div
                 key={recipe?._id}
