@@ -30,14 +30,9 @@ const InputForm = ({ gender }) => {
 
     if (files && files.length > 0) {
       files.forEach((file, index) => {
-        formData.append(`photo1`, file);
+        formData.append(`photo${index + 1}`, file);
       });
     }
-    // if (files && files.length > 0) {
-    //   files.forEach((file, index) => {
-    //     formData.append(`uploadedFile[${index}]`, file);
-    //   });
-    // }
 
     formData.append("user_id", userId);
 
@@ -161,48 +156,6 @@ const InputForm = ({ gender }) => {
               id="date"
               type="date"
               label="תאריך"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-          </div>
-          <div className="w-full">
-            <DynamicInputField
-              id="renew_date"
-              type="date"
-              label="תאריך"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-            <DynamicInputField
-              id="waist"
-              type="text"
-              label="היקף מותניים"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-            {/* <DynamicInputField
-              id="chest"
-              type="text"
-              label="היקף חזה"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            /> */}
-            <DynamicInputField
-              id="thighr"
-              type="text"
-              label="ירך ימין "
               placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: "שדה זה חובה" }}

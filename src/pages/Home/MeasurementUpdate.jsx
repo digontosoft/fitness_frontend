@@ -1,47 +1,89 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { upload } from "../../assets/index";
+
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const MeasurementUpdate = () => {
-  const [files, setFiles] = useState([]); // Store multiple files
+  const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
-  const [measurementData, setMeasurementData] = useState({});
-  console.log("file name is", previews);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
-  console.log("user data from mesurement", userDetails._id);
   const Gender = userDetails?.gender;
+  const Id = userDetails._id;
+  const [getMesurement, setMesurement] = useState([]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchMeasurement = async () => {
+      try {
+        const response = await axios.get(`${base_url}/measurement/${Id}`);
+        if (response.status === 200) {
+          setMesurement(response.data.data);
+        }
+      } catch (error) {
+        console.error("Measurement data not found", error);
+      }
+    };
+
+    if (Id) {
+      fetchMeasurement();
+    }
+  }, [Id]);
+
+  const id = getMesurement.measurement_id;
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      mode: "update",
+      leftThigh: getMesurement.thighl,
+      rightThigh: getMesurement.thighr,
+      rightArm: getMesurement.armr,
+      leftArm: getMesurement.arml,
+      Butt: Gender === "male" ? getMesurement.chest : getMesurement.butt,
+      chest: getMesurement.chest,
+      waist: getMesurement.waist,
+      selectedDate: getMesurement.date,
+    },
+  });
 
   useEffect(() => {
-    const fetchUserMeasurementData = async () => {
-      const response = await axios.get(
-        `${base_url}/measurement/${userDetails._id}`
+    if (getMesurement.photo1 || getMesurement.photo2) {
+      setPreviews([getMesurement.photo1, getMesurement.photo2]);
+    }
+  }, [getMesurement]);
+
+  const onSubmit = async (formData) => {
+    const updatedFormData = { ...formData, uploadedFiles: files };
+
+    try {
+      const response = await axios.put(
+        `${base_url}/measurement/${id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
-      console.log("measurement:", response.data);
       if (response.status === 200) {
-        setMeasurementData(response.data);
+        toast.success("Measurement completed successfully!");
+        navigate("/");
       }
-    };
-    fetchUserMeasurementData();
-  }, [userDetails?._id]);
-
-  console.log("meas:", measurementData);
-
-  const onSubmit = (data) => {
-    const formData = { ...data, uploadedFile: files };
-    console.log("this my form data ", formData);
+    } catch (error) {
+      toast.error("Error updating measurement. Please try again.");
+      console.error("Error updating measurement:", error);
+    }
   };
+
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -66,7 +108,7 @@ const MeasurementUpdate = () => {
     if (validFiles.length > 0) {
       const totalFiles = files.length + validFiles.length;
       if (totalFiles > 4) {
-        alert("You can upload up to 4 images only.");
+        toast.warning("You can upload up to 4 images only.");
         return;
       }
       setFiles((prevFiles) => [...prevFiles, ...validFiles]);
@@ -96,15 +138,16 @@ const MeasurementUpdate = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto justify-center  py-20" dir="rtl">
+    <div className="p-6 max-w-6xl mx-auto justify-center py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="  w-full justify-center flex flex-col md:flex-row-reverse  gap-4">
+        <div className="w-full justify-center flex flex-col md:flex-row-reverse gap-4">
           <div className="w-full">
             <DynamicInputField
               id="leftThigh"
               type="text"
               label="יירך שמאל"
               placeholder="הזן נתונים כאן..."
+              defaultValue={getMesurement.lth}
               register={register}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
@@ -115,6 +158,7 @@ const MeasurementUpdate = () => {
               type="text"
               label="זרוע ימין"
               placeholder="הזן נתונים כאן..."
+              defaultValue={getMesurement.armr}
               register={register}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
@@ -125,6 +169,7 @@ const MeasurementUpdate = () => {
               type="text"
               label="זרוע שמאל"
               placeholder="הזן נתונים כאן..."
+              defaultValue={getMesurement.thighl}
               register={register}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
@@ -135,6 +180,9 @@ const MeasurementUpdate = () => {
               type="number"
               label={Gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
+              defaultValue={
+                Gender === "male" ? getMesurement.chest : getMesurement.butt
+              }
               register={register}
               validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
               errors={errors}
@@ -148,6 +196,7 @@ const MeasurementUpdate = () => {
               label="תאריך"
               placeholder="הזן נתונים כאן..."
               register={register}
+              defaultValue={getMesurement.date}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
@@ -158,6 +207,7 @@ const MeasurementUpdate = () => {
               label="היקף מותניים"
               placeholder="הזן נתונים כאן..."
               register={register}
+              defaultValue={getMesurement.waist}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
@@ -165,28 +215,34 @@ const MeasurementUpdate = () => {
             <DynamicInputField
               id="chest"
               type="text"
-              label="היקף חזה"
+              label={Gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
               register={register}
-              validation={{ required: "שדה זה חובה" }}
+              validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
+              defaultValue={
+                Gender === "male" ? getMesurement.chest : getMesurement.butt
+              }
               errors={errors}
               watch={watch}
             />
             <DynamicInputField
               id="thigh right"
               type="text"
-              label="ירך ימין "
+              label="ירך ימין"
               placeholder="הזן נתונים כאן..."
               register={register}
+              defaultValue={getMesurement.thighr}
               validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
             />
           </div>
         </div>
+
         <button className="underline text-black text-xl font-bold hover:text-blue-600">
           לצפייה במדריך המדדים
         </button>
+
         <div className="w-full flex justify-center items-center">
           <div className="w-full md:w-[60%] mt-6">
             <label className="block font-semibold text-sm text-[#333333] text-center">
@@ -218,6 +274,7 @@ const MeasurementUpdate = () => {
 
               {/* Upload Button */}
               <button
+                type="button"
                 onClick={handleButtonClick}
                 className="bg-[#BF2033] hover:bg-red-500 text-white px-4 rounded-full mt-4"
               >
@@ -241,7 +298,7 @@ const MeasurementUpdate = () => {
                 {files.map((file, index) => (
                   <div
                     key={index}
-                    className="flex justify-between items-center  p-2 rounded-lg"
+                    className="flex justify-between items-center p-2 rounded-lg"
                   >
                     {/* Image Preview */}
                     {file.type.startsWith("image/") && (

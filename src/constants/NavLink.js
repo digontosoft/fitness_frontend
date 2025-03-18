@@ -43,6 +43,12 @@ export const traineeLink = [
     link: "/nutrition-guide",
     icon: NutrationGuide,
   },
+  {
+    _id:6,
+    title:'Personal Nutration',
+    link:'/personal-nutration',
+    icon:NutrationGuide
+  }
   // {
   //   _id: 7,
   //   title: "קורסים",
