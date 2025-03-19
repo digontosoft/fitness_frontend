@@ -153,7 +153,7 @@ export default function WorkoutLists({ workoutId }) {
 
   return (
     <div className="w-full" dir="ltr">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
           placeholder="שם מסנן...."
           value={table.getColumn("name")?.getFilterValue() ?? ""}

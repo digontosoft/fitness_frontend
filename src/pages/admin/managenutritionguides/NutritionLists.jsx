@@ -6,9 +6,9 @@ const NutritionLists = () => {
   return (
     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
       <Title tilte="רשימת תזונה" />
-      <section className="grid  gap-5 h-full">
-        <NutritionList />
-      </section>
+      {/* <section className="grid  gap-5 h-full">
+      </section> */}
+      <NutritionList />
     </Container>
   );
 };

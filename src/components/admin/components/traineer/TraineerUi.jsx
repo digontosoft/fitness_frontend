@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState(null);
-  console.log("user", user);
+  console.log("user", userId);
 
   useEffect(() => {
     const getUser = async () => {
@@ -110,7 +110,7 @@ const TraineerUi = ({ userId }) => {
     //   </div>
     // </div>
 
-    <div className="space-y-12 px-4 sm:px-6 lg:px-8">
+    <div className="space-y-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
         <span className="flex items-center gap-2 flex-row-reverse">
@@ -136,7 +136,7 @@ const TraineerUi = ({ userId }) => {
           stepAverage={user?.step_average}
           stepTarget={user?.step_target}
         />
-        <TraineeLeftCard userId={user?._id} />
+        <TraineeLeftCard userId={userId} />
       </div>
 
       <div className="flex items-center justify-center">

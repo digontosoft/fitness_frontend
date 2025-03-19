@@ -84,7 +84,7 @@ export function ExerciseTable() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-  אזור בגוף
+          אזור בגוף
           <ArrowUpDown />
         </Button>
       ),
@@ -99,14 +99,14 @@ export function ExerciseTable() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-        ציוד
+          ציוד
           <ArrowUpDown />
         </Button>
       ),
       cell: ({ row }) => (
         <div className="lowercase">{row.getValue("equipment")}</div>
-      )
-      },
+      ),
+    },
     {
       accessorKey: "video_url",
       header: ({ column }) => (
@@ -206,7 +206,7 @@ export function ExerciseTable() {
 
   return (
     <div className="w-full" dir="ltr">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
           placeholder="שם מסנן...."
           value={table.getColumn("name")?.getFilterValue() ?? ""}

@@ -6,9 +6,9 @@ const ExerciseList = () => {
   return (
     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
       <Title tilte="רשימת תרגילים" />
-      <section className="grid  gap-5 h-full">
-        <ExerciseTable />
-      </section>
+      {/* <section className="grid  gap-5 h-full">
+      </section> */}
+      <ExerciseTable />
     </Container>
   );
 };
