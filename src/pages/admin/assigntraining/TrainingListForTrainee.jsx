@@ -167,7 +167,7 @@ export function TrainingListForTrainee({ userId }) {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [userId]);
 
   const table = useReactTable({
     data: training,
