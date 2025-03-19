@@ -177,7 +177,7 @@ const AddNutritionForm = ({ userId }) => {
       >
         <div className="grid gap-4">
           <DynamicInputField
-            className="min-w-[350px]"
+            className="sm:min-w-[350px]"
             id="title"
             type="text"
             label={userId ? "Nutrition Menu Name" : "Nutrition Guide Name"}
@@ -196,7 +196,7 @@ const AddNutritionForm = ({ userId }) => {
           />
 
           <DynamicInputField
-            className="min-w-[350px]"
+            className="sm:min-w-[350px]"
             id="description"
             type="text"
             label={

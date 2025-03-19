@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dialog";
 import WorkoutDetails from "./WorkoutDetails";
 
-export default function WorkoutLists({ workoutId }) {
+export default function WorkoutLists() {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});

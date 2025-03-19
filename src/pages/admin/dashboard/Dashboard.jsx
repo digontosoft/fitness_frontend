@@ -127,7 +127,7 @@ const Dashboard = () => {
         </div>
       </div> */}
 
-      <div className="flex flex-col items-center justify-center space-y-6 px-4 md:px-8 lg:px-16">
+      <div className="flex flex-col items-center justify-center space-y-6 px-4">
         <Title tilte="ניהול מתאמנים" />
 
         <div className="sm:flex sm:flex-row flex-col items-center justify-center gap-5 sm:space-y-0 space-y-4">
@@ -164,7 +164,7 @@ const Dashboard = () => {
           משימות
         </span>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-5xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
           <AdminArrowCard
             image={women1}
             title="אישור מתאמנים חדשים"

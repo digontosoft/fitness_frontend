@@ -79,15 +79,9 @@ export function TraineeUsersLists() {
       header: "פעולות",
       cell: ({ row }) => {
         const userId = row.original._id;
-        console.log("row:", row);
         return (
           <div className="flex space-x-2">
             <UserDetails userId={userId} />
-            {/* <Link to={`/dashboard/edit-exercise/${row.original._id}`}>
-            </Link> */}
-            <Button className="bg-black" size="sm">
-              <Edit />
-            </Button>
             <Button
               className="bg-customBg"
               size="sm"
@@ -210,11 +204,6 @@ export function TraineeUsersLists() {
           }
           className="max-w-sm"
         />
-        {/* <Link to="/dashboard/exercise-library">
-          <Button className="bg-customBg uppercase font-medium" size="sm">
-            הוסף תרגיל חדש
-          </Button>
-        </Link> */}
       </div>
       <div className="rounded-md border">
         <Table>

@@ -33,7 +33,7 @@ export default function TrainingDetails({ trainingId }) {
           <Eye />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl mx-auto p-6 rounded-lg">
+      <DialogContent className="sm:max-w-4xl w-[90%] h-[70%] mx-auto p-6 rounded-lg overflow-y-scroll">
         {trainingData ? (
           <div className="flex flex-col items-center gap-6">
             <h2 className="text-xl font-bold text-gray-900">

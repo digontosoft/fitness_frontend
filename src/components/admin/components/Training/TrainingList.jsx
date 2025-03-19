@@ -170,7 +170,6 @@ export function TrainingList({ userId }) {
     onRowSelectionChange: setRowSelection,
     state: { sorting, columnFilters, columnVisibility, rowSelection },
   });
-  console.log(training);
 
   return (
     <div className="w-full" dir="ltr">
