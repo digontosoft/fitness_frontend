@@ -65,19 +65,19 @@ const AddWorkoutForm = () => {
 
     console.log("workoutData", workoutData);
 
-    // try {
-    //   const response = await axios.post(`${base_url}/workout`, workoutData);
-    //   if (response.status === 201) {
-    //     toast.success("Workout created successfully");
-    //     reset();
-    //     setWorkoutExercises([]);
-    //     setSelectedExercises([]);
-    //     navigate("/dashboard/workout-list");
-    //   }
-    // } catch (error) {
-    //   toast.error("Failed to create workout");
-    //   console.error(error);
-    // }
+    try {
+      const response = await axios.post(`${base_url}/workout`, workoutData);
+      if (response.status === 201) {
+        toast.success("Workout created successfully");
+        reset();
+        setWorkoutExercises([]);
+        setSelectedExercises([]);
+        navigate("/dashboard/workout-list");
+      }
+    } catch (error) {
+      toast.error("Failed to create workout");
+      console.error(error);
+    }
   };
 
   return (
@@ -85,7 +85,7 @@ const AddWorkoutForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4">
           <DynamicInputField
-            className="min-w-[400px]"
+            className="sm:min-w-[400px]"
             id="name"
             type="text"
             label="Workout Name"
@@ -96,7 +96,7 @@ const AddWorkoutForm = () => {
           />
 
           <DynamicInputField
-            className="min-w-[400px]"
+            className="sm:min-w-[400px]"
             id="description"
             type="text"
             label="Workout Description"
@@ -106,7 +106,7 @@ const AddWorkoutForm = () => {
             errors={errors}
           />
           <Select
-            className="rounded-lg h-12"
+            className="rounded-lg h-12 w-auto"
             direction="rtl"
             options={exercises}
             valueField="_id"
