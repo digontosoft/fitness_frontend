@@ -276,6 +276,14 @@ export const routes = createBrowserRouter([
             path: "/dashboard/edit-training/:trainingId/:userId",
             element: <EditTraineUser />,
           },
+          {
+            path: "/dashboard/recipe",
+            element: <RecipeBook />,
+          },
+          {
+            path: "/dashboard/courses",
+            element: <Course />,
+          },
         ],
       },
     ],

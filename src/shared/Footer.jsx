@@ -8,9 +8,19 @@ const Footer = () => {
           <div className="flex flex-col gap-4 justify-center items-center ">
             <p className=" text-white font-medium">עקבו אחרינו</p>
             <div className="flex gap-3">
-              <img src={instaIcon} alt="instagram" />
-              <img src={facebookIcon} alt="facebook" />
-              <img src={tiktok} alt="tiktok" />
+              <a
+                href="https://www.instagram.com/fitalmualem?igsh=MXZjbzV6bGswa2Fndg%3D%3D&utm_source=qr"
+                target="_blank"
+              >
+                <img src={instaIcon} alt="instagram" />
+              </a>
+              <a
+                href="https://www.tiktok.com/@fitalmualem?_t=ZS-8umaIU37r20&_r=1"
+                target="_blank"
+              >
+                {" "}
+                <img src={tiktok} alt="tiktok" />
+              </a>
             </div>
           </div>
         </div>

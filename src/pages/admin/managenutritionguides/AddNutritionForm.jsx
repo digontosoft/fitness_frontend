@@ -100,29 +100,68 @@ const AddNutritionForm = ({ userId }) => {
     formState: { errors },
   } = useForm();
 
+  // const onSubmit = async (data) => {
+  //   console.log("userId", userId);
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("user_id", userId);
+  //     formData.append("title", data.title);
+  //     formData.append("description", data.description);
+  //     formData.append("file", data.file[0]);
+
+  //     for (let [key, value] of formData.entries()) {
+  //       console.log(key, value);
+  //     }
+
+  //     await axios
+  //       .post(`${base_url}/nutritionGuide`, formData, {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       })
+  //       .then((response) => {
+  //         if (response.status === 201) {
+  //           toast.success("Nutrition saved successfully!");
+  //           reset();
+  //           navigate("/dashboard/nutrition-list");
+  //         }
+  //       });
+  //   } catch (error) {
+  //     console.error("Error submitting training session:", error);
+  //     toast.error("Failed to save training session.");
+  //   }
+  // };
+
   const onSubmit = async (data) => {
+    console.log("userId", userId); // Debugging: Check if userId is defined
+
     try {
       const formData = new FormData();
-      if (userId) {
-        formData.append("user_id", userId);
-      }
+      // formData.append("user_id", userId); // Ensure userId is correctly appended
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("file", data.file[0]);
 
-      await axios
-        .post(`${base_url}/nutritionGuide`, formData, {
+      // Debugging: Log all entries in formData
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+
+      const response = await axios.post(
+        `${base_url}/nutritionGuide`,
+        formData,
+        {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        })
-        .then((response) => {
-          if (response.status === 201) {
-            toast.success("Nutrition saved successfully!");
-            reset();
-            // navigate("/dashboard/nutrition-list");
-          }
-        });
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success("Nutrition saved successfully!");
+        reset();
+        navigate("/dashboard/nutrition-list");
+      }
     } catch (error) {
       console.error("Error submitting training session:", error);
       toast.error("Failed to save training session.");
