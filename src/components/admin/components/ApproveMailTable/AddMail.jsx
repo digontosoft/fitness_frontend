@@ -38,16 +38,17 @@ export default function AddMail({ setEmails }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-customBg">ADD MAIL</Button>
+        <Button className="bg-customBg">הוסף כתובת מייל</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Mail</DialogTitle>
+          <DialogTitle>הוסף כתובת מייל</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
             <div className="grid items-center gap-4">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">דואר אלקטרוני
+              </Label>
               <Input
                 id="email"
                 type="email"

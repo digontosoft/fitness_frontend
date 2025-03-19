@@ -122,7 +122,7 @@ const TraineerUi = ({ userId }) => {
               updateStatus(user?.userType === "admin" ? "trainee" : "admin")
             }
           >
-            {user?.userType === "admin" ? "Make Trainer" : "Make Admin"}
+            {user?.userType === "admin" ? "Make Trainer" : " הפוך למאמן"}
           </Button>
         </span>
       </div>
