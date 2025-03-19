@@ -1,11 +1,6 @@
+import { icon, iconOne, iconThree, iconTwo, pixelCartImg } from "@/assets";
 import { Button } from "../ui/button";
-import {
-  icon,
-  iconOne,
-  iconThree,
-  iconTwo,
-  pixelCartImg,
-} from "../../assets/index";
+// import { icon, iconOne, iconThree, iconTwo, pixelCartImg } from "@assets/index";
 import { Link } from "react-router-dom";
 
 const LeftCard = ({ data }) => {

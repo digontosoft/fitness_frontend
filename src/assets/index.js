@@ -69,7 +69,7 @@ import women2 from "./image/workout-women-2.png";
 import icon from'./image/icons/Icon.png';
 import iconOne from'./image/icons/IconOne.png';
 import iconTwo from'./image/icons/IconTwo.png';
-import iconThree from'./image/icons/iconThree.png';
+import iconThree from'./image/icons/IconThree.png';
 export {
   icon,
   iconOne,
