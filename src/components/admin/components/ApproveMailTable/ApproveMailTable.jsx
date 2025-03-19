@@ -20,8 +20,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import AddMail from "./AddMail";
-import { fetchEmail } from "@/api/fetchEmail";
-import { updateEmailStatus } from "@/api/updateData";
 import axios from "axios";
 import { toast } from "sonner";
 import { deleteEmail } from "@/api/deleteData";
@@ -157,7 +155,7 @@ export function ApproveMailTable() {
 
   return (
     <div className="w-full" dir="ltr">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex sm:flex-row flex-col items-center sm:justify-between justify-center py-4 space-y-4 sm:space-y-0">
         <Input
           placeholder="Filter emails..."
           value={table.getColumn("email")?.getFilterValue() ?? ""}

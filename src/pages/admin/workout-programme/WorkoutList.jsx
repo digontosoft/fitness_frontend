@@ -6,9 +6,9 @@ const WorkoutList = () => {
   return (
     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
       <Title tilte="רשימת אימונים" />
-      <section className="grid  gap-5 h-full">
-        <WorkoutLists />
-      </section>
+      {/* <section className="grid  gap-5 h-full">
+      </section> */}
+      <WorkoutLists />
     </Container>
   );
 };

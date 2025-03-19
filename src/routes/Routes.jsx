@@ -164,10 +164,10 @@ export const routes = createBrowserRouter([
             path: "/dashboard",
             element: <Dashboard />,
           },
-          // {
-          //   path: "/dashboard/mesurements/:id",
-          //   element: <Measurements />,
-          // },
+          {
+            path: "/dashboard/mesurements/:id",
+            element: <Measurements />,
+          },
           {
             path: "/dashboard/users",
             element: <Users />,
