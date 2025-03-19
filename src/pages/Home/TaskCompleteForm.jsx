@@ -49,9 +49,6 @@ const TaskCompleteForm = ({ data }) => {
     defaultValues: {
       mode: "create",
       date: "",
-      renew_date: "",
-      weight: "",
-      body_fat_percentage: "",
       thighl: "",
       thighr: "",
       armr: "",
@@ -68,9 +65,6 @@ const TaskCompleteForm = ({ data }) => {
       reset({
         mode: "task",
         date: getMesurement.date || "",
-        renew_date: getMesurement.renew_date || "",
-        weight: getMesurement.weight || "",
-        body_fat_percentage: getMesurement.body_fat_percentage || "",
         thighl: getMesurement.thighl || "",
         thighr: getMesurement.thighr || "",
         armr: getMesurement.armr || "",
@@ -177,16 +171,7 @@ const TaskCompleteForm = ({ data }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-full justify-center flex flex-col md:flex-row-reverse gap-4">
           <div className="w-full">
-            <DynamicInputField
-              id="body_fat_percentage"
-              type="number"
-              label="אחוז שומן בגוף"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
+          
 
             <DynamicInputField
               id="waist"
@@ -278,17 +263,6 @@ const TaskCompleteForm = ({ data }) => {
               placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
-              errors={errors}
-              watch={watch}
-            />
-
-            <DynamicInputField
-              id="weight"
-              type="number"
-              label="משקל"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
             />

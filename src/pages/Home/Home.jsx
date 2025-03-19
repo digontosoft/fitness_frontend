@@ -120,13 +120,8 @@ const Home = () => {
           setIsModalOpen={setIsModalOpen}
         />
       )}
-
-      {/* Main Content */}
-      <div className="flex flex-col items-center justify-center pt-10 sm:pt-16 md:pt-20">
-        <h6 className="text-sm sm:text-base font-normal text-gray-500">
-          בוקר טוב
-        </h6>
-        <h1 className="text-3xl sm:text-4xl font-bold text-center">
+      <div className="flex flex-col items-center justify-center pt-20">
+        <h1 className="text-4xl font-bold">
           {user?.firstName} {user?.lastName}
         </h1>
 

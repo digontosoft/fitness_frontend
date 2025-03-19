@@ -324,7 +324,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         <DynamicInputField
           id="name"
           type="text"
-          label="Training Name"
+          label="שם תוכנית אימון "
           placeholder="Enter training name..."
           register={register}
           validation={{ required: !user_Id && "Name is required" }}
@@ -334,7 +334,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         <DynamicInputField
           id="description"
           type="text"
-          label="Description"
+          label="תיאור"
           placeholder="Enter description..."
           register={register}
           validation={{ required: !user_Id && "Description is required" }}
@@ -360,7 +360,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                   className="cursor-pointer text-red-600"
                   onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
                 />
-                Remove Workout
+                הסר אימון
               </div>
 
               {workout?.exercises?.map((ex, exerciseIndex) => (
@@ -442,7 +442,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                 onClick={(e) => handleMoreExercise(workoutIndex, e)}
                 className="mt-2 bg-customBg flex mx-auto"
               >
-                Add More Exercise
+                הוסף תרגיל לאימון
               </Button>
             </div>
           ))}
@@ -458,14 +458,14 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
             }
             disabled={isButtonDisabled || isSupersetIncomplete}
           >
-            Update Training
+            שמיר תוכנית אימון
           </Button>
           <Button
             onClick={() => setShowWorkoutSelect(true)}
             type="button"
             className="bg-customBg"
           >
-            Add More Workout
+            הוסף תוכנית אימון
           </Button>
         </div>
       </form>
