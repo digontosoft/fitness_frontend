@@ -73,8 +73,6 @@ const SingleCart = ({ userId }) => {
           <div className="flex justify-center items-center">
             <SmallCart data={data} />
           </div>
-
-          {/* Button */}
         </div>
       ))}
     </div>
