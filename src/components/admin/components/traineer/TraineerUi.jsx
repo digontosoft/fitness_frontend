@@ -11,7 +11,7 @@ import axios from "axios";
 import { toast } from "sonner";
 
 const TraineerUi = ({ userId }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState([]);
   console.log("user", userId);
 
   useEffect(() => {

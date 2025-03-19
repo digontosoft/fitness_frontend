@@ -268,7 +268,7 @@ const AddTrainingForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4">
           <DynamicInputField
-            className="min-w-[350px]"
+            className="sm:min-w-[350px] w-auto"
             id="name"
             type="text"
             label="Training Name"
@@ -279,7 +279,7 @@ const AddTrainingForm = () => {
           />
 
           <DynamicInputField
-            className="min-w-[350px]"
+            className="sm:min-w-[350px] w-auto"
             id="description"
             type="text"
             label="Training Description"
@@ -300,7 +300,7 @@ const AddTrainingForm = () => {
           />
         </div>
 
-        <div className="space-y-4 w-[550px]">
+        <div className="space-y-4 sm:w-[550px]">
           {selectedTrainingExercises.map((workout, workoutIndex) => (
             <div key={workout.workout} className="p-4 border rounded-lg">
               <h3 className="text-lg font-semibold">{workout.name}</h3>
