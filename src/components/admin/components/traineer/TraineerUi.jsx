@@ -13,6 +13,7 @@ import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
   console.log("user", userId);
 
   useEffect(() => {
@@ -24,7 +25,10 @@ const TraineerUi = ({ userId }) => {
           "firstName",
           JSON.stringify(response.data.data.firstName)
         );
-        localStorage.setItem("selectedUserId", JSON.stringify(response.data.data._id));
+        localStorage.setItem(
+          "selectedUserId",
+          JSON.stringify(response.data.data._id)
+        );
         localStorage.setItem(
           "lastName",
           JSON.stringify(response.data.data.lastName)
@@ -51,13 +55,16 @@ const TraineerUi = ({ userId }) => {
       }
     } catch (error) {}
   };
-
+  const handleModal = () => {
+    setOpenModal(true);
+    console.log("modal clicked");
+  };
   const userFirstName = JSON.parse(localStorage.getItem("firstName"));
   const userLastName = JSON.parse(localStorage.getItem("lastName"));
   const userName = userFirstName + " " + userLastName;
 
   return (
-    <div className="space-y-12 px-4 sm:px-6 lg:px-8">
+    <div className="space-y-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
         <span className="flex items-center gap-2 flex-row-reverse">
@@ -111,11 +118,22 @@ const TraineerUi = ({ userId }) => {
           title="לדוח מדדים אישי"
           link={`/dashboard/mesurements-watch?userId=${userId}`}
         />
-        <AdminArrowCardWithoutImage title="מסמכים מקושרים להורדה" />
+
+        <AdminArrowCardWithoutImage
+          title="מסמכים מקושרים להורדה"
+          onClick={handleModal}
+        />
+
         {/* <FoodDairyModal userId={userId} /> */}
       </div>
 
       <div className="flex justify-center items-center"></div>
+      {openModal && (
+        <>
+          <p>Modal is Open</p>
+          <FoodDairyModal userId={userId} onClose={() => setOpenModal(false)} />
+        </>
+      )}
     </div>
   );
 };
