@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 
 const LeftCard = ({ data }) => {
   const userType = JSON.parse(localStorage.getItem("userInfo"));
+  console.log("userType", userType);
 
   return (
     <div
-      className="w-72 h-48 bg-[#0A0A0A] p-2 rounded-2xl "
+      className="w-80 h-56 bg-[#0A0A0A] p-2 rounded-2xl "
       style={{ backgroundImage: `url(${pixelCartImg})` }}
     >
       <div className="flex  flex-col justify-center items-start">
@@ -21,11 +22,11 @@ const LeftCard = ({ data }) => {
           <div className="flex justify-between gap-6 items-center flex-row-reverse">
             <div>
               <div className="flex items-center ">
-                <p className="text-sm text-white">זרוע:{data?.arml}</p>
+                <p className="text-lg text-white">זרוע:{data?.arml}</p>
                 <img src={icon} alt="" />
               </div>
               <div className="flex items-center ">
-                <p className="text-sm text-white">
+                <p className="text-lg text-white">
                   חזה:{userType.gender === "male" ? data?.chest : data?.butt}
                 </p>
                 <img src={iconOne} alt="" />
@@ -33,11 +34,11 @@ const LeftCard = ({ data }) => {
             </div>
             <div>
               <div className="flex items-center ">
-                <p className="text-sm text-white">מותניים:{data?.waist}</p>
+                <p className="text-lg text-white">מותניים:{data?.waist}</p>
                 <img src={iconTwo} alt="" />
               </div>
               <div className="flex items-center ">
-                <p className="text-sm text-white">יריכיים:{data?.thighl}</p>
+                <p className="text-lg text-white">יריכיים:{data?.thighl}</p>
                 <img src={iconThree} alt="" />
               </div>
             </div>

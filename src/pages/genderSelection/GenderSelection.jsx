@@ -32,6 +32,7 @@ const GenderSelection = () => {
           if (response.status === 200) {
             const userData = response.data.data;
             setUserInfo(userData);
+            localStorage.setItem("userInfo", JSON.stringify(userData));
             navigate("/regulation");
           }
         });
