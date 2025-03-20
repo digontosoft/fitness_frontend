@@ -8,46 +8,19 @@ import {
   men2,
   Ellipse88,
 } from "@/assets/index";
+import { useEffect, useState } from "react";
 
-const TraineeRightCard = ({ gender, stepAverage, stepTarget }) => {
-  const progress = 30;
+const TraineeRightCard = ({ userId, gender, stepAverage, stepTarget }) => {
+  const progress = stepAverage || 0;
   const target = Math.max(stepTarget || 1, 1);
   const strokeWidth = 4;
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
   const parcentage = ((progress / target) * 100).toFixed(1);
   const offset = circumference - (parcentage / 100) * circumference;
+  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+
   return (
-    // <div className="w-72 h-48 bg-customRadial p-2 rounded-2xl">
-    //   <div className="flex justify-between items-center relative" dir="ltr">
-    //     <div className="bg-slate-50 w-28 h-28 rounded-full bg-opacity-50 p-2">
-    //       <div className="bg-[#FFFFFF] w-24 h-24 rounded-full p-2 ">
-    //         <div className="bg-[#FFFFFF] w-20 h-20 rounded-full border-red-500 border-[4px] flex justify-center items-center">
-    //           <div className="flex flex-col items-center">
-    //             <p className="text-[#B9192E] text-sm font-bold">30%</p>
-    //             <p className="text-[#8C8C8C] text-xs font-normal">הושלם</p>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //     <div
-    //       className=" absolute -top-2 -right-9 w-36 h-40 "
-    //       style={{
-    //         backgroundImage: `url(${Ellipse})`,
-    //         backgroundRepeat: "no-repeat",
-    //       }}
-    //     >
-    //       <img className="pl-10 pt-4" src={Running} alt="" />
-    //     </div>
-    //   </div>
-    //   <div className="flex flex-col items-end justify-end pr-4" dir="ltr">
-    //     <div className="flex justify-end items-center ">
-    //       <span className="text-[#FFFFFF] text-xs font-normal">10,000 /</span>
-    //       <span className="text-[#FFFFFF] text-2xl font-bold">3500</span>
-    //     </div>
-    //     <p className="text-[#FFFFFF] text-xs font-normal text-end">צעדים</p>
-    //   </div>
-    // </div>
     <div className="w-80 h-56 bg-gradient-to-tr from-[#0A0A0A] via-[#343434] to-[#0A0A0A] p-2 rounded-2xl relative">
       <div
         className="absolute top-0 left-0 w-full h-full"

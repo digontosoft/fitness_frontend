@@ -9,6 +9,8 @@ export const NutritionCart = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [nutrationData, setNutrationData] = useState([]);
   const [loading, setLoading] = useState(true);
+ 
+  
 
   useEffect(() => {
     const fetchData = async () => {
