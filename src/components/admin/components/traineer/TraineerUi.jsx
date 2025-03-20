@@ -24,7 +24,10 @@ const TraineerUi = ({ userId }) => {
           "firstName",
           JSON.stringify(response.data.data.firstName)
         );
-        localStorage.setItem("selectedUserId", JSON.stringify(response.data.data._id));
+        localStorage.setItem(
+          "selectedUserId",
+          JSON.stringify(response.data.data._id)
+        );
         localStorage.setItem(
           "lastName",
           JSON.stringify(response.data.data.lastName)
