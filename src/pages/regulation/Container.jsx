@@ -10,40 +10,36 @@ import { toast } from "sonner";
 
 const Container = () => {
   const [loading, setLoading] = useState(false);
-  // const [termsAndConditions, setTermsAndConditions] = useState(false);
-  const { setUserInfo } = useContext(UserInfoContext);
 
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
-  // const { id } = verifyToken(authToken);
+
   const navigate = useNavigate();
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
+    setLoading(true);
     const updateUserInfo = {
       user_id: userDetails?._id,
       termsAndConditions: false,
       isNewUser: false,
     };
-    setLoading(true);
+
     try {
-      axios
-        .post(`${base_url}/updateUserInfo`, updateUserInfo)
-        .then((response) => {
-          if (response.status === 200) {
-            setUserInfo(response.data.data);
-            console.log("info:", response.data.data);
-            navigate("/measurement-women");
-          }
-        });
+      const [updateResponse, foodDairyResponse] = await Promise.all([
+        axios.post(`${base_url}/updateUserInfo`, updateUserInfo),
+        axios.post(`${base_url}/food-dairy`, { user_id: userDetails?._id }),
+      ]);
+
+      if (updateResponse.status === 200 && foodDairyResponse.status === 201) {
+        navigate("/measurement-women");
+      }
     } catch (err) {
-      toast.error(err.response.data.message);
-      console.log("error:", err);
+      toast.error(err.response?.data?.message || "An error occurred");
+      console.error("Error:", err);
     } finally {
       setLoading(false);
     }
-    if (loading) {
-      return <Loading />;
-    }
   };
+
   return (
     <div className="max-w-6xl mx-auto rounded-2xl shadow-xl p-10 mt-10 md:mt-20 bg-white">
       <div dir="rtl">

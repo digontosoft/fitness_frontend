@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-const AdminArrowCardWithoutImage = ({ title, link }) => {
+const AdminArrowCardWithoutImage = ({ title, link, onclick }) => {
   console.log("link", link);
   return (
     <Link to={link}>
       <div
+        onclick={onclick}
         className="w-[342px] h-[74px] flex gap-4 items-center justify-between px-4 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300"
         dir="ltr"
       >

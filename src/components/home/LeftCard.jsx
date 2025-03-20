@@ -2,10 +2,25 @@ import { icon, iconOne, iconThree, iconTwo, pixelCartImg } from "@/assets";
 import { Button } from "../ui/button";
 // import { icon, iconOne, iconThree, iconTwo, pixelCartImg } from "@assets/index";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { UserInfoContext } from "@/context";
 
 const LeftCard = ({ data }) => {
-  const userType = JSON.parse(localStorage.getItem("userInfo"));
+  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
 
+  console.log("user ", userDetails);
+
+  // const arm=
+  console.log("M data", data);
+
+  const leftArm = Number(data?.arml) || 0;
+  const rightArm = Number(data?.armr) || 0;
+  const total = leftArm + rightArm;
+  const avg = Math.floor(total / 2);
+  const leftThigh = Number(data?.thighl) || 0;
+  const rightThigh = Number(data?.thighr) || 0;
+  const totalThigh = leftThigh + rightThigh;
+  const avgThigh = Math.floor(totalThigh / 2);
   return (
     <div
       className="w-80 h-56 bg-[#0A0A0A] p-2 rounded-2xl "
@@ -21,12 +36,12 @@ const LeftCard = ({ data }) => {
           <div className="flex justify-between gap-6 items-center flex-row-reverse">
             <div>
               <div className="flex items-center ">
-                <p className="text-lg text-white">זרוע:{data?.arml}</p>
+                <p className="text-sm text-white">זרוע:{avg}</p>
                 <img src={icon} alt="" />
               </div>
               <div className="flex items-center ">
-                <p className="text-lg text-white">
-                  חזה:{userType.gender === "male" ? data?.chest : data?.butt}
+                <p className="text-sm text-white">
+                  חזה:{userDetails.gender === "male" ? data?.chest : data?.butt}
                 </p>
                 <img src={iconOne} alt="" />
               </div>
@@ -37,7 +52,7 @@ const LeftCard = ({ data }) => {
                 <img src={iconTwo} alt="" />
               </div>
               <div className="flex items-center ">
-                <p className="text-lg text-white">יריכיים:{data?.thighl}</p>
+                <p className="text-sm text-white">יריכיים:{avgThigh}</p>
                 <img src={iconThree} alt="" />
               </div>
             </div>

@@ -131,21 +131,20 @@ export function NutritionList() {
     }
   };
   const userId = localStorage.getItem("selectedUserId");
- // const userIdWithoutQuotes = userId.replace(/"/g, '');
+  const user_id = JSON.parse(userId)
 
   
 
   const fetchData = async () => {
     try {
-      if (userId) {
-        const response = await axios.get(`${base_url}/nutritionGuide/user/${userId?.replace(/"/g, '')}`);
-        console.log("nutrition-for-user", response);
+      const url = userId 
+      ? `${base_url}/nutritionGuide/user/${user_id}` 
+      : `${base_url}/nutritionGuide`;
+
+    const response = await axios.get(url);
         
-        setNutritionGuide(response.data.data);}
-      else {
-        const response = await axios.get(`${base_url}/nutritionGuide`);
         setNutritionGuide(response.data.data);
-      }
+      
       
     } catch (error) {
       console.error("Error fetching exercises:", error);
@@ -183,7 +182,7 @@ export function NutritionList() {
           }
           className="max-w-sm"
         />
-        <Link to={userId ? `/dashboard/add-nutrition-menu/${userId?.replace(/"/g, '')}` : `/dashboard/add-nutrition-guide`}>
+        <Link to={user_id ? `/dashboard/add-nutrition-menu/${user_id}` : `/dashboard/add-nutrition-guide`}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
             Add Nutrition Guide
           </Button>
