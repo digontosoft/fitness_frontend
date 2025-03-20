@@ -45,7 +45,7 @@ const AssignTrainingForm = ({ user_id }) => {
     setIsButtonDisabled(isAnyFieldEmpty);
   }, [selectedTraining]);
 
-  // Fetch training sessions
+  // Fetch training
   useEffect(() => {
     const fetchTraining = async () => {
       try {
@@ -308,7 +308,7 @@ const AssignTrainingForm = ({ user_id }) => {
     <div className="py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <Select
-          className="rounded-lg h-12 min-w-[400px] w-full"
+          className="rounded-lg h-12 sm:min-w-[400px] w-full"
           direction="rtl"
           options={trainingList}
           valueField="_id"
@@ -319,7 +319,7 @@ const AssignTrainingForm = ({ user_id }) => {
         {selectedTraining && (
           <div className="space-y-4">
             <DynamicInputField
-              className="min-w-[350px]"
+              className="sm:min-w-[350px]"
               id="name"
               type="text"
               label="Training Name"
@@ -331,7 +331,7 @@ const AssignTrainingForm = ({ user_id }) => {
             />
 
             <DynamicInputField
-              className="min-w-[350px]"
+              className="sm:min-w-[350px]"
               id="description"
               type="text"
               label="Training Description"

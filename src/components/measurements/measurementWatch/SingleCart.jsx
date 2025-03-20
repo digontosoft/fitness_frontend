@@ -19,7 +19,7 @@ const SingleCart = ({ userId }) => {
 
   const [data, setData] = useState([]);
 
-  console.log("userId", data);
+  console.log("userId", userId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +34,7 @@ const SingleCart = ({ userId }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [userId]);
 
   return (
     <div

@@ -133,11 +133,11 @@ const AddNutritionForm = ({ userId }) => {
   // };
 
   const onSubmit = async (data) => {
-    console.log("userId", userId); // Debugging: Check if userId is defined
-
     try {
       const formData = new FormData();
-      // formData.append("user_id", userId); // Ensure userId is correctly appended
+      if (userId) {
+        formData.append("user_id", userId);
+      }
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("file", data.file[0]);
@@ -157,10 +157,10 @@ const AddNutritionForm = ({ userId }) => {
         }
       );
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         toast.success("Nutrition saved successfully!");
         reset();
-        navigate("/dashboard/nutrition-list");
+        navigate("/dashboard/nutrition-lists");
       }
     } catch (error) {
       console.error("Error submitting training session:", error);
@@ -177,7 +177,7 @@ const AddNutritionForm = ({ userId }) => {
       >
         <div className="grid gap-4">
           <DynamicInputField
-            className="min-w-[350px]"
+            className="sm:min-w-[350px]"
             id="title"
             type="text"
             label={userId ? "Nutrition Menu Name" : "Nutrition Guide Name"}
@@ -196,7 +196,7 @@ const AddNutritionForm = ({ userId }) => {
           />
 
           <DynamicInputField
-            className="min-w-[350px]"
+            className="sm:min-w-[350px]"
             id="description"
             type="text"
             label={

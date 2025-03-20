@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dialog";
 import WorkoutDetails from "./WorkoutDetails";
 
-export default function WorkoutLists({ workoutId }) {
+export default function WorkoutLists() {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -153,7 +153,7 @@ export default function WorkoutLists({ workoutId }) {
 
   return (
     <div className="w-full" dir="ltr">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
           placeholder="שם מסנן...."
           value={table.getColumn("name")?.getFilterValue() ?? ""}
@@ -221,15 +221,16 @@ export default function WorkoutLists({ workoutId }) {
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>אשר מחיקה</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this workout?</p>
+          <p>האם אתה בטוח שברצונך למחוק אימון זה
+          </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-              Cancel
+            בטל
             </Button>
             <Button className="bg-red-600 text-white" onClick={handleDelete}>
-              Delete
+            מחק
             </Button>
           </DialogFooter>
         </DialogContent>

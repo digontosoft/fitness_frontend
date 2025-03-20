@@ -174,8 +174,8 @@ export const CourseListGroup = () => {
   const [searchValue, setSearchValue] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [body_part, setBodyPart] = useState('');
-  const [equipment, setEquipment] = useState('');
+  const [body_part, setBodyPart] = useState("");
+  const [equipment, setEquipment] = useState("");
 
   console.log(body_part, equipment);
 
@@ -217,23 +217,23 @@ export const CourseListGroup = () => {
           dir="rtl"
           onChange={(e) => setSearchValue(e.target.value)}
         />
-          <Select
-        direction="rtl"
-        className="w-40 rounded-lg h-12 border-2 p-2"
-        placeholder="חיפוש חלק בגוף"
-        options={bodyPartOptions}
-        onChange={(e) => setBodyPart(e[0].value)}
-      />
-      <Select
-        direction="rtl"
-        options={equipmentOptions}
-        className="w-40 rounded-lg h-12 border-2 p-2"
-        placeholder="ציוד חיפוש"
-        onChange={(e) => setEquipment(e[0].value)}
-      />
+        <Select
+          direction="rtl"
+          className="w-40 rounded-lg h-12 border-2 p-2"
+          placeholder="חיפוש חלק בגוף"
+          options={bodyPartOptions}
+          onChange={(e) => setBodyPart(e[0].value)}
+        />
+        <Select
+          direction="rtl"
+          options={equipmentOptions}
+          className="w-40 rounded-lg h-12 border-2 p-2"
+          placeholder="ציוד חיפוש"
+          onChange={(e) => setEquipment(e[0].value)}
+        />
       </div>
-    
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 items-center justify-items-center gap-6">
         {exercises.map((exercise) => (
           <CourseCart
             key={exercise._id}

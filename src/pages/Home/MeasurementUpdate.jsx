@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { upload } from "../../assets/index";
-
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const MeasurementUpdate = () => {
   const [files, setFiles] = useState([]);
@@ -17,6 +17,9 @@ const MeasurementUpdate = () => {
   const Gender = userDetails?.gender;
   const Id = userDetails._id;
   const [getMesurement, setMesurement] = useState([]);
+
+  
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchMeasurement = async () => {
@@ -47,9 +50,6 @@ const MeasurementUpdate = () => {
     defaultValues: {
       mode: "create",
       date: "",
-      renew_date: "",
-      weight: "",
-      body_fat_percentage: "",
       thighl: "",
       thighr: "",
       armr: "",
@@ -60,16 +60,15 @@ const MeasurementUpdate = () => {
     },
   });
 
+  
+
   useEffect(() => {
     if (getMesurement) {
       const buttValue =
-        Gender === "male" ? getMesurement.chest : getMesurement.butt;
+        Gender === "male" ? getMesurement.chest : getMesurement.butt; 
       reset({
         mode: "update",
         date: getMesurement.date || "",
-        renew_date: getMesurement.renew_date || "",
-        weight: getMesurement.weight || "",
-        body_fat_percentage: getMesurement.body_fat_percentage || "",
         thighl: getMesurement.thighl || "",
         thighr: getMesurement.thighr || "",
         armr: getMesurement.armr || "",
@@ -177,16 +176,6 @@ const MeasurementUpdate = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-full justify-center flex flex-col md:flex-row-reverse gap-4">
           <div className="w-full">
-            <DynamicInputField
-              id="body_fat_percentage"
-              type="number"
-              label="אחוז שומן בגוף"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
 
             <DynamicInputField
               id="waist"
@@ -278,17 +267,6 @@ const MeasurementUpdate = () => {
               placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
-              errors={errors}
-              watch={watch}
-            />
-
-            <DynamicInputField
-              id="weight"
-              type="number"
-              label="משקל"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
             />

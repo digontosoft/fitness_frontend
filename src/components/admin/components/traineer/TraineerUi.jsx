@@ -11,8 +11,8 @@ import axios from "axios";
 import { toast } from "sonner";
 
 const TraineerUi = ({ userId }) => {
-  const [user, setUser] = useState(null);
-  console.log("user", user);
+  const [user, setUser] = useState([]);
+  console.log("user", userId);
 
   useEffect(() => {
     const getUser = async () => {
@@ -67,7 +67,7 @@ const TraineerUi = ({ userId }) => {
               updateStatus(user?.userType === "admin" ? "trainee" : "admin")
             }
           >
-            {user?.userType === "admin" ? "Make Trainer" : "Make Admin"}
+            {user?.userType === "admin" ? "Make Trainer" : " הפוך למאמן"}
           </Button>
         </span>
       </div>
@@ -82,7 +82,7 @@ const TraineerUi = ({ userId }) => {
           stepAverage={user?.step_average}
           stepTarget={user?.step_target}
         />
-        <TraineeLeftCard userId={user?._id} />
+        <TraineeLeftCard userId={userId} />
       </div>
 
       <div className="flex items-center justify-center">

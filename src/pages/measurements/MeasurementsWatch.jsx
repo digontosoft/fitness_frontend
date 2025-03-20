@@ -9,12 +9,13 @@ const MeasurementsWatch = () => {
   // Create a URLSearchParams object to extract query parameters
   const queryParams = new URLSearchParams(location.search);
   const userId = queryParams.get("userId");
-  
-  
+
+  console.log("userId:", userId);
+
   return (
     <div>
       <Title title={"מעקב מדדים"} />
-      <SingleCart userId={userId}/>
+      <SingleCart userId={userId} />
     </div>
   );
 };

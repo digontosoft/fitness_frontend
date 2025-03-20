@@ -56,7 +56,7 @@ const Dashboard = () => {
   console.log("traineeUsers", traineeUsersLength);
   return (
     <Container className="min-h-[72vh] my-10 sm:px-0 px-4">
-      <div
+      {/* <div
         className="flex flex-col items-center
       justify-center space-y-8"
       >
@@ -79,7 +79,6 @@ const Dashboard = () => {
             <span>משתמשי מתכונים</span>
           </div>
         </div>
-        {/* <SearchBox inputClass="md:w-[335px] md:h-[54px]" /> */}
         <Select
           className="rounded-lg h-12 min-w-80"
           direction="rtl"
@@ -94,7 +93,6 @@ const Dashboard = () => {
         </span>
         <div
           className="grid grid-cols-2 gap-4 items-center justify-center"
-          // dir="ltr"
         >
           <AdminArrowCard
             image={women1}
@@ -125,6 +123,77 @@ const Dashboard = () => {
             image={ArrowDumbel}
             title={"Training Management"}
             link={"/dashboard/training-list"}
+          />
+        </div>
+      </div> */}
+
+      <div className="flex flex-col items-center justify-center space-y-6 px-4">
+        <Title tilte="ניהול מתאמנים" />
+
+        <div className="sm:flex sm:flex-row flex-col items-center justify-center gap-5 sm:space-y-0 space-y-4">
+          <div className="flex  items-center gap-3">
+            <div className="flex items-center justify-center w-10 h-10 bg-custom-radial rounded-full">
+              <span className="text-sm font-bold text-white">
+                {traineeUsersLength}
+              </span>
+            </div>
+            <span className="text-sm md:text-base">משתמשים מתאמנים</span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-10 h-10 bg-custom-radial rounded-full">
+              <span className="text-sm font-bold text-white">
+                {recipeUsersLength}
+              </span>
+            </div>
+            <span className="text-sm md:text-base">משתמשי מתכונים</span>
+          </div>
+        </div>
+
+        <Select
+          className="rounded-lg h-12 w-full min-w-80"
+          direction="rtl"
+          valueField="_id"
+          labelField="firstName"
+          options={traineeUsers}
+          searchBy="firstName"
+          onChange={handleSelectUser}
+        />
+
+        <span className="text-lg md:text-xl font-bold text-textColor">
+          משימות
+        </span>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+          <AdminArrowCard
+            image={women1}
+            title="אישור מתאמנים חדשים"
+            link="/dashboard/approve-email"
+          />
+          <AdminArrowCard
+            image={ArrowBurger}
+            title="ניהול מדריכי תזונה"
+            link="/dashboard/nutrition-lists"
+          />
+          <AdminArrowCard
+            image={women2}
+            title="ניהול מתאמנים קיימים"
+            link="/dashboard/trainee-users-list"
+          />
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title="נהל תוכניות אימון"
+            link="/dashboard/exercise-list"
+          />
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title="נהל אימונים"
+            link="/dashboard/workout-list"
+          />
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title="ניהול הדרכה"
+            link="/dashboard/training-list"
           />
         </div>
       </div>

@@ -75,7 +75,7 @@ const EditNutrition = () => {
             >
               <div className="grid gap-4">
                 <DynamicInputField
-                  className="min-w-[350px]"
+                  className="sm:min-w-[350px]"
                   id="title"
                   type="text"
                   label="שם האימון"
@@ -87,7 +87,7 @@ const EditNutrition = () => {
                 />
 
                 <DynamicInputField
-                  className="min-w-[350px]"
+                  className="sm:min-w-[350px]"
                   id="description"
                   type="text"
                   label="דגשים מיוחדים (במידה ויש)"

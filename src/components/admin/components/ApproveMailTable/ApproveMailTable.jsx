@@ -20,8 +20,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import AddMail from "./AddMail";
-import { fetchEmail } from "@/api/fetchEmail";
-import { updateEmailStatus } from "@/api/updateData";
 import axios from "axios";
 import { toast } from "sonner";
 import { deleteEmail } from "@/api/deleteData";
@@ -36,14 +34,15 @@ export function ApproveMailTable() {
 
   const columns = [
     {
-      accessorKey: "email",
+      accessorKey: 'email',
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Email
+      דואר אלקטרוני
+            
             <ArrowUpDown />
           </Button>
         );
@@ -54,7 +53,7 @@ export function ApproveMailTable() {
     },
     {
       id: "actions",
-      header: "Actions",
+      header: "פעולות",
       cell: ({ row }) => (
         <div className="flex space-x-2">
           <Button
@@ -157,9 +156,9 @@ export function ApproveMailTable() {
 
   return (
     <div className="w-full" dir="ltr">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex sm:flex-row flex-col items-center sm:justify-between justify-center py-4 space-y-4 sm:space-y-0">
         <Input
-          placeholder="Filter emails..."
+          placeholder="סנן מיילים..."
           value={table.getColumn("email")?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("email")?.setFilterValue(event.target.value)

@@ -167,7 +167,7 @@ export function TrainingListForTrainee({ userId }) {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [userId]);
 
   const table = useReactTable({
     data: training,
@@ -186,7 +186,7 @@ export function TrainingListForTrainee({ userId }) {
 
   return (
     <div className="w-full" dir="ltr">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
           placeholder="Filter by trainig name..."
           value={table.getColumn("name")?.getFilterValue() ?? ""}

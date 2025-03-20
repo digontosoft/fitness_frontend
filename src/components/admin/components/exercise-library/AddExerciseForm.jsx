@@ -101,7 +101,7 @@ const AddExerciseForm = ({ exerciseId }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-ful grid gap-4">
           <DynamicInputField
-            className="w-[327px]"
+            className="sm:w-[327px]"
             id="name"
             type="text"
             label="שם התרגיל"
@@ -113,7 +113,7 @@ const AddExerciseForm = ({ exerciseId }) => {
             defaultValue={exerciseId ? exerciseData?.name : ""}
           />
           <DynamicInputField
-            className="w-[327px]"
+            className="sm:w-[327px]"
             id="description"
             type="text"
             label="הוראות לתרגיל"
@@ -125,7 +125,7 @@ const AddExerciseForm = ({ exerciseId }) => {
             defaultValue={exerciseId ? exerciseData?.description : ""}
           />
           <DynamicInputField
-            className="w-[327px]"
+            className="sm:w-[327px]"
             id="video_url"
             type="text"
             label="לינק לסרטון התרגיל"
@@ -187,7 +187,7 @@ const AddExerciseForm = ({ exerciseId }) => {
                   errors.equipment ? "border-red-500" : "border-gray-300"
                 } rounded-lg p-3 text-right focus:outline-none focus:ring-2 focus:ring-blue-500`}
               >
-                {!exerciseId && <option   value="" >לבחור ציוד</option>}
+                {!exerciseId && <option value="">לבחור ציוד</option>}
                 {equipmentOptions.map((option, index) => (
                   <option key={index} value={option.value}>
                     {option.label}

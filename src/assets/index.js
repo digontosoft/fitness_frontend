@@ -66,12 +66,10 @@ import leftElips from "./image/leftElips.png";
 import Gentelmen from "./image/gentelman.png";
 import women1 from "./image/workout-women-1.png";
 import women2 from "./image/workout-women-2.png";
-import icon from'./image/icons/icon.png';
-import iconOne from'./image/icons/iconOne.png';
-import iconTwo from'./image/icons/iconTwo.png';
-import iconThree from'./image/icons/iconThree.png';
-import foodDairy from'./image/food-dairy.png';
-
+import icon from'./image/icons/Icon.png';
+import iconOne from'./image/icons/IconOne.png';
+import iconTwo from'./image/icons/IconTwo.png';
+import iconThree from'./image/icons/IconThree.png';
 export {
   foodDairy,
   icon,
