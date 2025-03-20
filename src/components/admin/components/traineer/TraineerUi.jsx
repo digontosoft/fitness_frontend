@@ -13,6 +13,7 @@ import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
   console.log("user", userId);
 
   useEffect(() => {
@@ -54,7 +55,10 @@ const TraineerUi = ({ userId }) => {
       }
     } catch (error) {}
   };
-
+  const handleModal = () => {
+    setOpenModal(true);
+    console.log("modal clicked");
+  };
   const userFirstName = JSON.parse(localStorage.getItem("firstName"));
   const userLastName = JSON.parse(localStorage.getItem("lastName"));
   const userName = userFirstName + " " + userLastName;
@@ -114,11 +118,22 @@ const TraineerUi = ({ userId }) => {
           title="לדוח מדדים אישי"
           link={`/dashboard/mesurements-watch?userId=${userId}`}
         />
-        <AdminArrowCardWithoutImage title="מסמכים מקושרים להורדה" />
+
+        <AdminArrowCardWithoutImage
+          title="מסמכים מקושרים להורדה"
+          onClick={handleModal}
+        />
+
         {/* <FoodDairyModal userId={userId} /> */}
       </div>
 
       <div className="flex justify-center items-center"></div>
+      {openModal && (
+        <>
+          <p>Modal is Open</p>
+          <FoodDairyModal userId={userId} onClose={() => setOpenModal(false)} />
+        </>
+      )}
     </div>
   );
 };

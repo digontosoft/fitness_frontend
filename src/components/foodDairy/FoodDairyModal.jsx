@@ -14,38 +14,101 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import AdminArrowCardWithoutImage from "../admin/components/ui/AdminArrowCardWithoutImage";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { base_url } from "@/api/baseUrl";
 
-export function FoodDairyModal() {
+export function FoodDairyModal({ userId, onClose }) {
+  console.log("user id", userId);
+  const [foodDairy, setFoodDairy] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+
+      try {
+        const response = await axios.get(`${base_url}/food-dairy/${userId}`);
+
+        if (response.status === 200) {
+          console.log("food data", response.data.data);
+          setFoodDairy(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching food data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userId) {
+      fetchData();
+    }
+  }, [userId]);
+  if (!foodDairy || foodDairy.length === 0) {
+    return (
+      <Dialog open={true} onOpenChange={onClose}>
+        <DialogTrigger asChild />
+        <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll">
+          <DialogHeader>
+            <DialogDescription>
+              No food diary data available for this user.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="secondary">
+                Close
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // Function to format the date into a readable format
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  };
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <AdminArrowCardWithoutImage title="מסמכים מקושרים להורדה" />
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={true} onOpenChange={onClose}>
+      <DialogTrigger asChild />
+      <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll">
         <DialogHeader>
-          <DialogDescription>
-            Anyone who has this link will be able to view this.
-          </DialogDescription>
+          <DialogDescription>Here’s your food diary data.</DialogDescription>
         </DialogHeader>
-        <div className="flex items-center space-x-2">
-          <div className="grid flex-1 gap-2">
-            <Label htmlFor="link" className="sr-only">
-              Link
-            </Label>
-            <Input
-              id="link"
-              defaultValue="https://ui.shadcn.com/docs/installation"
-              readOnly
-            />
-          </div>
-          <Button type="submit" size="sm" className="px-3">
-            <span className="sr-only">Copy</span>
-            <Copy />
-          </Button>
+
+        {/* Iterate over the data and display it */}
+        <div className="space-y-4">
+          {foodDairy.map((item) => (
+            <div key={item._id} className="p-4 border-b">
+              {/* Show date-wise data */}
+              {item.date ? (
+                <h4 className="text-xl font-bold mb-2">
+                  Date: {formatDate(item.date)}
+                </h4>
+              ) : (
+                <h4 className="text-xl font-bold mb-2">No Date</h4>
+              )}
+
+              <div>
+                <strong>Breakfast:</strong> {item.breakfast || "No data"}
+              </div>
+              <div>
+                <strong>Lunch:</strong> {item.lunch || "No data"}
+              </div>
+              <div>
+                <strong>Dinner:</strong> {item.dinner || "No data"}
+              </div>
+            </div>
+          ))}
         </div>
-        <DialogFooter className="sm:justify-start">
+
+        <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="secondary">
+            <Button type="button" className="w-full justify-center bg-customBg">
               Close
             </Button>
           </DialogClose>
