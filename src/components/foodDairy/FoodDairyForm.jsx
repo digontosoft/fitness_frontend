@@ -1,154 +1,85 @@
+import { base_url } from "@/api/baseUrl";
+import axios from "axios";
 import React, { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const FoodDairyForm = () => {
-  const { register, handleSubmit, control, getValues, setValue } = useForm({
-    defaultValues: {
-      days: [
-        { date: "", breakfast: [""], lunch: [""], dinner: [""] }, // Day 1
-        { date: "", breakfast: [""], lunch: [""], dinner: [""] }, // Day 2
-        { date: "", breakfast: [""], lunch: [""], dinner: [""] }, // Day 3
-      ],
-    },
-  });
+  const { register, handleSubmit, reset } = useForm();
+  const location = useLocation();
+  const taskData = location.state;
+  const navigate = useNavigate();
 
-  const [currentDayIndex, setCurrentDayIndex] = useState(0);
-
-  const onNext = (data) => {
-    if (currentDayIndex < 2) {
-      setCurrentDayIndex((prev) => prev + 1);
-    } else {
-      console.log("Final Submission Data:", data);
-      // Send `data.days` to API here
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.put(
+        `${base_url}/food-dairy-single/${taskData.food_dairy_id}`,
+        data
+      );
+      if (response.status === 200) {
+        toast.success("Food dairy task updated successfully");
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
     }
+    reset();
   };
 
   return (
-    <div className="max-w-lg mx-auto p-4  rounded-lg " dir="rtl">
-      <h2 className="text-lg font-bold mb-4">
-        Meal Plan - Day {currentDayIndex + 1}
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg my-10"
+      dir="rtl"
+    >
+      <h2 className="text-2xl font-semibold text-start mb-4" dir="rtl">
+        יום מספר
       </h2>
-      <form onSubmit={handleSubmit(onNext)}>
-        {/* Date Input */}
-        <label className="block font-semibold">Date</label>
-        <input
-          type="date"
-          {...register(`days.${currentDayIndex}.date`, { required: true })}
-          className="w-full p-2 border rounded mb-2"
-        />
 
-        {/* Dynamic Inputs */}
-        <MealInputList
-          register={register}
-          control={control}
-          name={`days.${currentDayIndex}.breakfast`}
-          label="Breakfast"
-        />
-        <MealInputList
-          register={register}
-          control={control}
-          name={`days.${currentDayIndex}.lunch`}
-          label="Lunch"
-        />
-        <MealInputList
-          register={register}
-          control={control}
-          name={`days.${currentDayIndex}.dinner`}
-          label="Dinner"
-        />
+      {/* Date Input */}
+      <label className="block font-medium">תאריך</label>
+      <input
+        type="date"
+        {...register("date", { required: true })}
+        className="w-full border p-2 rounded-md mb-4"
+      />
 
-        {/* Navigation Buttons */}
-        <div className="mt-4">
-          {currentDayIndex < 2 ? (
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Next
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="px-4 py-2 bg-green-500 text-white rounded"
-            >
-              Finish
-            </button>
-          )}
-        </div>
-      </form>
-    </div>
-  );
-};
+      {/* Breakfast Input */}
+      <label className="block font-medium">ארוחת בוקר</label>
+      <input
+        type="text"
+        {...register("breakfast", { required: true })}
+        placeholder="Enter items"
+        className="w-full border p-2 rounded-md"
+      />
 
-// ✅ Fixed: Properly Uses useFieldArray
-const MealInputList = ({ register, control, name, label }) => {
-  const { fields, append, remove } = useFieldArray({ control, name });
+      {/* Lunch Input */}
+      <label className="block font-medium mt-4">ארוחת צהריים</label>
+      <input
+        type="text"
+        {...register("lunch", { required: true })}
+        placeholder="Enter items"
+        className="w-full border p-2 rounded-md"
+      />
 
-  return (
-    <div className="mb-4">
-      <label className="block font-semibold">{label}</label>
-      {fields.map((item, index) => (
-        <div key={item.id} className="flex gap-2 mb-2">
-          <input
-            {...register(`${name}.${index}`)}
-            className="w-full p-2 border rounded"
-            placeholder={`Enter ${label.toLowerCase()} item`}
-          />
-          {fields.length > 1 && (
-            <button
-              type="button"
-              className="px-2 bg-red-500 text-white"
-              onClick={() => remove(index)}
-            >
-              ×
-            </button>
-          )}
-        </div>
-      ))}
+      {/* Dinner Input */}
+      <label className="block font-medium mt-4">ארוחת ערב</label>
+      <input
+        type="text"
+        {...register("dinner", { required: true })}
+        placeholder="Enter items"
+        className="w-full border p-2 rounded-md"
+      />
+
+      {/* Submit Button */}
       <button
-        type="button"
-        className="px-2 py-1 bg-gray-300 rounded"
-        onClick={() => append("")}
+        type="submit"
+        className="w-full mt-6 text-white p-2 rounded-md bg-customBg hover:bg-red-800"
       >
-        + Add {label} Item
+        שמירת יומן אכילה
       </button>
-    </div>
-  );
-};
-
-// Dynamic Input Component for Adding Multiple Items
-const DynamicInputArray = ({ register, name }) => {
-  const { fields, append, remove } = useFieldArray({
-    name,
-    control: register().control,
-  });
-
-  return (
-    <div>
-      {fields.map((item, index) => (
-        <div key={item.id} className="flex gap-2 mb-2">
-          <input
-            {...register(`${name}.${index}`)}
-            className="w-full p-2 border rounded"
-            placeholder="Enter food item"
-          />
-          <button
-            type="button"
-            className="px-2 bg-red-500 text-white"
-            onClick={() => remove(index)}
-          >
-            ×
-          </button>
-        </div>
-      ))}
-      <button
-        type="button"
-        className="px-2 py-1 bg-gray-300 rounded"
-        onClick={() => append("")}
-      >
-        + Add Item
-      </button>
-    </div>
+    </form>
   );
 };
 

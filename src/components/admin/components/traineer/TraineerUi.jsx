@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import { toast } from "sonner";
+import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
@@ -110,6 +111,7 @@ const TraineerUi = ({ userId }) => {
           link={`/dashboard/mesurements-watch?userId=${userId}`}
         />
         <AdminArrowCardWithoutImage title="מסמכים מקושרים להורדה" />
+        {/* <FoodDairyModal userId={userId} /> */}
       </div>
 
       <div className="flex justify-center items-center">

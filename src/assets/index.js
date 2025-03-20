@@ -70,6 +70,7 @@ import icon from'./image/icons/Icon.png';
 import iconOne from'./image/icons/IconOne.png';
 import iconTwo from'./image/icons/IconTwo.png';
 import iconThree from'./image/icons/IconThree.png';
+import foodDairy from'./image/food-dairy.png';
 export {
   foodDairy,
   icon,
