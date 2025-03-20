@@ -9,15 +9,13 @@ export const NutritionCart = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [nutrationData, setNutrationData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const auth = localStorage.getItem("userInfo");
-  const parsedAuthData = JSON.parse(auth);
-  console.log(parsedAuthData._id);
+ 
   
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${base_url}/nutritionGuide/for-user/${parsedAuthData?._id}`);
+        const response = await axios.get(`${base_url}/nutritionGuide`);
         const apiData = response?.data?.data;
         const mergedData = apiData.map((item, index) => ({
           ...item,
@@ -32,7 +30,7 @@ export const NutritionCart = () => {
       }
     };
     fetchData();
-  }, [parsedAuthData?._id]);
+  }, []);
 
   const filterData = nutrationData.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())

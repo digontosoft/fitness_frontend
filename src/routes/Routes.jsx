@@ -54,6 +54,7 @@ import Complete from "@/pages/Home/mesurementForm/Complete";
 import UpdateMesurement from "@/pages/Home/mesurementForm/UpdateMesurement";
 import MesurementPdf from "@/components/measurements/measurementWatch/MesurementPdf";
 import MeasurementTracking from "@/pages/measurementtracking/MeasurementTracking";
+import FoodDairy from "@/pages/foodDairy/FoodDairy";
 
 export const routes = createBrowserRouter([
   {

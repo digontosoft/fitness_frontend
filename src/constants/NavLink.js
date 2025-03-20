@@ -57,12 +57,12 @@ export const traineeLink = [
     link: "/courses",
     icon: Course,
   },
-  {
-    _id:8,
-    title:"יומן אוכל",
-    link:'/food-dairy',
-    icon:'NutrationGuide',
-  }
+  // {
+  //   _id:8,
+  //   title:"יומן אוכל",
+  //   link:'/food-dairy',
+  //   icon:'NutrationGuide',
+  // }
 ];
 export const adminLink = [
   {
