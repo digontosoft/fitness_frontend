@@ -56,62 +56,7 @@ const TraineerUi = ({ userId }) => {
   const userName = userFirstName + " " + userLastName;
 
   return (
-    // <div className="space-y-12">
-    //   <div className="flex flex-col items-center justify-center gap-4">
-    //     <FormTitle title="ניהול מתאמנים" />
-    //     <span className="flex items-center gap-2 flex-row-reverse">
-    //       {userName}
-    //       <Button
-    //         className="bg-customBg"
-    //         size="sm"
-    //         onClick={() =>
-    //           updateStatus(user?.userType === "admin" ? "trainee" : "admin")
-    //         }
-    //       >
-    //         {user?.userType === "admin" ? "Make Trainer" : "Make Admin"}
-    //       </Button>
-    //     </span>
-    //   </div>
-    //   <div className="flex items-center justify-center gap-5" dir="rtl">
-    //     <TraineeRightCard
-    //       gender={user?.gender}
-    //       stepAverage={user?.step_average}
-    //       stepTarget={user?.step_target}
-    //     />
-    //     <TraineeLeftCard userId={user?._id} />
-    //   </div>
-    //   <div className="flex items-center justify-center">
-    //     <span className="text-xl font-bold leading-6 text-textColor text-center">
-    //       משימות
-    //     </span>
-    //   </div>
-    //   <div className="flex items-center justify-center gap-5">
-    //     <AdminArrowCard
-    //       image={ArrowBurger}
-    //       title="ניהול תפריטי תזונה אישיים"
-    //       link={`/dashboard/add-nutrition-menu/${userId}`}
-    //     />
-    //     <AdminArrowCard
-    //       image={ArrowDumbel}
-    //       title="ניהול תוכנית אימון"
-    //       link={`/dashboard/assigned-training-list/${userId}`}
-    //     />
-    //   </div>
-    //   <div className="flex items-center justify-center gap-5">
-    //     <AdminArrowCardWithoutImage
-    //       title="להורדת דוח מדדים אישי"
-    //       link={`/dashboard/mesurements-watch?userId=${userId}`}
-    //     />
-    //     <AdminArrowCardWithoutImage title="מסמכים מקושרים להורדה" />
-    //   </div>
-    //   <div className="flex justify-center items-center">
-    //     <Button className="bg-custom-radial text-white rounded-full">
-    //       שמור והמשך
-    //     </Button>
-    //   </div>
-    // </div>
-
-    <div className="space-y-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <div className="space-y-12 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
         <span className="flex items-center gap-2 flex-row-reverse">
@@ -134,6 +79,7 @@ const TraineerUi = ({ userId }) => {
       >
         <TraineeRightCard
           gender={user?.gender}
+          userId={userId}
           stepAverage={user?.step_average}
           stepTarget={user?.step_target}
         />

@@ -457,6 +457,7 @@ const EditWorkoutForm = ({ workoutId }) => {
     watch,
     reset,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm();
 
@@ -494,49 +495,35 @@ const EditWorkoutForm = ({ workoutId }) => {
     };
     fetchSingleWorkout();
   }, [workoutId, reset, setValue]);
-  // const handleManipulationChange = (e, index) => {
-  //   const value = e.target.value.toLowerCase();
-  //   // Check if the user is trying to type "superset"
-  //   if (value.includes("superset")) {
-  //     if (hasSuperset) {
-  //       toast.error("You can only use 'superset' once in the workout.");
-  //       setDisableUpdateButton(true);
-  //       return;
-  //     } else {
-  //       setHasSuperset(true); // Mark "superset" as used
-  //     }
-  //   }
-  //   // Update the manipulation value for the specific exercise
-  //   setValue(`exercises.${index}.manipulation`, value);
-  //   setDisableUpdateButton(false);
-  // };
 
-  const handleManipulationChange = (e, index, exercise) => {
+  const handleManipulationChange = (e, index) => {
     const value = e.target.value.toLowerCase();
+    const exercises = getValues("exercises"); // Get all exercises
+    const lastIndex = exercises.length - 1;
 
-    // Check if the user is trying to type "superset"
-    if (value.includes("superset")) {
-      if (hasSuperset) {
-        toast.error("You can only use 'superset' once in the workout.");
-        setDisableUpdateButton(true);
-        return;
-      } else {
-        setHasSuperset(true); // Mark "superset" as used
-      }
+    // Count how many times "superset" is exactly used
+    const supersetCount = exercises.filter(
+      (ex) => ex.manipulation === "superset"
+    ).length;
+
+    // If user types exactly "superset" more than once, prevent it
+    if (value === "superset" && supersetCount >= 1) {
+      toast.error("You can only use 'superset' once in the workout.");
+      setDisableUpdateButton(true);
+      return;
     }
 
     // Update the manipulation value for the specific exercise
     setValue(`exercises.${index}.manipulation`, value);
 
-    // Get all exercises and check if the last index has "superset"
-    // const exercises = getValues("exercises"); // Assuming you're using React Hook Form
-    const lastIndex = exercise.length - 1;
+    // Recalculate if there's still a "superset"
+    const hasPureSuperset = exercises.some(
+      (ex) => ex.manipulation === "superset"
+    );
+    setHasSuperset(hasPureSuperset);
 
-    if (exercises[lastIndex]?.manipulation === "superset") {
-      setDisableUpdateButton(true);
-    } else {
-      setDisableUpdateButton(false);
-    }
+    // Disable the update button only if the last exercise is exactly "superset"
+    setDisableUpdateButton(exercises[lastIndex]?.manipulation === "superset");
   };
 
   const onSubmit = (data) => {
@@ -563,12 +550,24 @@ const EditWorkoutForm = ({ workoutId }) => {
         console.log(error);
       });
   };
-  const isFormValid = exercisesForm?.every(
-    (exercise) =>
+
+  const isFormValid = exercisesForm?.every((exercise, index, array) => {
+    const isLastExercise = index === array.length - 1;
+    const isSuperset =
+      exercise.manipulation?.trim().toLowerCase() === "superset";
+
+    // Disable button if the last exercise is a superset
+    if (isLastExercise && isSuperset) {
+      return false;
+    }
+
+    // Otherwise, check the standard validation rules
+    return (
       exercise.sets > 0 &&
       exercise.reps > 0 &&
       exercise.manipulation?.trim() !== ""
-  );
+    );
+  });
   return (
     <div className="py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -609,6 +608,7 @@ const EditWorkoutForm = ({ workoutId }) => {
                 const existing = exercisesForm.find(
                   (ex) => ex.exercise_id._id === option._id
                 );
+                console.log("existing", existing);
                 return existing
                   ? existing
                   : {

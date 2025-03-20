@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import DynamicInputField from "./DynamicInputField";
 import { upload } from "../../assets/index";
@@ -7,14 +7,16 @@ import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-const InputForm = ({ gender }) => {
+import { UserInfoContext } from "@/context";
+const InputForm = () => {
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userDetails._id;
-  const Gender = userDetails?.gender;
+  console.log("user id", userId);
   const navigate = useNavigate();
-  console.log("gender", Gender);
+  const { userInfo } = useContext(UserInfoContext);
+
   const {
     register,
     handleSubmit,
@@ -51,7 +53,7 @@ const InputForm = ({ gender }) => {
         console.log("Success:", response.data);
       }
     } catch (error) {
-      console.error("Error uploading form data:", error);
+      console.log("Error uploading form data:", error);
     }
   };
 
@@ -124,6 +126,16 @@ const InputForm = ({ gender }) => {
               watch={watch}
             />
             <DynamicInputField
+              id="thighr"
+              type="text"
+              label="ירך ימין"
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{ required: "שדה זה חובה" }}
+              errors={errors}
+              watch={watch}
+            />
+            <DynamicInputField
               id="armr"
               type="text"
               label="זרוע ימין"
@@ -144,12 +156,26 @@ const InputForm = ({ gender }) => {
               watch={watch}
             />
             <DynamicInputField
-              id={Gender === "male" ? "chest" : "butt"}
+              id={userInfo.gender === "male" ? "chest" : "butt"}
               type="number"
-              label={Gender === "male" ? "חָזֶה" : "קַת"}
+              label={userInfo.gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
               register={register}
-              validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
+              validation={{
+                required: userInfo.gender === "male" ? "חָזֶה" : "קַת",
+              }}
+              errors={errors}
+              watch={watch}
+            />
+            <DynamicInputField
+              id={"waist"}
+              type="number"
+              label={"מוֹתֶן"}
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{
+                required: "שדה זה נדרש",
+              }}
               errors={errors}
               watch={watch}
             />

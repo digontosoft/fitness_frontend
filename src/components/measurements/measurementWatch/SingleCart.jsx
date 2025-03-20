@@ -58,17 +58,7 @@ const SingleCart = ({ userId }) => {
             <h3 className="text-lg font-bold">{data.cartTitle}</h3>
           </div>
 
-          <div className="flex justify-center items-start">
-            {" "}
-            {/* <button
-              className={`py-2 md:w-[70%] w-[90%] rounded-full text-center ${getButtonClass(
-                data
-              )}`}
-            >
-              {data.button}
-            </button> */}
-          </div>
-          {/* Items */}
+          <div className="flex justify-center items-start"></div>
 
           <div className="flex justify-center items-center">
             <SmallCart data={data} />

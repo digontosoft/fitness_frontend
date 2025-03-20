@@ -154,6 +154,10 @@ export const routes = createBrowserRouter([
             path: "/regulation",
             element: <Regulation />,
           },
+          {
+            path: "/food-dairy",
+            element: <FoodDairy />,
+          },
         ],
       },
 

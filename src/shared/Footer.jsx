@@ -1,5 +1,6 @@
 import React from "react";
 import { facebookIcon, instaIcon, tiktok, whiteLogo } from "../assets/index";
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <div className="bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753] ">
@@ -24,16 +25,11 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="flex md:flex-row text-white justify-center items-center">
-          <a href="#">הסכם ליווי</a>
-          {/* <div className="flex gap-6 font-medium">
-              <a href="#">לינק נוסף</a>
-            </div>
-            <div className="flex gap-6 font-medium">
-              <a href="#">לינק נוסף</a>
-              <a href="#">לינק נוסף</a>
-            </div> */}
-        </div>
+        <Link to="">
+          <div className="flex md:flex-row text-white justify-center items-center hover:underline ">
+            הסכם ליווי
+          </div>
+        </Link>
         <div className="flex  flex-col justify-between items-center gap-2">
           <img className="hidden md:block w-15 h-14" src={whiteLogo} alt="" />
           <p className="text-xs font-medium text-white">

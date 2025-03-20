@@ -157,11 +157,11 @@ export function TraineeUsersLists() {
     fetchUsers();
   }, []);
 
-  useEffect(() => {
-    if (users?.length) {
-      setTraineeUsers(users.filter((user) => user.userType === "trainee"));
-    }
-  }, [users]);
+  // useEffect(() => {
+  //   if (users?.length) {
+  //     setTraineeUsers(users.filter((user) => user.userType === "trainee"));
+  //   }
+  // }, [users]);
 
   const updateStatus = async (userType, userId) => {
     try {
@@ -180,7 +180,7 @@ export function TraineeUsersLists() {
   };
 
   const table = useReactTable({
-    data: traineeUsers,
+    data: users,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

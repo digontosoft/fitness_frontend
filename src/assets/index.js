@@ -71,6 +71,7 @@ import iconOne from'./image/icons/IconOne.png';
 import iconTwo from'./image/icons/IconTwo.png';
 import iconThree from'./image/icons/IconThree.png';
 export {
+  foodDairy,
   icon,
   iconOne,
   iconTwo,
