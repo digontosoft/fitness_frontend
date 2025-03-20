@@ -19,7 +19,7 @@ const MeasurementWomen = () => {
   const token = localStorage.getItem("authToken");
   const { id } = verifyToken(token);
   const { userInfo } = useContext(UserInfoContext);
-  console.log("userType", userInfo);
+
   const handleFormSubmit = (data) => {
     setLoading(true);
     const questionnaries = {

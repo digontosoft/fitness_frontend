@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 
 const LeftCard = ({ data }) => {
   const userType = JSON.parse(localStorage.getItem("userInfo"));
+  // const arm=
+  console.log("M data", data);
 
   return (
     <div

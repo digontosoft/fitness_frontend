@@ -53,6 +53,7 @@ import TraineeUsers from "@/pages/admin/traineeusers/TraineeUsers";
 import Complete from "@/pages/Home/mesurementForm/Complete";
 import UpdateMesurement from "@/pages/Home/mesurementForm/UpdateMesurement";
 import MesurementPdf from "@/components/measurements/measurementWatch/MesurementPdf";
+import FoodDairy from "@/pages/foodDairy/FoodDairy";
 
 export const routes = createBrowserRouter([
   {
@@ -148,6 +149,10 @@ export const routes = createBrowserRouter([
           {
             path: "/regulation",
             element: <Regulation />,
+          },
+          {
+            path: "/food-dairy",
+            element: <FoodDairy />,
           },
         ],
       },

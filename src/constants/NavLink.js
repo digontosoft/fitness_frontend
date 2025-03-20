@@ -5,6 +5,7 @@ import {
   NutrationGuide,
   Trainings,
   Course,
+  icon,
 } from "../assets/index";
 export const traineeLink = [
   // {
@@ -13,6 +14,7 @@ export const traineeLink = [
   //   link: "/login",
   //   icon: LogOut,
   // },
+
   {
     _id: 2,
     title: "אימונים",
@@ -55,6 +57,12 @@ export const traineeLink = [
     link: "/courses",
     icon: Course,
   },
+  {
+    _id:8,
+    title:"יומן אוכל",
+    link:'/food-dairy',
+    icon:'NutrationGuide',
+  }
 ];
 export const adminLink = [
   {
