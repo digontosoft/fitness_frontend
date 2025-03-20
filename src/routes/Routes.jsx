@@ -53,6 +53,7 @@ import TraineeUsers from "@/pages/admin/traineeusers/TraineeUsers";
 import Complete from "@/pages/Home/mesurementForm/Complete";
 import UpdateMesurement from "@/pages/Home/mesurementForm/UpdateMesurement";
 import MesurementPdf from "@/components/measurements/measurementWatch/MesurementPdf";
+import MeasurementTracking from "@/pages/measurementtracking/MeasurementTracking";
 
 export const routes = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ export const routes = createBrowserRouter([
           {
             path: "/measurements",
             element: <Measurements />,
+          },
+          {
+            path: "/measurements-tracking",
+            element: <MeasurementTracking />,
           },
           {
             path: "/mesurement-complete",

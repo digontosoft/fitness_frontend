@@ -5,7 +5,7 @@ const AdminArrowCard = ({ image, title, link }) => {
   return (
     <Link to={link}>
       <div
-        className="sm:w-[342px] w-full h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300"
+        className="sm:w-[342px] w-full h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300 cursor-pointer"
         dir="ltr"
       >
         <Button className="rounded-2xl w-[25px] h-6">

@@ -61,7 +61,9 @@ export const deleteWorkout = async (workoutId) => {
 
 export const deleteTraining = async (trainingId) => {
   try {
-    const response = await axios.delete(`${base_url}/training/${trainingId}`);
+    const response = await axios.delete(
+      `${base_url}/user-training/${trainingId}`
+    );
     if (response.status === 200) {
       toast.success("Training deleted successfully.");
     }

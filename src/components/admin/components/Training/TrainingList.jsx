@@ -97,26 +97,14 @@ export function TrainingList({ userId }) {
             >
               <Trash />
             </Button>
-
-            {/* {userId && (
-              <Link to={`/dashboard/assign-training/${trainingId}/${userId}`}>
-                <Button className="bg-black" size="sm">
-                  Assign Training
-                </Button>
-              </Link>
-            )}
-
-            {userId && (
-              <Button
-                className="bg-customBg"
-                size="sm"
-                onClick={() =>
-                  updateStatus(user?.userType === "admin" ? "trainer" : "admin")
-                }
-              >
-                {user?.userType === "admin" ? "Make Trainer" : "Make Admin"}
-              </Button>
-            )} */}
+            <Button
+              className="bg-green-100 hover:bg-green-300 duration-200 ease-in-out delay-75"
+              size="sm"
+            >
+              <span className="text-green-500 uppercase font-semibold">
+                {row.original.isActive === true ? "Deactivate" : "Activate"}
+              </span>
+            </Button>
           </div>
         );
       },

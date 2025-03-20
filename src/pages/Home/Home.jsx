@@ -121,7 +121,7 @@ const Home = () => {
         />
       )}
       <div className="flex flex-col items-center justify-center pt-20">
-        <h1 className="text-4xl font-bold">
+        <h1 className="sm:text-4xl text-2xl font-bold">
           {user?.firstName} {user?.lastName}
         </h1>
 

@@ -49,7 +49,7 @@ export default function TrainingDetails({ trainingId }) {
                     className="border rounded-lg p-4 shadow-md bg-white"
                   >
                     <h3 className="text-lg font-semibold text-gray-800 pb-2 mb-3 text-center">
-                      {workoutItem.workout?.name || "No Workout Name Available"}
+                      {workoutItem?.name || "No Workout Name Available"}
                     </h3>
 
                     {workoutItem.exercises?.length > 0 ? (
@@ -63,8 +63,7 @@ export default function TrainingDetails({ trainingId }) {
                                 className="border p-2 space-y-4 rounded-md bg-gray-50 mb-2 shadow-xl"
                               >
                                 <h4 className="text-md font-medium text-center text-gray-700">
-                                  {exercise.exercise_id?.name ||
-                                    "Unnamed Exercise"}
+                                  {exercise?.name || "Unnamed Exercise"}
                                 </h4>
                                 <div className="flex flex-wrap gap-3 justify-center ">
                                   <span className="text-sm  px-3 py-1 rounded-md  uppercase font-bold">

@@ -182,17 +182,17 @@ const Dashboard = () => {
           />
           <AdminArrowCard
             image={ArrowDumbel}
-            title="ניהול תרגילים"
+            title="נהל תוכניות אימון"
             link="/dashboard/exercise-list"
           />
           <AdminArrowCard
             image={ArrowDumbel}
-            title="Workout Management"
+            title="נהל אימונים"
             link="/dashboard/workout-list"
           />
           <AdminArrowCard
             image={ArrowDumbel}
-            title="Training Management"
+            title="ניהול הדרכה"
             link="/dashboard/training-list"
           />
         </div>

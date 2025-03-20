@@ -268,7 +268,7 @@ const AddTrainingForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4">
           <DynamicInputField
-            className="sm:min-w-[350px] w-auto"
+            className="sm:min-w-[350px]"
             id="name"
             type="text"
             label="Training Name"
@@ -279,7 +279,7 @@ const AddTrainingForm = () => {
           />
 
           <DynamicInputField
-            className="sm:min-w-[350px] w-auto"
+            className="sm:min-w-[350px]"
             id="description"
             type="text"
             label="Training Description"
@@ -297,6 +297,7 @@ const AddTrainingForm = () => {
             labelField="name"
             multi
             onChange={handleWorkoutChange}
+            placeholder="בחר..."
           />
         </div>
 
@@ -407,7 +408,7 @@ const AddTrainingForm = () => {
             }
             disabled={isButtonDisabled || isSupersetIncomplete}
           >
-            Save a new training session
+            שמור תכנית אימון חדשה
           </Button>
         </div>
       </form>

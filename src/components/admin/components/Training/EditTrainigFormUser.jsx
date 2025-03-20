@@ -294,15 +294,6 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         })),
       })),
     };
-    console.log("Payload", payload);
-
-    // axios
-    //   .put(`${base_url}/update-user-training/${training._id}`, payload)
-    //   .then((res) => {
-    //     if (res.status === 200) {
-    //       toast.success("Training session updated successfully!");
-    //     }
-    //  });
     try {
       const response = await axios.put(
         `${base_url}/update-user-training/${trainingId}`,
