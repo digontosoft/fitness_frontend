@@ -49,8 +49,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    setIsModalOpen(true);
-  }, [user?.isNewUser]);
+    if (user?.is_video_popup) {
+      setIsModalOpen(true);
+    }
+  }, [user?.is_video_popup]);
 
   useEffect(() => {
     const fetchUserTask = async () => {
@@ -70,14 +72,39 @@ const Home = () => {
     fetchUserTask();
   }, [user?._id]);
 
+  const handleSubmit = async () => {
+    const payload = {
+      user_id: user?._id,
+      is_video_popup: false,
+    };
+
+    try {
+      const res = await axios.post(`${base_url}/updateUserInfo`, payload);
+      if (res.status === 200) {
+        console.log("User info updated:", res);
+        // Update localStorage to reflect the new value
+        const updatedUser = { ...user, is_video_popup: false };
+        localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+        setIsModalOpen(false); // Close the modal
+      }
+    } catch (error) {
+      console.error("Failed to update user info:", error);
+    }
+  };
+
   console.log("mesurement data", getMesurement);
   return (
-    <div className="min-h-screen px-4 sm:px-6 md:px-10 lg:px-20 overflow-hidden">
+    <div
+      className="min-h-screen px-4 sm:px-6 md:px-10 lg:px-20 overflow-hidden"
+      onClick={() => handleSubmit()}
+    >
       {/* Welcome Modal */}
-      {user?.isNewUser && (
+      {user?.is_video_popup === true && (
         <WelcomeModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          userId={user?._id}
+          handleSubmit={handleSubmit}
         />
       )}
       <div className="flex flex-col items-center justify-center pt-20">
