@@ -45,7 +45,7 @@ const AssignTrainingForm = ({ user_id }) => {
     setIsButtonDisabled(isAnyFieldEmpty);
   }, [selectedTraining]);
 
-  // Fetch training sessions
+  // Fetch training
   useEffect(() => {
     const fetchTraining = async () => {
       try {

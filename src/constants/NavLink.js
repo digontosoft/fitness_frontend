@@ -28,7 +28,7 @@ export const traineeLink = [
   {
     _id: 4,
     title: "מדדים",
-    link: "/measurements",
+    link: "/measurements-tracking",
     icon: Measurement,
   },
   {

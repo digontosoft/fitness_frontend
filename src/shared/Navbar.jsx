@@ -25,7 +25,7 @@ const Navbar = () => {
         {/* Logo */}
         <a
           href=""
-          className="flex items-center space-x-2 sm:block hidden"
+          className="hidden sm:flex items-center space-x-2"
           onClick={logout}
         >
           <span className="text-xl font-bold text-gray-800" dir="rtl">
@@ -33,6 +33,7 @@ const Navbar = () => {
           </span>
           <LogOut className="w-5 h-5" />
         </a>
+
         {/* <div className="text-xl font-bold text-gray-800 hidden md:flex">
           {userType === "admin" ? (
             <>

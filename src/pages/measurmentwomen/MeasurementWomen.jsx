@@ -47,7 +47,7 @@ const MeasurementWomen = () => {
   };
   return (
     <>
-      <div className="py-12 relative overflow-hidden">
+      <div className="py-12 relative overflow-hidden sm:px-0 px-4">
         <div
           className="absolute top-24 inset-[24%] w-full h-full"
           style={{
