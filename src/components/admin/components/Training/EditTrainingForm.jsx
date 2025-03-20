@@ -333,105 +333,115 @@ const EditTrainingForm = () => {
         )}
 
         <div className="my-5">
-          {training?.workouts?.map((workout, workoutIndex) => (
-            <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
-              <h1 className="font-semibold">{workout?.workout?.name}</h1>
-              <div className="flex items-center gap-x-2" dir="rtl">
-                <Trash
-                  className="cursor-pointer text-red-600"
-                  onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
-                />
-                Remove Workout
-              </div>
-              {workout?.exercises?.map((ex, exerciseIndex) => (
+          {training?.workouts?.map(
+            (workout, workoutIndex) => (
+              console.log("workout:", workout),
+              (
                 <div
-                  key={ex._id}
-                  className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
+                  key={workout._id}
+                  className="border py-2 px-4 rounded-md my-4"
                 >
-                  <div>
-                    <p className="py-4" dir="rtl">
-                      {ex?.name}
-                    </p>
-                    <div className="flex items-center justify-between gap-x-2">
-                      <div className="flex flex-col items-center space-y-4">
-                        <p>Sets</p>
-                        <Input
-                          type="number"
-                          defaultValue={ex?.sets}
-                          onChange={(e) =>
-                            handleExerciseChange(
-                              workoutIndex,
-                              exerciseIndex,
-                              "sets",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex flex-col items-center space-y-4">
-                        <p>Reps</p>
-                        <Input
-                          type="number"
-                          defaultValue={ex?.reps}
-                          onChange={(e) =>
-                            handleExerciseChange(
-                              workoutIndex,
-                              exerciseIndex,
-                              "reps",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex flex-col items-center space-y-4">
-                        <p>Manipulation</p>
-                        <Input
-                          type="text"
-                          defaultValue={ex?.manipulation}
-                          onChange={(e) =>
-                            handleExerciseChange(
-                              workoutIndex,
-                              exerciseIndex,
-                              "manipulation",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
+                  <h1 className="font-semibold">{workout?.name}</h1>
+                  <div className="flex items-center gap-x-2" dir="rtl">
+                    <Trash
+                      className="cursor-pointer text-red-600"
+                      onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
+                    />
+                    Remove Workout
                   </div>
-                  <Trash
-                    className="cursor-pointer text-red-600"
-                    onClick={() => handleRemoveExercise(workout._id, ex._id)}
-                  />
+                  {workout?.exercises?.map((ex, exerciseIndex) => (
+                    <div
+                      key={ex._id}
+                      className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
+                    >
+                      <div>
+                        <p className="py-4" dir="rtl">
+                          {ex?.name} {ex?.exercise_id?.name}
+                        </p>
+                        <div className="flex items-center justify-between gap-x-2">
+                          <div className="flex flex-col items-center space-y-4">
+                            <p>Sets</p>
+                            <Input
+                              type="number"
+                              defaultValue={ex?.sets}
+                              onChange={(e) =>
+                                handleExerciseChange(
+                                  workoutIndex,
+                                  exerciseIndex,
+                                  "sets",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="flex flex-col items-center space-y-4">
+                            <p>Reps</p>
+                            <Input
+                              type="number"
+                              defaultValue={ex?.reps}
+                              onChange={(e) =>
+                                handleExerciseChange(
+                                  workoutIndex,
+                                  exerciseIndex,
+                                  "reps",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="flex flex-col items-center space-y-4">
+                            <p>Manipulation</p>
+                            <Input
+                              type="text"
+                              defaultValue={ex?.manipulation}
+                              onChange={(e) =>
+                                handleExerciseChange(
+                                  workoutIndex,
+                                  exerciseIndex,
+                                  "manipulation",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <Trash
+                        className="cursor-pointer text-red-600"
+                        onClick={() =>
+                          handleRemoveExercise(workout._id, ex._id)
+                        }
+                      />
+                    </div>
+                  ))}
+
+                  {exerciseSelectVisible[workout._id] && (
+                    <Select
+                      options={exerciseList}
+                      valueField="_id"
+                      labelField="name"
+                      onChange={(selected) =>
+                        handleAddExercise(workout._id, selected)
+                      }
+                    />
+                  )}
+
+                  <Button
+                    type="button"
+                    onClick={() =>
+                      setExerciseSelectVisible((prev) => ({
+                        ...prev,
+                        [workout._id]: true,
+                      }))
+                    }
+                    className="mt-2 bg-customBg flex mx-auto"
+                  >
+                    Add More Exercise
+                  </Button>
                 </div>
-              ))}
-
-              {exerciseSelectVisible[workout._id] && (
-                <Select
-                  options={exerciseList}
-                  valueField="_id"
-                  labelField="name"
-                  onChange={(selected) =>
-                    handleAddExercise(workout._id, selected)
-                  }
-                />
-              )}
-
-              <Button
-                type="button"
-                onClick={() =>
-                  setExerciseSelectVisible((prev) => ({
-                    ...prev,
-                    [workout._id]: true,
-                  }))
-                }
-                className="mt-2 bg-customBg flex mx-auto"
-              >
-                Add More Exercise
-              </Button>
-            </div>
-          ))}
+              )
+            )
+          )}
         </div>
 
         <div className="flex items-center justify-between">

@@ -630,7 +630,7 @@ const EditWorkoutForm = ({ workoutId }) => {
               <div className="flex items-center justify-center bg-customBg py-4 w-1/2 h-5 rounded-md text-white">
                 <p className="text-center">{exercise.exercise_id?.name}</p>
               </div>
-              <div className="grid grid-cols-3 gap-4 w-[327px]">
+              <div className="grid sm:grid-cols-3 grid-cols-1 gap-4 sm:w-[327px]">
                 <div className="flex flex-col space-y-2">
                   <label htmlFor={`sets-${exercise._id}`}>Sets</label>
                   <input

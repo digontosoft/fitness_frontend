@@ -360,7 +360,7 @@ const AssignTrainingForm = ({ user_id }) => {
                     <div className="space-y-4">
                       <p>{exercise.name}</p>
                     </div>
-                    <div className="flex items-center justify-center gap-4">
+                    <div className="flex sm:flex-row flex-col items-center justify-center gap-4">
                       <Trash
                         className="text-red-500 hover:text-red-700 cursor-pointer"
                         onClick={() =>

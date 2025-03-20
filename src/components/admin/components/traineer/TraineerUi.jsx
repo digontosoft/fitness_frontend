@@ -60,7 +60,7 @@ const TraineerUi = ({ userId }) => {
   const userName = userFirstName + " " + userLastName;
 
   return (
-    <div className="space-y-12 px-4 sm:px-6 lg:px-8">
+    <div className="space-y-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
         <span className="flex items-center gap-2 flex-row-reverse">

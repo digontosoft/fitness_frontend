@@ -14,7 +14,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   const [training, setTraining] = useState({});
   const [exerciseList, setExerciseList] = useState([]);
   const [workouts, setWorkouts] = useState([]);
-  // const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
@@ -97,10 +97,10 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
     if (!selected.length) return;
     const newWorkout = selected[0];
 
-    if (training.workouts?.some((w) => w.workout._id === newWorkout._id)) {
-      // setSelectedWorkout(null);
-      return;
-    }
+    // if (training.workouts?.some((w) => w.workout?._id === newWorkout._id)) {
+    //   setSelectedWorkout(null);
+    //   return;
+    // }
 
     const updatedTraining = {
       ...training,
@@ -278,39 +278,38 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       training_id: trainingId,
       workouts: (training.workouts || []).map((w) => ({
         workout: w?._id,
-        // name: w.workout?.name,
-        // description: w.workout?.description,
-
-        exercises: (w.exercises || []).map((ex) => ({
-          _id: ex?._id,
-          // Ensure exercise_id is sent as a plain string or object based on your schema:
-          exercise_id:
-            typeof ex.exercise_id === "object"
-              ? ex.exercise_id?._id
-              : ex.exercise_id,
-          sets: Number(ex.sets),
-          reps: Number(ex.reps),
-          manipulation: ex.manipulation,
-        })),
+        exercises: (w.exercises || []).map(
+          (ex) => (
+            console.log("first", ex),
+            {
+              _id: ex?._id,
+              exercise_id: ex?._id,
+              sets: Number(ex.sets),
+              reps: Number(ex.reps),
+              manipulation: ex.manipulation,
+            }
+          )
+        ),
       })),
     };
-    try {
-      const response = await axios.put(
-        `${base_url}/update-user-training/${trainingId}`,
-        payload
-      );
-      if (response.status === 200) {
-        toast.success("Training session updated successfully!");
-        navigate(-1);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    console.log("edited payload", payload);
+    // try {
+    //   const response = await axios.put(
+    //     `${base_url}/update-user-training/${trainingId}`,
+    //     payload
+    //   );
+    //   if (response.status === 200) {
+    //     toast.success("Training session updated successfully!");
+    //     navigate(-1);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
   //console.log("training-Data", training);
 
   return (
-    <div className="py-10 w-[500px]">
+    <div className="py-10 sm:w-[500px] w-[280px]">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <DynamicInputField
           id="name"
@@ -349,7 +348,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
               <div className="flex items-center gap-x-2" dir="rtl">
                 <Trash
                   className="cursor-pointer text-red-600"
-                  onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
+                  onClick={() => handleRemoveWorkout(workout._id)}
                 />
                 הסר אימון
               </div>
@@ -360,8 +359,10 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                   className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
                 >
                   <div>
-                    <p className="py-4">{ex?.exercise_id?.name}</p>
-                    <div className="flex items-center justify-between gap-x-2">
+                    <p className="py-4">
+                      {ex?.name} {ex?.exercise_id?.name}
+                    </p>
+                    <div className="flex sm:flex-row flex-col items-center justify-between sm:gap-x-2 gap-y-2">
                       <div className="flex flex-col items-center space-y-4">
                         <p>Sets</p>
 
@@ -439,7 +440,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           ))}
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex sm:flex-row flex-col items-center sm:justify-between sm:gap-x-0 gap-y-2">
           <Button
             type="submit"
             className={

@@ -97,14 +97,14 @@ export function TrainingList({ userId }) {
             >
               <Trash />
             </Button>
-            <Button
+            {/* <Button
               className="bg-green-100 hover:bg-green-300 duration-200 ease-in-out delay-75"
               size="sm"
             >
               <span className="text-green-500 uppercase font-semibold">
                 {row.original.isActive === true ? "Deactivate" : "Activate"}
               </span>
-            </Button>
+            </Button> */}
           </div>
         );
       },
