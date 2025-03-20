@@ -19,7 +19,7 @@ const MeasurementWomen = () => {
   const token = localStorage.getItem("authToken");
   const { id } = verifyToken(token);
   const { userInfo } = useContext(UserInfoContext);
-  console.log("userType", userInfo);
+
   const handleFormSubmit = (data) => {
     setLoading(true);
     const questionnaries = {
@@ -32,7 +32,7 @@ const MeasurementWomen = () => {
         .then((response) => {
           if (response.status === 200) {
             toast.success("Questionaries Upload successfully!!!");
-            navigate("/measurements");
+            navigate("/");
           }
         });
     } catch (err) {

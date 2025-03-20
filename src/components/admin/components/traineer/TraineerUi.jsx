@@ -9,9 +9,11 @@ import { useEffect, useState } from "react";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import { toast } from "sonner";
+import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
   console.log("user", userId);
 
   useEffect(() => {
@@ -22,6 +24,10 @@ const TraineerUi = ({ userId }) => {
         localStorage.setItem(
           "firstName",
           JSON.stringify(response.data.data.firstName)
+        );
+        localStorage.setItem(
+          "selectedUserId",
+          JSON.stringify(response.data.data._id)
         );
         localStorage.setItem(
           "lastName",
@@ -49,67 +55,15 @@ const TraineerUi = ({ userId }) => {
       }
     } catch (error) {}
   };
-
+  const handleModal = () => {
+    setOpenModal(true);
+    console.log("modal clicked");
+  };
   const userFirstName = JSON.parse(localStorage.getItem("firstName"));
   const userLastName = JSON.parse(localStorage.getItem("lastName"));
   const userName = userFirstName + " " + userLastName;
 
   return (
-    // <div className="space-y-12">
-    //   <div className="flex flex-col items-center justify-center gap-4">
-    //     <FormTitle title="ניהול מתאמנים" />
-    //     <span className="flex items-center gap-2 flex-row-reverse">
-    //       {userName}
-    //       <Button
-    //         className="bg-customBg"
-    //         size="sm"
-    //         onClick={() =>
-    //           updateStatus(user?.userType === "admin" ? "trainee" : "admin")
-    //         }
-    //       >
-    //         {user?.userType === "admin" ? "Make Trainer" : "Make Admin"}
-    //       </Button>
-    //     </span>
-    //   </div>
-    //   <div className="flex items-center justify-center gap-5" dir="rtl">
-    //     <TraineeRightCard
-    //       gender={user?.gender}
-    //       stepAverage={user?.step_average}
-    //       stepTarget={user?.step_target}
-    //     />
-    //     <TraineeLeftCard userId={user?._id} />
-    //   </div>
-    //   <div className="flex items-center justify-center">
-    //     <span className="text-xl font-bold leading-6 text-textColor text-center">
-    //       משימות
-    //     </span>
-    //   </div>
-    //   <div className="flex items-center justify-center gap-5">
-    //     <AdminArrowCard
-    //       image={ArrowBurger}
-    //       title="ניהול תפריטי תזונה אישיים"
-    //       link={`/dashboard/add-nutrition-menu/${userId}`}
-    //     />
-    //     <AdminArrowCard
-    //       image={ArrowDumbel}
-    //       title="ניהול תוכנית אימון"
-    //       link={`/dashboard/assigned-training-list/${userId}`}
-    //     />
-    //   </div>
-    //   <div className="flex items-center justify-center gap-5">
-    //     <AdminArrowCardWithoutImage
-    //       title="להורדת דוח מדדים אישי"
-    //       link={`/dashboard/mesurements-watch?userId=${userId}`}
-    //     />
-    //     <AdminArrowCardWithoutImage title="מסמכים מקושרים להורדה" />
-    //   </div>
-    //   <div className="flex justify-center items-center">
-    //     <Button className="bg-custom-radial text-white rounded-full">
-    //       שמור והמשך
-    //     </Button>
-    //   </div>
-    // </div>
-
     <div className="space-y-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
@@ -133,6 +87,7 @@ const TraineerUi = ({ userId }) => {
       >
         <TraineeRightCard
           gender={user?.gender}
+          userId={userId}
           stepAverage={user?.step_average}
           stepTarget={user?.step_target}
         />
@@ -149,7 +104,7 @@ const TraineerUi = ({ userId }) => {
         <AdminArrowCard
           image={ArrowBurger}
           title="ניהול תפריטי תזונה אישיים"
-          link={`/dashboard/add-nutrition-menu/${userId}`}
+          link={`/dashboard/nutrition-lists/${userId}`}
         />
         <AdminArrowCard
           image={ArrowDumbel}
@@ -160,17 +115,25 @@ const TraineerUi = ({ userId }) => {
 
       <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-5">
         <AdminArrowCardWithoutImage
-          title="להורדת דוח מדדים אישי"
+          title="לדוח מדדים אישי"
           link={`/dashboard/mesurements-watch?userId=${userId}`}
         />
-        <AdminArrowCardWithoutImage title="מסמכים מקושרים להורדה" />
+
+        <AdminArrowCardWithoutImage
+          title="מסמכים מקושרים להורדה"
+          onClick={handleModal}
+        />
+
+        {/* <FoodDairyModal userId={userId} /> */}
       </div>
 
-      <div className="flex justify-center items-center">
-        <Button className="bg-custom-radial text-white rounded-full px-6 py-2 text-sm sm:text-base">
-          שמור והמשך
-        </Button>
-      </div>
+      <div className="flex justify-center items-center"></div>
+      {openModal && (
+        <>
+          <p>Modal is Open</p>
+          <FoodDairyModal userId={userId} onClose={() => setOpenModal(false)} />
+        </>
+      )}
     </div>
   );
 };

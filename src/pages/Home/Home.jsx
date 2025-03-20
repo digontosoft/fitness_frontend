@@ -21,6 +21,7 @@ const Home = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const Id = user._id;
+  console.log("user", Id);
 
   const [getMesurement, setMesurement] = useState([]);
   useEffect(() => {
@@ -40,14 +41,18 @@ const Home = () => {
     }
   }, [Id]);
 
+  console.log("mesurement data", getMesurement);
+
   const handleOpenModal = (task = null) => {
     setSelectedTask(task);
     setIsTaskModalOpen(true);
   };
 
   useEffect(() => {
-    setIsModalOpen(true);
-  }, [user?.isNewUser]);
+    if (user?.is_video_popup) {
+      setIsModalOpen(true);
+    }
+  }, [user?.is_video_popup]);
 
   useEffect(() => {
     const fetchUserTask = async () => {
@@ -66,58 +71,40 @@ const Home = () => {
     };
     fetchUserTask();
   }, [user?._id]);
+
+  const handleSubmit = async () => {
+    const payload = {
+      user_id: user?._id,
+      is_video_popup: false,
+    };
+
+    try {
+      const res = await axios.post(`${base_url}/updateUserInfo`, payload);
+      if (res.status === 200) {
+        console.log("User info updated:", res);
+        // Update localStorage to reflect the new value
+        const updatedUser = { ...user, is_video_popup: false };
+        localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+        setIsModalOpen(false); // Close the modal
+      }
+    } catch (error) {
+      console.error("Failed to update user info:", error);
+    }
+  };
+
   console.log("mesurement data", getMesurement);
   return (
-    // <div className="min-h-screen">
-    //   {user?.isNewUser && (
-    //     <WelcomeModal
-    //       isModalOpen={isModalOpen}
-    //       setIsModalOpen={setIsModalOpen}
-    //     />
-    //   )}
-    //   <div className="flex flex-col items-center justify-center pt-20">
-    //     <h6 className="text-sm font normal text-gray-500">בוקר טוב</h6>
-    //     <h1 className="text-4xl font-bold">
-    //       {user?.firstName} {user?.lastName}
-    //     </h1>
-    //     <div className="pt-20 flex gap-10 md:flex-row flex-col-reverse">
-    //       <LeftCard data={getMesurement} />
-    //       <RightCard user={user} />
-    //     </div>
-    //     <div className="pt-24 flex flex-col justify-end md:justify-center items-center ">
-    //       <h1 className="text-xl font-bold text-[#0A2533] text-end md:text-center ">
-    //         משימות
-    //       </h1>
-    //       <Carousel className="w-full max-w-6xl mt-5">
-    //         <CarouselContent className="-ml-1 flex">
-    //           {userTasks?.map((task) => (
-    //             <CarouselItem
-    //               className="pl-2 md:pl-4 basis-1/3 flex-shrink-0 cursor-pointer"
-    //               key={task?._id}
-    //             >
-    //               <ArrowGroup onclick={handleOpenModal} task={task} />
-    //             </CarouselItem>
-    //           ))}
-    //         </CarouselContent>
-    //         <CarouselPrevious />
-    //         <CarouselNext />
-    //       </Carousel>
-    //     </div>
-    //   </div>
-    //   <TaskModal
-    //     isModalOpen={taskModalOpen}
-    //     setIsModalOpen={setIsTaskModalOpen}
-    //     selectedTask={selectedTask}
-    //     user_id={user?._id}
-    //   />
-    // </div>
-
-    <div className="min-h-screen px-4 sm:px-6 md:px-10 lg:px-20 overflow-hidden">
+    <div
+      className="min-h-screen px-4 sm:px-6 md:px-10 lg:px-20 overflow-hidden"
+      onClick={() => handleSubmit()}
+    >
       {/* Welcome Modal */}
-      {user?.isNewUser && (
+      {user?.is_video_popup === true && (
         <WelcomeModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          userId={user?._id}
+          handleSubmit={handleSubmit}
         />
       )}
       <div className="flex flex-col items-center justify-center pt-20">

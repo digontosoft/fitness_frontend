@@ -1,8 +1,14 @@
+import { base_url } from "@/api/baseUrl";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import axios from "axios";
 
-export function WelcomeModal({ isModalOpen, setIsModalOpen }) {
+export function WelcomeModal({ isModalOpen, setIsModalOpen, handleSubmit }) {
   return (
-    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+    <Dialog
+      open={isModalOpen}
+      onOpenChange={setIsModalOpen}
+      onClick={() => handleSubmit()}
+    >
       <DialogContent className="w-[90%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] border-none p-4">
         <div className="space-y-5">
           <div className="flex flex-col items-center justify-center space-y-2">
