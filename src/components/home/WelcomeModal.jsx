@@ -1,6 +1,7 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-export function WelcomeModal({ isModalOpen, setIsModalOpen }) {
+export function WelcomeModal({ isModalOpen, setIsModalOpen, userId }) {
+  const handleCloseModal = () => setIsModalOpen(false);
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogContent className="w-[90%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] border-none p-4">

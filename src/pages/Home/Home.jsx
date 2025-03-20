@@ -116,10 +116,11 @@ const Home = () => {
 
     <div className="min-h-screen px-4 sm:px-6 md:px-10 lg:px-20 overflow-hidden">
       {/* Welcome Modal */}
-      {user?.isNewUser && (
+      {user?.is_video_popup === true && (
         <WelcomeModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          userId={user?._id}
         />
       )}
       <div className="flex flex-col items-center justify-center pt-20">
