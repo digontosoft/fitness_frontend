@@ -23,6 +23,7 @@ const TraineerUi = ({ userId }) => {
           "firstName",
           JSON.stringify(response.data.data.firstName)
         );
+        localStorage.setItem("selectedUserId", JSON.stringify(response.data.data._id));
         localStorage.setItem(
           "lastName",
           JSON.stringify(response.data.data.lastName)
@@ -149,7 +150,7 @@ const TraineerUi = ({ userId }) => {
         <AdminArrowCard
           image={ArrowBurger}
           title="ניהול תפריטי תזונה אישיים"
-          link={`/dashboard/add-nutrition-menu/${userId}`}
+          link={`/dashboard/nutrition-lists/${userId}`}
         />
         <AdminArrowCard
           image={ArrowDumbel}

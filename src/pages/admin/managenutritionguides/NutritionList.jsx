@@ -20,7 +20,7 @@ import {
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { deleteExercise, deleteNutritionGuide } from "@/api/deleteData";
 import {
   Dialog,
@@ -38,6 +38,10 @@ export function NutritionList() {
   const [nutritionGuide, setNutritionGuide] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedNutrition, setSelectedNutrition] = useState(null);
+  const {id} = useParams()
+  if (!id) {
+    localStorage.removeItem("selectedUserId");
+  }
 
   const columns = [
     {
@@ -126,11 +130,23 @@ export function NutritionList() {
       console.error("Error deleting exercise:", error);
     }
   };
+  const userId = localStorage.getItem("selectedUserId");
+ // const userIdWithoutQuotes = userId.replace(/"/g, '');
+
+  
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${base_url}/nutritionGuide`);
-      setNutritionGuide(response.data.data);
+      if (userId) {
+        const response = await axios.get(`${base_url}/nutritionGuide/user/${userId?.replace(/"/g, '')}`);
+        console.log("nutrition-for-user", response);
+        
+        setNutritionGuide(response.data.data);}
+      else {
+        const response = await axios.get(`${base_url}/nutritionGuide`);
+        setNutritionGuide(response.data.data);
+      }
+      
     } catch (error) {
       console.error("Error fetching exercises:", error);
     }
@@ -154,6 +170,8 @@ export function NutritionList() {
     state: { sorting, columnFilters, columnVisibility, rowSelection },
   });
 
+  
+
   return (
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
@@ -165,7 +183,7 @@ export function NutritionList() {
           }
           className="max-w-sm"
         />
-        <Link to="/dashboard/add-nutrition-guide">
+        <Link to={userId ? `/dashboard/add-nutrition-menu/${userId?.replace(/"/g, '')}` : `/dashboard/add-nutrition-guide`}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
             Add Nutrition Guide
           </Button>

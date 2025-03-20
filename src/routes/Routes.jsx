@@ -202,6 +202,10 @@ export const routes = createBrowserRouter([
             element: <NutritionLists />,
           },
           {
+            path: "/dashboard/nutrition-lists/:id",
+            element: <NutritionLists />,
+          },
+          {
             path: "/dashboard/edit-nutrition/:id",
             element: <EditNutrition />,
           },
