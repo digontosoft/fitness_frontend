@@ -12,7 +12,10 @@ const AdminArrowCard = ({ image, title, link }) => {
           <FaArrowLeftLong />
         </Button>
         <div className="flex items-center gap-4">
-          <h1 className="text-base font-bold leading-5 text-[#0A2533]">
+          <h1
+            className="text-base font-bold leading-5 text-[#0A2533]"
+            dir="rtl"
+          >
             {title}
           </h1>
           <div className="w-[104px] h-[84px]">

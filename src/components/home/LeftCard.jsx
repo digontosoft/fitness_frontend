@@ -23,7 +23,7 @@ const LeftCard = ({ data }) => {
   const avgThigh = Math.floor(totalThigh / 2);
   return (
     <div
-      className="w-72 h-48 bg-[#0A0A0A] p-2 rounded-2xl "
+      className="w-80 h-56 bg-[#0A0A0A] p-2 rounded-2xl "
       style={{ backgroundImage: `url(${pixelCartImg})` }}
     >
       <div className="flex  flex-col justify-center items-start">
@@ -48,7 +48,7 @@ const LeftCard = ({ data }) => {
             </div>
             <div>
               <div className="flex items-center ">
-                <p className="text-sm text-white">מותניים:{data?.waist}</p>
+                <p className="text-lg text-white">מותניים:{data?.waist}</p>
                 <img src={iconTwo} alt="" />
               </div>
               <div className="flex items-center ">

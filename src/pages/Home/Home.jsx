@@ -41,6 +41,8 @@ const Home = () => {
     }
   }, [Id]);
 
+  console.log("mesurement data", getMesurement);
+
   const handleOpenModal = (task = null) => {
     setSelectedTask(task);
     setIsTaskModalOpen(true);

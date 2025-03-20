@@ -24,6 +24,7 @@ const TraineerUi = ({ userId }) => {
           "firstName",
           JSON.stringify(response.data.data.firstName)
         );
+        localStorage.setItem("selectedUserId", JSON.stringify(response.data.data._id));
         localStorage.setItem(
           "lastName",
           JSON.stringify(response.data.data.lastName)
@@ -96,7 +97,7 @@ const TraineerUi = ({ userId }) => {
         <AdminArrowCard
           image={ArrowBurger}
           title="ניהול תפריטי תזונה אישיים"
-          link={`/dashboard/add-nutrition-menu/${userId}`}
+          link={`/dashboard/nutrition-lists/${userId}`}
         />
         <AdminArrowCard
           image={ArrowDumbel}
@@ -107,18 +108,14 @@ const TraineerUi = ({ userId }) => {
 
       <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-5">
         <AdminArrowCardWithoutImage
-          title="להורדת דוח מדדים אישי"
+          title="לדוח מדדים אישי"
           link={`/dashboard/mesurements-watch?userId=${userId}`}
         />
         <AdminArrowCardWithoutImage title="מסמכים מקושרים להורדה" />
         {/* <FoodDairyModal userId={userId} /> */}
       </div>
 
-      <div className="flex justify-center items-center">
-        <Button className="bg-custom-radial text-white rounded-full px-6 py-2 text-sm sm:text-base">
-          שמור והמשך
-        </Button>
-      </div>
+      <div className="flex justify-center items-center"></div>
     </div>
   );
 };

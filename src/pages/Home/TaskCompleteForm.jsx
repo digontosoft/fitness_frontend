@@ -183,27 +183,9 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
-            <DynamicInputField
-              id="thighr"
-              type="number"
-              label="ירך ימין"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
+           
 
-            <DynamicInputField
-              id="armr"
-              type="number"
-              label="זרוע ימין"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
+        
             <DynamicInputField
               id="arml"
               type="number"
@@ -224,6 +206,16 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
+               <DynamicInputField
+              id={Gender === "male" ? "chest" : "butt"}
+              type="number"
+              label={Gender === "male" ? "חָזֶה" : "קַת"}
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
+              errors={errors}
+              watch={watch}
+            />
           </div>
           <div className="w-full">
             <DynamicInputField
@@ -236,9 +228,9 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
-            <DynamicInputField
-              id="rightArm"
-              type="text"
+                <DynamicInputField
+              id="armr"
+              type="number"
               label="זרוע ימין"
               placeholder="הזן נתונים כאן..."
               register={register}
@@ -246,30 +238,9 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
-            <DynamicInputField
-              id="leftArm"
-              type="text"
-              label="זרוע שמאל"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-            <DynamicInputField
-              id="Butt"
+             <DynamicInputField
+              id="thighr"
               type="number"
-              label={Gender === "male" ? "חָזֶה" : "קַת"}
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
-              errors={errors}
-              watch={watch}
-            />
-
-            <DynamicInputField
-              id="thigh right"
-              type="text"
               label="ירך ימין"
               placeholder="הזן נתונים כאן..."
               register={register}
@@ -277,6 +248,10 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
+
+         
+
+          
           </div>
         </div>
         <Link to="/mesurement-pdf">
