@@ -21,7 +21,7 @@ const TraineeRightCard = ({ userId, gender, stepAverage, stepTarget }) => {
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
 
   return (
-    <div className="w-72 h-48 bg-gradient-to-tr from-[#0A0A0A] via-[#343434] to-[#0A0A0A] p-2 rounded-2xl relative">
+    <div className="w-80 h-56 bg-gradient-to-tr from-[#0A0A0A] via-[#343434] to-[#0A0A0A] p-2 rounded-2xl relative">
       <div
         className="absolute top-0 left-0 w-full h-full"
         style={{
@@ -68,21 +68,21 @@ const TraineeRightCard = ({ userId, gender, stepAverage, stepTarget }) => {
         </div>
       </div>
       <div
-        className="absolute top-44 left-10 w-full h-full"
+        className="absolute top-52 left-10 w-full h-full"
         style={{
           backgroundImage: `url(${vector3})`,
           backgroundRepeat: "no-repeat",
         }}
       ></div>
       <div
-        className="absolute top-0 left-[143px] w-full h-full"
+        className="absolute top-0 left-[174px] w-full h-full"
         style={{
           backgroundImage: `url(${Ellipse88})`,
           backgroundRepeat: "no-repeat",
         }}
       ></div>
       <div
-        className="absolute top-0 left-[170px] w-full h-full"
+        className="absolute top-0 left-[201px] w-full h-full"
         style={{
           backgroundImage: `url(${Ellipse})`,
           backgroundRepeat: "no-repeat",
@@ -97,9 +97,9 @@ const TraineeRightCard = ({ userId, gender, stepAverage, stepTarget }) => {
       <div className="flex flex-col items-end justify-end pr-4 absolute bottom-5 right-0">
         <div>
           <span className="text-white">
-            {stepAverage} /{" "}
+            <span className="text-lg"> {stepAverage}</span> /{" "}
             <span className="text-2xl font-semibold">{stepTarget}</span>
-            <h1 className="text-sm font-semibold text-right">צעדים</h1>
+            <h1 className="text-lg font-semibold text-right">צעדים</h1>
           </span>
         </div>
       </div>
