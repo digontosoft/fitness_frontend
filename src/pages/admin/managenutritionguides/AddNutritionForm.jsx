@@ -157,7 +157,7 @@ const AddNutritionForm = ({ userId }) => {
         }
       );
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         toast.success("Nutrition saved successfully!");
         reset();
         if (userId) {
