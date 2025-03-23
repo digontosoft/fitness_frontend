@@ -22,6 +22,8 @@ const CourseGroup = () => {
     };
     fetchCourses();
   }, []);
+  console.log("courses:", courses);
+  
   return (
     <div className="max-w-6xl mx-auto">
       <div
@@ -55,7 +57,7 @@ const CourseGroup = () => {
             </div>
           </div>
         </div>
-        {courses?.map((course) => (
+        {courses?.sort((a, b) => b.video.length - a.video.length)?.map((course) => (
           <CourseCart key={course._id} course={course} />
         ))}
       </div>

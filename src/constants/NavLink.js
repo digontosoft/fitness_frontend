@@ -14,6 +14,12 @@ export const traineeLink = [
   //   link: "/login",
   //   icon: LogOut,
   // },
+  {
+    _id: 1,
+    title: "Home",
+    link: "/",
+    icon: NutrationGuide,
+  },
 
   {
     _id: 2,
