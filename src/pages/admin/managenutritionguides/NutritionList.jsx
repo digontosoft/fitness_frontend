@@ -38,7 +38,7 @@ export function NutritionList() {
   const [nutritionGuide, setNutritionGuide] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedNutrition, setSelectedNutrition] = useState(null);
-  const {id} = useParams()
+  const { id } = useParams();
   if (!id) {
     localStorage.removeItem("selectedUserId");
   }
@@ -131,21 +131,17 @@ export function NutritionList() {
     }
   };
   const userId = localStorage.getItem("selectedUserId");
-  const user_id = JSON.parse(userId)
-
-  
+  const user_id = JSON.parse(userId);
 
   const fetchData = async () => {
     try {
-      const url = userId 
-      ? `${base_url}/nutritionGuide/user/${user_id}` 
-      : `${base_url}/nutritionGuide`;
+      const url = userId
+        ? `${base_url}/nutritionGuide/user/${user_id}`
+        : `${base_url}/nutritionGuide`;
 
-    const response = await axios.get(url);
-        
-        setNutritionGuide(response.data.data);
-      
-      
+      const response = await axios.get(url);
+
+      setNutritionGuide(response.data.data);
     } catch (error) {
       console.error("Error fetching exercises:", error);
     }
@@ -169,8 +165,6 @@ export function NutritionList() {
     state: { sorting, columnFilters, columnVisibility, rowSelection },
   });
 
-  
-
   return (
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
@@ -182,9 +176,15 @@ export function NutritionList() {
           }
           className="max-w-sm"
         />
-        <Link to={user_id ? `/dashboard/add-nutrition-menu/${user_id}` : `/dashboard/add-nutrition-guide`}>
+        <Link
+          to={
+            user_id
+              ? `/dashboard/add-nutrition-menu/${user_id}`
+              : `/dashboard/add-nutrition-guide`
+          }
+        >
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            Add Nutrition Guide
+            {user_id ? "Add Nutrition Menu" : "Add Nutrition Guide"}
           </Button>
         </Link>
       </div>

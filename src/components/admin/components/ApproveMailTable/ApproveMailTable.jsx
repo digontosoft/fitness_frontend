@@ -34,15 +34,14 @@ export function ApproveMailTable() {
 
   const columns = [
     {
-      accessorKey: 'email',
+      accessorKey: "email",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-      דואר אלקטרוני
-            
+            דואר אלקטרוני
             <ArrowUpDown />
           </Button>
         );
@@ -88,26 +87,27 @@ export function ApproveMailTable() {
       ...rowData,
       isActive: updatedStatus,
     };
+    console.log("data", data);
 
-    try {
-      const response = await axios.patch(
-        `${base_url}/update-approved-mail`,
-        data
-      );
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        setEmails((prevEmails) =>
-          prevEmails.map((email) =>
-            email._id === rowData._id
-              ? { ...email, isActive: updatedStatus }
-              : email
-          )
-        );
-      }
-    } catch (error) {
-      console.error("Error updating status:", error);
-      toast.error("Failed to update status.");
-    }
+    // try {
+    //   const response = await axios.patch(
+    //     `${base_url}/update-approved-mail`,
+    //     data
+    //   );
+    //   if (response.status === 200) {
+    //     toast.success(response.data.message);
+    //     setEmails((prevEmails) =>
+    //       prevEmails.map((email) =>
+    //         email._id === rowData._id
+    //           ? { ...email, isActive: updatedStatus }
+    //           : email
+    //       )
+    //     );
+    //   }
+    // } catch (error) {
+    //   console.error("Error updating status:", error);
+    //   toast.error("Failed to update status.");
+    // }
   };
 
   const handleDelete = async (rowData) => {

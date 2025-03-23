@@ -165,7 +165,6 @@ const AddNutritionForm = ({ userId }) => {
         } else {
           navigate("/dashboard/nutrition-lists");
         }
-       
       }
     } catch (error) {
       console.error("Error submitting training session:", error);
