@@ -304,11 +304,11 @@ const AssignTrainingForm = ({ user_id }) => {
 
       console.log("assignTraining:", payload);
 
-      // const response = await axios.post(`${base_url}/assign-training`, payload);
-      // if (response.status === 201) {
-      //   toast.success("Training session updated successfully!");
-      //   navigate(`/dashboard/assigned-training-list/${user_id}`);
-      // }
+      const response = await axios.post(`${base_url}/assign-training`, payload);
+      if (response.status === 201) {
+        toast.success("Training session updated successfully!");
+        navigate(`/dashboard/assigned-training-list/${user_id}`);
+      }
     } catch (error) {
       console.error("Error updating training session:", error);
       toast.error("Failed to update training session.");

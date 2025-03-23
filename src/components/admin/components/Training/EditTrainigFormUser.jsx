@@ -277,7 +277,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
     // console.log("payload", training);
     const payload = {
       user_id: user_Id,
-      training_id: trainingId,
+      training_id: training.training_id._id,
       workouts: (training.workouts || []).map(
         (w) => (
           console.log("workout", w?.workout?._id),
@@ -287,8 +287,8 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
               (ex) => (
                 console.log("first", ex),
                 {
-                  _id: ex?._id,
-                  exercise_id: ex?._id,
+                  _id: ex?.exercise_id?._id,
+                  exercise_id: ex?.exercise_id?._id,
                   sets: Number(ex.sets),
                   reps: Number(ex.reps),
                   manipulation: ex.manipulation,

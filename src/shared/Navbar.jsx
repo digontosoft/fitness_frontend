@@ -112,7 +112,7 @@ const Navbar = () => {
                 }
               >
                 <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-                <span>{title}</span>
+                <span dir="rtl">{title}</span>
               </NavLink>
             ))}
           </div>
@@ -131,7 +131,7 @@ const Navbar = () => {
                 }
               >
                 <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-                <span>{title}</span>
+                <span dir="rtl">{title}</span>
               </NavLink>
             ))}
           </div>
@@ -150,7 +150,7 @@ const Navbar = () => {
                 }
               >
                 <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-                <span>{title}</span>
+                <span dir="rtl">{title}</span>
               </NavLink>
             ))}
           </div>
@@ -192,9 +192,10 @@ const Navbar = () => {
                           : "text-gray-600 hover:text-gray-900"
                       }`
                     }
+                    onClick={() => setIsOpen(false)}
                   >
                     <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-                    <span>{title}</span>
+                    <span dir="rtl">{title}</span>
                   </NavLink>
                 ))}
               </div>
@@ -211,9 +212,10 @@ const Navbar = () => {
                           : "text-gray-600 hover:text-gray-900"
                       }`
                     }
+                    onClick={() => setIsOpen(false)}
                   >
                     <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-                    <span>{title}</span>
+                    <span dir="rtl">{title}</span>
                   </NavLink>
                 ))}
               </div>
@@ -230,9 +232,10 @@ const Navbar = () => {
                           : "text-gray-600 hover:text-gray-900"
                       }`
                     }
+                    onClick={() => setIsOpen(false)}
                   >
                     <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-                    <span>{title}</span>
+                    <span dir="rtl">{title}</span>
                   </NavLink>
                 ))}
               </div>
