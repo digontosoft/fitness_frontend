@@ -8,7 +8,7 @@ const ExcersizeInput = ({
   isFirst,
   isLast,
   value,
-  onChange,
+  onChange
 }) => {
   const {
     register,
@@ -16,6 +16,7 @@ const ExcersizeInput = ({
     setValue,
     formState: { errors },
     getValues,
+    reset
   } = useForm();
 
   useEffect(() => {
@@ -23,8 +24,11 @@ const ExcersizeInput = ({
       setValue("sets_done", value.sets_done || "");
       setValue("reps_done", value.reps_done || "");
       setValue("lastSet", value.lastSet || "");
+
     }
+    
   }, [value, setValue]);
+
 
   const handleInputChange = (field, val) => {
     onChange({ ...getValues(), [field]: val });
