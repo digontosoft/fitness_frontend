@@ -18,6 +18,17 @@ const StartTraining = () => {
   const [showPrevious, setShowPrevious] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [exerciseData, setExerciseData] = useState({});
+  const [valid,setValid] = useState({})
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+
+
+  useEffect(() => {
+    if((valid.sets_done && valid.reps_done) ){
+      setButtonDisabled(false)
+    } else {
+      setButtonDisabled(true)
+    }
+  },[valid,buttonDisabled])
   const navigate = useNavigate()
   const isSuperset =
     userTrainingExercise[currentIndex]?.manipulation?.toLowerCase() ===
@@ -29,8 +40,12 @@ const StartTraining = () => {
 
   
   
+  
 
   const handleInputChange = (courseId, value) => {
+    
+    setValid(value)
+    
     setExerciseData((prev) => ({
       ...prev,
       [courseId]: { ...prev[courseId], ...value },
@@ -72,10 +87,12 @@ const StartTraining = () => {
 
   const handleNext = () => {
     const nextIndex = getNextIndex();
-
+  
     if (nextIndex !== currentIndex) {
+      setButtonDisabled(true)
       setCurrentIndex(nextIndex);
       setShowPrevious(true);
+      
 
       if (nextIndex === userTrainingExercise.length - 1) {
         setIsFinished(true);
@@ -192,6 +209,7 @@ const StartTraining = () => {
           onPrevious={handlePrevious}
           showPrevious={showPrevious}
           isFinished={isFinished}
+          disabled={buttonDisabled}
         />
       </CommonContainer>
     </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { facebookIcon, instaIcon, tiktok, whiteLogo } from "../assets/index";
 const Footer = () => {
   return (
-    <div className="bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753]  h-[100px]">
+    <div className="bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753]  min-h-[100px]  max-h-full ">
       <div className="max-w-7xl mx-auto lg:py-10 py-2 px-2 md:py-4 flex flex-col md:flex-row justify-center md:justify-between items-center md:gap-10 ">
         <div className="flex flex-col-reverse md:flex-row gap-10 justify-between md:60 lg:gap-72">
           <div className="flex flex-col gap-4 justify-center items-center ">
@@ -24,11 +24,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        {/* <Link to="">
-          <div className="flex md:flex-row text-white justify-center items-center hover:underline ">
-            הסכם ליווי
-          </div>
-        </Link> */}
+       
         <div className="flex  flex-col justify-between items-center gap-2">
           <img className="hidden md:block w-15 h-14" src={whiteLogo} alt="" />
           <p className="text-xs font-medium text-white">
