@@ -157,7 +157,7 @@ const AddNutritionForm = ({ userId }) => {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success("Nutrition saved successfully!");
         reset();
         if (userId) {
@@ -165,7 +165,6 @@ const AddNutritionForm = ({ userId }) => {
         } else {
           navigate("/dashboard/nutrition-lists");
         }
-       
       }
     } catch (error) {
       console.error("Error submitting training session:", error);

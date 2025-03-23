@@ -26,9 +26,6 @@ const AssignTrainingForm = ({ user_id }) => {
     formState: { errors },
   } = useForm();
 
-  console.log("trainingList", trainingList);
-  console.log("selectedTraining", selectedTraining);
-
   // Check if any field (sets, reps, or manipulation) is empty in any exercise
   useEffect(() => {
     if (!selectedTraining) {
@@ -44,6 +41,8 @@ const AssignTrainingForm = ({ user_id }) => {
 
     setIsButtonDisabled(isAnyFieldEmpty);
   }, [selectedTraining]);
+
+  console.log("selectedTraining:", selectedTraining);
 
   // Fetch training
   useEffect(() => {
@@ -241,13 +240,18 @@ const AssignTrainingForm = ({ user_id }) => {
         updatedTraining.workouts.push({
           _id: fullWorkoutData._id,
           name: fullWorkoutData.name,
-          exercises: fullWorkoutData.exercises.map((exercise) => ({
-            _id: exercise._id,
-            name: exercise.name,
-            sets: exercise.sets || 3,
-            reps: exercise.reps || 10,
-            manipulation: exercise.manipulation || "normal",
-          })),
+          exercises: fullWorkoutData.exercises.map(
+            (exercise) => (
+              console.log("exercise_id:", exercise.exercise_id._id),
+              {
+                _id: exercise.exercise_id._id,
+                name: exercise.name,
+                sets: exercise.sets || 3,
+                reps: exercise.reps || 10,
+                manipulation: exercise.manipulation || "normal",
+              }
+            )
+          ),
         });
       }
     }
@@ -272,17 +276,23 @@ const AssignTrainingForm = ({ user_id }) => {
   };
 
   const onSubmit = async (data) => {
-    // console.log("training name:", data);
+    // console.log("training name:", data)
+
     try {
-      const formattedWorkouts = selectedTraining.workouts.map((workout) => ({
-        workout: workout._id,
-        exercises: workout.exercises.map((exercise) => ({
-          exercise_id: exercise?.exercise_id,
-          sets: exercise.sets,
-          reps: exercise.reps,
-          manipulation: exercise.manipulation,
-        })),
-      }));
+      const formattedWorkouts = selectedTraining.workouts.map(
+        (workout) => (
+          console.log("workout:", workout),
+          {
+            workout: workout._id,
+            exercises: workout.exercises.map((exercise) => ({
+              exercise_id: exercise?.exercise_id,
+              sets: exercise.sets,
+              reps: exercise.reps,
+              manipulation: exercise.manipulation,
+            })),
+          }
+        )
+      );
 
       const payload = {
         name: data.name || selectedTraining,
@@ -294,11 +304,11 @@ const AssignTrainingForm = ({ user_id }) => {
 
       console.log("assignTraining:", payload);
 
-      const response = await axios.post(`${base_url}/assign-training`, payload);
-      if (response.status === 201) {
-        toast.success("Training session updated successfully!");
-        navigate(`/dashboard/assigned-training-list/${user_id}`);
-      }
+      // const response = await axios.post(`${base_url}/assign-training`, payload);
+      // if (response.status === 201) {
+      //   toast.success("Training session updated successfully!");
+      //   navigate(`/dashboard/assigned-training-list/${user_id}`);
+      // }
     } catch (error) {
       console.error("Error updating training session:", error);
       toast.error("Failed to update training session.");
@@ -369,46 +379,55 @@ const AssignTrainingForm = ({ user_id }) => {
                       >
                         Remove Exercise
                       </Trash>
-                      <input
-                        type="number"
-                        value={exercise.sets}
-                        onChange={(e) =>
-                          handleExerciseChange(
-                            workoutIndex,
-                            exerciseIndex,
-                            "sets",
-                            e.target.value
-                          )
-                        }
-                        className="border p-2 rounded"
-                      />
-                      <input
-                        type="number"
-                        value={exercise.reps}
-                        onChange={(e) =>
-                          handleExerciseChange(
-                            workoutIndex,
-                            exerciseIndex,
-                            "reps",
-                            e.target.value
-                          )
-                        }
-                        className="border p-2 rounded"
-                      />
-                      <input
-                        type="text"
-                        value={exercise.manipulation}
-                        onChange={(e) =>
-                          handleExerciseChange(
-                            workoutIndex,
-                            exerciseIndex,
-                            "manipulation",
-                            e.target.value
-                          )
-                        }
-                        className="border p-2 rounded"
-                        placeholder="normal or superset"
-                      />
+                      <div className="flex flex-col gap-y-4">
+                        <label htmlFor="sets">Sets</label>
+                        <input
+                          type="number"
+                          value={exercise.sets}
+                          onChange={(e) =>
+                            handleExerciseChange(
+                              workoutIndex,
+                              exerciseIndex,
+                              "sets",
+                              e.target.value
+                            )
+                          }
+                          className="border p-2 rounded"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-y-4">
+                        <label htmlFor="reps">Reps</label>
+                        <input
+                          type="number"
+                          value={exercise.reps}
+                          onChange={(e) =>
+                            handleExerciseChange(
+                              workoutIndex,
+                              exerciseIndex,
+                              "reps",
+                              e.target.value
+                            )
+                          }
+                          className="border p-2 rounded"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-y-4">
+                        <label htmlFor="manipulation">Manipulation</label>
+                        <input
+                          type="text"
+                          value={exercise.manipulation}
+                          onChange={(e) =>
+                            handleExerciseChange(
+                              workoutIndex,
+                              exerciseIndex,
+                              "manipulation",
+                              e.target.value
+                            )
+                          }
+                          className="border p-2 rounded"
+                          placeholder="normal or superset"
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}

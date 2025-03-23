@@ -65,7 +65,9 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
 
     fetchData();
   }, [trainingId]);
+
   console.log("training-Data", training);
+  console.log("training-Id", trainingId);
 
   const handleMoreExercise = (workoutIndex, e) => {
     e.preventDefault();
@@ -276,35 +278,40 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
     const payload = {
       user_id: user_Id,
       training_id: trainingId,
-      workouts: (training.workouts || []).map((w) => ({
-        workout: w?._id,
-        exercises: (w.exercises || []).map(
-          (ex) => (
-            console.log("first", ex),
-            {
-              _id: ex?._id,
-              exercise_id: ex?._id,
-              sets: Number(ex.sets),
-              reps: Number(ex.reps),
-              manipulation: ex.manipulation,
-            }
-          )
-        ),
-      })),
+      workouts: (training.workouts || []).map(
+        (w) => (
+          console.log("workout", w?.workout?._id),
+          {
+            workout: w?.workout?._id,
+            exercises: (w.exercises || []).map(
+              (ex) => (
+                console.log("first", ex),
+                {
+                  _id: ex?._id,
+                  exercise_id: ex?._id,
+                  sets: Number(ex.sets),
+                  reps: Number(ex.reps),
+                  manipulation: ex.manipulation,
+                }
+              )
+            ),
+          }
+        )
+      ),
     };
     console.log("edited payload", payload);
-    // try {
-    //   const response = await axios.put(
-    //     `${base_url}/update-user-training/${trainingId}`,
-    //     payload
-    //   );
-    //   if (response.status === 200) {
-    //     toast.success("Training session updated successfully!");
-    //     navigate(-1);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const response = await axios.put(
+        `${base_url}/update-user-training/${trainingId}`,
+        payload
+      );
+      if (response.status === 200) {
+        toast.success("Training session updated successfully!");
+        navigate(-1);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   //console.log("training-Data", training);
 
