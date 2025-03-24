@@ -6,7 +6,7 @@ const ArrowCard = ({ image, tilte, tilte1, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="w-full h-24 flex  gap-4 items-center justify-between px-4 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300 cursor-pointer"
+      className="w-full  h-24 flex  gap-4 items-center justify-between px-4 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300 cursor-pointer"
     >
       <Button className="rounded-2xl">
         <FaArrowLeftLong />
@@ -16,7 +16,7 @@ const ArrowCard = ({ image, tilte, tilte1, onClick }) => {
         <h1 className="text-xs font-normal text-[#97A2B0]">{tilte1}</h1>
       </div>
       <div className="w-full">
-        <img src={image} alt="" className="w-full h-full" />
+        <img src={image} alt="" className="w-full sm:w-auto sm:h-auto h-full" />
       </div>
     </div>
   );

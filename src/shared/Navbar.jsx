@@ -104,12 +104,13 @@ const Navbar = () => {
                 to={link}
                 end={link === "/dashboard"}
                 className={({ isActive }) =>
-                  `flex items-center text-gray-600 hover:text-gray-900 font-bold space-x-2 ${
+                  `flex items-center text-gray-600 hover:text-gray-900 font-bold gap-x-4 ${
                     isActive
                       ? "text-red-500"
                       : "text-gray-600 hover:text-gray-900"
                   }`
                 }
+                dir="rtl"
               >
                 <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
                 <span dir="rtl">{title}</span>
@@ -123,12 +124,13 @@ const Navbar = () => {
                 key={_id}
                 to={link}
                 className={({ isActive }) =>
-                  `flex items-center text-gray-600 hover:text-gray-900 font-bold space-x-2 ${
+                  `flex items-center text-gray-600 hover:text-gray-900 font-bold gap-x-4 ${
                     isActive
                       ? "text-red-500"
                       : "text-gray-600 hover:text-gray-900"
                   }`
                 }
+                dir="rtl"
               >
                 <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
                 <span dir="rtl">{title}</span>
@@ -142,12 +144,13 @@ const Navbar = () => {
                 key={_id}
                 to={link}
                 className={({ isActive }) =>
-                  `flex items-center text-gray-600 hover:text-gray-900 font-bold space-x-2 ${
+                  `flex items-center text-gray-600 hover:text-gray-900 font-bold gap-x-4 ${
                     isActive
                       ? "text-red-500"
                       : "text-gray-600 hover:text-gray-900"
                   }`
                 }
+                dir="rtl"
               >
                 <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
                 <span dir="rtl">{title}</span>
@@ -186,13 +189,14 @@ const Navbar = () => {
                     key={_id}
                     to={link}
                     className={({ isActive }) =>
-                      `flex items-center text-gray-600 hover:text-gray-900 font-semibold space-x-2 ${
+                      `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
                         isActive
                           ? "text-red-500"
                           : "text-gray-600 hover:text-gray-900"
                       }`
                     }
                     onClick={() => setIsOpen(false)}
+                    dir="rtl"
                   >
                     <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
                     <span dir="rtl">{title}</span>
@@ -206,13 +210,14 @@ const Navbar = () => {
                     key={_id}
                     to={link}
                     className={({ isActive }) =>
-                      `flex items-center text-gray-600 hover:text-gray-900 font-semibold space-x-2 ${
+                      `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
                         isActive
                           ? "text-red-500"
                           : "text-gray-600 hover:text-gray-900"
                       }`
                     }
                     onClick={() => setIsOpen(false)}
+                    dir="rtl"
                   >
                     <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
                     <span dir="rtl">{title}</span>
@@ -226,13 +231,14 @@ const Navbar = () => {
                     key={_id}
                     to={link}
                     className={({ isActive }) =>
-                      `flex items-center text-gray-600 hover:text-gray-900 font-semibold space-x-2 ${
+                      `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
                         isActive
                           ? "text-red-500"
                           : "text-gray-600 hover:text-gray-900"
                       }`
                     }
                     onClick={() => setIsOpen(false)}
+                    dir="rtl"
                   >
                     <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
                     <span dir="rtl">{title}</span>
