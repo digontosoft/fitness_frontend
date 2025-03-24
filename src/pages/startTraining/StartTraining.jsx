@@ -23,23 +23,29 @@ const StartTraining = () => {
 
 
   useEffect(() => {
-    if((valid.sets_done && valid.reps_done) ){
+    if((valid.sets_done && valid.reps_done && valid.lastSet) ){
       setButtonDisabled(false)
     } else {
       setButtonDisabled(true)
     }
   },[valid,buttonDisabled])
+
+  console.log("exerciseData", Object.values(exerciseData));
+  const data = Object.values(exerciseData);
+  
+
+  useEffect(() => {
+    if(data[currentIndex]) {
+      setButtonDisabled(false)
+    } else {
+      setButtonDisabled(true)
+    }
+    
+  },[currentIndex])
   const navigate = useNavigate()
   const isSuperset =
     userTrainingExercise[currentIndex]?.manipulation?.toLowerCase() ===
     "superset";
-
-  // useEffect(() => {
-  //   console.log("Updated exerciseData:", exerciseData);
-  // }, [exerciseData]);
-
-  
-  
   
 
   const handleInputChange = (courseId, value) => {
@@ -71,19 +77,7 @@ const StartTraining = () => {
 
     return currentIndex;
   };
-  // const getPreviousIndex = () => {
-  //   let prevIndex = currentIndex - 1;
 
-  //   if (
-  //     prevIndex > 0 &&
-  //     userTrainingExercise[prevIndex]?.manipulation?.toLowerCase() ===
-  //       "superset"
-  //   ) {
-  //     prevIndex--;
-  //   }
-
-  //   return prevIndex >= 0 ? prevIndex : 0;
-  // };
 
   const handleNext = () => {
     const nextIndex = getNextIndex();
