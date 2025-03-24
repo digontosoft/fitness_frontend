@@ -298,6 +298,7 @@ const AddTrainingForm = () => {
             multi
             onChange={handleWorkoutChange}
             placeholder="בחר..."
+            searchBy="name"
           />
         </div>
 

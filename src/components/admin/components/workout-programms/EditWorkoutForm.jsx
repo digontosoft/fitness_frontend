@@ -598,6 +598,7 @@ const EditWorkoutForm = ({ workoutId }) => {
             options={exercises}
             valueField="_id"
             labelField="name"
+            searchBy="name"
             multi
             values={exercisesForm?.map((ex) => ({
               _id: ex.exercise_id?._id,
