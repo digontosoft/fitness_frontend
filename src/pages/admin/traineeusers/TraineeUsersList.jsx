@@ -112,6 +112,22 @@ export function TraineeUsersLists() {
                 ? "Make Admin"
                 : "Make Trainee"}
             </Button>
+            <Button
+              className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
+              size="sm"
+            >
+              {row.original.isNewUser === "true" ? "New User" : "Old User"}
+            </Button>
+            <Button
+              className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
+              size="sm"
+            >
+              {row.original.userType === "trainee"
+                ? "Trainee User"
+                : row.original.userType === "recipe"
+                ? "Recipe User"
+                : "Admin"}
+            </Button>
           </div>
         );
       },

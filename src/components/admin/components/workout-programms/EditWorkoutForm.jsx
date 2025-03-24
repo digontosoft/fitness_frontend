@@ -502,16 +502,16 @@ const EditWorkoutForm = ({ workoutId }) => {
     const lastIndex = exercises.length - 1;
 
     // Count how many times "superset" is exactly used
-    const supersetCount = exercises.filter(
-      (ex) => ex.manipulation === "superset"
-    ).length;
+    // const supersetCount = exercises.filter(
+    //   (ex) => ex.manipulation === "superset"
+    // ).length;
 
-    // If user types exactly "superset" more than once, prevent it
-    if (value === "superset" && supersetCount >= 1) {
-      toast.error("You can only use 'superset' once in the workout.");
-      setDisableUpdateButton(true);
-      return;
-    }
+    // // If user types exactly "superset" more than once, prevent it
+    // if (value === "superset" && supersetCount >= 1) {
+    //   toast.error("You can only use 'superset' once in the workout.");
+    //   setDisableUpdateButton(true);
+    //   return;
+    // }
 
     // Update the manipulation value for the specific exercise
     setValue(`exercises.${index}.manipulation`, value);
