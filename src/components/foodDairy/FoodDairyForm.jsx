@@ -39,7 +39,7 @@ const FoodDairyForm = () => {
 
       {/* Date Input */}
       <label className="block font-medium">תאריך</label>
-      <input
+      <textarea
         type="date"
         {...register("date", { required: true })}
         className="w-full border p-2 rounded-md mb-4"
@@ -47,7 +47,7 @@ const FoodDairyForm = () => {
 
       {/* Breakfast Input */}
       <label className="block font-medium">ארוחת בוקר</label>
-      <input
+      <textarea
         type="text"
         {...register("breakfast", { required: true })}
         placeholder="Enter items"
@@ -56,7 +56,7 @@ const FoodDairyForm = () => {
 
       {/* Lunch Input */}
       <label className="block font-medium mt-4">ארוחת צהריים</label>
-      <input
+      <textarea
         type="text"
         {...register("lunch", { required: true })}
         placeholder="Enter items"
@@ -65,7 +65,7 @@ const FoodDairyForm = () => {
 
       {/* Dinner Input */}
       <label className="block font-medium mt-4">ארוחת ערב</label>
-      <input
+      <textarea
         type="text"
         {...register("dinner", { required: true })}
         placeholder="Enter items"

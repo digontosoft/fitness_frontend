@@ -136,6 +136,7 @@ export function TrainingList({ userId }) {
     try {
       const response = await axios.get(`${base_url}/training`);
       setTraining(response.data.data);
+      console.log("trainingList:", response.data.data);
     } catch (error) {
       console.error("Error fetching exercises:", error);
     }

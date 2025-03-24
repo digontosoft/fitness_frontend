@@ -13,6 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Container from "@/shared/Container";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -118,14 +119,8 @@ const Home = () => {
           <RightCard user={user} className="w-full md:w-1/2" />
         </div>
 
-        {/* Tasks Section */}
-        <div className="pt-16 sm:pt-20 md:pt-24 flex flex-col justify-center items-center w-full">
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A2533] text-center">
-            משימות
-          </h1>
-
-          {/* Responsive Carousel */}
-          <Carousel className="w-full max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-6xl mt-5 px-2 sm:px-4">
+        {/* Responsive Carousel */}
+        {/* <Carousel className="w-full max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-6xl mt-5 px-2 sm:px-4">
             <CarouselContent className="-ml-1 flex">
               {userTasks?.map((task) => (
                 <CarouselItem
@@ -138,7 +133,24 @@ const Home = () => {
             </CarouselContent>
             <CarouselPrevious />
             <CarouselNext />
-          </Carousel>
+          </Carousel> */}
+
+        {/* Tasks Section */}
+        <div className="max-w-3xl mx-auto justify-center py-10" dir="ltr">
+          <div className="pt-16 sm:pt-20 md:pt-24 flex flex-wrap justify-center items-center w-full">
+            <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A2533] text-center w-full">
+              משימות
+            </h1>
+
+            {userTasks?.map((task) => (
+              <div
+                className="w-full sm:w-1/2 p-2 flex-shrink-0 cursor-pointer"
+                key={task?._id}
+              >
+                <ArrowGroup onclick={handleOpenModal} task={task} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

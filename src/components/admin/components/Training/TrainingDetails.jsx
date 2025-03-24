@@ -19,12 +19,11 @@ export default function TrainingDetails({ trainingId }) {
       axios.get(`${base_url}/training/${trainingId}`).then((response) => {
         if (response.status === 200) {
           setTrainingData(response.data.data);
+          console.log("Training-Data:", response.data.data);
         }
       });
     }
   }, [trainingId]);
-
-  console.log("first", trainingData);
 
   return (
     <Dialog className="">
@@ -52,8 +51,7 @@ export default function TrainingDetails({ trainingId }) {
                         className="border rounded-lg p-4 shadow-md bg-white"
                       >
                         <h3 className="text-lg font-semibold text-gray-800 pb-2 mb-3 text-center">
-                          {workoutItem?.workout?.name ||
-                            "No Workout Name Available"}
+                          {workoutItem?.name || "No Workout Name Available"}
                         </h3>
 
                         {workoutItem.exercises?.length > 0 ? (
