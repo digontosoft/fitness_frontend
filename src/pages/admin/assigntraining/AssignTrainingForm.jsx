@@ -324,6 +324,7 @@ const AssignTrainingForm = ({ user_id }) => {
           valueField="_id"
           labelField="name"
           onChange={handleTrainingChange}
+          searchBy="name"
         />
 
         {selectedTraining && (
@@ -443,6 +444,7 @@ const AssignTrainingForm = ({ user_id }) => {
                       onChange={(selected) =>
                         handleNewExerciseSelection(selected, workoutIndex)
                       }
+                      searchBy="name"
                     />
                   )}
                   <Button
@@ -467,6 +469,7 @@ const AssignTrainingForm = ({ user_id }) => {
                   labelField="name"
                   multi
                   onChange={(selected) => handleAddWorkout(selected)}
+                  searchBy="name"
                 />
               )}
               <Button

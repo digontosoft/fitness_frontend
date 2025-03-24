@@ -113,6 +113,7 @@ const AddWorkoutForm = () => {
             labelField="name"
             multi
             onChange={(values) => setSelectedExercises(values)}
+            searchBy="name"
           />
           {selectedExercises.map((exercise) => (
             <AddExercise
