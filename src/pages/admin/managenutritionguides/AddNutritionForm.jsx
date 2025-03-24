@@ -87,7 +87,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AddNutritionForm = ({ userId }) => {
   const navigate = useNavigate();
@@ -100,51 +100,20 @@ const AddNutritionForm = ({ userId }) => {
     formState: { errors },
   } = useForm();
 
-  // const onSubmit = async (data) => {
-  //   console.log("userId", userId);
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("user_id", userId);
-  //     formData.append("title", data.title);
-  //     formData.append("description", data.description);
-  //     formData.append("file", data.file[0]);
-
-  //     for (let [key, value] of formData.entries()) {
-  //       console.log(key, value);
-  //     }
-
-  //     await axios
-  //       .post(`${base_url}/nutritionGuide`, formData, {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       })
-  //       .then((response) => {
-  //         if (response.status === 201) {
-  //           toast.success("Nutrition saved successfully!");
-  //           reset();
-  //           navigate("/dashboard/nutrition-list");
-  //         }
-  //       });
-  //   } catch (error) {
-  //     console.error("Error submitting training session:", error);
-  //     toast.error("Failed to save training session.");
-  //   }
-  // };
+  const { id } = useParams();
 
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-      if (userId) {
-        formData.append("user_id", userId);
-      }
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      formData.append("file", data.file[0]);
-
-      // Debugging: Log all entries in formData
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
+      if (id) {
+        formData.append("user_id", id);
+        formData.append("title", data.title);
+        formData.append("description", data.description);
+        formData.append("file", data.file[0]);
+      } else {
+        formData.append("title", data.title);
+        formData.append("description", data.description);
+        formData.append("file", data.file[0]);
       }
 
       const response = await axios.post(
@@ -157,14 +126,11 @@ const AddNutritionForm = ({ userId }) => {
         }
       );
 
-      console.log("response", response);
-      
-
       if (response.status === 201) {
         toast.success("Nutrition saved successfully!");
         reset();
-        if (userId) {
-          navigate(`/dashboard/nutrition-lists/${userId}`);
+        if (id) {
+          navigate(`/dashboard/nutrition-lists/${id}`);
         } else {
           navigate("/dashboard/nutrition-lists");
         }

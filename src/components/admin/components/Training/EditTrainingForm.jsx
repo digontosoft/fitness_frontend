@@ -329,6 +329,7 @@ const EditTrainingForm = () => {
             valueField="_id"
             labelField="name"
             onChange={handleAddWorkout}
+            searchBy="name"
           />
         )}
 
@@ -423,6 +424,7 @@ const EditTrainingForm = () => {
                       onChange={(selected) =>
                         handleAddExercise(workout._id, selected)
                       }
+                      searchBy="name"
                     />
                   )}
 

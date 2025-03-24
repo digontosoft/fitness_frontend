@@ -6,14 +6,6 @@ import { WelcomeModal } from "@/components/home/WelcomeModal";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { TaskModal } from "./TaskModal";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Container from "@/shared/Container";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
