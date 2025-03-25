@@ -2,10 +2,9 @@ import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AddNutritionMenu = ({ userId }) => {
   const navigate = useNavigate();
@@ -14,7 +13,6 @@ const AddNutritionMenu = ({ userId }) => {
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm();
 
@@ -32,6 +30,7 @@ const AddNutritionMenu = ({ userId }) => {
         formData,
         {
           headers: {
+            Accept: "application/json",
             "Content-Type": "multipart/form-data",
           },
         }
