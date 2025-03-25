@@ -7,7 +7,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Trash } from "lucide-react";
+import { ArrowUpDown, Edit, Trash } from "lucide-react";
+import moment from "moment";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,8 @@ import axios from "axios";
 import { toast } from "sonner";
 import { deleteEmail } from "@/api/deleteData";
 import { base_url } from "@/api/baseUrl";
+import { Link } from "react-router-dom";
+import EditApproveMail from "@/components/admin/components/ApproveMailTable/EditApproveMail";
 
 export function ApproveMailTable() {
   const [sorting, setSorting] = React.useState([]);
@@ -31,6 +34,13 @@ export function ApproveMailTable() {
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [emails, setEmails] = React.useState([]);
+
+  // const handleOpen = (email) => {
+  //   setOpen(true);
+  //   setApproveMail(email);
+  // };
+  // console.log("approveMail", approveMail,open);
+  
 
   const columns = [
     {
@@ -51,35 +61,84 @@ export function ApproveMailTable() {
       ),
     },
     {
-      id: "actions",
-      header: "פעולות",
+      accessorKey: "expiry_date",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            תאריך סיום
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       cell: ({ row }) => (
-        <div className="flex space-x-2">
-          <Button
-            className="bg-customBg"
-            size="sm"
-            onClick={() => handleDelete(row.original)}
-          >
-            <Trash />
-          </Button>
-          <Button
-            // variant="secondary"
-            className="border bg-white hover:bg-white"
-            size="sm"
-            onClick={() => handleStatus(row.original)}
-          >
-            {row.original.isActive === true ? (
-              <span className="text-red-500">Deactivate</span>
-            ) : (
-              <span className="text-green-500">Activate</span>
-            )}
-          </Button>
+        <div className="lowercase">
+          {row.getValue("expiry_date") &&
+            moment(row.getValue("expiry_date")).format("DD/MM/YYYY")}
         </div>
       ),
+    },
+    {
+      id: "actions",
+      header: "פעולות",
+      cell: ({ row }) => {
+        //console.log("row", row);
+        const id = row.original._id;
+       return (
+        <div className="flex space-x-2">
+         
+        <EditApproveMail id={id} updateDate={updateDate}/>
+     
+       <Button
+         className="bg-customBg"
+         size="sm"
+         onClick={() => handleDelete(row.original)}
+       >
+         <Trash />
+       </Button>
+       <Button
+         // variant="secondary"
+         className="border bg-white hover:bg-white"
+         size="sm"
+         onClick={() => handleStatus(row.original)}
+       >
+         {row.original.isActive === true ? (
+           <span className="text-red-500">Deactivate</span>
+         ) : (
+           <span className="text-green-500">Activate</span>
+         )}
+       </Button>
+     </div>
+       )
+      },
       enableSorting: false,
       enableHiding: false,
     },
   ];
+
+  const updateDate = async(data) =>{
+    try {
+      const response = await axios.patch(
+        `${base_url}/update-approved-mail`,
+        data
+      );
+      if (response.status === 200) {
+        toast.success("Date updated successfully.");
+        setEmails((prevEmails) =>
+          prevEmails.map((email) =>
+            email._id === data._id
+              ? { ...email, expiry_date: data.expiry_date }
+              : email
+          )
+        );
+      }
+    } catch (error) {
+      toast.error("Failed to update date.");
+    }
+      
+  }
 
   const handleStatus = async (rowData) => {
     const updatedStatus = !rowData.isActive;
@@ -165,7 +224,9 @@ export function ApproveMailTable() {
           }
           className="max-w-sm"
         />
+        
         <AddMail setEmails={fetchData} />
+        
       </div>
       <div className="rounded-md border">
         <Table>
@@ -249,6 +310,7 @@ export function ApproveMailTable() {
           Next
         </Button>
       </div>
+      {/* {open&& <EditApproveMail open={open} setOpen={setOpen} approveMail={approveMail}/>} */}
     </div>
   );
 }

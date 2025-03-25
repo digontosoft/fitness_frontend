@@ -1,84 +1,4 @@
-// import { base_url } from "@/api/baseUrl";
-// import { Button } from "@/components/ui/button";
-// import DynamicInputField from "@/components/measurements/DynamicInputField";
-// import axios from "axios";
-// import { useEffect, useState } from "react";
-// import { useForm } from "react-hook-form";
-// import { toast } from "sonner";
-// import Select from "react-dropdown-select";
-// import { useNavigate } from "react-router-dom";
-
-// const AddNutritionForm = ({ userId }) => {
-//   const navigate = useNavigate();
-
-//   const {
-//     register,
-//     handleSubmit,
-//     reset,
-//     setValue,
-//     formState: { errors },
-//   } = useForm();
-
-//   const onSubmit = async (data) => {
-//     try {
-//       const payload = {};
-
-//       console.log("Payload:", payload);
-
-//       await axios.post(`${base_url}/training`, payload).then((response) => {
-//         if (response.status === 201) {
-//           toast.success("Training session saved successfully!");
-
-//           reset();
-//           navigate("/dashboard/training-list");
-//         }
-//       });
-//     } catch (error) {
-//       console.error("Error submitting training session:", error);
-//       toast.error("Failed to save training session.");
-//     }
-//   };
-
-//   return (
-//     <div className="py-20" dir="rtl">
-//       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-//         <div className="grid gap-4">
-//           <DynamicInputField
-//             className="min-w-[350px]"
-//             id="title"
-//             type="text"
-//             label="שם האימון"
-//             placeholder="Add שם האימון...."
-//             register={register}
-//             validation={{ required: "שם האימון is required" }}
-//             errors={errors}
-//           />
-
-//           <DynamicInputField
-//             className="min-w-[350px]"
-//             id="description"
-//             type="text"
-//             label="דגשים מיוחדים (במידה ויש)"
-//             placeholder="דגשים מיוחדים (במידה ויש)..."
-//             register={register}
-//             validation={{ required: "דגשים מיוחדים is required" }}
-//             errors={errors}
-//           />
-//         </div>
-//         <div className="flex justify-center">
-//           <Button
-//             type="submit"
-//             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
-//           >
-//             Add Nutrition Menu
-//           </Button>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default AddNutritionForm;
+/* eslint-disable react/prop-types */
 
 import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
@@ -102,19 +22,24 @@ const AddNutritionForm = ({ userId }) => {
 
   const { id } = useParams();
 
-  const onSubmit = async (data) => {
-    try {
+    // Helper function to create form data
+    const createFormData = (data) => {
       const formData = new FormData();
-      if (id) {
-        formData.append("user_id", id);
-        formData.append("title", data.title);
-        formData.append("description", data.description);
-        formData.append("file", data.file[0]);
-      } else {
-        formData.append("title", data.title);
-        formData.append("description", data.description);
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      if (data.file && data.file[0]) {
         formData.append("file", data.file[0]);
       }
+      if (id) {
+        formData.append("user_id", id);
+      }
+      return formData;
+    };
+
+  const onSubmit = async (data) => {
+    try {
+      const formData = createFormData(data);
+      
 
       const response = await axios.post(
         `${base_url}/nutritionGuide`,
@@ -137,7 +62,7 @@ const AddNutritionForm = ({ userId }) => {
       }
     } catch (error) {
       console.error("Error submitting training session:", error);
-      toast.error("Failed to save training session.");
+      toast.error("Failed to save nutrition.");
     }
   };
 
