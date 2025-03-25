@@ -46,6 +46,8 @@ import workoutCartBg from "../../assets/image/workoutList/Bg.png";
 import whiteLogo from "../../assets/image/whiteLogo.png";
 import { Link } from "react-router-dom";
 const Cart = ({ workout, training }) => {
+  console.log("workout", workout);
+  
   return (
     <Link to={`/personal-workout/${training._id}`}>
       <div className="md:w-56 w-48 shadow-xl rounded-2xl p-3 mt-8">
@@ -61,7 +63,7 @@ const Cart = ({ workout, training }) => {
         </div>
         <div className="px-6 py-4">
           <p className="text-[#0A2533]  text-sm font-bold text-end">
-            {workout?.workout?.name}
+            {workout?.name}
           </p>
         </div>
       </div>

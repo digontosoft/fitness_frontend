@@ -103,6 +103,7 @@ const StartTraining = () => {
       setIsFinished(false);
     }
   };
+  
 
   const handleFinish = async () => {
     //console.log("All exercise data on finish:", exerciseData);
@@ -132,16 +133,22 @@ const StartTraining = () => {
    }
 };
 
+console.log("userTrainingExercise", userTrainingExercise)
+
+
   const nextIndex = currentIndex + 1;
   const currentExercise = userTrainingExercise[currentIndex] || {};
   const courseId =
     currentExercise?.exercise_id?._id || `course-${currentIndex}`;
 
   console.log("current index data", currentIndex);
+  console.log("workout", workData);
+  
   return (
     <div className="px-2">
       <CommonContainer>
         <>
+        <Title title={workData?.task_name}/>
           <Title
             title={userTrainingExercise[currentIndex]?.exercise_id?.name}
           />

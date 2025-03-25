@@ -1,49 +1,69 @@
+
+import { base_url } from "@/api/baseUrl";
+import BasicButton from "@/components/admin/components/ui/BasicButton";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"; // Ensure consistency with other dialogs
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import BasicButton from "../ui/BasicButton";
-import { useForm } from "react-hook-form";
+import { Label } from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
-import { toast } from "sonner";
-import { base_url } from "@/api/baseUrl";
+import { Edit } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import moment from "moment";
 
-export default function AddMail({ setEmails }) {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+function EditApproveMail({id,updateDate}) {
+    const [loading, setLoading] = useState(false);
+    const [approvedEmail, setApprovedEmail] = useState({});
+   
+    
+      const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+      } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      console.log("Submitted email:", data);
-      const response = await axios.post(`${base_url}/approved-mail`, data);
-      toast.success(response.data.message);
-      reset();
-      setEmails();
-    } catch (error) {
-      toast.success(error.response.data.message);
-    }
-  };
+      useEffect(()=>{
+        const getMail = async () => {
+          try {
+            setLoading(true);
+            const response = await axios.get(`${base_url}/approved-mail/${id}`);
+            const data = response.data.approvedEmail;
+            
+            setApprovedEmail(data);
+          } catch (error) {
+            console.error("Error fetching email:", error);
+          } finally {
+            setLoading(false);
+          }
+        }
+        getMail();
+      },[id])
 
+      const onSubmit = async (data) => {
+        await updateDate(data);
+     
+      }
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-customBg">הוסף כתובת מייל</Button>
+        <Button className="bg-customBg hover:bg-customBg-dark" size="sm">
+          <Edit/>
+        </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle>הוסף כתובת מייל</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-center text-gray-800">
+            Edit Approved Mail
+          </DialogTitle>
         </DialogHeader>
+        {/* Add form fields or other content here */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
             <div className="grid items-center gap-4">
@@ -52,6 +72,8 @@ export default function AddMail({ setEmails }) {
               <Input
                 id="email"
                 type="email"
+                defaultValue={approvedEmail.email}
+                disabled  
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -71,6 +93,7 @@ export default function AddMail({ setEmails }) {
               <Input
                 id="expiry_date"
                 type="date"
+                defaultValue={moment(approvedEmail.expiry_date).format("YYYY-MM-DD")}
                 {...register("expiry_date", {
                   required: "Expiry Date is required",
                 })}
@@ -84,11 +107,12 @@ export default function AddMail({ setEmails }) {
             </div>
           </div>
           <div className="flex items-center justify-end">
-            <BasicButton type="submit" title="ADD" className="bg-customBg" />
+            <BasicButton type="submit" title="UPDATE" className="bg-customBg" />
           </div>
         </form>
-        <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
+
+export default EditApproveMail;
