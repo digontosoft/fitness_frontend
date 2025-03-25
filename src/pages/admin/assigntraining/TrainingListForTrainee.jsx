@@ -126,6 +126,12 @@ export function TrainingListForTrainee({ userId }) {
             >
               <Trash />
             </Button>
+            <Button
+              className="bg-green-100 hover:bg-green-100 text-green-500 font-bold uppercase tracking-wide"
+              size="sm"
+            >
+              {row.original.status === "active" ? "Active" : "Inactive"}
+            </Button>
           </div>
         );
       },
@@ -195,7 +201,7 @@ export function TrainingListForTrainee({ userId }) {
           }
           className="max-w-sm"
         />
-        <Link to={`/dashboard/assign-training/${userId}`}>
+        <Link to={`/dashboard/training-list`} state={userId}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
             Assign New Training
           </Button>

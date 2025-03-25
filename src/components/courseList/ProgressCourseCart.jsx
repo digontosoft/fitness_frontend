@@ -1,8 +1,6 @@
 import Title from "../measurements/Tilte";
 import RecipeParagraph from "../recipe/RecipeParagraph";
 import VideoCourseCart from "../common/VideoCourseCart";
-import { VideoCartData } from "@/constants/VideoCartData";
-import Subtitle from "./Subtitle";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { base_url } from "@/api/baseUrl";
