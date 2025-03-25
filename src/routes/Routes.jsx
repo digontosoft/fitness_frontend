@@ -280,6 +280,10 @@ export const routes = createBrowserRouter([
           },
           {
             path: "/dashboard/assign-training/:userId",
+            element: <TrainingLists />,
+          },
+          {
+            path: "/dashboard/assign-training/:trainingId/:userId",
             element: <AssignTraining />,
           },
           {

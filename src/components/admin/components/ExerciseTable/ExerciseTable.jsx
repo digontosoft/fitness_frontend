@@ -30,7 +30,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { handler } from "tailwindcss-animate";
 
 export function ExerciseTable() {
   const [sorting, setSorting] = useState([]);
@@ -212,6 +211,22 @@ export function ExerciseTable() {
           value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <Input
+          placeholder="צִיוּד...."
+          value={table.getColumn("equipment")?.getFilterValue() ?? ""}
+          onChange={(event) =>
+            table.getColumn("equipment")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <Input
+          placeholder="חלק גוף...."
+          value={table.getColumn("body_part")?.getFilterValue() ?? ""}
+          onChange={(event) =>
+            table.getColumn("body_part")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

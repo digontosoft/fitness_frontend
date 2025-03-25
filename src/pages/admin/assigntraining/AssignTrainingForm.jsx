@@ -9,8 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { Trash } from "lucide-react";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 
-const AssignTrainingForm = ({ user_id }) => {
+const AssignTrainingForm = ({ trainingId, user_id }) => {
   const [selectedTraining, setSelectedTraining] = useState(null);
+  const [trainingbyId, setTrainingById] = useState({});
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
   const [showWorkoutDropdown, setShowWorkoutDropdown] = useState(false);
   const [trainingList, setTrainingList] = useState([]);
@@ -56,6 +57,20 @@ const AssignTrainingForm = ({ user_id }) => {
     };
     fetchTraining();
   }, []);
+
+  // Fetch trainingbyId
+  useEffect(() => {
+    const fetchTraining = async () => {
+      try {
+        const response = await axios.get(`${base_url}/training/${trainingId}`);
+        setTrainingById(response.data.data);
+        console.log("trainingById:", response.data.data);
+      } catch (error) {
+        console.error("Error fetching training sessions:", error);
+      }
+    };
+    fetchTraining();
+  }, [trainingId]);
 
   // Fetch exercises
   useEffect(() => {
@@ -114,23 +129,23 @@ const AssignTrainingForm = ({ user_id }) => {
 
   // When a user changes an exercise field, especially the manipulation field.
   const handleExerciseChange = (workoutIndex, exerciseIndex, field, value) => {
-    const updatedWorkouts = [...selectedTraining.workouts];
+    const updatedWorkouts = [...trainingbyId.workouts];
     const workout = updatedWorkouts[workoutIndex];
     const exercise = workout.exercises[exerciseIndex];
 
     if (field === "manipulation" && value === "superset") {
       // Check if there is already a superset in the workout
-      const existingSuperset = workout.exercises.some(
-        (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
-      );
+      // const existingSuperset = workout.exercises.some(
+      //   (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
+      // );
 
-      if (existingSuperset) {
-        toast.error("Only one superset is allowed per workout.");
-        setIsSupersetIncomplete(true);
-        return;
-      } else {
-        setIsSupersetIncomplete(false);
-      }
+      // if (existingSuperset) {
+      //   toast.error("Only one superset is allowed per workout.");
+      //   setIsSupersetIncomplete(true);
+      //   return;
+      // } else {
+      //   setIsSupersetIncomplete(false);
+      // }
 
       // Check if this is the last exercise
       const isLastExercise = exerciseIndex === workout.exercises.length - 1;
@@ -187,27 +202,27 @@ const AssignTrainingForm = ({ user_id }) => {
       } else {
         setIsSupersetIncomplete(false);
       }
-    } else {
-      setIsSupersetIncomplete(false);
     }
 
     // setSelectedTraining(updatedWorkouts);
-    const updatedTraining = { ...selectedTraining };
+    const updatedTraining = { ...trainingbyId };
     updatedTraining.workouts[workoutIndex].exercises[exerciseIndex][field] =
       value;
-    setSelectedTraining(updatedTraining);
+    setTrainingById(updatedTraining);
   };
 
   // When new exercises are selected (for "Add More Exercise")
   const handleNewExerciseSelection = (selectedExercises, workoutIndex) => {
-    if (!selectedTraining) return;
-    const updatedTraining = { ...selectedTraining };
+    console.log("selectedExercises:", selectedExercises);
+    if (!trainingbyId) return;
+    const updatedTraining = { ...trainingbyId };
     const currentWorkout = updatedTraining.workouts[workoutIndex];
 
     selectedExercises.forEach((exercise) => {
       currentWorkout.exercises.push({
         _id: exercise._id,
         name: exercise.name,
+        exercise_id: exercise._id,
         sets: 0,
         reps: 0,
         manipulation: "",
@@ -215,7 +230,7 @@ const AssignTrainingForm = ({ user_id }) => {
     });
 
     setIsSupersetIncomplete(false);
-    setSelectedTraining(updatedTraining);
+    setTrainingById(updatedTraining);
     setAddMoreExerciseIndex(null);
   };
 
@@ -230,9 +245,9 @@ const AssignTrainingForm = ({ user_id }) => {
   };
 
   const handleAddWorkout = async (selectedWorkouts) => {
-    if (!selectedTraining || selectedWorkouts.length === 0) return;
+    if (!trainingbyId || selectedWorkouts.length === 0) return;
 
-    const updatedTraining = { ...selectedTraining };
+    const updatedTraining = { ...trainingbyId };
 
     for (const workout of selectedWorkouts) {
       const fullWorkoutData = await fetchWorkoutData(workout._id);
@@ -245,6 +260,7 @@ const AssignTrainingForm = ({ user_id }) => {
               console.log("exercise_id:", exercise.exercise_id._id),
               {
                 _id: exercise.exercise_id._id,
+                exercise_id: exercise.exercise_id._id,
                 name: exercise.name,
                 sets: exercise.sets || 3,
                 reps: exercise.reps || 10,
@@ -256,21 +272,21 @@ const AssignTrainingForm = ({ user_id }) => {
       }
     }
 
-    setSelectedTraining(updatedTraining);
+    setTrainingById(updatedTraining);
     setShowWorkoutDropdown(false);
   };
 
   const handleRemoveExercise = (workoutIndex, exerciseIndex) => {
-    if (!selectedTraining) return;
-    const updatedTraining = { ...selectedTraining };
+    if (!trainingbyId) return;
+    const updatedTraining = { ...trainingbyId };
     updatedTraining.workouts[workoutIndex].exercises.splice(exerciseIndex, 1);
     setSelectedTraining(updatedTraining);
     checkSupersetCompletion();
   };
 
   const handleRemoveWorkout = (workoutIndex) => {
-    if (!selectedTraining) return;
-    const updatedTraining = { ...selectedTraining };
+    if (!trainingbyId) return;
+    const updatedTraining = { ...trainingbyId };
     updatedTraining.workouts.splice(workoutIndex, 1);
     setSelectedTraining(updatedTraining);
   };
@@ -279,7 +295,7 @@ const AssignTrainingForm = ({ user_id }) => {
     // console.log("training name:", data)
 
     try {
-      const formattedWorkouts = selectedTraining.workouts.map(
+      const formattedWorkouts = trainingbyId.workouts.map(
         (workout) => (
           console.log("workout:", workout),
           {
@@ -295,10 +311,10 @@ const AssignTrainingForm = ({ user_id }) => {
       );
 
       const payload = {
-        name: data.name || selectedTraining,
-        description: data.description || selectedTraining.description,
+        name: data.name || trainingbyId?.name,
+        description: data.description || trainingbyId.description,
         user_id,
-        training_id: selectedTraining._id,
+        training_id: trainingbyId._id,
         workouts: formattedWorkouts,
       };
 
@@ -317,7 +333,7 @@ const AssignTrainingForm = ({ user_id }) => {
   return (
     <div className="py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <Select
+        {/* <Select
           className="rounded-lg h-12 sm:min-w-[400px] w-full"
           direction="rtl"
           options={trainingList}
@@ -325,9 +341,9 @@ const AssignTrainingForm = ({ user_id }) => {
           labelField="name"
           onChange={handleTrainingChange}
           searchBy="name"
-        />
+        /> */}
 
-        {selectedTraining && (
+        {trainingbyId && (
           <div className="space-y-4">
             <DynamicInputField
               className="sm:min-w-[350px]"
@@ -338,7 +354,7 @@ const AssignTrainingForm = ({ user_id }) => {
               register={register}
               validation={{ required: "Training Name is required" }}
               errors={errors}
-              defaultValue={selectedTraining?.name}
+              defaultValue={trainingbyId?.name}
             />
 
             <DynamicInputField
@@ -350,10 +366,10 @@ const AssignTrainingForm = ({ user_id }) => {
               register={register}
               validation={{ required: "Training Description is required" }}
               errors={errors}
-              defaultValue={selectedTraining?.description}
+              defaultValue={trainingbyId?.description}
             />
 
-            {selectedTraining.workouts.map((workout, workoutIndex) => (
+            {trainingbyId?.workouts?.map((workout, workoutIndex) => (
               <div key={workout._id} className="border p-4 rounded-lg">
                 <div className="flex justify-between items-center">
                   <h3 className="font-bold">{workout.name}</h3>

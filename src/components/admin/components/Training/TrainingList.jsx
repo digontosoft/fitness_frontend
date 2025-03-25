@@ -20,7 +20,7 @@ import {
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 // import ExerciseDetails from "./ExerciseDetails";
 import { deleteTraining } from "@/api/deleteData";
 import {
@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import TrainingDetails from "./TrainingDetails";
 
-export function TrainingList({ userId }) {
+export function TrainingList() {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -40,6 +40,7 @@ export function TrainingList({ userId }) {
   const [training, setTraining] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedTraining, setSelectedTraining] = useState(null);
+  const { state: userId } = useLocation();
 
   const columns = [
     {
@@ -97,14 +98,13 @@ export function TrainingList({ userId }) {
             >
               <Trash />
             </Button>
-            {/* <Button
-              className="bg-green-100 hover:bg-green-300 duration-200 ease-in-out delay-75"
-              size="sm"
+            <Link
+              to={`/dashboard/assign-training/${row.original._id}/${userId}`}
             >
-              <span className="text-green-500 uppercase font-semibold">
-                {row.original.isActive === true ? "Deactivate" : "Activate"}
-              </span>
-            </Button> */}
+              <Button className="bg-customBg" size="sm">
+                Assign Training
+              </Button>
+            </Link>
           </div>
         );
       },

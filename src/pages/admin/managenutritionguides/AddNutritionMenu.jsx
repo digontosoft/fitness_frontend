@@ -1,4 +1,3 @@
-
 import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
@@ -7,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
-const AddNutritionForm = () => {
+const AddNutritionMenu = ({ userId }) => {
   const navigate = useNavigate();
 
   const {
@@ -17,26 +16,14 @@ const AddNutritionForm = () => {
     formState: { errors },
   } = useForm();
 
-  const { id } = useParams();
-
-    // Helper function to create form data
-    const createFormData = (data) => {
-      const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      if (data.file && data.file[0]) {
-        formData.append("file", data.file[0]);
-      }
-      if (id) {
-        formData.append("user_id", id);
-      }
-      return formData;
-    };
-
   const onSubmit = async (data) => {
     try {
-      const formData = createFormData(data);
-      
+      const formData = new FormData();
+
+      formData.append("user_id", userId);
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("file", data.file[0]);
 
       const response = await axios.post(
         `${base_url}/nutritionGuide`,
@@ -53,11 +40,11 @@ const AddNutritionForm = () => {
         toast.success("Nutrition saved successfully!");
         reset();
 
-        navigate("/dashboard/nutrition-lists");
+        navigate(`/dashboard/nutrition-lists/${userId}`);
       }
     } catch (error) {
       console.error("Error submitting training session:", error);
-      toast.error("Failed to save nutrition.");
+      toast.error("Failed to save training session.");
     }
   };
 
@@ -73,11 +60,11 @@ const AddNutritionForm = () => {
             className="sm:min-w-[350px]"
             id="title"
             type="text"
-            label={"Nutrition Guide Name"}
-            placeholder={"Add nutrition guide name..."}
+            label={userId ? "Nutrition Menu Name" : "Nutrition Guide Name"}
+            placeholder={"Add nutrition menu name..."}
             register={register}
             validation={{
-              required: "Nutrition guide name is required",
+              required: "Nutrition menu name is required",
             }}
             errors={errors}
           />
@@ -86,11 +73,11 @@ const AddNutritionForm = () => {
             className="sm:min-w-[350px]"
             id="description"
             type="text"
-            label={"Nutrition Guide Description"}
-            placeholder={"Add nutrition guide description..."}
+            label={"Nutrition Menu Description"}
+            placeholder={"Add nutrition menu description..."}
             register={register}
             validation={{
-              required: "Nutrition guide description is required",
+              required: "Nutrition menu description is required",
             }}
             errors={errors}
           />
@@ -126,7 +113,7 @@ const AddNutritionForm = () => {
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
           >
-            {"Add Nutrition Guide"}
+            {"Add Nutrition Menu"}
           </Button>
         </div>
       </form>
@@ -134,4 +121,4 @@ const AddNutritionForm = () => {
   );
 };
 
-export default AddNutritionForm;
+export default AddNutritionMenu;
