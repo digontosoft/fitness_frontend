@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import AddNutritionForm from "./AddNutritionForm";
 import FormTitle from "@/components/admin/components/ui/FormTitle";
+import AddNutritionMenu from "./AddNutritionMenu";
 
 const AddNutrition = () => {
   const { id } = useParams();
@@ -11,7 +12,7 @@ const AddNutrition = () => {
           <FormTitle
             title={id ? "Add Nutrition Menu" : "Add Nutrition Guide"}
           />
-          <AddNutritionForm userId={id} />
+          {id ? <AddNutritionMenu userId={id} /> : <AddNutritionForm />}
         </div>
       </div>
     </div>

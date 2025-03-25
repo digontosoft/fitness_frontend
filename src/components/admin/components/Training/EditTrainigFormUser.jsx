@@ -185,17 +185,17 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
 
     if (field === "manipulation" && value === "superset") {
       // Check if there is already a superset in the workout
-      const existingSuperset = workout.exercises.some(
-        (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
-      );
+      // const existingSuperset = workout.exercises.some(
+      //   (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
+      // );
 
-      if (existingSuperset) {
-        toast.error("Only one superset is allowed per workout.");
-        setIsSupersetIncomplete(true);
-        return;
-      } else {
-        setIsSupersetIncomplete(false);
-      }
+      // if (existingSuperset) {
+      //   toast.error("Only one superset is allowed per workout.");
+      //   setIsSupersetIncomplete(true);
+      //   return;
+      // } else {
+      //   setIsSupersetIncomplete(false);
+      // }
 
       // Check if this is the last exercise
       const isLastExercise = exerciseIndex === workout.exercises.length - 1;

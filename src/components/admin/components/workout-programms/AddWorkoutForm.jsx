@@ -16,6 +16,7 @@ const AddWorkoutForm = () => {
   const [superset, setSuperset] = useState(false);
   const [isSupersetSelected, setIsSupersetSelected] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const searchFields = ["name", "equipment", "body_part"];
 
   const navigate = useNavigate();
   const {
@@ -105,16 +106,36 @@ const AddWorkoutForm = () => {
             validation={{ required: "Workout Description is required" }}
             errors={errors}
           />
-          <Select
-            className="rounded-lg h-12 w-auto"
-            direction="rtl"
-            options={exercises}
-            valueField="_id"
-            labelField="name"
-            multi
-            onChange={(values) => setSelectedExercises(values)}
-            searchBy="name"
-          />
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Filter with Exercise Name
+            </label>
+            <Select
+              className="rounded-lg h-12 w-auto"
+              direction="rtl"
+              options={exercises}
+              valueField="_id"
+              labelField="name"
+              multi
+              onChange={(values) => setSelectedExercises(values)}
+              searchBy="name"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Filter with Exercise Equipment
+            </label>
+            <Select
+              className="rounded-lg h-12 w-auto"
+              direction="rtl"
+              options={exercises}
+              valueField="_id"
+              labelField="equipment"
+              multi
+              onChange={(values) => setSelectedExercises(values)}
+              searchBy="equipment"
+            />
+          </div>
           {selectedExercises.map((exercise) => (
             <AddExercise
               key={exercise._id}

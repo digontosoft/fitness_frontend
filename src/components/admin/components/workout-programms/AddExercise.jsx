@@ -124,10 +124,10 @@ const AddExercise = ({
     const value = e.target.value.toLowerCase();
 
     // Check if the user is trying to select "superset" and if it's already selected in another exercise
-    if (value === "superset" && isSupersetSelected) {
-      toast.error("Superset can only be added to one exercise at a time.");
-      return;
-    }
+    // if (value === "superset" && isSupersetSelected) {
+    //   toast.error("Superset can only be added to one exercise at a time.");
+    //   return;
+    // }
 
     // Update the manipulation state
     setManipulation(value);

@@ -84,37 +84,27 @@ import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const AddNutritionForm = ({ userId }) => {
+const AddNutritionForm = () => {
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm();
-
-  const { id } = useParams();
 
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-      if (id) {
-        formData.append("user_id", id);
-        formData.append("title", data.title);
-        formData.append("description", data.description);
-        formData.append("file", data.file[0]);
-      } else {
-        formData.append("title", data.title);
-        formData.append("description", data.description);
-        formData.append("file", data.file[0]);
-      }
+
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("file", data.file[0]);
 
       const response = await axios.post(
         `${base_url}/nutritionGuide`,
@@ -129,11 +119,8 @@ const AddNutritionForm = ({ userId }) => {
       if (response.status === 201) {
         toast.success("Nutrition saved successfully!");
         reset();
-        if (id) {
-          navigate(`/dashboard/nutrition-lists/${id}`);
-        } else {
-          navigate("/dashboard/nutrition-lists");
-        }
+
+        navigate("/dashboard/nutrition-lists");
       }
     } catch (error) {
       console.error("Error submitting training session:", error);
@@ -153,17 +140,11 @@ const AddNutritionForm = ({ userId }) => {
             className="sm:min-w-[350px]"
             id="title"
             type="text"
-            label={userId ? "Nutrition Menu Name" : "Nutrition Guide Name"}
-            placeholder={
-              userId
-                ? "Add nutrition menu name..."
-                : "Add nutrition guide name..."
-            }
+            label={"Nutrition Guide Name"}
+            placeholder={"Add nutrition guide name..."}
             register={register}
             validation={{
-              required: userId
-                ? "Nutrition menu name is required"
-                : "Nutrition guide name is required",
+              required: "Nutrition guide name is required",
             }}
             errors={errors}
           />
@@ -172,21 +153,11 @@ const AddNutritionForm = ({ userId }) => {
             className="sm:min-w-[350px]"
             id="description"
             type="text"
-            label={
-              userId
-                ? "Nutrition Menu Description"
-                : "Nutrition Guide Description"
-            }
-            placeholder={
-              userId
-                ? "Add nutrition menu description..."
-                : "Add nutrition guide description..."
-            }
+            label={"Nutrition Guide Description"}
+            placeholder={"Add nutrition guide description..."}
             register={register}
             validation={{
-              required: userId
-                ? "Nutrition menu description is required"
-                : "Nutrition guide description is required",
+              required: "Nutrition guide description is required",
             }}
             errors={errors}
           />
@@ -222,7 +193,7 @@ const AddNutritionForm = ({ userId }) => {
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
           >
-            {userId ? "Add Nutrition Menu" : "Add Nutrition Guide"}
+            {"Add Nutrition Guide"}
           </Button>
         </div>
       </form>
