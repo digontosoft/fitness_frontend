@@ -10,10 +10,12 @@ import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import { toast } from "sonner";
 import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
+import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [openAnswer, setOpenAnswer] = useState(false);
   console.log("user", userId);
 
   useEffect(() => {
@@ -59,6 +61,10 @@ const TraineerUi = ({ userId }) => {
     setOpenModal(true);
     console.log("modal clicked");
   };
+
+  const handleAnswer = () => {
+    setOpenAnswer(true);
+  }
   const userFirstName = JSON.parse(localStorage.getItem("firstName"));
   const userLastName = JSON.parse(localStorage.getItem("lastName"));
   const userName = userFirstName + " " + userLastName;
@@ -126,6 +132,14 @@ const TraineerUi = ({ userId }) => {
 
         {/* <FoodDairyModal userId={userId} /> */}
       </div>
+      <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-5">
+        <AdminArrowCardWithoutImage
+          title="תשובות מתאמן"
+          onClick={handleAnswer}
+        />
+
+        {/* <FoodDairyModal userId={userId} /> */}
+      </div>
 
       <div className="flex justify-center items-center"></div>
       {openModal && (
@@ -134,6 +148,7 @@ const TraineerUi = ({ userId }) => {
           <FoodDairyModal userId={userId} onClose={() => setOpenModal(false)} />
         </>
       )}
+      {openAnswer && <ShowAnswerModal userId={userId} onclose={()=>setOpenAnswer(false)}/>}
     </div>
   );
 };

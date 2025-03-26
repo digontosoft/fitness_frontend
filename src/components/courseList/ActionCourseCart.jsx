@@ -18,7 +18,7 @@ const ActionCourseCart = () => {
     navigate("/startTraining", { state: { data: workoutData } });
   };
   console.log("workoutData", workoutData);
-  
+
   return (
     <div className=" bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753] min-h-screen border-b-8 border-white py-12  ">
       <div className="flex flex-col justify-center items-center max-w-6xl mx-auto bg-white rounded-3xl p-2 md:p-10">
@@ -40,8 +40,9 @@ const ActionCourseCart = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
           {workoutData?.userTrainingExercise?.map((item, index) => (
             <VideoCourseCart
-              key={`${item?.exercise_id?._id}-${index}`}
-              exercise={item}
+              key={index}
+              exercise={item?.exercise_id}
+              index={index}
             />
           ))}
         </div>

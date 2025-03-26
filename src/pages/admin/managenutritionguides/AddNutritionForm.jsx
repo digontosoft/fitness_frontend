@@ -1,3 +1,4 @@
+
 import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
@@ -16,13 +17,26 @@ const AddNutritionForm = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      const formData = new FormData();
+  const { id } = useParams();
 
+    // Helper function to create form data
+    const createFormData = (data) => {
+      const formData = new FormData();
       formData.append("title", data.title);
       formData.append("description", data.description);
-      formData.append("file", data.file[0]);
+      if (data.file && data.file[0]) {
+        formData.append("file", data.file[0]);
+      }
+      if (id) {
+        formData.append("user_id", id);
+      }
+      return formData;
+    };
+
+  const onSubmit = async (data) => {
+    try {
+      const formData = createFormData(data);
+      
 
       const response = await axios.post(
         `${base_url}/nutritionGuide`,
@@ -43,7 +57,7 @@ const AddNutritionForm = () => {
       }
     } catch (error) {
       console.error("Error submitting training session:", error);
-      toast.error("Failed to save training session.");
+      toast.error("Failed to save nutrition.");
     }
   };
 
