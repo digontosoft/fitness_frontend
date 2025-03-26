@@ -121,7 +121,9 @@ function ShowAnswerModal() {
           </div>
         <div>
           <div>איפה אתה מעדיף להתאמן?</div>
-          <div>{userInfo.height ? userInfo?.height : "N/A"}</div>
+          <div>{userInfo.
+preferred_training_location ? userInfo?.
+preferred_training_location : "N/A"}</div>
         </div>
         <div>
           <div>האם יש לך פציעות או מגבלות פיזיות?</div>
