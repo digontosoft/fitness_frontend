@@ -16,51 +16,56 @@ const AddNutritionMenu = ({ userId }) => {
     formState: { errors },
   } = useForm();
 
+  const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(",")[1]); // Extract base64 string
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const onSubmit = async (data) => {
     try {
-      const formData = new FormData();
+      let base64File = "";
+      if (data.file && data.file[0]) {
+        base64File = await convertFileToBase64(data.file[0]);
+      }
 
-      formData.append("user_id", userId);
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      formData.append("file", data.file[0]);
+      const payload = {
+        title: data.title,
+        user_id: userId,
+        description: data.description,
+        file: base64File,
+      };
 
-      const response = await axios.post(
-        `${base_url}/nutritionGuide`,
-        formData,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(`${base_url}/nutritionGuide`, payload, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
 
       if (response.status === 201) {
         toast.success("Nutrition saved successfully!");
         reset();
-
         navigate(`/dashboard/nutrition-lists/${userId}`);
       }
     } catch (error) {
-      console.error("Error submitting training session:", error);
-      toast.error("Failed to save training session.");
+      console.error("Error submitting nutrition menu:", error);
+      toast.error("Failed to save nutrition.");
     }
   };
 
   return (
     <div className="py-20" dir="rtl">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6"
-        encType="multipart/form-data"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4">
           <DynamicInputField
             className="sm:min-w-[350px]"
             id="title"
             type="text"
-            label={userId ? "Nutrition Menu Name" : "Nutrition Guide Name"}
+            label={"Nutrition Menu Name"}
             placeholder={"Add nutrition menu name..."}
             register={register}
             validation={{

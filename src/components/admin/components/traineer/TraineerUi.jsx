@@ -64,7 +64,7 @@ const TraineerUi = ({ userId }) => {
 
   const handleAnswer = () => {
     setOpenAnswer(true);
-  }
+  };
   const userFirstName = JSON.parse(localStorage.getItem("firstName"));
   const userLastName = JSON.parse(localStorage.getItem("lastName"));
   const userName = userFirstName + " " + userLastName;
@@ -135,7 +135,7 @@ const TraineerUi = ({ userId }) => {
       <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-5">
         <AdminArrowCardWithoutImage
           title="תשובות מתאמן"
-          onClick={handleAnswer}
+          link={`/dashboard/answers-list/${userId}`}
         />
 
         {/* <FoodDairyModal userId={userId} /> */}
@@ -148,7 +148,9 @@ const TraineerUi = ({ userId }) => {
           <FoodDairyModal userId={userId} onClose={() => setOpenModal(false)} />
         </>
       )}
-      {openAnswer && <ShowAnswerModal userId={userId} onclose={()=>setOpenAnswer(false)}/>}
+      {openAnswer && (
+        <ShowAnswerModal userId={userId} onclose={() => setOpenAnswer(false)} />
+      )}
     </div>
   );
 };
