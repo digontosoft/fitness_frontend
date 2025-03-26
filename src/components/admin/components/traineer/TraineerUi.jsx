@@ -135,7 +135,7 @@ const TraineerUi = ({ userId }) => {
       <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-5">
         <AdminArrowCardWithoutImage
           title="תשובות מתאמן"
-          onClick={handleAnswer}
+          link={`/dashboard/answers-list/${userId}`}
         />
 
         {/* <FoodDairyModal userId={userId} /> */}
