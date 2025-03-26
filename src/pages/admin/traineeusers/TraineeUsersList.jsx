@@ -116,16 +116,10 @@ export function TraineeUsersLists() {
               className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
               size="sm"
             >
-              {row.original.isNewUser === "true" ? "New User" : "Old User"}
-            </Button>
-            <Button
-              className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
-              size="sm"
-            >
               {row.original.userType === "trainee"
-                ? "Trainee User"
+                ? "משתמש מתאמן"
                 : row.original.userType === "recipe"
-                ? "Recipe User"
+                ? "משתמש ספר מתכונים"
                 : "Admin"}
             </Button>
           </div>

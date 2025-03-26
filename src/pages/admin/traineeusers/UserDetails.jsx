@@ -65,6 +65,15 @@ export default function UserDetails({ userId }) {
                 {userData?.userStatus}
               </span>
             </div>
+            <div className="px-4 py-2 bg-green-200 rounded-lg shadow-sm">
+              <span className="font-medium text-green-600 uppercase">
+                {userData?.userType === "trainee"
+                  ? "משתמש מתאמן"
+                  : userData?.userType === "recipe"
+                  ? "משתמש ספר מתכונים"
+                  : "Admin"}
+              </span>
+            </div>
           </div>
         </div>
 
