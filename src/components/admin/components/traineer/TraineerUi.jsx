@@ -64,7 +64,7 @@ const TraineerUi = ({ userId }) => {
 
   const handleAnswer = () => {
     setOpenAnswer(true);
-  }
+  };
   const userFirstName = JSON.parse(localStorage.getItem("firstName"));
   const userLastName = JSON.parse(localStorage.getItem("lastName"));
   const userName = userFirstName + " " + userLastName;
@@ -148,7 +148,9 @@ const TraineerUi = ({ userId }) => {
           <FoodDairyModal userId={userId} onClose={() => setOpenModal(false)} />
         </>
       )}
-      {openAnswer && <ShowAnswerModal userId={userId} onclose={()=>setOpenAnswer(false)}/>}
+      {openAnswer && (
+        <ShowAnswerModal userId={userId} onclose={() => setOpenAnswer(false)} />
+      )}
     </div>
   );
 };

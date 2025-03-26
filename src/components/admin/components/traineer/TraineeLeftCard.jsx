@@ -12,8 +12,7 @@ import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 
 const TraineeLeftCard = ({ userId }) => {
-  const [measurementData, setMesurementData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [measurementData, setMesurementData] = useState({});
 
   const userType = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -21,17 +20,14 @@ const TraineeLeftCard = ({ userId }) => {
     if (!userId) return;
 
     const fetchMeasurement = async () => {
-      // setLoading(true);
       try {
         const res = axios.get(`${base_url}/measurement/${userId}`);
         if (res.status === 200) {
-          setMesurementData(res.data.data);
-          console.log("measurementData", res.data.data);
+          setMesurementData(res.data);
+          console.log("measurement data Fatched:", res.data);
         }
       } catch (error) {
         console.error("measurement data not Fatched");
-      } finally {
-        // setLoading(false);
       }
     };
     fetchMeasurement();

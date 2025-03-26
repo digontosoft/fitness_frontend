@@ -140,7 +140,7 @@ export const routes = createBrowserRouter([
           },
 
           {
-            path: "/personal-workout/:id",
+            path: "/personal-workout",
             element: <ProgressCourseCart />,
           },
 
