@@ -1,4 +1,3 @@
-
 import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
@@ -17,26 +16,20 @@ const AddNutritionForm = () => {
     formState: { errors },
   } = useForm();
 
-  const { id } = useParams();
+  const createFormData = (data) => {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    if (data.file && data.file[0]) {
+      formData.append("file", data.file[0]);
+    }
 
-    // Helper function to create form data
-    const createFormData = (data) => {
-      const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      if (data.file && data.file[0]) {
-        formData.append("file", data.file[0]);
-      }
-      if (id) {
-        formData.append("user_id", id);
-      }
-      return formData;
-    };
+    return formData;
+  };
 
   const onSubmit = async (data) => {
     try {
       const formData = createFormData(data);
-      
 
       const response = await axios.post(
         `${base_url}/nutritionGuide`,
