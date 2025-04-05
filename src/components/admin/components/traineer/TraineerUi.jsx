@@ -105,8 +105,7 @@ const TraineerUi = ({ userId }) => {
           משימות
         </span>
       </div>
-
-      <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-5">
+      <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-4 md:gap-5 max-w-5xl mx-auto">
         <AdminArrowCard
           image={ArrowBurger}
           title="ניהול תפריטי תזונה אישיים"
@@ -117,9 +116,6 @@ const TraineerUi = ({ userId }) => {
           title="ניהול תוכנית אימון"
           link={`/dashboard/assigned-training-list/${userId}`}
         />
-      </div>
-
-      <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-5">
         <AdminArrowCardWithoutImage
           title="לדוח מדדים אישי"
           link={`/dashboard/mesurements-watch?userId=${userId}`}
@@ -130,18 +126,11 @@ const TraineerUi = ({ userId }) => {
           onClick={handleModal}
         />
 
-        {/* <FoodDairyModal userId={userId} /> */}
-      </div>
-      <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-5">
         <AdminArrowCardWithoutImage
           title="תשובות מתאמן"
           link={`/dashboard/answers-list/${userId}`}
         />
-
-        {/* <FoodDairyModal userId={userId} /> */}
       </div>
-
-      <div className="flex justify-center items-center"></div>
       {openModal && (
         <>
           <p>Modal is Open</p>

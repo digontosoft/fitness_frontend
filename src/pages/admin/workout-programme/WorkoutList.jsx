@@ -5,7 +5,7 @@ import Container from "@/shared/Container";
 const WorkoutList = () => {
   return (
     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
-      <Title tilte="רשימת אימונים" />
+      <Title title="רשימת אימונים" />
       <WorkoutLists />
     </Container>
   );

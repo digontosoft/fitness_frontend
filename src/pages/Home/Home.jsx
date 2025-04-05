@@ -111,22 +111,6 @@ const Home = () => {
           <RightCard user={user} className="w-full md:w-1/2" />
         </div>
 
-        {/* Responsive Carousel */}
-        {/* <Carousel className="w-full max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-6xl mt-5 px-2 sm:px-4">
-            <CarouselContent className="-ml-1 flex">
-              {userTasks?.map((task) => (
-                <CarouselItem
-                  className="pl-2 md:pl-4 basis-3/4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 flex-shrink-0 cursor-pointer"
-                  key={task?._id}
-                >
-                  <ArrowGroup onclick={handleOpenModal} task={task} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel> */}
-
         {/* Tasks Section */}
         <div className="max-w-3xl mx-auto justify-center py-10" dir="ltr">
           <div className="pt-16 sm:pt-20 md:pt-24 flex flex-wrap justify-center items-center w-full">
