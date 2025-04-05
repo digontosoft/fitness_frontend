@@ -42,12 +42,13 @@ export default function AddMail({ setEmails }) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>הוסף כתובת מייל</DialogTitle>
+          <DialogTitle className="text-center">הוסף כתובת מייל</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
             <div className="grid items-center gap-4">
-              <Label htmlFor="email">דואר אלקטרוני
+              <Label htmlFor="email" dir="rtl">
+                דואר אלקטרוני
               </Label>
               <Input
                 id="email"
@@ -60,13 +61,15 @@ export default function AddMail({ setEmails }) {
                   },
                 })}
                 className={`${errors.email ? "border-red-500" : ""}`}
+                dir="rtl"
               />
               {errors.email && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.email.message}
                 </p>
               )}
-              <Label htmlFor="expiry_date">תאריך סיום
+              <Label htmlFor="expiry_date" dir="rtl">
+                תאריך סיום
               </Label>
               <Input
                 id="expiry_date"
@@ -75,6 +78,7 @@ export default function AddMail({ setEmails }) {
                   required: "Expiry Date is required",
                 })}
                 className={`${errors.expiry_date ? "border-red-500" : ""}`}
+                dir="rtl"
               />
               {errors.expiry_date && (
                 <p className="text-red-500 text-sm mt-1">

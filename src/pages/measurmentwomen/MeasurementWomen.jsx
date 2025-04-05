@@ -134,7 +134,7 @@ const MeasurementWomen = () => {
               label="מה האימון אירובי האהוב עליך?(אם יש)"
               placeholder="התשובה שלך"
               name="favorite_cardio"
-              // dir="rtl"
+              dir="rtl"
             />
 
             <FRadioInput
@@ -144,7 +144,7 @@ const MeasurementWomen = () => {
                 { id: "r2", value: "gym", label: "בחדר כושר" },
                 { id: "r3", value: "home", label: "בבית" },
               ]}
-              // dir="rtl"
+              dir="rtl"
               type="radio"
             />
 
@@ -152,56 +152,56 @@ const MeasurementWomen = () => {
               label="האם יש לך פציעות או מגבלות פיזיות?"
               placeholder="התשובה שלך"
               name="injuries_description"
-              // dir="rtl"
+              dir="rtl"
             />
 
             <FInput
               label="אם בחרת בבית - איזה אביזרים יש ברשותך או שתרצה לרכוש? למשל גומיות, רצועות TRX, משקולות, מתח, ספת משקולות? מומלץ משקולות"
               placeholder="התשובה שלך"
               name="home_equipment"
-              // dir="rtl"
+              dir="rtl"
             />
 
             <FInput
               label="מהם המאכלים האהובים עליך?*"
               placeholder="התשובה שלך"
               name="favorite_foods"
-              // dir="rtl"
+              dir="rtl"
             />
 
             <FInput
               label="תאר את אימוני הכח שלך כרגע (איזה תרגילים, טווחי חזרות, תדירות וכו׳): אם לא עושה לרשום ׳לא עושה׳"
               placeholder="התשובה שלך"
               name="strength_training_description"
-              // dir="rtl"
+              dir="rtl"
             />
 
             <FInput
               label="מהם המאכלים שלא תיגע בהם?*"
               placeholder="התשובה שלך"
               name="disliked_foods"
-              // dir="rtl"
+              dir="rtl"
             />
 
             <FInput
               label="מהם התרגילים האהובים עליך? במידה ולא יודע לרשום ׳לא יודע׳"
               placeholder="התשובה שלך"
               name="favorite_exercises"
-              // dir="rtl"
+              dir="rtl"
             />
 
             <FInput
               label="תאר סדר יום מלא של התזונה שלך, איך נראה יום רגיל* מה אוכל כשקם, בצהריים, בערב, נשנושים לפרט:)"
               placeholder="התשובה שלך"
               name="daily_meds"
-              // dir="rtl"
+              dir="rtl"
             />
 
             <FInput
               label="איזה אזורים אתה מעדיף שיקבלו יותר דגש בתכנית האימונים האישית שלך? חזה, ידיים, גב, רגליים, דגש ישבן, כתפיים, בטן ועוד.. אפשר לרשום גם כל הגוף באותה המידה או כמה אזורים שעדיפים עלייך."
               placeholder="התשובה שלך"
               name="focused_body_areas"
-              // dir="rtl"
+              dir="rtl"
             />
           </div>
           <hr className="max-w-3xl mx-auto my-10" />
