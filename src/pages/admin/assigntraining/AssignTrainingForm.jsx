@@ -401,9 +401,8 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         onClick={() =>
                           handleRemoveExercise(workoutIndex, exerciseIndex)
                         }
-                      >
-                        Remove Exercise
-                      </Trash>
+                      />
+
                       <div className="flex flex-col gap-y-4">
                         <label htmlFor="sets">Sets</label>
                         <input
