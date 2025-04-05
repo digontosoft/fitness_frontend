@@ -27,6 +27,8 @@ import { deleteEmail } from "@/api/deleteData";
 import { base_url } from "@/api/baseUrl";
 import { Link } from "react-router-dom";
 import EditApproveMail from "@/components/admin/components/ApproveMailTable/EditApproveMail";
+import PaginationComp from "@/components/pagination";
+import { useEffect } from "react";
 
 export function ApproveMailTable() {
   const [sorting, setSorting] = React.useState([]);
@@ -199,19 +201,27 @@ export function ApproveMailTable() {
     },
   });
 
+  const [page, setPage] = React.useState(1);
+  const [totalPages, setTotalPages] = React.useState(1);
+
+
+useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${base_url}/approved-mail`);
+      const response = await axios.get(`${base_url}/approved-mail?limit=10&page=${page}`);
       console.log("emails:", response.data);
       setEmails(response.data.approvedEmail);
+      setTotalPages(response.data.pagination.totalPages);
+      setPage(response.data.pagination.currentPage);
     } catch (error) {
-      console.error("Error fetching email:", error);
+      
       throw error;
     }
-  };
-  React.useEffect(() => {
-    fetchData();
-  }, []);
+  }
+
+  fetchData();
+  }, [page, totalPages]);
+ 
 
   return (
     <div className="w-full" dir="ltr">
@@ -225,7 +235,7 @@ export function ApproveMailTable() {
           className="max-w-sm"
         />
         
-        <AddMail setEmails={fetchData} />
+        <AddMail setEmails={setEmails} />
         
       </div>
       <div className="rounded-md border">
@@ -277,38 +287,7 @@ export function ApproveMailTable() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          Previous
-        </Button>
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: table.getPageCount() }, (_, index) => (
-            <Button
-              key={index}
-              className={`${
-                table.getState().pagination.pageIndex === index
-                  ? "bg-customBg"
-                  : "bg-white text-black border hover:text-white"
-              }`}
-              size="sm"
-              onClick={() => table.setPageIndex(index)}
-            >
-              {index + 1}
-            </Button>
-          ))}
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          Next
-        </Button>
+        <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
       </div>
       {/* {open&& <EditApproveMail open={open} setOpen={setOpen} approveMail={approveMail}/>} */}
     </div>

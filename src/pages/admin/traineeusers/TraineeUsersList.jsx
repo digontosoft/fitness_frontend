@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import UserDetails from "./UserDetails";
 import { toast } from "sonner";
+import PaginationComp from "@/components/pagination";
 
 export function TraineeUsersLists() {
   const [users, setUsers] = useState([]);
@@ -153,10 +154,13 @@ export function TraineeUsersLists() {
     }
   };
 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const fetchUsers = async () => {
     try {
       const response = await axios.get(`${base_url}/getUsers`);
-      console.log("Users:", response.data.data);
+      console.log("Users:", response.data);
       setUsers(response.data.data);
     } catch (error) {
       console.error("Error fetching email:", error);
@@ -167,11 +171,7 @@ export function TraineeUsersLists() {
     fetchUsers();
   }, []);
 
-  // useEffect(() => {
-  //   if (users?.length) {
-  //     setTraineeUsers(users.filter((user) => user.userType === "trainee"));
-  //   }
-  // }, [users]);
+  
 
   const updateStatus = async (userType, userId) => {
     try {
@@ -283,38 +283,7 @@ export function TraineeUsersLists() {
       </Dialog>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          Previous
-        </Button>
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: table.getPageCount() }, (_, index) => (
-            <Button
-              key={index}
-              className={`${
-                table.getState().pagination.pageIndex === index
-                  ? "bg-customBg"
-                  : "bg-white text-black border hover:text-white"
-              }`}
-              size="sm"
-              onClick={() => table.setPageIndex(index)}
-            >
-              {index + 1}
-            </Button>
-          ))}
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          Next
-        </Button>
+      <PaginationComp/>
       </div>
     </div>
   );
