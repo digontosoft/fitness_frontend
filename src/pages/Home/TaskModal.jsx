@@ -50,16 +50,16 @@ export function TaskModal({
           </div>
 
           {/* Step Input */}
-          <div className="space-y-3 w-full ">
+          <div className="space-y-3 w-full" dir="rtl">
             <Label htmlFor="steps" className="font-semibold text-start">
-              Enter Total Steps
+              הזן את סך השלבים
             </Label>
             <Input
               id="steps"
               type="number"
               value={stepCount}
               onChange={(e) => setStepCount(e.target.value)}
-              placeholder="Enter your total steps"
+              placeholder="הזן את סך השלבים שלך"
             />
           </div>
         </div>

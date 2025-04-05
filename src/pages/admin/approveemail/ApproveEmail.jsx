@@ -6,8 +6,6 @@ const ApproveEmail = () => {
   return (
     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
       <Title tilte="Approved Mail List" />
-      {/* <section className="grid gap-5 h-full">
-      </section> */}
       <ApproveMailTable />
     </Container>
   );

@@ -352,7 +352,11 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               label="Training Name"
               placeholder="Add Training Name..."
               register={register}
-              validation={{ required: "Training Name is required" }}
+              validation={{
+                required: !trainingbyId?.name
+                  ? "Training Name is required"
+                  : false,
+              }}
               errors={errors}
               defaultValue={trainingbyId?.name}
             />
@@ -364,7 +368,11 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               label="Training Description"
               placeholder="Add Training Description..."
               register={register}
-              validation={{ required: "Training Description is required" }}
+              validation={{
+                required: !trainingbyId?.description
+                  ? "Training Description is required"
+                  : false,
+              }}
               errors={errors}
               defaultValue={trainingbyId?.description}
             />

@@ -98,13 +98,17 @@ export function TrainingList() {
             >
               <Trash />
             </Button>
-            <Link
-              to={`/dashboard/assign-training/${row.original._id}/${userId}`}
-            >
-              <Button className="bg-customBg" size="sm">
-                Assign Training
-              </Button>
-            </Link>
+            {userId ? (
+              <Link
+                to={`/dashboard/assign-training/${row.original._id}/${userId}`}
+              >
+                <Button className="bg-customBg" size="sm">
+                  Assign Training
+                </Button>
+              </Link>
+            ) : (
+              <></>
+            )}
           </div>
         );
       },
