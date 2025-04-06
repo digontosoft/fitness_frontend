@@ -268,7 +268,8 @@ export default function WorkoutLists() {
           disabled={!table.getCanNextPage()}
           onClick={() => table.nextPage()}
         >
-          Next
+          הבא
+
         </Button>
       </div>
     </div>

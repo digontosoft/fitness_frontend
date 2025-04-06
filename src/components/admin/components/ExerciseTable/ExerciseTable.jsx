@@ -371,7 +371,7 @@ export function ExerciseTable() {
           disabled={!table.getCanNextPage()}
           onClick={() => table.nextPage()}
         >
-          Next
+        הבא
         </Button>
       </div>
     </div>

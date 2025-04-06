@@ -263,7 +263,7 @@ export function NutritionList() {
           disabled={!table.getCanPreviousPage()}
           onClick={() => table.previousPage()}
         >
-          Previous
+          הקודם
         </Button>
         <div className="flex items-center space-x-2">
           {Array.from({ length: table.getPageCount() }, (_, index) => (
@@ -287,7 +287,8 @@ export function NutritionList() {
           disabled={!table.getCanNextPage()}
           onClick={() => table.nextPage()}
         >
-          Next
+          הבא
+
         </Button>
       </div>
     </div>

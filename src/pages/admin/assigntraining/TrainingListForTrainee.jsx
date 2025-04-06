@@ -194,6 +194,7 @@ export function TrainingListForTrainee({ userId }) {
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
+        dir='rtl'
           placeholder="סנן לפי שם תוכנית אימון ..."
           value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
@@ -280,7 +281,8 @@ export function TrainingListForTrainee({ userId }) {
           disabled={!table.getCanPreviousPage()}
           onClick={() => table.previousPage()}
         >
-          Previous
+          הקודם
+
         </Button>
         <div className="flex items-center space-x-2">
           {Array.from({ length: table.getPageCount() }, (_, index) => (

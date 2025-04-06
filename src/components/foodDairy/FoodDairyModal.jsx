@@ -77,7 +77,8 @@ export function FoodDairyModal({ userId, onClose }) {
       <DialogTrigger asChild />
       <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll">
         <DialogHeader>
-          <DialogDescription>Here’s your food diary data.</DialogDescription>
+          <DialogDescription>פירוט יומן האכילה של הלקוח
+          </DialogDescription>
         </DialogHeader>
 
         {/* Iterate over the data and display it */}
@@ -109,7 +110,7 @@ export function FoodDairyModal({ userId, onClose }) {
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" className="w-full justify-center bg-customBg">
-              Close
+            סגור
             </Button>
           </DialogClose>
         </DialogFooter>
