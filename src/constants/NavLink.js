@@ -16,7 +16,7 @@ export const traineeLink = [
   // },
   {
     _id: 1,
-    title: "Home",
+    title: "דף הבית",
     link: "/",
     icon: NutrationGuide,
   },
@@ -73,7 +73,7 @@ export const traineeLink = [
 export const adminLink = [
   {
     _id: 1,
-    title: "Home",
+    title: "דף הבית",
     link: "/dashboard",
     icon: NutrationGuide,
   },

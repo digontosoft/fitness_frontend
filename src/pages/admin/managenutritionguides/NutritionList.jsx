@@ -51,7 +51,7 @@ export function NutritionList() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          שם התרגיל
+          שם תפריט תזונה
           <ArrowUpDown />
         </Button>
       ),
@@ -66,7 +66,7 @@ export function NutritionList() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          הוראות לתרגיל
+    תיאור תפריט תזונה
           <ArrowUpDown />
         </Button>
       ),
@@ -169,6 +169,7 @@ export function NutritionList() {
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
+        dir="rtl"
           placeholder="שם מסנן...."
           value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
@@ -184,7 +185,7 @@ export function NutritionList() {
           }
         >
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            {user_id ? "Add Nutrition Menu" : "Add Nutrition Guide"}
+            {user_id ? "הוסף תפריט תזונה" : " הוסף מדריך תזונה"}
           </Button>
         </Link>
       </div>
@@ -229,7 +230,7 @@ export function NutritionList() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  לא הוקצה תפריט תזונה
                 </TableCell>
               </TableRow>
             )}
@@ -262,7 +263,7 @@ export function NutritionList() {
           disabled={!table.getCanPreviousPage()}
           onClick={() => table.previousPage()}
         >
-          Previous
+          הקודם
         </Button>
         <div className="flex items-center space-x-2">
           {Array.from({ length: table.getPageCount() }, (_, index) => (
@@ -286,7 +287,8 @@ export function NutritionList() {
           disabled={!table.getCanNextPage()}
           onClick={() => table.nextPage()}
         >
-          Next
+          הבא
+
         </Button>
       </div>
     </div>

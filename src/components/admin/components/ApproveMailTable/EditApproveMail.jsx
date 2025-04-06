@@ -57,15 +57,18 @@ function EditApproveMail({ id, updateDate }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center text-gray-800">
-            Edit Approved Mail
+            ערוך כתובת מייל מאושרת
           </DialogTitle>
         </DialogHeader>
         {/* Add form fields or other content here */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
-            <div className="grid items-center gap-4" dir="rtl">
-              <Label htmlFor="email">דואר אלקטרוני</Label>
+            <div className="grid items-center gap-4">
+              <Label htmlFor="email" dir="rtl">
+                דואר אלקטרוני
+              </Label>
               <Input
+                dir="rtl"
                 id="email"
                 type="email"
                 defaultValue={approvedEmail.email}
@@ -77,15 +80,18 @@ function EditApproveMail({ id, updateDate }) {
                     message: "Enter a valid email address",
                   },
                 })}
-                className={`${errors.email ? "border-red-500" : ""}`}
+                className={`${errors.email ? "border-red-500" : ""} `}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-sm mt-1" dir="rtl">
                   {errors.email.message}
                 </p>
               )}
-              <Label htmlFor="expiry_date">תאריך סיום</Label>
+              <Label htmlFor="expiry_date" dir="rtl">
+                תאריך סיום
+              </Label>
               <Input
+                dir="rtl"
                 id="expiry_date"
                 type="date"
                 defaultValue={moment(approvedEmail.expiry_date).format(
@@ -94,17 +100,23 @@ function EditApproveMail({ id, updateDate }) {
                 {...register("expiry_date", {
                   required: "Expiry Date is required",
                 })}
-                className={`${errors.expiry_date ? "border-red-500" : ""}`}
+                className={`${
+                  errors.expiry_date ? "border-red-500" : ""
+                } flex items-center justify-end`}
               />
               {errors.expiry_date && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-sm mt-1" dir="rtl">
                   {errors.expiry_date.message}
                 </p>
               )}
             </div>
           </div>
           <div className="flex items-center justify-end">
-            <BasicButton type="submit" title="UPDATE" className="bg-customBg" />
+            <BasicButton
+              type="submit"
+              title="עדכן"
+              className="bg-customBg"
+            />
           </div>
         </form>
       </DialogContent>

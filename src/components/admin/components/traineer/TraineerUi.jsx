@@ -122,7 +122,7 @@ const TraineerUi = ({ userId }) => {
         />
 
         <AdminArrowCardWithoutImage
-          title="מסמכים מקושרים להורדה"
+          title="ומן אכילה"
           onClick={handleModal}
         />
 

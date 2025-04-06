@@ -271,8 +271,9 @@ const AddTrainingForm = () => {
             className="sm:min-w-[350px]"
             id="name"
             type="text"
-            label="Training Name"
-            placeholder="Add Training Name..."
+            label="שם תוכנית אימון"
+            placeholder="הוסף 
+שם תוכנית אימון..."
             register={register}
             validation={{ required: "Training Name is required" }}
             errors={errors}
@@ -282,8 +283,8 @@ const AddTrainingForm = () => {
             className="sm:min-w-[350px]"
             id="description"
             type="text"
-            label="Training Description"
-            placeholder="Add Training Description..."
+            label="תיאור תוכנית אימון"
+            placeholder="הוסף תיאור תוכנית אימון..."
             register={register}
             validation={{ required: "Training Description is required" }}
             errors={errors}
@@ -321,7 +322,7 @@ const AddTrainingForm = () => {
                         }
                       />
                       <div>
-                        <label htmlFor="sets">Sets</label>
+                        <label htmlFor="sets">סטים</label>
                         <input
                           type="number"
                           className="border rounded p-1 w-full"
@@ -338,7 +339,7 @@ const AddTrainingForm = () => {
                         />
                       </div>
                       <div>
-                        <label htmlFor="reps">Reps</label>
+                        <label htmlFor="reps">חזרות</label>
                         <input
                           type="number"
                           className="border rounded p-1 w-full"
@@ -355,7 +356,7 @@ const AddTrainingForm = () => {
                         />
                       </div>
                       <div>
-                        <label htmlFor="manipulation">Manipulation</label>
+                        <label htmlFor="manipulation">מניפולציה </label>
                         <input
                           type="text"
                           className="border rounded p-1 w-full  text-center placeholder:text-sm  "
@@ -393,7 +394,8 @@ const AddTrainingForm = () => {
                 className="mt-5 bg-customBg"
                 onClick={() => handleAddMoreExercise(workoutIndex)}
               >
-                Add More Exercise
+                הוסף עוד תרגיל לאימון 
+
               </Button>
             </div>
           ))}
