@@ -6,7 +6,7 @@ import { base_url } from "./baseUrl";
 export const deleteEmail = async (data) => {
   try {
     const response = await axios.patch(
-      "http://localhost:5000/update-approved-mail",
+      `${base_url}/update-approved-mail`,
       data
     );
     console.log("delete:", response);
@@ -35,7 +35,6 @@ export const deleteExercise = async (exerciseId) => {
 export const deleteUser = async (data) => {
   try {
     const response = await axios.post(`${base_url}/updateUserInfo`, data);
-    console.log("delete:", response);
     if (response.status === 200) {
       toast.success("User deleted successfully.");
     }

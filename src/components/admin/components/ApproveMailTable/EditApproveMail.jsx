@@ -1,4 +1,3 @@
-
 import { base_url } from "@/api/baseUrl";
 import BasicButton from "@/components/admin/components/ui/BasicButton";
 import { Button } from "@/components/ui/button";
@@ -17,44 +16,42 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import moment from "moment";
 
-function EditApproveMail({id,updateDate}) {
-    const [loading, setLoading] = useState(false);
-    const [approvedEmail, setApprovedEmail] = useState({});
-   
-    
-      const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors },
-      } = useForm();
+function EditApproveMail({ id, updateDate }) {
+  const [loading, setLoading] = useState(false);
+  const [approvedEmail, setApprovedEmail] = useState({});
 
-      useEffect(()=>{
-        const getMail = async () => {
-          try {
-            setLoading(true);
-            const response = await axios.get(`${base_url}/approved-mail/${id}`);
-            const data = response.data.approvedEmail;
-            
-            setApprovedEmail(data);
-          } catch (error) {
-            console.error("Error fetching email:", error);
-          } finally {
-            setLoading(false);
-          }
-        }
-        getMail();
-      },[id])
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-      const onSubmit = async (data) => {
-        await updateDate(data);
-     
+  useEffect(() => {
+    const getMail = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${base_url}/approved-mail/${id}`);
+        const data = response.data.approvedEmail;
+
+        setApprovedEmail(data);
+      } catch (error) {
+        console.error("Error fetching email:", error);
+      } finally {
+        setLoading(false);
       }
+    };
+    getMail();
+  }, [id]);
+
+  const onSubmit = async (data) => {
+    await updateDate(data);
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button className="bg-customBg hover:bg-customBg-dark" size="sm">
-          <Edit/>
+          <Edit />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -66,14 +63,13 @@ function EditApproveMail({id,updateDate}) {
         {/* Add form fields or other content here */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
-            <div className="grid items-center gap-4">
-              <Label htmlFor="email">דואר אלקטרוני
-              </Label>
+            <div className="grid items-center gap-4" dir="rtl">
+              <Label htmlFor="email">דואר אלקטרוני</Label>
               <Input
                 id="email"
                 type="email"
                 defaultValue={approvedEmail.email}
-                disabled  
+                disabled
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -88,12 +84,13 @@ function EditApproveMail({id,updateDate}) {
                   {errors.email.message}
                 </p>
               )}
-              <Label htmlFor="expiry_date">תאריך סיום
-              </Label>
+              <Label htmlFor="expiry_date">תאריך סיום</Label>
               <Input
                 id="expiry_date"
                 type="date"
-                defaultValue={moment(approvedEmail.expiry_date).format("YYYY-MM-DD")}
+                defaultValue={moment(approvedEmail.expiry_date).format(
+                  "YYYY-MM-DD"
+                )}
                 {...register("expiry_date", {
                   required: "Expiry Date is required",
                 })}
