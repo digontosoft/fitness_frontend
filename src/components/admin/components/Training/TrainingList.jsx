@@ -278,7 +278,8 @@ export function TrainingList() {
           disabled={!table.getCanNextPage()}
           onClick={() => table.nextPage()}
         >
-          Next
+          
+        הבא
         </Button>
       </div>
     </div>

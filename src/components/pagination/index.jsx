@@ -13,6 +13,7 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
     <div className="flex justify-center gap-4 my-4">
       <Button
         size="sm"
+        variant="outline"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
@@ -24,7 +25,7 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
           size="sm"
           key={number}
           onClick={() => onPageChange(number)}
-          className={`${currentPage === number ? "bg-customBg" : ""}`}
+          className={`${currentPage === number ? "bg-customBg" : "bg-white text-black border hover:text-white"}`}
         >
           {number}
         </Button>
@@ -32,6 +33,7 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
 
       <Button
         size="sm"
+        variant="outline"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
