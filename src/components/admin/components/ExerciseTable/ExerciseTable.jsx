@@ -31,6 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Select from "react-dropdown-select";
+import PaginationComp from "@/components/pagination";
 
 const bodyPartOptions = [
   { label: "כל חלקי הגוף", value: "" },
@@ -210,12 +211,13 @@ export function ExerciseTable() {
     }
   };
 
-  
+  const [page,setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     const fetchExercise = async () => {
       try {
         const response = await axios.get(
-          `${base_url}/exercise?search=${searchValue}&body_part=${body_part}&equipment=${equipment}`
+          `${base_url}/exercise?search=${searchValue}&body_part=${body_part}&equipment=${equipment}&page=${page}&limit=10`
         );
         setExercise(response.data.data);
         setTotalPages(response.data.pagination.totalPages);
@@ -226,7 +228,7 @@ export function ExerciseTable() {
       }
     };
     fetchExercise();
-  }, [searchValue, body_part, equipment]);
+  }, [searchValue, body_part, equipment,page,totalPages]);
 
   const table = useReactTable({
     data: exercise,
@@ -341,38 +343,8 @@ export function ExerciseTable() {
       </Dialog>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          Previous
-        </Button>
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: table.getPageCount() }, (_, index) => (
-            <Button
-              key={index}
-              className={`${
-                table.getState().pagination.pageIndex === index
-                  ? "bg-customBg"
-                  : "bg-white text-black border hover:text-white"
-              }`}
-              size="sm"
-              onClick={() => table.setPageIndex(index)}
-            >
-              {index + 1}
-            </Button>
-          ))}
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-        הבא
-        </Button>
+        <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
+        
       </div>
     </div>
   );

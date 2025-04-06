@@ -31,6 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import TrainingForTraineeDetails from "./TrainingForTraineeDetails";
+import PaginationComp from "@/components/pagination";
 // import TrainingDetails from "./TrainingDetails";
 
 export function TrainingListForTrainee({ userId }) {
@@ -159,21 +160,25 @@ export function TrainingListForTrainee({ userId }) {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${base_url}/get-training-by-user-id/${userId}`
-      );
-      setTraining(response.data.data);
-      console.log("training-for-user", response.data.data);
-    } catch (error) {
-      console.error("Error fetching exercises:", error);
-    }
-  };
+const [page, setPage] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${base_url}/get-training-by-user-id/${userId}?page=${page}&&limit=10`
+        );
+        setTraining(response.data.data);
+        setTotalPages(response.data.pagination.pages);
+        setPage(response.data.pagination.page);
+        console.log("response:", response);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
     fetchData();
-  }, [userId]);
+  }, [userId, page,totalPages]);
 
   const table = useReactTable({
     data: training,
@@ -275,39 +280,7 @@ export function TrainingListForTrainee({ userId }) {
         </DialogContent>
       </Dialog>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          הקודם
-
-        </Button>
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: table.getPageCount() }, (_, index) => (
-            <Button
-              key={index}
-              className={`${
-                table.getState().pagination.pageIndex === index
-                  ? "bg-customBg"
-                  : "bg-white text-black border hover:text-white"
-              }`}
-              size="sm"
-              onClick={() => table.setPageIndex(index)}
-            >
-              {index + 1}
-            </Button>
-          ))}
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          Next
-        </Button>
+        <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
       </div>
     </div>
   );

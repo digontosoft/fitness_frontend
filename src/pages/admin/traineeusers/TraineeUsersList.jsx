@@ -33,7 +33,6 @@ import {
 import UserDetails from "./UserDetails";
 import { toast } from "sonner";
 import PaginationComp from "@/components/pagination";
-import { set } from "react-hook-form";
 
 export function TraineeUsersLists() {
   const [users, setUsers] = useState([]);
@@ -45,6 +44,7 @@ export function TraineeUsersLists() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [traineeUsers, setTraineeUsers] = useState([]);
+  const [search,setSearch] = useState("")
   const columns = [
     {
       accessorKey: "firstName",
@@ -160,7 +160,7 @@ export function TraineeUsersLists() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${base_url}/getUsers?page=${page}&&limit=10`);
+        const response = await axios.get(`${base_url}/getUsers?page=${page}&&limit=10&&search=${search}`);
         console.log("Users:", response.data);
         setPage(response.data.pagination.currentPage);
         setTotalPages(response.data.pagination.totalPages);
@@ -171,7 +171,7 @@ export function TraineeUsersLists() {
       }
     };
     fetchUsers();
-  }, [page,totalPages]);
+  }, [page,totalPages,search]);
 
   
 
@@ -205,16 +205,21 @@ export function TraineeUsersLists() {
     state: { sorting, columnFilters, columnVisibility, rowSelection },
   });
 
+
+  
+
+
   return (
     <div className="w-full" dir="ltr">
       <div className="flex items-center justify-between py-4">
         <Input
         dir="rtl"
           placeholder="סנן לפי שם..."
-          value={table.getColumn("firstName")?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            table.getColumn("firstName")?.setFilterValue(event.target.value)
-          }
+          // value={table.getColumn("firstName")?.getFilterValue() ?? ""}
+          // onChange={(event) =>
+          //   table.getColumn("firstName")?.setFilterValue(event.target.value)
+          // }
+          onChange={(e) => setSearch(e.target.value)}        
           className="max-w-sm"
         />
       </div>
