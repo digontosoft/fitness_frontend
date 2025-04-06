@@ -212,7 +212,7 @@ export const CourseListGroup = () => {
       <div className="flex items-center justify-center gap-10 md:flex-row flex-col-reverse">
         <input
           type="text"
-          placeholder="חפש"
+          placeholder="סנן לפי ציוד"
           className="w-40 rounded-sm border-blue-500 h-12 border-2 p-2 focus:border-blue-400"
           dir="rtl"
           onChange={(e) => setSearchValue(e.target.value)}
@@ -220,7 +220,7 @@ export const CourseListGroup = () => {
         <Select
           direction="rtl"
           className="w-40 rounded-lg h-12 border-2 p-2"
-          placeholder="חיפוש חלק בגוף"
+          placeholder="סנן לפי איזור בגוף"
           options={bodyPartOptions}
           onChange={(e) => setBodyPart(e[0].value)}
         />

@@ -55,7 +55,6 @@ const Home = () => {
           .then((response) => {
             if (response.status === 200) {
               setUserTasks(response.data.data);
-              console.log("userTasks:", response?.data?.data);
             }
           });
       } catch (error) {
@@ -74,8 +73,6 @@ const Home = () => {
     try {
       const res = await axios.post(`${base_url}/updateUserInfo`, payload);
       if (res.status === 200) {
-        console.log("User info updated:", res);
-        // Update localStorage to reflect the new value
         const updatedUser = { ...user, is_video_popup: false };
         localStorage.setItem("userInfo", JSON.stringify(updatedUser));
         setIsModalOpen(false); // Close the modal
@@ -85,7 +82,6 @@ const Home = () => {
     }
   };
 
-  console.log("mesurement data", getMesurement);
   return (
     <div
       className="min-h-screen px-4 sm:px-6 md:px-10 lg:px-20 overflow-hidden"

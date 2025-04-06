@@ -18,40 +18,35 @@ const StartTraining = () => {
   const [showPrevious, setShowPrevious] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [exerciseData, setExerciseData] = useState({});
-  const [valid,setValid] = useState({})
+  const [valid, setValid] = useState({});
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
-
   useEffect(() => {
-    if((valid.sets_done && valid.reps_done && valid.lastSet) ){
-      setButtonDisabled(false)
+    if (valid.sets_done && valid.reps_done && valid.lastSet) {
+      setButtonDisabled(false);
     } else {
-      setButtonDisabled(true)
+      setButtonDisabled(true);
     }
-  },[valid,buttonDisabled])
+  }, [valid, buttonDisabled]);
 
   console.log("exerciseData", Object.values(exerciseData));
   const data = Object.values(exerciseData);
-  
 
   useEffect(() => {
-    if(data[currentIndex]) {
-      setButtonDisabled(false)
+    if (data[currentIndex]) {
+      setButtonDisabled(false);
     } else {
-      setButtonDisabled(true)
+      setButtonDisabled(true);
     }
-    
-  },[currentIndex])
-  const navigate = useNavigate()
+  }, [currentIndex]);
+  const navigate = useNavigate();
   const isSuperset =
     userTrainingExercise[currentIndex]?.manipulation?.toLowerCase() ===
     "superset";
-  
 
   const handleInputChange = (courseId, value) => {
-    
-    setValid(value)
-    
+    setValid(value);
+
     setExerciseData((prev) => ({
       ...prev,
       [courseId]: { ...prev[courseId], ...value },
@@ -78,15 +73,13 @@ const StartTraining = () => {
     return currentIndex;
   };
 
-
   const handleNext = () => {
     const nextIndex = getNextIndex();
-  
+
     if (nextIndex !== currentIndex) {
-      setButtonDisabled(true)
+      setButtonDisabled(true);
       setCurrentIndex(nextIndex);
       setShowPrevious(true);
-      
 
       if (nextIndex === userTrainingExercise.length - 1) {
         setIsFinished(true);
@@ -103,38 +96,34 @@ const StartTraining = () => {
       setIsFinished(false);
     }
   };
-  
 
   const handleFinish = async () => {
     //console.log("All exercise data on finish:", exerciseData);
-    
+
     const payload = {
-      task_id: workData.task_id, 
+      task_id: workData.task_id,
       user_training_workout_id: workData.user_training_workout_id,
-      excerciseData:
-        Object.entries(exerciseData).map(([key, value]) => ({
-          exercise_id: key,     
-          sets_done: Number(value.sets_done),   // Convert to number
-          reps_done: Number(value.reps_done),   
-        }))
-    }
+      excerciseData: Object.entries(exerciseData).map(([key, value]) => ({
+        exercise_id: key,
+        sets_done: Number(value.sets_done), // Convert to number
+        reps_done: Number(value.reps_done),
+      })),
+    };
     console.log("payload", payload);
-    
-   try {
-    const response = await axios.post(`${base_url}/complete-workout-task`, payload); 
-    if (response.status === 200) {
-      toast.success("Workout completed successfully!");
-      navigate("/")
-    
-  }
-   } catch (error) {
-    console.log(error);
-    
-   }
-};
 
-console.log("userTrainingExercise", userTrainingExercise)
-
+    try {
+      const response = await axios.post(
+        `${base_url}/complete-workout-task`,
+        payload
+      );
+      if (response.status === 200) {
+        toast.success("Workout completed successfully!");
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const nextIndex = currentIndex + 1;
   const currentExercise = userTrainingExercise[currentIndex] || {};
@@ -143,12 +132,12 @@ console.log("userTrainingExercise", userTrainingExercise)
 
   console.log("current index data", currentIndex);
   console.log("workout", workData);
-  
+
   return (
     <div className="px-2">
       <CommonContainer>
         <>
-        <Title title={workData?.task_name}/>
+          <Title title={workData?.task_name} />
           <Title
             title={userTrainingExercise[currentIndex]?.exercise_id?.name}
           />

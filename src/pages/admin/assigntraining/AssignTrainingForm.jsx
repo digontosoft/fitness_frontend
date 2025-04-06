@@ -386,8 +386,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                     className="text-white bg-customBg"
                     onClick={() => handleRemoveWorkout(workoutIndex)}
                   >
-                    <Trash className="mr-2 text-white cursor-pointer" /> Remove
-                    Workout
+                    <Trash className=" text-white cursor-pointer" />
                   </Button>
                 </div>
                 {workout.exercises.map((exercise, exerciseIndex) => (
