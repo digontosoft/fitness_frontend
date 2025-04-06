@@ -31,6 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import TrainingDetails from "./TrainingDetails";
+import PaginationComp from "@/components/pagination";
 
 export function TrainingList() {
   const [sorting, setSorting] = useState([]);
@@ -41,6 +42,7 @@ export function TrainingList() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedTraining, setSelectedTraining] = useState(null);
   const { state: userId } = useLocation();
+  const [search,setSearch] = useState("")
 
   const columns = [
     {
@@ -50,7 +52,7 @@ export function TrainingList() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Training Name
+          שם תוכנית אימון
           <ArrowUpDown />
         </Button>
       ),
@@ -65,7 +67,7 @@ export function TrainingList() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Training Description
+          תיאור תוכנית אימון
           <ArrowUpDown />
         </Button>
       ),
@@ -103,7 +105,7 @@ export function TrainingList() {
                 to={`/dashboard/assign-training/${row.original._id}/${userId}`}
               >
                 <Button className="bg-customBg" size="sm">
-                  Assign Training
+                שייך תוכנית אימון
                 </Button>
               </Link>
             ) : (
@@ -136,19 +138,28 @@ export function TrainingList() {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${base_url}/training`);
-      setTraining(response.data.data);
-      console.log("trainingList:", response.data.data);
-    } catch (error) {
-      console.error("Error fetching exercises:", error);
-    }
-  };
 
+const [page,setPage] = useState(1);
+const [totalPages,setTotalPages] = useState(1);
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${base_url}/training?page=${page}&&limit=10&&search=${search}`);
+        console.log("response:", response);
+        
+        setTraining(response.data.data);
+        setTotalPages(response.data.pagination.pages);
+        setPage(response.data.pagination.page);
+        console.log("trainingList:", response.data.data);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
     fetchData();
-  }, []);
+  }, [page,search]);
+
+  console.log("Page:", totalPages);
+  
 
   const table = useReactTable({
     data: training,
@@ -168,17 +179,17 @@ export function TrainingList() {
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
+        dir="rtl"
           placeholder="שם מסנן...."
-          value={table.getColumn("name")?.getFilterValue() ?? ""}
+          //value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            setSearch(event.target.value)
           }
           className="max-w-sm"
         />
         <Link to="/dashboard/add-training-program">
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            Add New Training
-          </Button>
+          צור תוכנית אימון       </Button>
         </Link>
       </div>
       <div className="rounded-md border">
@@ -248,38 +259,7 @@ export function TrainingList() {
         </DialogContent>
       </Dialog>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          Previous
-        </Button>
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: table.getPageCount() }, (_, index) => (
-            <Button
-              key={index}
-              className={`${
-                table.getState().pagination.pageIndex === index
-                  ? "bg-customBg"
-                  : "bg-white text-black border hover:text-white"
-              }`}
-              size="sm"
-              onClick={() => table.setPageIndex(index)}
-            >
-              {index + 1}
-            </Button>
-          ))}
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          Next
-        </Button>
+      <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
       </div>
     </div>
   );

@@ -150,19 +150,19 @@ export default function WorkoutDetails({ workoutId }) {
                         </div>
                         <div className="flex flex-wrap justify-center gap-4">
                           <p className="text-sm py-2 px-4 font-bold rounded-md text-black uppercase tracking-wide">
-                            Sets:{" "}
+                          סטים:{" "}
                             <span className="font-normal">
                               {exercise?.sets}
                             </span>
                           </p>
                           <p className="text-sm py-2 px-4 rounded-md text-black uppercase font-bold tracking-wide">
-                            Reps:{" "}
+                          חזרות:{" "}
                             <span className="font-normal">
                               {exercise?.reps}
                             </span>
                           </p>
                           <p className="text-sm py-2 px-4 rounded-md text-black uppercase font-bold tracking-wide">
-                            Manipulation:{" "}
+                          מניפולציה:{" "}
                             <span className="font-normal">
                               {exercise?.manipulation}
                             </span>
@@ -184,7 +184,7 @@ export default function WorkoutDetails({ workoutId }) {
         )}
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg uppercase">Close</Button>
+            <Button className="w-full bg-customBg uppercase">סגור</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

@@ -195,8 +195,8 @@ const AddNutritionForm = () => {
             className="sm:min-w-[350px]"
             id="title"
             type="text"
-            label={"Nutrition Guide Name"}
-            placeholder={"Add nutrition guide name..."}
+            label={"שם מדריך תזונה"}
+            placeholder={"הוסף שם למדריך תזונה ..."}
             register={register}
             validation={{
               required: "Nutrition guide name is required",
@@ -208,8 +208,8 @@ const AddNutritionForm = () => {
             className="sm:min-w-[350px]"
             id="description"
             type="text"
-            label={"Nutrition Guide Description"}
-            placeholder={"Add nutrition guide description..."}
+            label={"תיאור מדריך תזונה "}
+            placeholder={"הוסף תיאור מדריך תזונה ..."}
             register={register}
             validation={{
               required: "Nutrition guide description is required",
@@ -248,7 +248,7 @@ const AddNutritionForm = () => {
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
           >
-            {"Add Nutrition Guide"}
+            {"הוסף מדריך תזונה"}
           </Button>
         </div>
       </form>

@@ -3,6 +3,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button } from "../ui/button";
 
 const ArrowCard = ({ image, tilte, tilte1, onClick }) => {
+  console.log("title", tilte);
   return (
     <div
       onClick={onClick}

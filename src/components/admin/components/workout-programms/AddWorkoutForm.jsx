@@ -89,8 +89,8 @@ const AddWorkoutForm = () => {
             className="sm:min-w-[400px]"
             id="name"
             type="text"
-            label="Workout Name"
-            placeholder="Add woukout name...."
+            label="שם תוכנית אימון"
+            placeholder="הוסף שם תוכנית אימון ...."
             register={register}
             validation={{ required: "Workout name is required" }}
             errors={errors}
@@ -100,15 +100,15 @@ const AddWorkoutForm = () => {
             className="sm:min-w-[400px]"
             id="description"
             type="text"
-            label="Workout Description"
-            placeholder="Add Workout Description...."
+            label=" תיאור האימון "
+            placeholder="הוסף תיאור לאימון...."
             register={register}
             validation={{ required: "Workout Description is required" }}
             errors={errors}
           />
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Filter with Exercise Name
+            סנן לפי שם תרגיל
             </label>
             <Select
               className="rounded-lg h-12 w-auto"
@@ -117,13 +117,14 @@ const AddWorkoutForm = () => {
               valueField="_id"
               labelField="name"
               multi
+              placeholder="בחר"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="name"
             />
           </div>
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Filter with Exercise Equipment
+            סנן לפי ציוד
             </label>
             <Select
               className="rounded-lg h-12 w-auto"
@@ -132,6 +133,7 @@ const AddWorkoutForm = () => {
               valueField="_id"
               labelField="equipment"
               multi
+              placeholder="בחר"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="equipment"
             />
@@ -157,7 +159,7 @@ const AddWorkoutForm = () => {
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
             disabled={superset || isButtonDisabled}
           >
-            Saving a new workout
+           לשמור תוכנית אימון חדשה 
           </Button>
         </div>
       </form>

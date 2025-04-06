@@ -633,7 +633,7 @@ const EditWorkoutForm = ({ workoutId }) => {
               </div>
               <div className="grid sm:grid-cols-3 grid-cols-1 gap-4 sm:w-[327px]">
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor={`sets-${exercise._id}`}>Sets</label>
+                  <label htmlFor={`sets-${exercise._id}`}>סטים</label>
                   <input
                     id={`sets-${exercise._id}`}
                     type="number"
@@ -644,7 +644,7 @@ const EditWorkoutForm = ({ workoutId }) => {
                   />
                 </div>
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor={`reps-${exercise._id}`}>Reps</label>
+                  <label htmlFor={`reps-${exercise._id}`}>חזרות</label>
                   <input
                     id={`reps-${exercise._id}`}
                     type="number"
@@ -656,7 +656,7 @@ const EditWorkoutForm = ({ workoutId }) => {
                 </div>
                 <div className="flex flex-col space-y-2">
                   <label htmlFor={`manipulation-${exercise._id}`}>
-                    Manipulation
+                  מניפולציה
                   </label>
                   <input
                     type="text"
@@ -679,7 +679,7 @@ const EditWorkoutForm = ({ workoutId }) => {
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
             disabled={disableUpdateButton || !isFormValid}
           >
-            Update Workout
+            עדכן תוכנית אימון
           </Button>
         </div>
       </form>

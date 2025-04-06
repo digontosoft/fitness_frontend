@@ -65,20 +65,20 @@ export default function TrainingForTraineeDetails({ trainingId }) {
                               {exercise.exercise_id?.name || "Unnamed Exercise"}
                             </h4>
                             <div className="flex flex-wrap gap-3 justify-center ">
-                              <span className="text-sm  px-3 py-1 rounded-md  uppercase font-bold">
-                                Sets:{" "}
+                              <span className="text-sm  px-3 py-1 rounded-md  uppercase font-bold" dir="rtl">
+                              סטים :{" "}
                                 <span className="font-normal">
                                   {exercise.sets}
                                 </span>
                               </span>
-                              <span className="text-sm  px-3 py-1 rounded-md  uppercase font-bold">
-                                Reps:{" "}
+                              <span className="text-sm  px-3 py-1 rounded-md  uppercase font-bold" dir="rtl">
+                              חזרות:{" "}
                                 <span className="font-normal">
                                   {exercise.reps}
                                 </span>
                               </span>
-                              <span className="text-sm  px-3 py-1 rounded-md  uppercase font-bold">
-                                Manipulation:{" "}
+                              <span className="text-sm  px-3 py-1 rounded-md  uppercase font-bold" dir="rtl">
+                              מניפולציה:{" "}
                                 <span className="font-normal">
                                   {exercise.manipulation || "N/A"}
                                 </span>
