@@ -48,9 +48,9 @@ export function FoodDairyModal({ userId, onClose }) {
     return (
       <Dialog open={true} onOpenChange={onClose}>
         <DialogTrigger asChild />
-        <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll">
+        <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll" >
           <DialogHeader>
-            <DialogDescription>
+            <DialogDescription >
               No food diary data available for this user.
             </DialogDescription>
           </DialogHeader>
@@ -75,14 +75,17 @@ export function FoodDairyModal({ userId, onClose }) {
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogTrigger asChild />
-      <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll">
-        <DialogHeader>
-          <DialogDescription>פירוט יומן האכילה של הלקוח
+      <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll" >
+        <DialogHeader  >
+          <DialogDescription className="text-right my-4" >
+            <div dir="rtl">
+            פירוט יומן האכילה של הלקוח</div>
+
           </DialogDescription>
         </DialogHeader>
 
         {/* Iterate over the data and display it */}
-        <div className="space-y-4">
+        <div className="space-y-4" dir="rtl">
           {foodDairy.map((item) => (
             <div key={item._id} className="p-4 border-b">
               {/* Show date-wise data */}
@@ -95,14 +98,10 @@ export function FoodDairyModal({ userId, onClose }) {
               )}
 
               <div>
-                <strong>Breakfast:</strong> {item.breakfast || "No data"}
+                <strong></strong> {item?.breakfast || "No data"}
               </div>
-              <div>
-                <strong>Lunch:</strong> {item.lunch || "No data"}
-              </div>
-              <div>
-                <strong>Dinner:</strong> {item.dinner || "No data"}
-              </div>
+                
+                
             </div>
           ))}
         </div>
