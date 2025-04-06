@@ -267,9 +267,6 @@ const EditTrainingForm = () => {
       description: data.description,
       workouts: (training.workouts || []).map((w) => ({
         workout: w._id,
-        // name: w.workout?.name,
-        // description: w.workout?.description,
-
         exercises: (w.exercises || []).map((ex) => ({
           _id: ex._id,
           exercise_id:
