@@ -43,7 +43,7 @@ export function TraineeUsersLists() {
   const [rowSelection, setRowSelection] = useState({});
   //   const [exercise, setExercise] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedExercise, setSelectedExercise] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [traineeUsers, setTraineeUsers] = useState([]);
   const columns = [
     {
@@ -132,24 +132,22 @@ export function TraineeUsersLists() {
     },
   ];
 
-  const handleOpenDeleteModal = (exercise) => {
-    setSelectedExercise(exercise);
+  const handleOpenDeleteModal = (userId) => {
+    setSelectedUser(userId);
     setDeleteModalOpen(true);
   };
 
   const handleDelete = async () => {
-    if (!selectedExercise) return;
+    if (!selectedUser) return;
     try {
       const data = {
-        user_id: selectedExercise,
+        user_id: selectedUser,
         userStatus: "Inactive",
       };
       await deleteUser(data);
-      setUsers((prevUsers) =>
-        prevUsers.filter((e) => e._id !== selectedExercise)
-      );
+      setUsers((prevUsers) => prevUsers.filter((e) => e._id !== selectedUser));
       setDeleteModalOpen(false);
-      setSelectedExercise(null);
+      setSelectedUser(null);
     } catch (error) {
       console.error("Error deleting exercise:", error);
     }

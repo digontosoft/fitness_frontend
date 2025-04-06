@@ -15,7 +15,7 @@ const SingleCart = ({ id, title, description, icon }) => {
         to={`/nutration-pdf/${id}`}
       >
         <button className="text-[#000000] font-bold text-sm  text-center underline pb-4 hover:text-blue-500">
-          לצפייה במדריך
+          לצפיה בתפריט
         </button>
       </Link>
     </div>

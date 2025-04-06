@@ -39,7 +39,7 @@ export function TaskModal({
   };
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen} dir="rtl">
       <DialogContent className="sm:max-w-[739px] sm:h-[546px] border-none flex flex-col justify-between items-center">
         <div className="space-y-5 w-full">
           <div className="flex flex-col items-center justify-center space-y-2">
@@ -52,14 +52,14 @@ export function TaskModal({
           {/* Step Input */}
           <div className="space-y-3 w-full" dir="rtl">
             <Label htmlFor="steps" className="font-semibold text-start">
-              הזן את סך השלבים
+              מספר הצעדים היומי
             </Label>
             <Input
               id="steps"
               type="number"
               value={stepCount}
               onChange={(e) => setStepCount(e.target.value)}
-              placeholder="הזן את סך השלבים שלך"
+              placeholder="יש למלא מספר צעדים יומי"
             />
           </div>
         </div>
@@ -69,7 +69,7 @@ export function TaskModal({
             onClick={handleSubmit}
             className="bg-red-600 hover:bg-red-500 w-full"
           >
-            {selectedTask ? "Update Task" : "Create Task"}
+            {selectedTask ? "עדכן מעקב" : "Create Task"}
           </Button>
         </DialogFooter>
       </DialogContent>

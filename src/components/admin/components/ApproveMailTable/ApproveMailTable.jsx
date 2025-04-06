@@ -42,7 +42,6 @@ export function ApproveMailTable() {
   //   setApproveMail(email);
   // };
   // console.log("approveMail", approveMail,open);
-  
 
   const columns = [
     {
@@ -88,39 +87,38 @@ export function ApproveMailTable() {
       cell: ({ row }) => {
         //console.log("row", row);
         const id = row.original._id;
-       return (
-        <div className="flex space-x-2">
-         
-        <EditApproveMail id={id} updateDate={updateDate}/>
-     
-       <Button
-         className="bg-customBg"
-         size="sm"
-         onClick={() => handleDelete(row.original)}
-       >
-         <Trash />
-       </Button>
-       <Button
-         // variant="secondary"
-         className="border bg-white hover:bg-white"
-         size="sm"
-         onClick={() => handleStatus(row.original)}
-       >
-         {row.original.isActive === true ? (
-           <span className="text-red-500">בטל מנוי</span>
-         ) : (
-           <span className="text-green-500">Activate</span>
-         )}
-       </Button>
-     </div>
-       )
+        return (
+          <div className="flex space-x-2">
+            <EditApproveMail id={id} updateDate={updateDate} />
+
+            <Button
+              className="bg-customBg"
+              size="sm"
+              onClick={() => handleDelete(row.original)}
+            >
+              <Trash />
+            </Button>
+            <Button
+              // variant="secondary"
+              className="border bg-white hover:bg-white"
+              size="sm"
+              onClick={() => handleStatus(row.original)}
+            >
+              {row.original.isActive === true ? (
+                <span className="text-red-500">בטל מנוי</span>
+              ) : (
+                <span className="text-green-500">Activate</span>
+              )}
+            </Button>
+          </div>
+        );
       },
       enableSorting: false,
       enableHiding: false,
     },
   ];
 
-  const updateDate = async(data) =>{
+  const updateDate = async (data) => {
     try {
       const response = await axios.patch(
         `${base_url}/update-approved-mail`,
@@ -139,8 +137,7 @@ export function ApproveMailTable() {
     } catch (error) {
       toast.error("Failed to update date.");
     }
-      
-  }
+  };
 
   const handleStatus = async (rowData) => {
     const updatedStatus = !rowData.isActive;
@@ -172,8 +169,14 @@ export function ApproveMailTable() {
   };
 
   const handleDelete = async (rowData) => {
+    const payload = {
+      email: rowData?.email,
+      isActive: false,
+      status: 0,
+    };
+    console.log("emaildDelete:", payload);
     try {
-      await deleteEmail(rowData);
+      await deleteEmail(payload);
       setEmails((prevEmails) =>
         prevEmails.filter((email) => email._id !== rowData._id)
       );
