@@ -16,7 +16,7 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        Prev
+        הקודם
       </Button>
 
       {pageNumbers.map((number) => (
@@ -35,7 +35,7 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        Next
+        הבא
       </Button>
     </div>
   );

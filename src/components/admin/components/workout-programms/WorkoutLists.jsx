@@ -48,7 +48,7 @@ export default function WorkoutLists() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          שם התרגיל
+          שם האימון 
           <ArrowUpDown />
         </Button>
       ),
@@ -63,7 +63,7 @@ export default function WorkoutLists() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          הוראות לתרגיל
+          תיאור האימון
           <ArrowUpDown />
         </Button>
       ),
@@ -155,6 +155,7 @@ export default function WorkoutLists() {
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
+        dir="rtl"
           placeholder="שם מסנן...."
           value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>

@@ -35,7 +35,7 @@ export default function ExerciseDetails({ exerciseId }) {
       <DialogContent className="sm:max-w-4xl p-6 rounded-lg">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-center">
-            Exercise Details
+            פרטי תרגיל
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center gap-4">
@@ -55,7 +55,7 @@ export default function ExerciseDetails({ exerciseId }) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg ">Close</Button>
+            <Button className="w-full bg-customBg ">סגור </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

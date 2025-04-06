@@ -32,7 +32,7 @@ export default function UserDetails({ userId }) {
       <DialogContent className="sm:max-w-3xl p-6 rounded-lg shadow-lg border border-gray-200 bg-white">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center text-gray-800">
-            User Details
+          פרטי מתאמן
           </DialogTitle>
         </DialogHeader>
 
@@ -57,12 +57,12 @@ export default function UserDetails({ userId }) {
           <div className="w-full flex flex-wrap justify-center gap-4 text-sm text-gray-700">
             <div className="px-4 py-2 bg-red-200 rounded-lg shadow-sm">
               <span className="font-medium text-red-600 uppercase">
-                {userData?.gender}
+                {userData?.gender==='male'?'זכר':'נקבה'}
               </span>
             </div>
             <div className="px-4 py-2 bg-green-200 rounded-lg shadow-sm">
               <span className="font-medium text-green-600 uppercase">
-                {userData?.userStatus}
+                {userData?.userStatus==='active'?'פעיל':'לא פעיל'}
               </span>
             </div>
             <div className="px-4 py-2 bg-green-200 rounded-lg shadow-sm">
@@ -80,7 +80,7 @@ export default function UserDetails({ userId }) {
         <DialogFooter>
           <DialogClose asChild>
             <Button className="w-full bg-customBg hover:bg-customBg-dark transition-all duration-200">
-              Close
+            סגור
             </Button>
           </DialogClose>
         </DialogFooter>

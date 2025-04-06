@@ -361,7 +361,7 @@ const EditTrainingForm = () => {
                         </p>
                         <div className="flex items-center justify-between gap-x-2">
                           <div className="flex flex-col items-center space-y-4">
-                            <p>Sets</p>
+                            <p>סטים </p>
                             <Input
                               type="number"
                               defaultValue={ex?.sets}
@@ -376,7 +376,7 @@ const EditTrainingForm = () => {
                             />
                           </div>
                           <div className="flex flex-col items-center space-y-4">
-                            <p>Reps</p>
+                            <p>חזרות</p>
                             <Input
                               type="number"
                               defaultValue={ex?.reps}
@@ -391,7 +391,7 @@ const EditTrainingForm = () => {
                             />
                           </div>
                           <div className="flex flex-col items-center space-y-4">
-                            <p>Manipulation</p>
+                            <p>מניפולציה</p>
                             <Input
                               type="text"
                               defaultValue={ex?.manipulation}
@@ -438,7 +438,7 @@ const EditTrainingForm = () => {
                     }
                     className="mt-2 bg-customBg flex mx-auto"
                   >
-                    Add More Exercise
+                    הוסף תרגילים לאימון
                   </Button>
                 </div>
               )
@@ -456,14 +456,14 @@ const EditTrainingForm = () => {
             }
             disabled={isButtonDisabled || isSupersetIncomplete}
           >
-            Update Training
+        שמור תוכנית אימון חדשה
           </Button>
           <Button
             type="button"
             className=" bg-customBg"
             onClick={() => setShowWorkoutSelect(true)}
           >
-            Add More Workout
+            הוסף אימון לתוכנית
           </Button>
         </div>
       </form>

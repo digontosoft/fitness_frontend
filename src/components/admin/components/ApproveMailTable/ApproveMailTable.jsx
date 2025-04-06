@@ -107,7 +107,7 @@ export function ApproveMailTable() {
          onClick={() => handleStatus(row.original)}
        >
          {row.original.isActive === true ? (
-           <span className="text-red-500">Deactivate</span>
+           <span className="text-red-500">בטל מנוי</span>
          ) : (
            <span className="text-green-500">Activate</span>
          )}

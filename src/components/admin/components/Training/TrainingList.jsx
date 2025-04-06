@@ -50,7 +50,7 @@ export function TrainingList() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Training Name
+          שם תוכנית אימון
           <ArrowUpDown />
         </Button>
       ),
@@ -65,7 +65,7 @@ export function TrainingList() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Training Description
+          תיאור תוכנית אימון
           <ArrowUpDown />
         </Button>
       ),
@@ -103,7 +103,7 @@ export function TrainingList() {
                 to={`/dashboard/assign-training/${row.original._id}/${userId}`}
               >
                 <Button className="bg-customBg" size="sm">
-                  Assign Training
+                שייך תוכנית אימון
                 </Button>
               </Link>
             ) : (
@@ -177,8 +177,7 @@ export function TrainingList() {
         />
         <Link to="/dashboard/add-training-program">
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            Add New Training
-          </Button>
+          צור תוכנית אימון       </Button>
         </Link>
       </div>
       <div className="rounded-md border">

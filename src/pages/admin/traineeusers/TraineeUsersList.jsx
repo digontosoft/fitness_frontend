@@ -33,6 +33,7 @@ import {
 import UserDetails from "./UserDetails";
 import { toast } from "sonner";
 import PaginationComp from "@/components/pagination";
+import { set } from "react-hook-form";
 
 export function TraineeUsersLists() {
   const [users, setUsers] = useState([]);
@@ -52,7 +53,7 @@ export function TraineeUsersLists() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          שם מתאמן
           <ArrowUpDown />
         </Button>
       ),
@@ -67,7 +68,7 @@ export function TraineeUsersLists() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          כתובת דואר
           <ArrowUpDown />
         </Button>
       ),
@@ -96,7 +97,7 @@ export function TraineeUsersLists() {
                 size="sm"
                 onClick={() => handleOpenDeleteModal(row.original)}
               >
-                Managing Training
+                נהל מתאמן
               </Button>
             </Link>
             <Button
@@ -110,7 +111,7 @@ export function TraineeUsersLists() {
               }
             >
               {row.original.userType === "trainee"
-                ? "Make Admin"
+                ? "הפוך למאמן"
                 : "Make Trainee"}
             </Button>
             <Button
@@ -157,19 +158,22 @@ export function TraineeUsersLists() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get(`${base_url}/getUsers`);
-      console.log("Users:", response.data);
-      setUsers(response.data.data);
-    } catch (error) {
-      console.error("Error fetching email:", error);
-      throw error;
-    }
-  };
+
   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(`${base_url}/getUsers?page=${page}&&limit=10`);
+        console.log("Users:", response.data);
+        setPage(response.data.pagination.currentPage);
+        setTotalPages(response.data.pagination.totalPages);
+        setUsers(response.data.data);
+      } catch (error) {
+        console.error("Error fetching email:", error);
+        throw error;
+      }
+    };
     fetchUsers();
-  }, []);
+  }, [page,totalPages]);
 
   
 
@@ -207,7 +211,8 @@ export function TraineeUsersLists() {
     <div className="w-full" dir="ltr">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Filter name..."
+        dir="rtl"
+          placeholder="סנן לפי שם..."
           value={table.getColumn("firstName")?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("firstName")?.setFilterValue(event.target.value)
@@ -283,7 +288,7 @@ export function TraineeUsersLists() {
       </Dialog>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-      <PaginationComp/>
+      <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
       </div>
     </div>
   );

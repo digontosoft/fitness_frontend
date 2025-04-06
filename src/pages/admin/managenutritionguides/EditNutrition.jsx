@@ -65,7 +65,7 @@ const EditNutrition = () => {
     <div className="bg-customBg relative flex items-center justify-center min-h-screen mb-2">
       <div className="bg-white shadow-lg rounded-[60px] p-6 w-5/6 min-h-[80vh] h-auto flex flex-col items-center justify-center my-4">
         <div className="grid gap-4 items-center justify-items-center">
-          <FormTitle title={"Edit Nutrition"} />
+          <FormTitle title={"ערוך מדריך תזונה"} />
 
           <div className="py-20" dir="rtl">
             <form
@@ -78,7 +78,7 @@ const EditNutrition = () => {
                   className="sm:min-w-[350px]"
                   id="title"
                   type="text"
-                  label="שם האימון"
+                  label="שם מדריך תזונה"
                   placeholder="Add שם האימון...."
                   register={register}
                   validation={{ required: "שם האימון is required" }}
@@ -90,7 +90,7 @@ const EditNutrition = () => {
                   className="sm:min-w-[350px]"
                   id="description"
                   type="text"
-                  label="דגשים מיוחדים (במידה ויש)"
+                  label="תיאור מדריך תזונה"
                   placeholder="דגשים מיוחדים (במידה ויש)..."
                   register={register}
                   validation={{ required: "דגשים מיוחדים is required" }}
@@ -127,7 +127,7 @@ const EditNutrition = () => {
                 {/* Show Existing PDF */}
                 {existingPdf && (
                   <div className="mt-2">
-                    <p className="text-sm text-gray-600">Existing File:</p>
+                    <p className="text-sm text-gray-600">קובץ קיים:</p>
                     <a
                       href={`${base_url}/${existingPdf}`}
                       target="_blank"

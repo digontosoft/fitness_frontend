@@ -1,4 +1,3 @@
-
 import { base_url } from "@/api/baseUrl";
 import BasicButton from "@/components/admin/components/ui/BasicButton";
 import { Button } from "@/components/ui/button";
@@ -17,63 +16,63 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import moment from "moment";
 
-function EditApproveMail({id,updateDate}) {
-    const [loading, setLoading] = useState(false);
-    const [approvedEmail, setApprovedEmail] = useState({});
-   
-    
-      const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors },
-      } = useForm();
+function EditApproveMail({ id, updateDate }) {
+  const [loading, setLoading] = useState(false);
+  const [approvedEmail, setApprovedEmail] = useState({});
 
-      useEffect(()=>{
-        const getMail = async () => {
-          try {
-            setLoading(true);
-            const response = await axios.get(`${base_url}/approved-mail/${id}`);
-            const data = response.data.approvedEmail;
-            
-            setApprovedEmail(data);
-          } catch (error) {
-            console.error("Error fetching email:", error);
-          } finally {
-            setLoading(false);
-          }
-        }
-        getMail();
-      },[id])
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-      const onSubmit = async (data) => {
-        await updateDate(data);
-     
+  useEffect(() => {
+    const getMail = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${base_url}/approved-mail/${id}`);
+        const data = response.data.approvedEmail;
+
+        setApprovedEmail(data);
+      } catch (error) {
+        console.error("Error fetching email:", error);
+      } finally {
+        setLoading(false);
       }
+    };
+    getMail();
+  }, [id]);
+
+  const onSubmit = async (data) => {
+    await updateDate(data);
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button className="bg-customBg hover:bg-customBg-dark" size="sm">
-          <Edit/>
+          <Edit />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center text-gray-800">
-            Edit Approved Mail
+            ערוך כתובת מייל מאושרת
           </DialogTitle>
         </DialogHeader>
         {/* Add form fields or other content here */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
             <div className="grid items-center gap-4">
-              <Label htmlFor="email">דואר אלקטרוני
+              <Label htmlFor="email" dir="rtl">
+                דואר אלקטרוני
               </Label>
               <Input
+                dir="rtl"
                 id="email"
                 type="email"
                 defaultValue={approvedEmail.email}
-                disabled  
+                disabled
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -81,33 +80,43 @@ function EditApproveMail({id,updateDate}) {
                     message: "Enter a valid email address",
                   },
                 })}
-                className={`${errors.email ? "border-red-500" : ""}`}
+                className={`${errors.email ? "border-red-500" : ""} `}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-sm mt-1" dir="rtl">
                   {errors.email.message}
                 </p>
               )}
-              <Label htmlFor="expiry_date">תאריך סיום
+              <Label htmlFor="expiry_date" dir="rtl">
+                תאריך סיום
               </Label>
               <Input
+                dir="rtl"
                 id="expiry_date"
                 type="date"
-                defaultValue={moment(approvedEmail.expiry_date).format("YYYY-MM-DD")}
+                defaultValue={moment(approvedEmail.expiry_date).format(
+                  "YYYY-MM-DD"
+                )}
                 {...register("expiry_date", {
                   required: "Expiry Date is required",
                 })}
-                className={`${errors.expiry_date ? "border-red-500" : ""}`}
+                className={`${
+                  errors.expiry_date ? "border-red-500" : ""
+                } flex items-center justify-end`}
               />
               {errors.expiry_date && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-red-500 text-sm mt-1" dir="rtl">
                   {errors.expiry_date.message}
                 </p>
               )}
             </div>
           </div>
           <div className="flex items-center justify-end">
-            <BasicButton type="submit" title="UPDATE" className="bg-customBg" />
+            <BasicButton
+              type="submit"
+              title="עדכן"
+              className="bg-customBg"
+            />
           </div>
         </form>
       </DialogContent>

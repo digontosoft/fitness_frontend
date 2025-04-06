@@ -78,7 +78,7 @@ export function TrainingListForTrainee({ userId }) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Training Name
+          סנן לפי שם תוכנית אימון 
           <ArrowUpDown />
         </Button>
       ),
@@ -93,7 +93,7 @@ export function TrainingListForTrainee({ userId }) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Training Description
+        תיאור תוכנית אימון
           <ArrowUpDown />
         </Button>
       ),
@@ -130,7 +130,7 @@ export function TrainingListForTrainee({ userId }) {
               className="bg-green-100 hover:bg-green-100 text-green-500 font-bold uppercase tracking-wide"
               size="sm"
             >
-              {row.original.status === "active" ? "Active" : "Inactive"}
+              {row.original.status === "active" ? "תוכנית אימון פעילה" : "תוכנית אימון לא פעילה"}
             </Button>
           </div>
         );
@@ -194,7 +194,7 @@ export function TrainingListForTrainee({ userId }) {
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
-          placeholder="Filter by trainig name..."
+          placeholder="סנן לפי שם תוכנית אימון ..."
           value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -203,7 +203,7 @@ export function TrainingListForTrainee({ userId }) {
         />
         <Link to={`/dashboard/training-list`} state={userId}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            Assign New Training
+          סנן לפי שם תוכנית אימון 
           </Button>
         </Link>
       </div>
@@ -248,7 +248,7 @@ export function TrainingListForTrainee({ userId }) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  לא הוקצו תוכניות אימון למתאמן
                 </TableCell>
               </TableRow>
             )}

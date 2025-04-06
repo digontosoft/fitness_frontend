@@ -86,6 +86,7 @@ const Dashboard = () => {
           labelField="firstName"
           options={traineeUsers}
           searchBy="firstName"
+          placeholder="בחר מתאמן"
           onChange={handleSelectUser}
         />
 

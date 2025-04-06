@@ -65,8 +65,8 @@ const AddNutritionMenu = ({ userId }) => {
             className="sm:min-w-[350px]"
             id="title"
             type="text"
-            label={"Nutrition Menu Name"}
-            placeholder={"Add nutrition menu name..."}
+            label={" שם תפריט תזונה אישי "}
+            placeholder={"הוסף שם תפריט תזונה אישי..."}
             register={register}
             validation={{
               required: "Nutrition menu name is required",
@@ -78,8 +78,8 @@ const AddNutritionMenu = ({ userId }) => {
             className="sm:min-w-[350px]"
             id="description"
             type="text"
-            label={"Nutrition Menu Description"}
-            placeholder={"Add nutrition menu description..."}
+            label={"תיאור תפריט תזונה אישי"}
+            placeholder={"הוסף תיאור תפריט תזונה אישי..."}
             register={register}
             validation={{
               required: "Nutrition menu description is required",
@@ -118,7 +118,7 @@ const AddNutritionMenu = ({ userId }) => {
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
           >
-            {"Add Nutrition Menu"}
+            {"הוסף תפריט תזונה אישי"}
           </Button>
         </div>
       </form>
