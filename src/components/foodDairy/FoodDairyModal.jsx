@@ -90,8 +90,8 @@ export function FoodDairyModal({ userId, onClose }) {
             <div key={item._id} className="p-4 border-b">
               {/* Show date-wise data */}
               {item.date ? (
-                <h4 className="text-xl font-bold mb-2">
-                  Date: {formatDate(item.date)}
+                <h4 className="text-xl font-bold mb-2" dir="rtl">
+                  <span >Date: {formatDate(item.date)}</span>
                 </h4>
               ) : (
                 <h4 className="text-xl font-bold mb-2">No Date</h4>

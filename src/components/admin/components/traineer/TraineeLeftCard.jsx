@@ -125,6 +125,8 @@ const TraineeLeftCard = ({ userId }) => {
   const rightThigh = Number(measurementData?.thighr) || 0;
   const totalThigh = leftThigh + rightThigh;
   const avgThigh = Math.floor(totalThigh / 2);
+  console.log("userType", userType.gender);
+  
 
   return (
     <div
@@ -143,7 +145,8 @@ const TraineeLeftCard = ({ userId }) => {
             </div>
             <div className="flex items-center ">
               <p className="text-lg text-white" dir="rtl">
-                חזה:
+                
+                <span>{userType.gender === "male" ? "חָזֶה":'ישבן' }</span>
                 {userType.gender === "male"
                   ? measurementData?.chest
                   : measurementData?.butt}

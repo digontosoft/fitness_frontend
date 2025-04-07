@@ -206,12 +206,13 @@ export function ApproveMailTable() {
 
   const [page, setPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(1);
+  const [search, setSearch] = React.useState("");
 
 
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${base_url}/approved-mail?limit=10&page=${page}`);
+      const response = await axios.get(`${base_url}/approved-mail?limit=10&page=${page}&search=${search}`);
       console.log("emails:", response.data);
       setEmails(response.data.approvedEmail);
       setTotalPages(response.data.pagination.totalPages);
@@ -223,17 +224,21 @@ useEffect(() => {
   }
 
   fetchData();
-  }, [page, totalPages]);
+  }, [page,totalPages,search]);
+
+  console.log(totalPages,page);
+  
  
 
   return (
     <div className="w-full" dir="ltr">
       <div className="flex sm:flex-row flex-col items-center sm:justify-between justify-center py-4 space-y-4 sm:space-y-0">
         <Input
-          placeholder="סנן מיילים..."
-          value={table.getColumn("email")?.getFilterValue() ?? ""}
+        dir="rtl"
+          placeholder="סנן לפי כתובת דואר אלקטרוני..."
+         // value={table.getColumn("email")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            setSearch(event.target.value)
           }
           className="max-w-sm"
         />
