@@ -18,6 +18,10 @@ const LastExercise = ({ currentExercise }) => {
           <p className="flex  items-center font-normal">
             <span className="font-bold">סטים שבוצעו: </span> {currentExercise?.sets}
           </p>
+          <p className="flex  items-center font-normal">
+            <span className="font-bold">משקל: </span> {currentExercise?.last_set_weight
+            }
+          </p>
         </div>
         <div className="flex flex-col gap-2 text-[#000000] text-xs">
           {/* <p className="flex  items-center font-normal">

@@ -69,6 +69,7 @@ export const NutritionCart = () => {
               title={item.title}
               description={item.description}
               pdfLink={item.pdf_link}
+              type="guide"
             />
           ))
         ) : (

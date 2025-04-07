@@ -112,7 +112,7 @@ export function TraineeUsersLists() {
             >
               {row.original.userType === "trainee"
                 ? "הפוך למאמן"
-                : "Make Trainee"}
+                : "הפוך למתאמן"}
             </Button>
             <Button
               className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"

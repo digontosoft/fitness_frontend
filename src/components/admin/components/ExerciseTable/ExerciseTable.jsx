@@ -249,7 +249,7 @@ export function ExerciseTable() {
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <input
           type="text"
-          placeholder="חפש"
+          placeholder="סנן לפי שם"
           className="w-40 rounded-sm border-blue-500 h-12 border-2 p-2 focus:border-blue-400"
           dir="rtl"
           onChange={(e) => setSearchValue(e.target.value)}
@@ -257,16 +257,16 @@ export function ExerciseTable() {
 
         <Select
           direction="rtl"
-          className="w-40 rounded-lg h-12 border-2 p-2"
-          placeholder="חיפוש חלק בגוף"
+          className="min-w-40 rounded-lg h-12 border-2 p-2"
+          placeholder="סנן לפי חלק בגוף"
           options={bodyPartOptions}
           onChange={(e) => setBodyPart(e[0].value)}
         />
         <Select
           direction="rtl"
           options={equipmentOptions}
-          className="w-40 rounded-lg h-12 border-2 p-2"
-          placeholder="ציוד חיפוש"
+          className=" min-w-40   rounded-lg h-12 border-2 p-2"
+          placeholder="סנן לפי ציוד"
           onChange={(e) => setEquipment(e[0].value)}
         />
         <Link to="/dashboard/exercise-library">

@@ -122,7 +122,7 @@ const TraineerUi = ({ userId }) => {
         />
 
         <AdminArrowCardWithoutImage
-          title="ומן אכילה"
+          title="יומן אכילה"
           onClick={handleModal}
         />
 
