@@ -91,7 +91,7 @@ export function FoodDairyModal({ userId, onClose }) {
               {/* Show date-wise data */}
               {item.date ? (
                 <h4 className="text-xl font-bold mb-2" dir="rtl">
-                  <span >Date: {formatDate(item.date)}</span>
+                  <span dir="rtl">Date: </span>{formatDate(item.date)}
                 </h4>
               ) : (
                 <h4 className="text-xl font-bold mb-2">No Date</h4>
