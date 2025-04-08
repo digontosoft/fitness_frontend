@@ -305,7 +305,7 @@ const AssignTrainingForm = ({ user_id }) => {
     }
   };
   return (
-    <div className="py-20" dir="rtl">
+    <div className="py-20  " dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <Select
           className="rounded-lg h-12 sm:min-w-[400px] w-full"
@@ -319,7 +319,7 @@ const AssignTrainingForm = ({ user_id }) => {
         {selectedTraining && (
           <div className="space-y-4">
             <DynamicInputField
-              className="sm:min-w-[350px]"
+              className="sm:min-w-[350px] "
               id="name"
               type="text"
               label="Training Name"

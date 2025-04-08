@@ -18,17 +18,10 @@ const StartTraining = () => {
   const [showPrevious, setShowPrevious] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [exerciseData, setExerciseData] = useState({});
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const isSuperset =
     userTrainingExercise[currentIndex]?.manipulation?.toLowerCase() ===
     "superset";
-
-  // useEffect(() => {
-  //   console.log("Updated exerciseData:", exerciseData);
-  // }, [exerciseData]);
-
-  
-  
 
   const handleInputChange = (courseId, value) => {
     setExerciseData((prev) => ({
@@ -56,19 +49,6 @@ const StartTraining = () => {
 
     return currentIndex;
   };
-  // const getPreviousIndex = () => {
-  //   let prevIndex = currentIndex - 1;
-
-  //   if (
-  //     prevIndex > 0 &&
-  //     userTrainingExercise[prevIndex]?.manipulation?.toLowerCase() ===
-  //       "superset"
-  //   ) {
-  //     prevIndex--;
-  //   }
-
-  //   return prevIndex >= 0 ? prevIndex : 0;
-  // };
 
   const handleNext = () => {
     const nextIndex = getNextIndex();
@@ -77,7 +57,10 @@ const StartTraining = () => {
       setCurrentIndex(nextIndex);
       setShowPrevious(true);
 
-      if (nextIndex === userTrainingExercise.length - 1) {
+      if (
+        userTrainingExercise.length === 1 ||
+        nextIndex === userTrainingExercise.length - 1
+      ) {
         setIsFinished(true);
       }
     }
@@ -94,32 +77,30 @@ const StartTraining = () => {
   };
 
   const handleFinish = async () => {
-    //console.log("All exercise data on finish:", exerciseData);
-    
     const payload = {
-      task_id: workData.task_id, 
+      task_id: workData.task_id,
       user_training_workout_id: workData.user_training_workout_id,
-      excerciseData:
-        Object.entries(exerciseData).map(([key, value]) => ({
-          exercise_id: key,     
-          sets_done: Number(value.sets_done),   // Convert to number
-          reps_done: Number(value.reps_done),   
-        }))
-    }
+      excerciseData: Object.entries(exerciseData).map(([key, value]) => ({
+        exercise_id: key,
+        sets_done: Number(value.sets_done), // Convert to number
+        reps_done: Number(value.reps_done),
+      })),
+    };
     console.log("payload", payload);
-    
-   try {
-    const response = await axios.post(`${base_url}/complete-workout-task`, payload); 
-    if (response.status === 200) {
-      toast.success("Workout completed successfully!");
-      navigate("/")
-    
-  }
-   } catch (error) {
-    console.log(error);
-    
-   }
-};
+
+    try {
+      const response = await axios.post(
+        `${base_url}/complete-workout-task`,
+        payload
+      );
+      if (response.status === 200) {
+        toast.success("Workout completed successfully!");
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const nextIndex = currentIndex + 1;
   const currentExercise = userTrainingExercise[currentIndex] || {};
