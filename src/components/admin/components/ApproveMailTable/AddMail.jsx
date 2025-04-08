@@ -71,15 +71,18 @@ export default function AddMail({ setEmails }) {
               <Label htmlFor="expiry_date" dir="rtl">
                 תאריך סיום
               </Label>
-              <Input
-                id="expiry_date"
-                type="date"
-                {...register("expiry_date", {
-                  required: "Expiry Date is required",
-                })}
-                className={`${errors.expiry_date ? "border-red-500" : ""}`}
-                dir="rtl"
-              />
+              <div dir="rtl">
+                <input
+                  id="expiry_date"
+                  type="date"
+                  {...register("expiry_date", {
+                    required: "Expiry Date is required",
+                  })}
+                  className={`w-full border border-gray-300 rounded-lg p-3 text-right ${
+                    errors.expiry_date ? "border-red-500" : ""
+                  }`}
+                />
+              </div>
               {errors.expiry_date && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.expiry_date.message}
