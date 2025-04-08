@@ -502,16 +502,16 @@ const EditWorkoutForm = ({ workoutId }) => {
     const lastIndex = exercises.length - 1;
 
     // Count how many times "superset" is exactly used
-    const supersetCount = exercises.filter(
-      (ex) => ex.manipulation === "superset"
-    ).length;
+    // const supersetCount = exercises.filter(
+    //   (ex) => ex.manipulation === "superset"
+    // ).length;
 
-    // If user types exactly "superset" more than once, prevent it
-    if (value === "superset" && supersetCount >= 1) {
-      toast.error("You can only use 'superset' once in the workout.");
-      setDisableUpdateButton(true);
-      return;
-    }
+    // // If user types exactly "superset" more than once, prevent it
+    // if (value === "superset" && supersetCount >= 1) {
+    //   toast.error("You can only use 'superset' once in the workout.");
+    //   setDisableUpdateButton(true);
+    //   return;
+    // }
 
     // Update the manipulation value for the specific exercise
     setValue(`exercises.${index}.manipulation`, value);
@@ -598,6 +598,7 @@ const EditWorkoutForm = ({ workoutId }) => {
             options={exercises}
             valueField="_id"
             labelField="name"
+            searchBy="name"
             multi
             values={exercisesForm?.map((ex) => ({
               _id: ex.exercise_id?._id,
@@ -630,9 +631,9 @@ const EditWorkoutForm = ({ workoutId }) => {
               <div className="flex items-center justify-center bg-customBg py-4 w-1/2 h-5 rounded-md text-white">
                 <p className="text-center">{exercise.exercise_id?.name}</p>
               </div>
-              <div className="grid grid-cols-3 gap-4 w-[327px]">
+              <div className="grid sm:grid-cols-3 grid-cols-1 gap-4 sm:w-[327px]">
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor={`sets-${exercise._id}`}>Sets</label>
+                  <label htmlFor={`sets-${exercise._id}`}>סטים</label>
                   <input
                     id={`sets-${exercise._id}`}
                     type="number"
@@ -643,7 +644,7 @@ const EditWorkoutForm = ({ workoutId }) => {
                   />
                 </div>
                 <div className="flex flex-col space-y-2">
-                  <label htmlFor={`reps-${exercise._id}`}>Reps</label>
+                  <label htmlFor={`reps-${exercise._id}`}>חזרות</label>
                   <input
                     id={`reps-${exercise._id}`}
                     type="number"
@@ -655,7 +656,7 @@ const EditWorkoutForm = ({ workoutId }) => {
                 </div>
                 <div className="flex flex-col space-y-2">
                   <label htmlFor={`manipulation-${exercise._id}`}>
-                    Manipulation
+                  מניפולציה
                   </label>
                   <input
                     type="text"
@@ -678,7 +679,7 @@ const EditWorkoutForm = ({ workoutId }) => {
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
             disabled={disableUpdateButton || !isFormValid}
           >
-            Update Workout
+            עדכן תוכנית אימון
           </Button>
         </div>
       </form>

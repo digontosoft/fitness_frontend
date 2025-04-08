@@ -1,7 +1,7 @@
 import React from "react";
 
 const LastExercise = ({ currentExercise }) => {
-  // console.log("current excersizeeeeeee", currentExercise?.manipulation);
+   
   return (
     <div className="w-96 ">
       <p className="text-[#0A2533] text-xl font-bold text-start" dir="rtl">
@@ -13,23 +13,27 @@ const LastExercise = ({ currentExercise }) => {
       >
         <div className="flex flex-col gap-2 text-[#000000] text-xs">
           <p className="flex  items-center font-normal">
-            <span className="font-bold">חזרות שבוצעו: </span> N/A
+            <span className="font-bold">חזרות שבוצעו: </span> {currentExercise?.reps}
           </p>
           <p className="flex  items-center font-normal">
-            <span className="font-bold">סטים שבוצעו: </span> N/A
+            <span className="font-bold">סטים שבוצעו: </span> {currentExercise?.sets}
+          </p>
+          <p className="flex  items-center font-normal">
+            <span className="font-bold">משקל: </span> {currentExercise?.last_set_weight
+            }
           </p>
         </div>
         <div className="flex flex-col gap-2 text-[#000000] text-xs">
-          <p className="flex  items-center font-normal">
+          {/* <p className="flex  items-center font-normal">
             <span className="font-bold">אימון:</span> N/A
-          </p>
+          </p> */}
           <p className="flex  items-center font-normal ">
             <span className="font-bold text-sm pl-1">מניפולציה:</span>
             {currentExercise?.manipulation}
           </p>
-          <p className="flex  items-center font-normal">
+          {/* <p className="flex  items-center font-normal">
             <span className="font-bold">משקל שבוצע:</span> N/A
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

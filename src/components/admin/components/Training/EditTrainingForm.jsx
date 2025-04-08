@@ -180,17 +180,17 @@ const EditTrainingForm = () => {
 
     if (field === "manipulation" && value === "superset") {
       // Check if there is already a superset in the workout
-      const existingSuperset = workout.exercises.some(
-        (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
-      );
+      // const existingSuperset = workout.exercises.some(
+      //   (ex, idx) => ex.manipulation === "superset" && idx !== exerciseIndex
+      // );
 
-      if (existingSuperset) {
-        toast.error("Only one superset is allowed per workout.");
-        setIsSupersetIncomplete(true);
-        return;
-      } else {
-        setIsSupersetIncomplete(false);
-      }
+      // if (existingSuperset) {
+      //   toast.error("Only one superset is allowed per workout.");
+      //   setIsSupersetIncomplete(true);
+      //   return;
+      // } else {
+      //   setIsSupersetIncomplete(false);
+      // }
 
       // Check if this is the last exercise
       const isLastExercise = exerciseIndex === workout.exercises.length - 1;
@@ -267,9 +267,6 @@ const EditTrainingForm = () => {
       description: data.description,
       workouts: (training.workouts || []).map((w) => ({
         workout: w._id,
-        // name: w.workout?.name,
-        // description: w.workout?.description,
-
         exercises: (w.exercises || []).map((ex) => ({
           _id: ex._id,
           exercise_id:
@@ -283,7 +280,6 @@ const EditTrainingForm = () => {
       })),
     };
 
-    console.log("payload:", payload);
     try {
       const response = await axios.put(`${base_url}/training/${id}`, payload);
       if (response.status === 200) {
@@ -299,7 +295,7 @@ const EditTrainingForm = () => {
   };
 
   return (
-    <div className="py-10 w-[500px]">
+    <div className="py-10 sm:w-[500px]">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <DynamicInputField
           id="name"
@@ -329,19 +325,19 @@ const EditTrainingForm = () => {
             valueField="_id"
             labelField="name"
             onChange={handleAddWorkout}
+            searchBy="name"
           />
         )}
 
         <div className="my-5">
           {training?.workouts?.map((workout, workoutIndex) => (
             <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
-              <h1 className="font-semibold">{workout?.workout?.name}</h1>
+              <h1 className="font-semibold">{workout?.name}</h1>
               <div className="flex items-center gap-x-2" dir="rtl">
                 <Trash
                   className="cursor-pointer text-red-600"
                   onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
                 />
-                Remove Workout
               </div>
               {workout?.exercises?.map((ex, exerciseIndex) => (
                 <div
@@ -350,11 +346,11 @@ const EditTrainingForm = () => {
                 >
                   <div>
                     <p className="py-4" dir="rtl">
-                      {ex?.name}
+                      {ex?.name} {ex?.exercise_id?.name}
                     </p>
-                    <div className="flex items-center justify-between gap-x-2">
+                    <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
                       <div className="flex flex-col items-center space-y-4">
-                        <p>Sets</p>
+                        <p>סטים</p>
                         <Input
                           type="number"
                           defaultValue={ex?.sets}
@@ -369,7 +365,7 @@ const EditTrainingForm = () => {
                         />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
-                        <p>Reps</p>
+                        <p>חזרות</p>
                         <Input
                           type="number"
                           defaultValue={ex?.reps}
@@ -384,7 +380,7 @@ const EditTrainingForm = () => {
                         />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
-                        <p>Manipulation</p>
+                        <p>מניפולציה</p>
                         <Input
                           type="text"
                           defaultValue={ex?.manipulation}
@@ -415,6 +411,7 @@ const EditTrainingForm = () => {
                   onChange={(selected) =>
                     handleAddExercise(workout._id, selected)
                   }
+                  searchBy="name"
                 />
               )}
 
@@ -428,30 +425,30 @@ const EditTrainingForm = () => {
                 }
                 className="mt-2 bg-customBg flex mx-auto"
               >
-                Add More Exercise
+                הוסף תרגילים לאימון
               </Button>
             </div>
           ))}
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-y-0 gap-y-2">
           <Button
             type="submit"
             className={
               isButtonDisabled || isSupersetIncomplete
-                ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
-                : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+                ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200 sm:order-first order-last"
+                : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg sm:order-first order-last"
             }
             disabled={isButtonDisabled || isSupersetIncomplete}
           >
-            Update Training
+        שמור תוכנית אימון חדשה
           </Button>
           <Button
             type="button"
             className=" bg-customBg"
             onClick={() => setShowWorkoutSelect(true)}
           >
-            Add More Workout
+            הוסף אימון לתוכנית
           </Button>
         </div>
       </form>

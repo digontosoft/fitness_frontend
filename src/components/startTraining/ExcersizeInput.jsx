@@ -16,6 +16,7 @@ const ExcersizeInput = ({
     setValue,
     formState: { errors },
     getValues,
+    reset,
   } = useForm();
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const ExcersizeInput = ({
   return (
     <div className="w-96 py-20" dir="rtl">
       <div className="flex flex-row-reverse text-[#0A2533] text-xl font-bold justify-between items-center">
-        <p>סט אחרון:</p>
+        <p className="sm:ml-[84px] ml-[100px]">סט אחרון:</p>
         <p>יעד:</p>
       </div>
       <div className="w-96 bg-white shadow-md rounded-2xl p-2 md:p-6 flex justify-between border-[1px] border-gray-100 mt-4">
@@ -88,7 +89,8 @@ const ExcersizeInput = ({
                 className="border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#FD4753] focus:border-[#FD4753]"
                 {...register("reps_done", {
                   required: "reps_done reps are required",
-                  onChange: (e) => handleInputChange("reps_done", e.target.value),
+                  onChange: (e) =>
+                    handleInputChange("reps_done", e.target.value),
                 })}
               />
               {errors.reps_done && (
@@ -112,7 +114,7 @@ const ExcersizeInput = ({
                 htmlFor="lastSet"
                 className=" absolute px-1 text-sm font-medium text-[#7F7F7F]  bg-white -top-2.5 left-[30%]"
               >
-                מניפולציה
+                משקל
               </label>
               <input
                 id="lastSet"

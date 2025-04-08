@@ -39,7 +39,7 @@ const SmallCart = ({ data }) => {
                 </span>
 
                 <span className="text-[#8C8C8C] text-[10px] font-normal">
-                  {"SM"}
+                  {"CM"}
                 </span>
               </div>
             </div>

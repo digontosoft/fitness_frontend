@@ -30,7 +30,37 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { handler } from "tailwindcss-animate";
+import Select from "react-dropdown-select";
+import PaginationComp from "@/components/pagination";
+
+const bodyPartOptions = [
+  { label: "כל חלקי הגוף", value: "" },
+  {
+    label: "יד קדמית",
+    value: "יד קדמית",
+  },
+  {
+    label: "יד אחורית ",
+    value: "יד אחורית",
+  },
+  { label: "כתפיים", value: "כתפיים" },
+  { label: "חזה", value: "חזה" },
+  { label: "גב", value: "גב" },
+  { label: "רגליים", value: "רגליים" },
+  { label: "בטן", value: "בטן" },
+  { label: "ישבן", value: "ישבן" },
+  { label: "גב תחתון", value: "גב תחתון" },
+];
+
+const equipmentOptions = [
+  { label: "כל הציוד", value: "" },
+  { label: "ללא ציוד", value: "ללא ציוד" },
+  { label: "TRX", value: "TRX" },
+  { label: "גומיות", value: "גומיות" },
+  { label: "משקולות", value: "משקולות" },
+  { label: "מכונות", value: "מכונות" },
+  { label: "מוטות", value: "מוטות" },
+];
 
 export function ExerciseTable() {
   const [sorting, setSorting] = useState([]);
@@ -40,6 +70,10 @@ export function ExerciseTable() {
   const [exercise, setExercise] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
+  const [body_part, setBodyPart] = useState("");
+  const [equipment, setEquipment] = useState("");
+
+  const [searchValue, setSearchValue] = useState("");
 
   const columns = [
     {
@@ -177,18 +211,24 @@ export function ExerciseTable() {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${base_url}/exercise`);
-      setExercise(response.data.data);
-    } catch (error) {
-      console.error("Error fetching exercises:", error);
-    }
-  };
-
+  const [page,setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
-    fetchData();
-  }, []);
+    const fetchExercise = async () => {
+      try {
+        const response = await axios.get(
+          `${base_url}/exercise?search=${searchValue}&body_part=${body_part}&equipment=${equipment}&page=${page}&limit=10`
+        );
+        setExercise(response.data.data);
+        setTotalPages(response.data.pagination.totalPages);
+        setPage(response.data.pagination.currentPage);
+        //console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
+    fetchExercise();
+  }, [searchValue, body_part, equipment,page,totalPages]);
 
   const table = useReactTable({
     data: exercise,
@@ -207,13 +247,27 @@ export function ExerciseTable() {
   return (
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
-        <Input
-          placeholder="שם מסנן...."
-          value={table.getColumn("name")?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
+        <input
+          type="text"
+          placeholder="סנן לפי שם"
+          className="w-40 rounded-sm border-blue-500 h-12 border-2 p-2 focus:border-blue-400"
+          dir="rtl"
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+
+        <Select
+          direction="rtl"
+          className="min-w-40 rounded-lg h-12 border-2 p-2"
+          placeholder="סנן לפי חלק בגוף"
+          options={bodyPartOptions}
+          onChange={(e) => setBodyPart(e[0].value)}
+        />
+        <Select
+          direction="rtl"
+          options={equipmentOptions}
+          className=" min-w-40   rounded-lg h-12 border-2 p-2"
+          placeholder="סנן לפי ציוד"
+          onChange={(e) => setEquipment(e[0].value)}
         />
         <Link to="/dashboard/exercise-library">
           <Button className="bg-customBg uppercase font-medium" size="sm">
@@ -289,38 +343,8 @@ export function ExerciseTable() {
       </Dialog>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          Previous
-        </Button>
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: table.getPageCount() }, (_, index) => (
-            <Button
-              key={index}
-              className={`${
-                table.getState().pagination.pageIndex === index
-                  ? "bg-customBg"
-                  : "bg-white text-black border hover:text-white"
-              }`}
-              size="sm"
-              onClick={() => table.setPageIndex(index)}
-            >
-              {index + 1}
-            </Button>
-          ))}
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          Next
-        </Button>
+        <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
+        
       </div>
     </div>
   );

@@ -6,13 +6,6 @@ import { WelcomeModal } from "@/components/home/WelcomeModal";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { TaskModal } from "./TaskModal";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,7 +55,6 @@ const Home = () => {
           .then((response) => {
             if (response.status === 200) {
               setUserTasks(response.data.data);
-              console.log("userTasks:", response?.data?.data);
             }
           });
       } catch (error) {
@@ -81,8 +73,6 @@ const Home = () => {
     try {
       const res = await axios.post(`${base_url}/updateUserInfo`, payload);
       if (res.status === 200) {
-        console.log("User info updated:", res);
-        // Update localStorage to reflect the new value
         const updatedUser = { ...user, is_video_popup: false };
         localStorage.setItem("userInfo", JSON.stringify(updatedUser));
         setIsModalOpen(false); // Close the modal
@@ -92,7 +82,6 @@ const Home = () => {
     }
   };
 
-  console.log("mesurement data", getMesurement);
   return (
     <div
       className="min-h-screen px-4 sm:px-6 md:px-10 lg:px-20 overflow-hidden"
@@ -119,26 +108,21 @@ const Home = () => {
         </div>
 
         {/* Tasks Section */}
-        <div className="pt-16 sm:pt-20 md:pt-24 flex flex-col justify-center items-center w-full">
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A2533] text-center">
-            משימות
-          </h1>
+        <div className="max-w-3xl mx-auto justify-center py-10" dir="ltr">
+          <div className="pt-16 sm:pt-20 md:pt-24 flex flex-wrap justify-center items-center w-full">
+            <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A2533] text-center w-full">
+              משימות
+            </h1>
 
-          {/* Responsive Carousel */}
-          <Carousel className="w-full max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-6xl mt-5 px-2 sm:px-4">
-            <CarouselContent className="-ml-1 flex">
-              {userTasks?.map((task) => (
-                <CarouselItem
-                  className="pl-2 md:pl-4 basis-3/4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 flex-shrink-0 cursor-pointer"
-                  key={task?._id}
-                >
-                  <ArrowGroup onclick={handleOpenModal} task={task} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
+            {userTasks?.map((task) => (
+              <div
+                className="w-full sm:w-1/2 p-2 flex-shrink-0 cursor-pointer"
+                key={task?._id}
+              >
+                <ArrowGroup onclick={handleOpenModal} task={task} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

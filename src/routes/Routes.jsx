@@ -55,6 +55,7 @@ import UpdateMesurement from "@/pages/Home/mesurementForm/UpdateMesurement";
 import MesurementPdf from "@/components/measurements/measurementWatch/MesurementPdf";
 import MeasurementTracking from "@/pages/measurementtracking/MeasurementTracking";
 import FoodDairy from "@/pages/foodDairy/FoodDairy";
+import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 
 export const routes = createBrowserRouter([
   {
@@ -139,7 +140,7 @@ export const routes = createBrowserRouter([
           },
 
           {
-            path: "/personal-workout/:id",
+            path: "/personal-workout",
             element: <ProgressCourseCart />,
           },
 
@@ -185,6 +186,10 @@ export const routes = createBrowserRouter([
           {
             path: "/dashboard/manage-exercise",
             element: <ManageExercise />,
+          },
+          {
+            path: "/dashboard/answers-list/:Id",
+            element: <ShowAnswerModal />,
           },
           {
             path: "/dashboard/add-exercise",
@@ -280,6 +285,10 @@ export const routes = createBrowserRouter([
           },
           {
             path: "/dashboard/assign-training/:userId",
+            element: <TrainingLists />,
+          },
+          {
+            path: "/dashboard/assign-training/:trainingId/:userId",
             element: <AssignTraining />,
           },
           {

@@ -31,6 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import TrainingForTraineeDetails from "./TrainingForTraineeDetails";
+import PaginationComp from "@/components/pagination";
 // import TrainingDetails from "./TrainingDetails";
 
 export function TrainingListForTrainee({ userId }) {
@@ -78,7 +79,7 @@ export function TrainingListForTrainee({ userId }) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Training Name
+          סנן לפי שם תוכנית אימון 
           <ArrowUpDown />
         </Button>
       ),
@@ -93,7 +94,7 @@ export function TrainingListForTrainee({ userId }) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Training Description
+        תיאור תוכנית אימון
           <ArrowUpDown />
         </Button>
       ),
@@ -126,6 +127,12 @@ export function TrainingListForTrainee({ userId }) {
             >
               <Trash />
             </Button>
+            <Button
+              className="bg-green-100 hover:bg-green-100 text-green-500 font-bold uppercase tracking-wide"
+              size="sm"
+            >
+              {row.original.status === "active" ? "תוכנית אימון פעילה" : "תוכנית אימון לא פעילה"}
+            </Button>
           </div>
         );
       },
@@ -153,21 +160,25 @@ export function TrainingListForTrainee({ userId }) {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `${base_url}/get-training-by-user-id/${userId}`
-      );
-      setTraining(response.data.data);
-      console.log("training-for-user", response.data.data);
-    } catch (error) {
-      console.error("Error fetching exercises:", error);
-    }
-  };
+const [page, setPage] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${base_url}/get-training-by-user-id/${userId}?page=${page}&&limit=10`
+        );
+        setTraining(response.data.data);
+        setTotalPages(response.data.pagination.pages);
+        setPage(response.data.pagination.page);
+        console.log("response:", response);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
     fetchData();
-  }, [userId]);
+  }, [userId, page,totalPages]);
 
   const table = useReactTable({
     data: training,
@@ -188,16 +199,17 @@ export function TrainingListForTrainee({ userId }) {
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
-          placeholder="Filter by trainig name..."
+        dir='rtl'
+          placeholder="סנן לפי שם תוכנית אימון ..."
           value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
-        <Link to={`/dashboard/assign-training/${userId}`}>
+        <Link to={`/dashboard/training-list`} state={userId}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            Assign New Training
+          סנן לפי שם תוכנית אימון 
           </Button>
         </Link>
       </div>
@@ -242,7 +254,7 @@ export function TrainingListForTrainee({ userId }) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  לא הוקצו תוכניות אימון למתאמן
                 </TableCell>
               </TableRow>
             )}
@@ -268,38 +280,7 @@ export function TrainingListForTrainee({ userId }) {
         </DialogContent>
       </Dialog>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          Previous
-        </Button>
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: table.getPageCount() }, (_, index) => (
-            <Button
-              key={index}
-              className={`${
-                table.getState().pagination.pageIndex === index
-                  ? "bg-customBg"
-                  : "bg-white text-black border hover:text-white"
-              }`}
-              size="sm"
-              onClick={() => table.setPageIndex(index)}
-            >
-              {index + 1}
-            </Button>
-          ))}
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          Next
-        </Button>
+        <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
       </div>
     </div>
   );

@@ -55,7 +55,7 @@ const Dashboard = () => {
   const recipeUsersLength = JSON.parse(localStorage.getItem("recipeUsers"));
   console.log("traineeUsers", traineeUsersLength);
   return (
-    <Container className="min-h-[72vh] my-10 sm:px-0 px-4 overflow-hidden ">
+    <Container className="min-h-[72vh] my-10 sm:px-0 px-4">
       <div className="flex flex-col items-center justify-center space-y-6 px-4">
         <Title tilte="ניהול מתאמנים" />
 
@@ -86,6 +86,7 @@ const Dashboard = () => {
           labelField="firstName"
           options={traineeUsers}
           searchBy="firstName"
+          placeholder="בחר מתאמן"
           onChange={handleSelectUser}
         />
 
@@ -111,7 +112,7 @@ const Dashboard = () => {
           />
           <AdminArrowCard
             image={ArrowDumbel}
-            title="נהל תוכניות אימון"
+            title="נהל תרגילים"
             link="/dashboard/exercise-list"
           />
           <AdminArrowCard
@@ -121,7 +122,7 @@ const Dashboard = () => {
           />
           <AdminArrowCard
             image={ArrowDumbel}
-            title="ניהול הדרכה"
+            title="נהל תוכניות אימון"
             link="/dashboard/training-list"
           />
         </div>

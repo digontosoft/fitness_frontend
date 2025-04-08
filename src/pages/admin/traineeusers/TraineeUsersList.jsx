@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import UserDetails from "./UserDetails";
 import { toast } from "sonner";
+import PaginationComp from "@/components/pagination";
 
 export function TraineeUsersLists() {
   const [users, setUsers] = useState([]);
@@ -41,8 +42,9 @@ export function TraineeUsersLists() {
   const [rowSelection, setRowSelection] = useState({});
   //   const [exercise, setExercise] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedExercise, setSelectedExercise] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [traineeUsers, setTraineeUsers] = useState([]);
+  const [search,setSearch] = useState("")
   const columns = [
     {
       accessorKey: "firstName",
@@ -51,7 +53,7 @@ export function TraineeUsersLists() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          שם מתאמן
           <ArrowUpDown />
         </Button>
       ),
@@ -66,7 +68,7 @@ export function TraineeUsersLists() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          כתובת דואר
           <ArrowUpDown />
         </Button>
       ),
@@ -95,7 +97,7 @@ export function TraineeUsersLists() {
                 size="sm"
                 onClick={() => handleOpenDeleteModal(row.original)}
               >
-                Managing Training
+                נהל מתאמן
               </Button>
             </Link>
             <Button
@@ -109,8 +111,18 @@ export function TraineeUsersLists() {
               }
             >
               {row.original.userType === "trainee"
-                ? "Make Admin"
-                : "Make Trainee"}
+                ? "הפוך למאמן"
+                : "הפוך למתאמן"}
+            </Button>
+            <Button
+              className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
+              size="sm"
+            >
+              {row.original.userType === "trainee"
+                ? "משתמש מתאמן"
+                : row.original.userType === "recipe"
+                ? "משתמש ספר מתכונים"
+                : "Admin"}
             </Button>
           </div>
         );
@@ -120,48 +132,48 @@ export function TraineeUsersLists() {
     },
   ];
 
-  const handleOpenDeleteModal = (exercise) => {
-    setSelectedExercise(exercise);
+  const handleOpenDeleteModal = (userId) => {
+    setSelectedUser(userId);
     setDeleteModalOpen(true);
   };
 
   const handleDelete = async () => {
-    if (!selectedExercise) return;
+    if (!selectedUser) return;
     try {
       const data = {
-        user_id: selectedExercise,
+        user_id: selectedUser,
         userStatus: "Inactive",
       };
       await deleteUser(data);
-      setUsers((prevUsers) =>
-        prevUsers.filter((e) => e._id !== selectedExercise)
-      );
+      setUsers((prevUsers) => prevUsers.filter((e) => e._id !== selectedUser));
       setDeleteModalOpen(false);
-      setSelectedExercise(null);
+      setSelectedUser(null);
     } catch (error) {
       console.error("Error deleting exercise:", error);
     }
   };
 
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get(`${base_url}/getUsers`);
-      console.log("Users:", response.data.data);
-      setUsers(response.data.data);
-    } catch (error) {
-      console.error("Error fetching email:", error);
-      throw error;
-    }
-  };
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  // useEffect(() => {
-  //   if (users?.length) {
-  //     setTraineeUsers(users.filter((user) => user.userType === "trainee"));
-  //   }
-  // }, [users]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(`${base_url}/getUsers?page=${page}&&limit=10&&search=${search}`);
+        console.log("Users:", response.data);
+        setPage(response.data.pagination.currentPage);
+        setTotalPages(response.data.pagination.totalPages);
+        setUsers(response.data.data);
+      } catch (error) {
+        console.error("Error fetching email:", error);
+        throw error;
+      }
+    };
+    fetchUsers();
+  }, [page,totalPages,search]);
+
+  
 
   const updateStatus = async (userType, userId) => {
     try {
@@ -193,15 +205,21 @@ export function TraineeUsersLists() {
     state: { sorting, columnFilters, columnVisibility, rowSelection },
   });
 
+
+  
+
+
   return (
     <div className="w-full" dir="ltr">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Filter name..."
-          value={table.getColumn("firstName")?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            table.getColumn("firstName")?.setFilterValue(event.target.value)
-          }
+        dir="rtl"
+          placeholder="סנן לפי שם..."
+          // value={table.getColumn("firstName")?.getFilterValue() ?? ""}
+          // onChange={(event) =>
+          //   table.getColumn("firstName")?.setFilterValue(event.target.value)
+          // }
+          onChange={(e) => setSearch(e.target.value)}        
           className="max-w-sm"
         />
       </div>
@@ -273,38 +291,7 @@ export function TraineeUsersLists() {
       </Dialog>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          Previous
-        </Button>
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: table.getPageCount() }, (_, index) => (
-            <Button
-              key={index}
-              className={`${
-                table.getState().pagination.pageIndex === index
-                  ? "bg-customBg"
-                  : "bg-white text-black border hover:text-white"
-              }`}
-              size="sm"
-              onClick={() => table.setPageIndex(index)}
-            >
-              {index + 1}
-            </Button>
-          ))}
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          Next
-        </Button>
+      <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
       </div>
     </div>
   );

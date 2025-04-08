@@ -48,9 +48,9 @@ export function FoodDairyModal({ userId, onClose }) {
     return (
       <Dialog open={true} onOpenChange={onClose}>
         <DialogTrigger asChild />
-        <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll">
+        <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll" >
           <DialogHeader>
-            <DialogDescription>
+            <DialogDescription >
               No food diary data available for this user.
             </DialogDescription>
           </DialogHeader>
@@ -75,33 +75,33 @@ export function FoodDairyModal({ userId, onClose }) {
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogTrigger asChild />
-      <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll">
-        <DialogHeader>
-          <DialogDescription>Here’s your food diary data.</DialogDescription>
+      <DialogContent className="max-w-4xl mx-auto w-[90%] h-[80%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] xl:max-w-[900px] overflow-y-scroll" >
+        <DialogHeader  >
+          <DialogDescription className="text-right my-4" >
+            <div dir="rtl">
+            פירוט יומן האכילה של הלקוח</div>
+
+          </DialogDescription>
         </DialogHeader>
 
         {/* Iterate over the data and display it */}
-        <div className="space-y-4">
+        <div className="space-y-4" dir="rtl">
           {foodDairy.map((item) => (
             <div key={item._id} className="p-4 border-b">
               {/* Show date-wise data */}
               {item.date ? (
-                <h4 className="text-xl font-bold mb-2">
-                  Date: {formatDate(item.date)}
+                <h4 className="text-xl font-bold mb-2" dir="rtl">
+                  <span dir="rtl">Date: </span>{formatDate(item.date)}
                 </h4>
               ) : (
                 <h4 className="text-xl font-bold mb-2">No Date</h4>
               )}
 
               <div>
-                <strong>Breakfast:</strong> {item.breakfast || "No data"}
+                <strong></strong> {item?.breakfast || "No data"}
               </div>
-              <div>
-                <strong>Lunch:</strong> {item.lunch || "No data"}
-              </div>
-              <div>
-                <strong>Dinner:</strong> {item.dinner || "No data"}
-              </div>
+                
+                
             </div>
           ))}
         </div>
@@ -109,7 +109,7 @@ export function FoodDairyModal({ userId, onClose }) {
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" className="w-full justify-center bg-customBg">
-              Close
+            סגור
             </Button>
           </DialogClose>
         </DialogFooter>

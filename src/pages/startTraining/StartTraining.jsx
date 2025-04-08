@@ -18,12 +18,38 @@ const StartTraining = () => {
   const [showPrevious, setShowPrevious] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [exerciseData, setExerciseData] = useState({});
+<<<<<<< HEAD
+=======
+  const [valid, setValid] = useState({});
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    if (valid.sets_done && valid.reps_done && valid.lastSet) {
+      setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
+    }
+  }, [valid, buttonDisabled]);
+
+  console.log("exerciseData", Object.values(exerciseData));
+  const data = Object.values(exerciseData);
+
+  useEffect(() => {
+    if (data[currentIndex]) {
+      setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
+    }
+  }, [currentIndex]);
+>>>>>>> e67df0c4cd45c9dfd5f5a9d11e3f6855efb0bfef
   const navigate = useNavigate();
   const isSuperset =
     userTrainingExercise[currentIndex]?.manipulation?.toLowerCase() ===
     "superset";
 
   const handleInputChange = (courseId, value) => {
+    setValid(value);
+
     setExerciseData((prev) => ({
       ...prev,
       [courseId]: { ...prev[courseId], ...value },
@@ -54,6 +80,7 @@ const StartTraining = () => {
     const nextIndex = getNextIndex();
 
     if (nextIndex !== currentIndex) {
+      setButtonDisabled(true);
       setCurrentIndex(nextIndex);
       setShowPrevious(true);
 
@@ -77,6 +104,11 @@ const StartTraining = () => {
   };
 
   const handleFinish = async () => {
+<<<<<<< HEAD
+=======
+    //console.log("All exercise data on finish:", exerciseData);
+
+>>>>>>> e67df0c4cd45c9dfd5f5a9d11e3f6855efb0bfef
     const payload = {
       task_id: workData.task_id,
       user_training_workout_id: workData.user_training_workout_id,
@@ -108,10 +140,13 @@ const StartTraining = () => {
     currentExercise?.exercise_id?._id || `course-${currentIndex}`;
 
   console.log("current index data", currentIndex);
+  console.log("workout", workData);
+
   return (
     <div className="px-2">
       <CommonContainer>
         <>
+          <Title title={workData?.task_name} />
           <Title
             title={userTrainingExercise[currentIndex]?.exercise_id?.name}
           />
@@ -173,6 +208,7 @@ const StartTraining = () => {
           onPrevious={handlePrevious}
           showPrevious={showPrevious}
           isFinished={isFinished}
+          disabled={buttonDisabled}
         />
       </CommonContainer>
     </div>

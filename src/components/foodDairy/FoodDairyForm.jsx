@@ -46,31 +46,32 @@ const FoodDairyForm = () => {
       />
 
       {/* Breakfast Input */}
-      <label className="block font-medium">ארוחת בוקר</label>
-      <input
+      <label className="block font-medium" dir="rtl">
+        פירוט יומי
+      </label>
+      <textarea
         type="text"
         {...register("breakfast", { required: true })}
-        placeholder="Enter items"
+        placeholder="מה אכלת היום?"
         className="w-full border p-2 rounded-md"
+        dir="rtl"
       />
 
-      {/* Lunch Input */}
-      <label className="block font-medium mt-4">ארוחת צהריים</label>
-      <input
+      {/* <label className="block font-medium mt-4">ארוחת צהריים</label>
+      <textarea
         type="text"
         {...register("lunch", { required: true })}
         placeholder="Enter items"
         className="w-full border p-2 rounded-md"
       />
 
-      {/* Dinner Input */}
       <label className="block font-medium mt-4">ארוחת ערב</label>
-      <input
+      <textarea
         type="text"
         {...register("dinner", { required: true })}
         placeholder="Enter items"
         className="w-full border p-2 rounded-md"
-      />
+      /> */}
 
       {/* Submit Button */}
       <button

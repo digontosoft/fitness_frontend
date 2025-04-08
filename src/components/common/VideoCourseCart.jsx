@@ -1,4 +1,3 @@
-import React from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button } from "../ui/button";
 import ReactPlayer from "react-player";

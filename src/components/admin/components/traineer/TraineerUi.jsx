@@ -10,10 +10,12 @@ import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import { toast } from "sonner";
 import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
+import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [openAnswer, setOpenAnswer] = useState(false);
   console.log("user", userId);
 
   useEffect(() => {
@@ -59,6 +61,10 @@ const TraineerUi = ({ userId }) => {
     setOpenModal(true);
     console.log("modal clicked");
   };
+
+  const handleAnswer = () => {
+    setOpenAnswer(true);
+  };
   const userFirstName = JSON.parse(localStorage.getItem("firstName"));
   const userLastName = JSON.parse(localStorage.getItem("lastName"));
   const userName = userFirstName + " " + userLastName;
@@ -99,8 +105,7 @@ const TraineerUi = ({ userId }) => {
           משימות
         </span>
       </div>
-
-      <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-5">
+      <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-4 md:gap-5 max-w-5xl mx-auto">
         <AdminArrowCard
           image={ArrowBurger}
           title="ניהול תפריטי תזונה אישיים"
@@ -111,28 +116,29 @@ const TraineerUi = ({ userId }) => {
           title="ניהול תוכנית אימון"
           link={`/dashboard/assigned-training-list/${userId}`}
         />
-      </div>
-
-      <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-5">
         <AdminArrowCardWithoutImage
           title="לדוח מדדים אישי"
           link={`/dashboard/mesurements-watch?userId=${userId}`}
         />
 
         <AdminArrowCardWithoutImage
-          title="מסמכים מקושרים להורדה"
+          title="יומן אכילה"
           onClick={handleModal}
         />
 
-        {/* <FoodDairyModal userId={userId} /> */}
+        <AdminArrowCardWithoutImage
+          title="תשובות מתאמן"
+          link={`/dashboard/answers-list/${userId}`}
+        />
       </div>
-
-      <div className="flex justify-center items-center"></div>
       {openModal && (
         <>
           <p>Modal is Open</p>
           <FoodDairyModal userId={userId} onClose={() => setOpenModal(false)} />
         </>
+      )}
+      {openAnswer && (
+        <ShowAnswerModal userId={userId} onclose={() => setOpenAnswer(false)} />
       )}
     </div>
   );

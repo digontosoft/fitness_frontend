@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const SingleCart = ({ id, title, description, icon }) => {
+const SingleCart = ({ id, title, description, icon,type }) => {
   return (
     <div
       key={id}
@@ -14,9 +14,8 @@ const SingleCart = ({ id, title, description, icon }) => {
         className=" flex justify-center  items-center"
         to={`/nutration-pdf/${id}`}
       >
-        <button className="text-[#000000] font-bold text-sm  text-center underline pb-4 hover:text-blue-500">
-          לצפייה במדריך
-        </button>
+        <button className="text-[#000000] font-bold text-sm  text-center underline pb-4 hover:text-blue-500">{type==='guide'?"לצפייה במדריך":
+        '  לצפיה בתפריט'}  </button>
       </Link>
     </div>
   );
