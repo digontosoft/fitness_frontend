@@ -15,7 +15,7 @@ const months = [
   "דצמבר",
 ];
 
-const SmallCart = ({ data }) => {
+const SmallCart = ({ data,setOpen,setId }) => {
   return (
     <div className="flex sm:flex-nowrap flex-wrap sm:justify-between justify-center items-center gap-4 px-2 md:px-10">
       {data.item.map(
@@ -24,11 +24,15 @@ const SmallCart = ({ data }) => {
           (
             <div
               key={index}
+              onClick={() => {
+                setOpen(true);
+                setId(item.id);
+              }}
               className="min-w-24 w-auto min-h-[90px] h-auto flex justify-center items-center bg-white bg-transparent bg-opacity-50 p-2 rounded-lg"
             >
               <div
                 key={index}
-                className="min-w-[70px] w-auto min-h-[70px] h-auto flex flex-col items-center justify-center   bg-white  shadow-md rounded-lg p-2  border-red-50"
+                className="min-w-[70px] w-auto min-h-[70px] h-auto flex flex-col items-center justify-center   bg-white  shadow-md rounded-lg p-2  border-red-50 cursor-pointer"
               >
                 <span className=" text-[#000000] text-xs font-bold text-center">
                   {months[moment(item?.date).month()]}
