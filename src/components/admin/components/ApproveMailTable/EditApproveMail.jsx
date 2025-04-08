@@ -112,11 +112,7 @@ function EditApproveMail({ id, updateDate }) {
             </div>
           </div>
           <div className="flex items-center justify-end">
-            <BasicButton
-              type="submit"
-              title="עדכן"
-              className="bg-customBg"
-            />
+            <BasicButton type="submit" title="עדכן" className="bg-customBg" />
           </div>
         </form>
       </DialogContent>

@@ -8,12 +8,6 @@ import {
   icon,
 } from "../assets/index";
 export const traineeLink = [
-  // {
-  //   _id: 1,
-  //   title: "התנתקות",
-  //   link: "/login",
-  //   icon: LogOut,
-  // },
   {
     _id: 1,
     title: "דף הבית",
