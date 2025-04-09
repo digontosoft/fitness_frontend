@@ -299,7 +299,7 @@ const CustomizeWorkoutForm = () => {
       );
       if (response.status === 200) {
         toast.success("Workout customized successfully!");
-        navigate("/personal-workout");
+        navigate("/trainings");
       }
     } catch (error) {
       console.log(error);
