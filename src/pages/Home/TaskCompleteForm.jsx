@@ -35,6 +35,9 @@ const TaskCompleteForm = ({ data }) => {
     }
   }, [Id]);
 
+  console.log("getMesurement", getMesurement);
+  
+
   const id = data.measurement_id;
 
   const {
@@ -47,7 +50,7 @@ const TaskCompleteForm = ({ data }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      mode: "create",
+      mode: "task",
       date: "",
       thighl: "",
       thighr: "",
@@ -83,25 +86,42 @@ const TaskCompleteForm = ({ data }) => {
     }
   }, [getMesurement]);
 
-  const onSubmit = async (formData) => {
-    const updatedFormData = { ...formData, uploadedFiles: files };
+  console.log("id",id);
+  
 
-    try {
-      const response = await axios.put(
-        `${base_url}/measurement/${id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      if (response.status === 200) {
-        toast.success("Measurement completed successfully!");
-        navigate("/");
+  const onSubmit = async (data) => {
+  const formData = new FormData();
+
+  Object.keys(data).forEach((key) => {
+    formData.append(key, data[key]);
+  });
+
+  if (files && files.length > 0) {
+    files.forEach((file, index) => {
+      formData.append(`photo${index + 1}`, file);
+    });
+  }
+
+  formData.append("user_id", Id);
+
+  try {
+    const response = await axios.put(
+      `${base_url}/measurement/${id}`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
       }
-    } catch (error) {
-      toast.error("Error updating measurement. Please try again.");
-      console.error("Error updating measurement:", error);
+    );
+    if (response.status === 200) {
+      toast.success("Measurement Task Complete successfully!");
+      navigate("/");
     }
+  } catch (error) {
+    toast.error("Error updating measurement. Please try again.");
+    console.error("Error updating measurement:", error);
+      }
+  
+  
   };
 
   const handleDragOver = (e) => {

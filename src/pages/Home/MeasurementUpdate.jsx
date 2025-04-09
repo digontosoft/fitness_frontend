@@ -48,7 +48,7 @@ const MeasurementUpdate = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      mode: "create",
+      mode: "update",
       date: "",
       thighl: "",
       thighr: "",
@@ -68,7 +68,7 @@ const MeasurementUpdate = () => {
         Gender === "male" ? getMesurement.chest : getMesurement.butt; 
       reset({
         mode: "update",
-        date: getMesurement.date || "",
+        date: moment(getMesurement.date).format("YYYY-MM-DD") || "",
         thighl: getMesurement.thighl || "",
         thighr: getMesurement.thighr || "",
         armr: getMesurement.armr || "",
@@ -88,9 +88,20 @@ const MeasurementUpdate = () => {
     }
   }, [getMesurement]);
 
-  const onSubmit = async (formData) => {
-    const updatedFormData = { ...formData, uploadedFiles: files };
+  console.log("getMesurement", getMesurement);
+  
 
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
+    });
+    if (files && files.length > 0) {
+      files.forEach((file, index) => {
+        formData.append(`photo${index + 1}`, file);
+      });
+    }
+    formData.append("user_id", Id);
     try {
       const response = await axios.put(
         `${base_url}/measurement/${id}`,
@@ -107,6 +118,7 @@ const MeasurementUpdate = () => {
       toast.error("Error updating measurement. Please try again.");
       console.error("Error updating measurement:", error);
     }
+  
   };
 
   const handleDragOver = (e) => {
