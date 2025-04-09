@@ -75,7 +75,6 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* Right Section */}
       <div className="flex-1 hidden md:flex md:bg-white bg-transparent pt-40 justify-center items-center md:pt-0 py-4 md:relative">
         <WelcomeContent logo={blackLogo} textColor="md:text-black text-white" />
       </div>

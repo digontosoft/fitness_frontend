@@ -18,8 +18,6 @@ const StartTraining = () => {
   const [showPrevious, setShowPrevious] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [exerciseData, setExerciseData] = useState({});
-<<<<<<< HEAD
-=======
   const [valid, setValid] = useState({});
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
@@ -41,7 +39,6 @@ const StartTraining = () => {
       setButtonDisabled(true);
     }
   }, [currentIndex]);
->>>>>>> e67df0c4cd45c9dfd5f5a9d11e3f6855efb0bfef
   const navigate = useNavigate();
   const isSuperset =
     userTrainingExercise[currentIndex]?.manipulation?.toLowerCase() ===
@@ -104,11 +101,8 @@ const StartTraining = () => {
   };
 
   const handleFinish = async () => {
-<<<<<<< HEAD
-=======
     //console.log("All exercise data on finish:", exerciseData);
 
->>>>>>> e67df0c4cd45c9dfd5f5a9d11e3f6855efb0bfef
     const payload = {
       task_id: workData.task_id,
       user_training_workout_id: workData.user_training_workout_id,
