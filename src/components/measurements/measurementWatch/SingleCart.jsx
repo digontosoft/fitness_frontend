@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 
-const SingleCart = ({ userId }) => {
+const SingleCart = ({ userId, setOpen, setId }) => {
   const getButtonClass = (data) => {
     if (data.green) {
       return "bg-green-400 hover:bg-green-500 text-white text-xs font-bold";
@@ -61,7 +61,7 @@ const SingleCart = ({ userId }) => {
           <div className="flex justify-center items-start"></div>
 
           <div className="flex justify-center items-center">
-            <SmallCart data={data} />
+            <SmallCart data={data}  setOpen={setOpen} setId={setId}/>
           </div>
         </div>
       ))}

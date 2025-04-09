@@ -108,7 +108,7 @@ const AddWorkoutForm = () => {
           />
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            סנן לפי שם תרגיל
+              סנן לפי שם תרגיל
             </label>
             <Select
               className="rounded-lg h-12 w-auto"
@@ -124,7 +124,7 @@ const AddWorkoutForm = () => {
           </div>
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            סנן לפי ציוד
+              סנן לפי ציוד
             </label>
             <Select
               className="rounded-lg h-12 w-auto"
@@ -159,7 +159,7 @@ const AddWorkoutForm = () => {
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
             disabled={superset || isButtonDisabled}
           >
-           לשמור תוכנית אימון חדשה 
+            לשמור תוכנית אימון חדשה
           </Button>
         </div>
       </form>

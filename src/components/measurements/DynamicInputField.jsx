@@ -12,6 +12,7 @@ const DynamicInputField = ({
   watch,
   className,
   defaultValue,
+  disabled,
 }) => {
   const value = typeof watch === "function" ? watch(id) : null;
   return (
@@ -37,6 +38,7 @@ const DynamicInputField = ({
           } rounded-lg p-3 text-right focus:outline-none focus:ring-2 ${
             errors[id] ? "focus:ring-red-500" : "focus:ring-blue-500"
           } ${className}`}
+          disabled={disabled}
         />
         <span
           className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-lg ${

@@ -208,43 +208,37 @@ export function ApproveMailTable() {
   const [totalPages, setTotalPages] = React.useState(1);
   const [search, setSearch] = React.useState("");
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${base_url}/approved-mail?limit=10&page=${page}&search=${search}`
+        );
+        console.log("emails:", response.data);
+        setEmails(response.data.approvedEmail);
+        setTotalPages(response.data.pagination.totalPages);
+        setPage(response.data.pagination.currentPage);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    };
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${base_url}/approved-mail?limit=10&page=${page}&search=${search}`);
-      console.log("emails:", response.data);
-      setEmails(response.data.approvedEmail);
-      setTotalPages(response.data.pagination.totalPages);
-      setPage(response.data.pagination.currentPage);
-    } catch (error) {
-      
-      throw error;
-    }
-  }
-
-  fetchData();
-  }, [page,totalPages,search]);
-
-  console.log(totalPages,page);
-  
- 
+    fetchData();
+  }, [page, totalPages, search]);
 
   return (
     <div className="w-full" dir="ltr">
       <div className="flex sm:flex-row flex-col items-center sm:justify-between justify-center py-4 space-y-4 sm:space-y-0">
         <Input
-        dir="rtl"
+          dir="rtl"
           placeholder="סנן לפי כתובת דואר אלקטרוני..."
-         // value={table.getColumn("email")?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            setSearch(event.target.value)
-          }
+          // value={table.getColumn("email")?.getFilterValue() ?? ""}
+          onChange={(event) => setSearch(event.target.value)}
           className="max-w-sm"
         />
-        
+
         <AddMail setEmails={setEmails} />
-        
       </div>
       <div className="rounded-md border">
         <Table>
@@ -295,7 +289,11 @@ useEffect(() => {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
+        <PaginationComp
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
       {/* {open&& <EditApproveMail open={open} setOpen={setOpen} approveMail={approveMail}/>} */}
     </div>

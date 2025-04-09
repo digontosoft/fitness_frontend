@@ -1,4 +1,3 @@
-import Title from "@/components/measurements/Tilte";
 import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
 import { courseBg } from "@/assets";
 import CourseTitle from "@/components/courseList/course/CourseTitle";
