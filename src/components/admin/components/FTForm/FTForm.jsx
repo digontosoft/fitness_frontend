@@ -5,7 +5,6 @@ const FTForm = ({ children, onSubmit, resolver }) => {
   const methods = useForm(formConfig);
   const { handleSubmit } = methods;
   const submit = (data) => {
-    console.log("data", data);
     onSubmit(data);
   };
   return (
