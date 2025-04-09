@@ -81,7 +81,10 @@ const StartTraining = () => {
       setCurrentIndex(nextIndex);
       setShowPrevious(true);
 
-      if (nextIndex === userTrainingExercise.length - 1) {
+      if (
+        userTrainingExercise.length === 1 ||
+        nextIndex === userTrainingExercise.length - 1
+      ) {
         setIsFinished(true);
       }
     }
