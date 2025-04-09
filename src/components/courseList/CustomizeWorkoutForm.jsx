@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Select from "react-dropdown-select";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { base_url } from "@/api/baseUrl";
@@ -10,10 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const EditTrainingFormUser = ({ trainingId, user_Id }) => {
-  const [training, setTraining] = useState({});
+const CustomizeWorkoutForm = () => {
+  const {
+    state: { workout, training: trainings },
+  } = useLocation();
+  const [training, setTraining] = useState(trainings);
   const [exerciseList, setExerciseList] = useState([]);
-  const [workouts, setWorkouts] = useState([]);
+  const [workouts, setWorkouts] = useState(workout);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
@@ -21,7 +24,9 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const navigate = useNavigate();
 
-  //console.log("userId", userId);
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const user_Id = userInfo._id;
+  const trainingId = trainings?._id;
 
   const {
     register,
@@ -49,25 +54,22 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [exerciseRes, workoutRes, trainingRes] = await Promise.all([
+        const [exerciseRes] = await Promise.all([
           axios.get(`${base_url}/exercise`),
-          axios.get(`${base_url}/workout`),
-          axios.get(`${base_url}/get-training-by-id/${trainingId}`),
+          //   axios.get(`${base_url}/workout`),
+          //   axios.get(`${base_url}/get-training-by-id/${trainingId}`),
         ]);
 
         if (exerciseRes.status === 200) setExerciseList(exerciseRes.data.data);
-        if (workoutRes.status === 200) setWorkouts(workoutRes.data.data);
-        if (trainingRes.status === 200) setTraining(trainingRes.data.data);
+        // if (workoutRes.status === 200) setWorkouts(workoutRes.data.data);
+        // if (trainingRes.status === 200) setTraining(trainingRes.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [trainingId]);
-
-  console.log("training-Data", training);
-  console.log("training-Id", trainingId);
+  }, []);
 
   const handleMoreExercise = (workoutIndex, e) => {
     e.preventDefault();
@@ -296,8 +298,8 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         payload
       );
       if (response.status === 200) {
-        toast.success("Training session updated successfully!");
-        navigate(-1);
+        toast.success("Workout customized successfully!");
+        navigate("/personal-workout");
       }
     } catch (error) {
       console.log(error);
@@ -317,6 +319,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           validation={{ required: !user_Id && "Name is required" }}
           errors={errors}
           defaultValue={training?.name}
+          disabled={true}
         />
         <DynamicInputField
           id="description"
@@ -327,6 +330,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           validation={{ required: !user_Id && "Description is required" }}
           errors={errors}
           defaultValue={training?.description}
+          disabled={true}
         />
 
         {showWorkoutSelect && (
@@ -343,13 +347,6 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           {training?.workouts?.map((workout, workoutIndex) => (
             <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
               <h1 className="font-semibold">{workout?.workout?.name}</h1>
-              <div className="flex items-center gap-x-2" dir="rtl">
-                <Trash
-                  className="cursor-pointer text-red-600"
-                  onClick={() => handleRemoveWorkout(workout._id)}
-                />
-                הסר אימון
-              </div>
 
               {workout?.exercises?.map((ex, exerciseIndex) => (
                 <div
@@ -439,7 +436,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           ))}
         </div>
 
-        <div className="flex sm:flex-row flex-col items-center sm:justify-between sm:gap-x-0 gap-y-2">
+        <div className="flex items-center justify-center">
           <Button
             type="submit"
             className={
@@ -451,17 +448,10 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           >
             שמיר תוכנית אימון
           </Button>
-          <Button
-            onClick={() => setShowWorkoutSelect(true)}
-            type="button"
-            className="bg-customBg"
-          >
-            הוסף תוכנית אימון
-          </Button>
         </div>
       </form>
     </div>
   );
 };
 
-export default EditTrainingFormUser;
+export default CustomizeWorkoutForm;

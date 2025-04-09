@@ -44,11 +44,7 @@ const ActionCourseCart = () => {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
           {workoutData?.userTrainingExercise?.map((item, index) => (
-            <VideoCourseCart
-              key={index}
-              exercise={item?.exercise_id}
-              index={index}
-            />
+            <VideoCourseCart key={index} exercise={item} index={index} />
           ))}
         </div>
       </div>

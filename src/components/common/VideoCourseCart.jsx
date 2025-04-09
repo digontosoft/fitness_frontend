@@ -3,6 +3,8 @@ import { Button } from "../ui/button";
 import ReactPlayer from "react-player";
 
 const VideoCourseCart = ({ exercise }) => {
+
+  
   return (
     <div className="w-full md:w-96 flex gap-2 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300">
       <Button className="rounded-2xl">

@@ -4,7 +4,6 @@ import EditTrainingFormUser from "./EditTrainigFormUser";
 
 const EditTraineUser = () => {
   const { trainingId, userId } = useParams();
-  console.log("trainingId", trainingId);
 
   return (
     <div className="bg-customBg relative flex items-center justify-center min-h-screen mb-2">

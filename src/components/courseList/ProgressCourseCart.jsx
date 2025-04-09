@@ -1,7 +1,8 @@
 import Title from "../measurements/Tilte";
 import RecipeParagraph from "../recipe/RecipeParagraph";
 import VideoCourseCart from "../common/VideoCourseCart";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "../ui/button";
 const ProgressCourseCart = () => {
   const {
     state: { workout, training },
@@ -19,6 +20,11 @@ const ProgressCourseCart = () => {
         >
           תרגילים:
         </p>
+        <Link to="/customize-workout" state={{ workout, training }}>
+          <Button className="text-sm font-bold text-white  bg-gradient-to-tr from-[rgb(148,0,25)] to-[#FD4753] px-8 py-4 rounded-full my-10 w-52 md:w-40 h-12">
+            התאם אישית את האימון
+          </Button>
+        </Link>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
           {workout.exercises.map((exercise) => (
             <VideoCourseCart key={exercise._id} exercise={exercise} />

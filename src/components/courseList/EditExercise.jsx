@@ -1,14 +1,18 @@
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const EditExercise = () => {
   const location = useLocation();
   const workData = location.state?.data;
+  const navigate = useNavigate();
   const [exerciseList, setExerciseList] = useState(
     workData?.userTrainingExercise || []
   );
+  console.log("workdata", workData);
+  const workoutId = workData?.user_training_workout_id;
   const [exercise, setExercise] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedExerciseId, setSelectedExerciseId] = useState("");
@@ -49,8 +53,39 @@ const EditExercise = () => {
     setExerciseList(updatedExercises);
   };
 
-  const handleSubmit = () => {
-    console.log("Updated Data:", exerciseList);
+  //   const handleSubmit = () => {
+  //     const payload = {
+  //       user_training_workout_id: workoutId,
+  //       exercises: exerciseList,
+  //     };
+  //     console.log("payload", payload);
+
+  //   };
+  const handleSubmit = async () => {
+    const payload = {
+      user_training_workout_id: workoutId,
+      exercises: exerciseList.map((item) => ({
+        exercise_id: item.exercise_id._id || item.exercise_id, // যদি নতুন যোগ করা হয় তাহলে object, না হলে id
+        sets: Number(item.sets),
+        reps: Number(item.reps),
+        manipulation: item.manipulation,
+      })),
+    };
+
+    try {
+      const response = await axios.post(
+        `${base_url}/customize-single-workout`,
+        payload
+      );
+      if (response.status === 200) {
+        toast.success("workout update successful");
+        navigate("/");
+      }
+      // optional: success message or redirect
+    } catch (error) {
+      console.error("Error updating workout:", error);
+      // optional: show toast or alert
+    }
   };
 
   return (

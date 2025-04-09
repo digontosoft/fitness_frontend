@@ -57,6 +57,7 @@ import MeasurementTracking from "@/pages/measurementtracking/MeasurementTracking
 import FoodDairy from "@/pages/foodDairy/FoodDairy";
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 import EditExercise from "@/components/courseList/EditExercise";
+import CustomizeWorkout from "@/components/courseList/CustomizeWorkout";
 
 export const routes = createBrowserRouter([
   {
@@ -143,6 +144,10 @@ export const routes = createBrowserRouter([
           {
             path: "/personal-workout",
             element: <ProgressCourseCart />,
+          },
+          {
+            path: "/customize-workout",
+            element: <CustomizeWorkout />,
           },
 
           {
