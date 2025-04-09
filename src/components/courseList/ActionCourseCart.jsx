@@ -12,6 +12,7 @@ const ActionCourseCart = () => {
   const handleCourse = () => {
     navigate("/startTraining", { state: { data: workoutData } });
   };
+  
 
   return (
     <div className=" bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753] min-h-screen border-b-8 border-white py-12  ">
@@ -34,7 +35,7 @@ const ActionCourseCart = () => {
           {workoutData?.userTrainingExercise?.map((item, index) => (
             <VideoCourseCart
               key={index}
-              exercise={item?.exercise_id}
+              exercise={item}
               index={index}
             />
           ))}
