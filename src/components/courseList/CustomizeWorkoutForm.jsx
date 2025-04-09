@@ -282,18 +282,13 @@ const CustomizeWorkoutForm = () => {
       training_id: training.training_id._id,
       workouts: (training.workouts || []).map((w) => ({
         workout: w?.workout?._id,
-        exercises: (w.exercises || []).map(
-          (ex) => (
-            console.log("first", ex),
-            {
-              _id: ex?._id,
-              exercise_id: ex?._id,
-              sets: Number(ex.sets),
-              reps: Number(ex.reps),
-              manipulation: ex.manipulation,
-            }
-          )
-        ),
+        exercises: (w.exercises || []).map((ex) => ({
+          _id: ex?._id,
+          exercise_id: ex?._id,
+          sets: Number(ex.sets),
+          reps: Number(ex.reps),
+          manipulation: ex.manipulation,
+        })),
       })),
     };
     console.log("edited payload", payload);
