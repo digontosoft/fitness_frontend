@@ -530,7 +530,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                     className="my-4 bg-customBg"
                     onClick={(e) => handleMoreExercise(workoutIndex, e)}
                   >
-                    Add More Exercise
+                    הוסף עוד תרגיל לאימון
                   </Button>
                 </div>
               </div>
@@ -557,7 +557,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               >
                 {showWorkoutDropdown
                   ? "Hide Workout Dropdown"
-                  : "Add More Workout"}
+                  : "הוסף עוד אימון"}
               </Button>
             </div>
           </div>
@@ -573,7 +573,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
             }
             disabled={isButtonDisabled || isSupersetIncomplete}
           >
-            Assign Training
+            הקצאת הדרכה
           </Button>
         </div>
       </form>
