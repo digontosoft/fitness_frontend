@@ -162,12 +162,13 @@ export function TrainingListForTrainee({ userId }) {
 
 const [page, setPage] = useState(1);
 const [totalPages, setTotalPages] = useState(1);
+const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${base_url}/get-training-by-user-id/${userId}?page=${page}&&limit=10`
+          `${base_url}/get-training-by-user-id/${userId}?page=${page}&&limit=10&&search=${search}`
         );
         setTraining(response.data.data);
         setTotalPages(response.data.pagination.pages);
@@ -178,7 +179,7 @@ const [totalPages, setTotalPages] = useState(1);
       }
     };
     fetchData();
-  }, [userId, page,totalPages]);
+  }, [userId, page,totalPages,search]);
 
   const table = useReactTable({
     data: training,
@@ -201,9 +202,8 @@ const [totalPages, setTotalPages] = useState(1);
         <Input
         dir='rtl'
           placeholder="סנן לפי שם תוכנית אימון ..."
-          value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            setSearch(event.target.value)
           }
           className="max-w-sm"
         />

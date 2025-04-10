@@ -201,7 +201,7 @@ const AddTrainingForm = () => {
   };
 
   const handleNewExerciseSelection = (selectedExercises) => {
-    if (addMoreExercise === null) return;
+    // if (addMoreExercise === null) return;
 
     setSelectedTrainingExercises((prevWorkouts) => {
       const updatedWorkouts = [...prevWorkouts];
@@ -378,15 +378,65 @@ const AddTrainingForm = () => {
               </div>
 
               {addMoreExercise === workoutIndex && (
-                <Select
-                  className="rounded-lg h-12 mt-3"
-                  direction="rtl"
-                  options={exerciseList}
-                  valueField="_id"
-                  labelField="name"
-                  multi
-                  onChange={handleNewExerciseSelection}
-                />
+                <div>
+                  {/* <Select
+                    className="rounded-lg h-12 mt-3"
+                    direction="rtl"
+                    options={exerciseList}
+                    valueField="_id"
+                    labelField="name"
+                    multi
+                    onChange={handleNewExerciseSelection}
+                  /> */}
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      סנן לפי שם תרגיל
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      options={exerciseList}
+                      valueField="_id"
+                      labelField="name"
+                      multi
+                      placeholder="בחר"
+                      onChange={handleNewExerciseSelection}
+                      searchBy="name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      אזור בגוף
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      valueField="_id"
+                      labelField="body_part"
+                      options={exerciseList}
+                      multi
+                      placeholder="סנן לפי חלק בגוף"
+                      onChange={handleNewExerciseSelection}
+                      searchBy="body_part"
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      ציוד
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      options={exerciseList}
+                      valueField="_id"
+                      labelField="equipment"
+                      multi
+                      placeholder="סנן לפי ציוד"
+                      onChange={handleNewExerciseSelection}
+                      searchBy="equipment"
+                    />
+                  </div>
+                </div>
               )}
 
               <Button
@@ -394,8 +444,7 @@ const AddTrainingForm = () => {
                 className="mt-5 bg-customBg"
                 onClick={() => handleAddMoreExercise(workoutIndex)}
               >
-                הוסף עוד תרגיל לאימון 
-
+                הוסף עוד תרגיל לאימון
               </Button>
             </div>
           ))}
