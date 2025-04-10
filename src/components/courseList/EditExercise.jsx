@@ -53,19 +53,11 @@ const EditExercise = () => {
     setExerciseList(updatedExercises);
   };
 
-  //   const handleSubmit = () => {
-  //     const payload = {
-  //       user_training_workout_id: workoutId,
-  //       exercises: exerciseList,
-  //     };
-  //     console.log("payload", payload);
-
-  //   };
   const handleSubmit = async () => {
     const payload = {
       user_training_workout_id: workoutId,
       exercises: exerciseList.map((item) => ({
-        exercise_id: item.exercise_id._id || item.exercise_id, // যদি নতুন যোগ করা হয় তাহলে object, না হলে id
+        exercise_id: item.exercise_id._id || item.exercise_id,
         sets: Number(item.sets),
         reps: Number(item.reps),
         manipulation: item.manipulation,
@@ -81,7 +73,6 @@ const EditExercise = () => {
         toast.success("workout update successful");
         navigate("/");
       }
-      // optional: success message or redirect
     } catch (error) {
       console.error("Error updating workout:", error);
       // optional: show toast or alert
