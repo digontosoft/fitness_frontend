@@ -340,13 +340,14 @@ const CustomizeWorkoutForm = () => {
             labelField="name"
             searchBy="name"
             onChange={handleAddWorkout}
+            placeholder="סנן לפי שם תרגיל"
           />
         )}
 
-        <div className="my-5">
+        <div className="my-5" >
           {training?.workouts?.map((workout, workoutIndex) => (
             <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
-              <h1 className="font-semibold">{workout?.workout?.name}</h1>
+              <h1 className="font-semibold" dir="rtl">{workout?.workout?.name}</h1>
 
               {workout?.exercises?.map((ex, exerciseIndex) => (
                 <div
@@ -354,12 +355,12 @@ const CustomizeWorkoutForm = () => {
                   className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
                 >
                   <div>
-                    <p className="py-4">
+                    <p className="py-4" dir="rtl">
                       {ex?.name} {ex?.exercise_id?.name}
                     </p>
-                    <div className="flex sm:flex-row flex-col items-center justify-between sm:gap-x-2 gap-y-2">
+                    <div className="flex sm:flex-row flex-col items-center justify-between sm:gap-x-2 gap-y-2" dir="rtl">
                       <div className="flex flex-col items-center space-y-4">
-                        <p>Sets</p>
+                        <p>סטים</p>
 
                         <Input
                           type="number"
@@ -375,7 +376,7 @@ const CustomizeWorkoutForm = () => {
                         />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
-                        <p>Reps</p>
+                        <p>חזרות</p>
                         <Input
                           type="number"
                           defaultValue={ex?.reps}
@@ -390,7 +391,7 @@ const CustomizeWorkoutForm = () => {
                         />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
-                        <p>Manipulation</p>
+                        <p>מניפולציה</p>
                         <Input
                           type="text"
                           defaultValue={ex?.manipulation}
@@ -420,6 +421,7 @@ const CustomizeWorkoutForm = () => {
                   valueField="_id"
                   labelField="name"
                   searchBy="name"
+                  placeholder="סנן לפי שם תרגיל"
                   onChange={(selected) =>
                     handleNewExerciseSelection(selected, workoutIndex)
                   }
