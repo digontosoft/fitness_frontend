@@ -404,15 +404,72 @@ const EditTrainingForm = () => {
               ))}
 
               {exerciseSelectVisible[workout._id] && (
-                <Select
-                  options={exerciseList}
-                  valueField="_id"
-                  labelField="name"
-                  onChange={(selected) =>
-                    handleAddExercise(workout._id, selected)
-                  }
-                  searchBy="name"
-                />
+                <div dir="rtl">
+                  {/* <Select
+                    options={exerciseList}
+                    valueField="_id"
+                    labelField="name"
+                    onChange={(selected) =>
+                      handleAddExercise(workout._id, selected)
+                    }
+                    searchBy="name"
+                  /> */}
+
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      סנן לפי שם תרגיל
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      options={exerciseList}
+                      valueField="_id"
+                      labelField="name"
+                      multi
+                      placeholder="בחר"
+                      onChange={(selected) =>
+                        handleAddExercise(workout._id, selected)
+                      }
+                      searchBy="name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      אזור בגוף
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      valueField="_id"
+                      labelField="body_part"
+                      options={exerciseList}
+                      multi
+                      placeholder="סנן לפי חלק בגוף"
+                      onChange={(selected) =>
+                        handleAddExercise(workout._id, selected)
+                      }
+                      searchBy="body_part"
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      ציוד
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      options={exerciseList}
+                      valueField="_id"
+                      labelField="equipment"
+                      multi
+                      placeholder="סנן לפי ציוד"
+                      onChange={(selected) =>
+                        handleAddExercise(workout._id, selected)
+                      }
+                      searchBy="equipment"
+                    />
+                  </div>
+                </div>
               )}
 
               <Button
@@ -441,7 +498,7 @@ const EditTrainingForm = () => {
             }
             disabled={isButtonDisabled || isSupersetIncomplete}
           >
-        שמור תוכנית אימון חדשה
+            שמור תוכנית אימון חדשה
           </Button>
           <Button
             type="button"

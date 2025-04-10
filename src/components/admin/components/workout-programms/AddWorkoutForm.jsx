@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import AddExercise from "./AddExercise";
@@ -16,7 +16,7 @@ const AddWorkoutForm = () => {
   const [superset, setSuperset] = useState(false);
   const [isSupersetSelected, setIsSupersetSelected] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const searchFields = ["name", "equipment", "body_part"];
+  console.log("selectedExercises", selectedExercises);
 
   const navigate = useNavigate();
   const {
@@ -113,27 +113,49 @@ const AddWorkoutForm = () => {
             <Select
               className="rounded-lg h-12 w-auto"
               direction="rtl"
-              options={exercises}
+              options={
+                selectedExercises?.length > 0 ? selectedExercises : exercises
+              }
               valueField="_id"
               labelField="name"
               multi
-              placeholder="בחר"
+              placeholder="סנן לפי שם תרגיל"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="name"
             />
           </div>
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              סנן לפי ציוד
+              אזור בגוף
             </label>
             <Select
               className="rounded-lg h-12 w-auto"
               direction="rtl"
-              options={exercises}
+              options={
+                selectedExercises?.length > 0 ? selectedExercises : exercises
+              }
+              valueField="_id"
+              labelField="body_part"
+              multi
+              placeholder="סנן לפי איזור גוף"
+              onChange={(values) => setSelectedExercises(values)}
+              searchBy="body_part"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              ציוד
+            </label>
+            <Select
+              className="rounded-lg h-12 w-auto"
+              direction="rtl"
+              options={
+                selectedExercises?.length > 0 ? selectedExercises : exercises
+              }
               valueField="_id"
               labelField="equipment"
               multi
-              placeholder="בחר"
+              placeholder="סנן לפי ציוד"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="equipment"
             />
