@@ -7,6 +7,7 @@ const FormTitle = ({ className, title }) => {
         "text-2xl font-bold leading-normal text-[#010101]",
         className
       )}
+      dir="rtl"
     >
       {title}
     </span>
