@@ -456,18 +456,74 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                 ))}
                 <div className="my-4">
                   {addMoreExerciseIndex === workoutIndex && (
-                    <Select
-                      className="rounded-lg h-12"
-                      direction="rtl"
-                      options={exercise}
-                      valueField="_id"
-                      labelField="name"
-                      multi
-                      onChange={(selected) =>
-                        handleNewExerciseSelection(selected, workoutIndex)
-                      }
-                      searchBy="name"
-                    />
+                    <div>
+                      {/* <Select
+                        className="rounded-lg h-12"
+                        direction="rtl"
+                        options={exercise}
+                        valueField="_id"
+                        labelField="name"
+                        multi
+                        onChange={(selected) =>
+                          handleNewExerciseSelection(selected, workoutIndex)
+                        }
+                        searchBy="name"
+                      /> */}
+                      <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          סנן לפי שם תרגיל
+                        </label>
+                        <Select
+                          className="rounded-lg h-12 w-auto"
+                          direction="rtl"
+                          options={exercise}
+                          valueField="_id"
+                          labelField="name"
+                          multi
+                          placeholder="בחר"
+                          onChange={(selected) =>
+                            handleNewExerciseSelection(selected, workoutIndex)
+                          }
+                          searchBy="name"
+                        />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          אזור בגוף
+                        </label>
+                        <Select
+                          className="rounded-lg h-12 w-auto"
+                          direction="rtl"
+                          valueField="_id"
+                          labelField="body_part"
+                          options={exercise}
+                          multi
+                          placeholder="סנן לפי חלק בגוף"
+                          onChange={(selected) =>
+                            handleNewExerciseSelection(selected, workoutIndex)
+                          }
+                          searchBy="body_part"
+                        />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          ציוד
+                        </label>
+                        <Select
+                          className="rounded-lg h-12 w-auto"
+                          direction="rtl"
+                          options={exercise}
+                          valueField="_id"
+                          labelField="equipment"
+                          multi
+                          placeholder="סנן לפי ציוד"
+                          onChange={(selected) =>
+                            handleNewExerciseSelection(selected, workoutIndex)
+                          }
+                          searchBy="equipment"
+                        />
+                      </div>
+                    </div>
                   )}
                   <Button
                     type="button"
