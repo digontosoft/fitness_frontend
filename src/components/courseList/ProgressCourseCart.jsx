@@ -7,8 +7,6 @@ const ProgressCourseCart = () => {
   const {
     state: { workout, training },
   } = useLocation();
-  console.log("workout", workout);
-  console.log("training", training);
 
   return (
     <div className=" bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753] min-h-screen border-b-8 border-white py-12  ">
@@ -16,24 +14,25 @@ const ProgressCourseCart = () => {
         <Title title={training?.training_id?.name} />
         <RecipeParagraph trainingDesc={training?.training_id?.description} />
 
+        <div className="flex flex-col md:flex-row-reverse gap-4">
+          <Link to={"/startTraining"} state={{ data: workout }}>
+            <Button className="text-sm font-bold text-white  bg-gradient-to-tr from-[rgb(148,0,25)] to-[#FD4753] px-8 py-4 rounded-full sm:my-10 my-0 w-52 md:w-40 h-12">
+              התאם אישית את האימון
+            </Button>
+          </Link>
+          <Link to="/customize-workout" state={{ workout, training }}>
+            <Button className="text-sm font-bold text-black hover:text-white bg-gray-100  border border-gray-400 px-8 py-4 rounded-full sm:my-10 my-0 w-52 md:w-40 h-12">
+              התחלת אימון
+            </Button>
+          </Link>
+        </div>
+
         <p
           dir="rtl"
           className="text-[#0A2533] font-bold text-xl py-10 text center"
         >
           תרגילים:
         </p>
-        <div className="flex flex-col md:flex-row-reverse gap-4">
-          <Link to={"/startTraining"} state={{ data: workout }}>
-            <Button className="text-sm font-bold text-white  bg-gradient-to-tr from-[rgb(148,0,25)] to-[#FD4753] px-8 py-4 rounded-full my-10 w-52 md:w-40 h-12">
-              התאם אישית את האימון
-            </Button>
-          </Link>
-          <Link to="/customize-workout" state={{ workout, training }}>
-            <Button className="text-sm font-bold text-black hover:text-white bg-gray-100  border border-gray-400 px-8 py-4 rounded-full my-10 w-52 md:w-40 h-12">
-              התחלת אימון
-            </Button>
-          </Link>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
           {workout.exercises.map((exercise) => (
