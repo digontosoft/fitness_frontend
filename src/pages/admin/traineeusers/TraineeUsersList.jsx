@@ -44,7 +44,7 @@ export function TraineeUsersLists() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [traineeUsers, setTraineeUsers] = useState([]);
-  const [search,setSearch] = useState("")
+  const [search, setSearch] = useState("");
   const columns = [
     {
       accessorKey: "firstName",
@@ -156,11 +156,12 @@ export function TraineeUsersLists() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${base_url}/getUsers?page=${page}&&limit=10&&search=${search}`);
+        const response = await axios.get(
+          `${base_url}/getUsers?page=${page}&&limit=10&&search=${search}`
+        );
         console.log("Users:", response.data);
         setPage(response.data.pagination.currentPage);
         setTotalPages(response.data.pagination.totalPages);
@@ -171,9 +172,7 @@ export function TraineeUsersLists() {
       }
     };
     fetchUsers();
-  }, [page,totalPages,search]);
-
-  
+  }, [page, totalPages, search]);
 
   const updateStatus = async (userType, userId) => {
     try {
@@ -184,10 +183,18 @@ export function TraineeUsersLists() {
 
       if (response.status === 200) {
         toast.success("User Type Updated Successfully");
-        fetchUsers();
+        setUsers((prevUsers) =>
+          prevUsers.map((user) => {
+            if (user._id === userId) {
+              return { ...user, userType };
+            }
+            return user;
+          })
+        );
       }
     } catch (error) {
       toast.error("Failed to update user type");
+      console.log("error:", error);
     }
   };
 
@@ -205,21 +212,17 @@ export function TraineeUsersLists() {
     state: { sorting, columnFilters, columnVisibility, rowSelection },
   });
 
-
-  
-
-
   return (
     <div className="w-full" dir="ltr">
       <div className="flex items-center justify-between py-4">
         <Input
-        dir="rtl"
+          dir="rtl"
           placeholder="סנן לפי שם..."
           // value={table.getColumn("firstName")?.getFilterValue() ?? ""}
           // onChange={(event) =>
           //   table.getColumn("firstName")?.setFilterValue(event.target.value)
           // }
-          onChange={(e) => setSearch(e.target.value)}        
+          onChange={(e) => setSearch(e.target.value)}
           className="max-w-sm"
         />
       </div>
@@ -291,7 +294,11 @@ export function TraineeUsersLists() {
       </Dialog>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-      <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
+        <PaginationComp
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );
