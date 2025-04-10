@@ -1,7 +1,7 @@
 const RecipeParagraph = ({ trainingDesc }) => {
   return (
     <div className="flex justify-center items-center  pb-10 px-4" dir="rtl">
-      <p className="text-[#0A2533] text-sm md:flex hidden text-center">
+      <p className="text-[#0A2533] text-sm md:flex text-center">
         {trainingDesc}
       </p>
       {/* <p className="text-[#0A2533] text-sm md:hidden block text-center">
