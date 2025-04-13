@@ -92,8 +92,8 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
-import muscle from "@/assets/image/muscle.png";
-import waist from "@/assets/image/weightloss.png";
+import muscle from "@/assets/image/arm.png";
+import waist from "@/assets/image/waist.png";
 import hips from "@/assets/image/thigh.png";
 import chest from "@/assets/image/chest.png";
 const TraineeLeftCard = ({ userId }) => {
@@ -137,35 +137,40 @@ const TraineeLeftCard = ({ userId }) => {
       dir="rtl"
     >
       <div className="w-full h-full flex justify-center items-center" dir="ltr">
-        <div className="flex justify-between gap-6 items-center flex-row-reverse">
-          <div>
-            <div className="flex items-center ">
-              <p className="text-lg text-white" dir="rtl">
-                זרוע: {avg}
-              </p>
+        <div className="grid grid-cols-2 gap-6 justify-items-center items-center">
+          <div className="flex items-center gap-4">
+            <p className="text-lg text-white" dir="rtl">
+              זרוע: {avg}
+            </p>
+            <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
               <img src={muscle} alt="" className="object-cover" />
             </div>
-            <div className="flex items-center ">
-              <p className="text-lg text-white" dir="rtl">
-                <span>{userType.gender === "male" ? "חָזֶה" : "ישבן"}</span>:{" "}
-                {userType.gender === "male"
-                  ? measurementData?.chest
-                  : measurementData?.butt}
-              </p>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <p className="text-lg text-white" dir="rtl">
+              מותניים: {measurementData?.weight}
+            </p>
+            <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
+              <img src={waist} alt="" className="object-cover" />
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <p className="text-lg text-white" dir="rtl">
+              <span>{userType.gender === "male" ? "חָזֶה" : "ישבן"}</span>:{" "}
+              {userType.gender === "male"
+                ? measurementData?.chest
+                : measurementData?.butt}
+            </p>
+            <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
               <img src={chest} alt="" className="object-cover" />
             </div>
           </div>
-          <div>
-            <div className="flex items-center ">
-              <p className="text-lg text-white" dir="rtl">
-                מותניים: {measurementData?.weight}
-              </p>
-              <img src={waist} alt="" className="object-cover" />
-            </div>
-            <div className="flex items-center ">
-              <p className="text-lg text-white" dir="rtl">
-                יריכיים: {avgThigh}
-              </p>
+          <div className="flex items-center gap-4">
+            <p className="text-lg text-white" dir="rtl">
+              יריכיים: {avgThigh}
+            </p>
+            <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
               <img src={hips} alt="" className="object-cover" />
             </div>
           </div>

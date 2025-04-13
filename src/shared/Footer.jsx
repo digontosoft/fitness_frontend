@@ -1,4 +1,6 @@
-import { instaIcon, tiktok, whiteLogo } from "../assets/index";
+import { whiteLogo } from "../assets/index";
+import insta from "@/assets/image/instagram.png";
+import tiktok from "@/assets/image/tiktok.png";
 const Footer = () => {
   return (
     <div className="bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753]  min-h-[100px]  max-h-full ">
@@ -11,14 +13,18 @@ const Footer = () => {
                 href="https://www.instagram.com/fitalmualem?igsh=MXZjbzV6bGswa2Fndg%3D%3D&utm_source=qr"
                 target="_blank"
               >
-                <img src={instaIcon} alt="instagram" />
+                <div className="h-8 w-8 bg-white rounded-full flex justify-center items-center">
+                  <img src={insta} alt="instagram" />
+                </div>
               </a>
               <a
                 href="https://www.tiktok.com/@fitalmualem?_t=ZS-8umaIU37r20&_r=1"
                 target="_blank"
               >
                 {" "}
-                <img src={tiktok} alt="tiktok" />
+                <div className="h-8 w-8 bg-white rounded-full flex justify-center items-center">
+                  <img src={tiktok} alt="tiktok" />
+                </div>
               </a>
             </div>
           </div>

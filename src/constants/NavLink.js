@@ -1,11 +1,9 @@
 import {
-  LogOut,
   Measurement,
   ReceipeUser,
   NutrationGuide,
   Trainings,
   Course,
-  icon,
 } from "../assets/index";
 export const traineeLink = [
   {
@@ -14,24 +12,23 @@ export const traineeLink = [
     link: "/",
     icon: NutrationGuide,
   },
-
   {
     _id: 2,
-    title: "אימונים",
-    link: "/trainings",
-    icon: Trainings,
-  },
-  {
-    _id: 3,
-    title: "תרגילים",
-    link: "/exercise-library",
-    icon: Course,
-  },
-  {
-    _id: 4,
     title: "מדדים",
     link: "/measurements-tracking",
     icon: Measurement,
+  },
+  {
+    _id: 3,
+    title: "תפריטי תזונה אישיים",
+    link: "/personal-nutration",
+    icon: NutrationGuide,
+  },
+  {
+    _id: 4,
+    title: "מדריך תזונה",
+    link: "/nutrition-guide",
+    icon: NutrationGuide,
   },
   {
     _id: 5,
@@ -40,19 +37,19 @@ export const traineeLink = [
     icon: ReceipeUser,
   },
   {
-    _id: 5,
-    title: "מדריך תזונה",
-    link: "/nutrition-guide",
-    icon: NutrationGuide,
-  },
-  {
     _id: 6,
-    title: "תפריטי תזונה אישיים",
-    link: "/personal-nutration",
-    icon: NutrationGuide,
+    title: "תרגילים",
+    link: "/exercise-library",
+    icon: Course,
   },
   {
     _id: 7,
+    title: "אימונים",
+    link: "/trainings",
+    icon: Trainings,
+  },
+  {
+    _id: 8,
     title: "קורסים",
     link: "/courses",
     icon: Course,
@@ -69,6 +66,42 @@ export const adminLink = [
     _id: 1,
     title: "דף הבית",
     link: "/dashboard",
+    icon: NutrationGuide,
+  },
+  {
+    _id: 2,
+    title: "Trainee Users List",
+    link: "dashboard/trainee-users-list",
+    icon: NutrationGuide,
+  },
+  {
+    _id: 3,
+    title: "Training List",
+    link: "dashboard/training-list",
+    icon: NutrationGuide,
+  },
+  {
+    _id: 4,
+    title: "Nutrition List",
+    link: "dashboard/nutrition-lists",
+    icon: NutrationGuide,
+  },
+  {
+    _id: 5,
+    title: "Workout List",
+    link: "/dashboard/workout-list",
+    icon: NutrationGuide,
+  },
+  {
+    _id: 6,
+    title: "Approve Email",
+    link: "/dashboard/approve-email",
+    icon: NutrationGuide,
+  },
+  {
+    _id: 7,
+    title: "Exercise List",
+    link: "/dashboard/exercise-list",
     icon: NutrationGuide,
   },
   // {
@@ -132,18 +165,18 @@ export const adminLink = [
   //   icon: NutrationGuide,
   // },
 
-  {
-    _id: 2,
-    title: "מתכונים",
-    link: "/dashboard/recipe",
-    icon: ReceipeUser,
-  },
-  {
-    _id: 3,
-    title: "קורסים",
-    link: "/dashboard/courses",
-    icon: Course,
-  },
+  // {
+  //   _id: 2,
+  //   title: "מתכונים",
+  //   link: "/dashboard/recipe",
+  //   icon: ReceipeUser,
+  // },
+  // {
+  //   _id: 3,
+  //   title: "קורסים",
+  //   link: "/dashboard/courses",
+  //   icon: Course,
+  // },
 ];
 export const recipeLink = [
   {

@@ -46,7 +46,7 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
       <DialogContent className="sm:max-w-4xl p-6 rounded-lg">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-center">
-            Exercise Details
+            פרטי תרגיל
           </DialogTitle>
         </DialogHeader>
 
@@ -54,7 +54,7 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
           <p className="text-center text-gray-500">Loading...</p>
         ) : (
           <div className="flex flex-col items-center gap-4">
-            <div className="w-full aspect-video rounded-lg overflow-hidden">
+            <div className="w-full aspect-video rounded-lg">
               <HeroVideo videoUrl={exerciseData?.video_url} />
             </div>
             <h2 className="text-lg font-bold">{exerciseData?.name}</h2>
@@ -62,17 +62,17 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
               {exerciseData?.description}
             </p>
             <p className="text-sm text-gray-600 text-center px-4">
-              {exerciseData?.body_part} : Body Part
+              {exerciseData?.body_part} : איזור בגוף
             </p>
             <p className="text-sm text-gray-600 text-center px-4">
-              {exerciseData?.equipment} : Equipment
+              {exerciseData?.equipment} : ציוד
             </p>
           </div>
         )}
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg">Close</Button>
+            <Button className="w-full bg-customBg">סגור</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

@@ -1,4 +1,4 @@
-import { mwatchData } from "@/constants/mwatchData";
+// import { mwatchData } from "@/constants/mwatchData";
 import { pixelCartImg } from "@/assets";
 import SmallCart from "./SmallCart";
 import { useEffect, useState } from "react";
@@ -61,7 +61,7 @@ const SingleCart = ({ userId, setOpen, setId }) => {
           <div className="flex justify-center items-start"></div>
 
           <div className="flex justify-center items-center">
-            <SmallCart data={data}  setOpen={setOpen} setId={setId}/>
+            <SmallCart data={data} setOpen={setOpen} setId={setId} />
           </div>
         </div>
       ))}

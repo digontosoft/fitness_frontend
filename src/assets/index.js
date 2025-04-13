@@ -60,17 +60,17 @@ import supermarket from "./image/supermarket/supermarketBgone.png";
 import supermarketBg from "./image/supermarket/superBgTwo.png";
 import sideNavBg from "./image/supermarket/sideNavBg.png";
 import mcartBg from "./image/mcartBg.jpg";
-import whiteBiceps from "./image/whiteBiceps.png";
+// import whiteBiceps from "./image/whiteBiceps.png";
 import pixelCartImg from "./image/pixelcut-export.png";
 import leftElips from "./image/leftElips.png";
 import Gentelmen from "./image/gentelman.png";
 import women1 from "./image/workout-women-1.png";
 import women2 from "./image/workout-women-2.png";
-import icon from'./image/icons/Icon.png';
-import iconOne from'./image/icons/IconOne.png';
-import iconTwo from'./image/icons/IconTwo.png';
-import iconThree from'./image/icons/IconThree.png';
-import foodDairy from'./image/food-dairy.png';
+import icon from "./image/icons/Icon.png";
+import iconOne from "./image/icons/IconOne.png";
+import iconTwo from "./image/icons/IconTwo.png";
+import iconThree from "./image/icons/IconThree.png";
+import foodDairy from "./image/food-dairy.png";
 export {
   foodDairy,
   icon,
@@ -144,5 +144,5 @@ export {
   supermarketBg,
   sideNavBg,
   mcartBg,
-  whiteBiceps,
+  // whiteBiceps,
 };

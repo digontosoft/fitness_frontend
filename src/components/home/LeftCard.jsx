@@ -1,6 +1,6 @@
 import { pixelCartImg } from "@/assets";
-import muscle from "../../assets/image/muscle.png";
-import waist from "../../assets/image/weightloss.png";
+import muscle from "../../assets/image/arm.png";
+import waist from "../../assets/image/waist.png";
 import hips from "../../assets/image/thigh.png";
 import chest from "../../assets/image/chest.png";
 import { Button } from "../ui/button";
@@ -34,27 +34,32 @@ const LeftCard = ({ data }) => {
             להזנת המדדים
           </Button>
         </Link>
-        <div className="w-full flex justify-center items-center">
-          <div className="flex justify-between gap-6 items-center flex-row-reverse">
-            <div>
-              <div className="flex items-center ">
-                <p className="text-lg text-white">זרוע:{avg}</p>
+        <div className="w-full flex justify-center items-center mt-6">
+          <div className="grid grid-cols-2 gap-6 justify-items-center items-center">
+            <div className="flex items-center gap-4">
+              <p className="text-lg text-white">זרוע:{avg}</p>
+              <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
                 <img src={muscle} alt="" className="object-cover" />
               </div>
-              <div className="flex items-center ">
-                <p className="text-lg text-white">
-                  חזה:{userDetails.gender === "male" ? data?.chest : data?.butt}
-                </p>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <p className="text-lg text-white">מותניים:{data?.waist}</p>
+              <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
+                <img src={waist} alt="" className="object-cover" />
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <p className="text-lg text-white">
+                חזה:{userDetails.gender === "male" ? data?.chest : data?.butt}
+              </p>
+              <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
                 <img src={chest} alt="" className="object-cover" />
               </div>
             </div>
-            <div>
-              <div className="flex items-center ">
-                <p className="text-lg text-white">מותניים:{data?.waist}</p>
-                <img src={waist} alt="" className="object-cover" />
-              </div>
-              <div className="flex items-center ">
-                <p className="text-lg text-white">יריכיים:{avgThigh}</p>
+            <div className="flex items-center gap-4">
+              <p className="text-lg text-white">יריכיים:{avgThigh}</p>
+              <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
                 <img src={hips} alt="" className="object-cover" />
               </div>
             </div>
