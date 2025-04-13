@@ -18,8 +18,6 @@ const MeasurementUpdate = () => {
   const Id = userDetails._id;
   const [getMesurement, setMesurement] = useState([]);
 
-  
-
   const navigate = useNavigate();
   useEffect(() => {
     const fetchMeasurement = async () => {
@@ -60,12 +58,10 @@ const MeasurementUpdate = () => {
     },
   });
 
-  
-
   useEffect(() => {
     if (getMesurement) {
       const buttValue =
-        Gender === "male" ? getMesurement.chest : getMesurement.butt; 
+        Gender === "male" ? getMesurement.chest : getMesurement.butt;
       reset({
         mode: "update",
         date: moment(getMesurement.date).format("YYYY-MM-DD") || "",
@@ -89,7 +85,6 @@ const MeasurementUpdate = () => {
   }, [getMesurement]);
 
   console.log("getMesurement", getMesurement);
-  
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -118,7 +113,6 @@ const MeasurementUpdate = () => {
       toast.error("Error updating measurement. Please try again.");
       console.error("Error updating measurement:", error);
     }
-  
   };
 
   const handleDragOver = (e) => {
@@ -186,90 +180,77 @@ const MeasurementUpdate = () => {
   return (
     <div className="p-6 max-w-6xl mx-auto justify-center py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="w-full justify-center flex flex-col md:flex-row-reverse gap-4">
-          <div className="w-full">
-
-            <DynamicInputField
-              id="waist"
-              type="text"
-              label="היקף מותניים"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-              <DynamicInputField
-              id="thighl"
-              type="number"
-              label="ירך שמאל"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-            <DynamicInputField
-              id="arml"
-              type="number"
-              label="זרוע שמאל"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-         
-             <DynamicInputField
-              id={Gender === "male" ? "chest" : "butt"}
-              type="number"
-              label={Gender === "male" ? "חָזֶה" : "קַת"}
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
-              errors={errors}
-              watch={watch}
-            />
-          
-          </div>
-          <div className="w-full">
-            <DynamicInputField
-              id="date"
-              type="date"
-              label="תאריך"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-               <DynamicInputField
-              id="thighr"
-              type="number"
-              label="ירך ימין"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-
-            <DynamicInputField
-              id="armr"
-              type="number"
-              label="זרוע ימין"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-            
-          
-          
-           
-
-          </div>
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <DynamicInputField
+            id="date"
+            type="date"
+            label="תאריך"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
+          <DynamicInputField
+            id="waist"
+            type="text"
+            label="היקף מותניים"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
+          <DynamicInputField
+            id={Gender === "male" ? "chest" : "butt"}
+            type="number"
+            label={Gender === "male" ? "חָזֶה" : "קַת"}
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
+            errors={errors}
+            watch={watch}
+          />
+          <DynamicInputField
+            id="thighr"
+            type="number"
+            label="ירך ימין"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
+          <DynamicInputField
+            id="thighl"
+            type="number"
+            label="ירך שמאל"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
+          <DynamicInputField
+            id="armr"
+            type="number"
+            label="זרוע ימין"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
+          <DynamicInputField
+            id="arml"
+            type="number"
+            label="זרוע שמאל"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
         </div>
 
         <Link to="/mesurement-pdf">

@@ -425,7 +425,6 @@ const EditTrainingForm = () => {
                       options={exerciseList}
                       valueField="_id"
                       labelField="name"
-                      multi
                       placeholder="בחר"
                       onChange={(selected) =>
                         handleAddExercise(workout._id, selected)
@@ -443,7 +442,6 @@ const EditTrainingForm = () => {
                       valueField="_id"
                       labelField="body_part"
                       options={exerciseList}
-                      multi
                       placeholder="סנן לפי חלק בגוף"
                       onChange={(selected) =>
                         handleAddExercise(workout._id, selected)
@@ -461,7 +459,6 @@ const EditTrainingForm = () => {
                       options={exerciseList}
                       valueField="_id"
                       labelField="equipment"
-                      multi
                       placeholder="סנן לפי ציוד"
                       onChange={(selected) =>
                         handleAddExercise(workout._id, selected)

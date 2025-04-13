@@ -296,7 +296,6 @@ const AddTrainingForm = () => {
             options={trainingExercises}
             valueField="_id"
             labelField="name"
-            multi
             onChange={handleWorkoutChange}
             placeholder="בחר..."
             searchBy="name"
@@ -398,7 +397,6 @@ const AddTrainingForm = () => {
                       options={exerciseList}
                       valueField="_id"
                       labelField="name"
-                      multi
                       placeholder="בחר"
                       onChange={handleNewExerciseSelection}
                       searchBy="name"
@@ -414,7 +412,6 @@ const AddTrainingForm = () => {
                       valueField="_id"
                       labelField="body_part"
                       options={exerciseList}
-                      multi
                       placeholder="סנן לפי חלק בגוף"
                       onChange={handleNewExerciseSelection}
                       searchBy="body_part"
@@ -430,7 +427,6 @@ const AddTrainingForm = () => {
                       options={exerciseList}
                       valueField="_id"
                       labelField="equipment"
-                      multi
                       placeholder="סנן לפי ציוד"
                       onChange={handleNewExerciseSelection}
                       searchBy="equipment"

@@ -1,16 +1,13 @@
 import {
-  Ractanglebg,
   Ellipse,
-  Running,
   vector2,
   vector3,
   female2,
   men2,
   Ellipse88,
 } from "@/assets/index";
-import { useEffect, useState } from "react";
 
-const TraineeRightCard = ({ userId, gender, stepAverage, stepTarget }) => {
+const TraineeRightCard = ({ gender, stepAverage, stepTarget }) => {
   const progress = stepAverage || 0;
   const target = Math.max(stepTarget || 1, 1);
   const strokeWidth = 4;
@@ -18,7 +15,6 @@ const TraineeRightCard = ({ userId, gender, stepAverage, stepTarget }) => {
   const circumference = 2 * Math.PI * radius;
   const parcentage = ((progress / target) * 100).toFixed(1);
   const offset = circumference - (parcentage / 100) * circumference;
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
 
   return (
     <div className="w-80 h-56 bg-gradient-to-tr from-[#0A0A0A] via-[#343434] to-[#0A0A0A] p-2 rounded-2xl relative">

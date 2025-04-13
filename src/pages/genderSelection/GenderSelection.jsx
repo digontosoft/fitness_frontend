@@ -69,7 +69,9 @@ const GenderSelection = () => {
               <Button
                 variant="ai"
                 size="lg"
-                className="bg-[#FF6757] hover:bg-red-600 transition duration-300 rounded-full h-8 text-white font-semibold flex justify-center items-center w-full"
+                className={`bg-gray-400 hover:bg-gray-500 transition duration-300 rounded-full h-8 text-white font-semibold flex justify-center items-center w-full ${
+                  gender === "female" ? "bg-red-600" : ""
+                }`}
                 onClick={() => handleGenderSelection("female")}
               >
                 <p>נקבה</p>
@@ -80,7 +82,9 @@ const GenderSelection = () => {
               <Button
                 variant="ai"
                 size="lg"
-                className="bg-[#141414] hover:bg-gray-700 transition duration-300 h-8 rounded-full text-white font-semibold flex justify-center items-center w-full"
+                className={`bg-gray-400 hover:bg-gray-500 transition duration-300 rounded-full h-8 text-white font-semibold flex justify-center items-center w-full ${
+                  gender === "male" ? "bg-red-600" : ""
+                }`}
                 onClick={() => handleGenderSelection("male")}
               >
                 <p>זכר</p>

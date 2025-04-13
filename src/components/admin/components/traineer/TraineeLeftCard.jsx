@@ -92,7 +92,10 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
-
+import muscle from "@/assets/image/muscle.png";
+import waist from "@/assets/image/weightloss.png";
+import hips from "@/assets/image/thigh.png";
+import chest from "@/assets/image/chest.png";
 const TraineeLeftCard = ({ userId }) => {
   const [measurementData, setMesurementData] = useState({});
 
@@ -126,7 +129,6 @@ const TraineeLeftCard = ({ userId }) => {
   const totalThigh = leftThigh + rightThigh;
   const avgThigh = Math.floor(totalThigh / 2);
   console.log("userType", userType.gender);
-  
 
   return (
     <div
@@ -141,17 +143,16 @@ const TraineeLeftCard = ({ userId }) => {
               <p className="text-lg text-white" dir="rtl">
                 זרוע: {avg}
               </p>
-              <img src={icon} alt="" />
+              <img src={muscle} alt="" className="object-cover" />
             </div>
             <div className="flex items-center ">
               <p className="text-lg text-white" dir="rtl">
-                
-                <span>{userType.gender === "male" ? "חָזֶה":'ישבן' }</span>
+                <span>{userType.gender === "male" ? "חָזֶה" : "ישבן"}</span>:{" "}
                 {userType.gender === "male"
                   ? measurementData?.chest
                   : measurementData?.butt}
               </p>
-              <img src={iconOne} alt="" />
+              <img src={chest} alt="" className="object-cover" />
             </div>
           </div>
           <div>
@@ -159,13 +160,13 @@ const TraineeLeftCard = ({ userId }) => {
               <p className="text-lg text-white" dir="rtl">
                 מותניים: {measurementData?.weight}
               </p>
-              <img src={iconTwo} alt="" />
+              <img src={waist} alt="" className="object-cover" />
             </div>
             <div className="flex items-center ">
               <p className="text-lg text-white" dir="rtl">
                 יריכיים: {avgThigh}
               </p>
-              <img src={iconThree} alt="" />
+              <img src={hips} alt="" className="object-cover" />
             </div>
           </div>
         </div>

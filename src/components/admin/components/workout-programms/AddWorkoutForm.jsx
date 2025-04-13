@@ -55,8 +55,6 @@ const AddWorkoutForm = () => {
   //   manipulation: ex.manipulation,
   // }));
 
-  console.log("selectedExercises", selectedExercises);
-
   const onSubmit = async (data) => {
     const workoutData = {
       name: data.name,
@@ -118,7 +116,6 @@ const AddWorkoutForm = () => {
               }
               valueField="_id"
               labelField="name"
-              multi
               placeholder="סנן לפי שם תרגיל"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="name"
@@ -136,7 +133,6 @@ const AddWorkoutForm = () => {
               }
               valueField="_id"
               labelField="body_part"
-              multi
               placeholder="סנן לפי איזור גוף"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="body_part"
@@ -154,7 +150,6 @@ const AddWorkoutForm = () => {
               }
               valueField="_id"
               labelField="equipment"
-              multi
               placeholder="סנן לפי ציוד"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="equipment"

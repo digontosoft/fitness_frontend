@@ -437,7 +437,6 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                       options={exerciseList}
                       valueField="_id"
                       labelField="name"
-                      multi
                       placeholder="בחר"
                       onChange={(selected) =>
                         handleNewExerciseSelection(selected, workoutIndex)
@@ -455,7 +454,6 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                       valueField="_id"
                       labelField="body_part"
                       options={exerciseList}
-                      multi
                       placeholder="סנן לפי חלק בגוף"
                       onChange={(selected) =>
                         handleNewExerciseSelection(selected, workoutIndex)
@@ -473,7 +471,6 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                       options={exerciseList}
                       valueField="_id"
                       labelField="equipment"
-                      multi
                       placeholder="סנן לפי ציוד"
                       onChange={(selected) =>
                         handleNewExerciseSelection(selected, workoutIndex)
