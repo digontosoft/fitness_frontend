@@ -12,24 +12,23 @@ export const traineeLink = [
     link: "/",
     icon: NutrationGuide,
   },
-
   {
     _id: 2,
-    title: "אימונים",
-    link: "/trainings",
-    icon: Trainings,
-  },
-  {
-    _id: 3,
-    title: "תרגילים",
-    link: "/exercise-library",
-    icon: Course,
-  },
-  {
-    _id: 4,
     title: "מדדים",
     link: "/measurements-tracking",
     icon: Measurement,
+  },
+  {
+    _id: 3,
+    title: "תפריטי תזונה אישיים",
+    link: "/personal-nutration",
+    icon: NutrationGuide,
+  },
+  {
+    _id: 4,
+    title: "מדריך תזונה",
+    link: "/nutrition-guide",
+    icon: NutrationGuide,
   },
   {
     _id: 5,
@@ -38,19 +37,19 @@ export const traineeLink = [
     icon: ReceipeUser,
   },
   {
-    _id: 5,
-    title: "מדריך תזונה",
-    link: "/nutrition-guide",
-    icon: NutrationGuide,
-  },
-  {
     _id: 6,
-    title: "תפריטי תזונה אישיים",
-    link: "/personal-nutration",
-    icon: NutrationGuide,
+    title: "תרגילים",
+    link: "/exercise-library",
+    icon: Course,
   },
   {
     _id: 7,
+    title: "אימונים",
+    link: "/trainings",
+    icon: Trainings,
+  },
+  {
+    _id: 8,
     title: "קורסים",
     link: "/courses",
     icon: Course,
