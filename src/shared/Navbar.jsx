@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { MdOutlineClose } from "react-icons/md";
 import { CiMenuFries } from "react-icons/ci";
 import { adminLink, recipeLink, traineeLink } from "@/constants/NavLink";
-import { redLogo } from "../assets/index";
 import { NavLink } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+import logo from "@/assets/image/Logo.png";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userTasks, setUserTasks] = useState([]);
@@ -227,7 +227,7 @@ const Navbar = () => {
         )}
 
         <div className="flex items-center md:justify-center  pr-[40%] md:pr-0">
-          <img src={redLogo} alt="logo" className="w-15 h-14 object-cover" />
+          <img src={logo} alt="logo" className="w-15 h-14 object-cover" />
         </div>
 
         {/* Hamburger Menu Button */}
