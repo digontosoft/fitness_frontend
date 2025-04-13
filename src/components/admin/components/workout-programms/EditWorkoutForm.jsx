@@ -445,6 +445,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
+import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 
 const EditWorkoutForm = ({ workoutId }) => {
   const [exercises, setExercises] = useState([]);
@@ -583,7 +584,7 @@ const EditWorkoutForm = ({ workoutId }) => {
             required
           />
 
-          <DynamicInputField
+          <DynamicTextAreaField
             className="w-full"
             id="description"
             type="text"
@@ -599,7 +600,6 @@ const EditWorkoutForm = ({ workoutId }) => {
             valueField="_id"
             labelField="name"
             searchBy="name"
-            multi
             values={exercisesForm?.map((ex) => ({
               _id: ex.exercise_id?._id,
               name: ex.exercise_id?.name,
@@ -609,7 +609,6 @@ const EditWorkoutForm = ({ workoutId }) => {
                 const existing = exercisesForm.find(
                   (ex) => ex.exercise_id._id === option._id
                 );
-                console.log("existing", existing);
                 return existing
                   ? existing
                   : {
@@ -628,7 +627,7 @@ const EditWorkoutForm = ({ workoutId }) => {
               key={exercise._id || index}
               className="border p-2 flex flex-col items-center justify-center space-y-4 rounded-md"
             >
-              <div className="flex items-center justify-center bg-customBg py-4 w-1/2 h-5 rounded-md text-white">
+              <div className="flex items-center justify-center bg-customBg py-4 min-w-1/2 w-auto h-5 px-2 rounded-md text-white">
                 <p className="text-center">{exercise.exercise_id?.name}</p>
               </div>
               <div className="grid sm:grid-cols-3 grid-cols-1 gap-4 sm:w-[327px]">
@@ -656,7 +655,7 @@ const EditWorkoutForm = ({ workoutId }) => {
                 </div>
                 <div className="flex flex-col space-y-2">
                   <label htmlFor={`manipulation-${exercise._id}`}>
-                  מניפולציה
+                    מניפולציה
                   </label>
                   <input
                     type="text"

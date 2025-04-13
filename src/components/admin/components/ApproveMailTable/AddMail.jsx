@@ -91,7 +91,7 @@ export default function AddMail({ setEmails }) {
             </div>
           </div>
           <div className="flex items-center justify-end">
-            <BasicButton type="submit" title="ADD" className="bg-customBg" />
+            <BasicButton type="submit" title="הוסף" className="bg-customBg" />
           </div>
         </form>
         <DialogFooter></DialogFooter>

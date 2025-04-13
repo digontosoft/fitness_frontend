@@ -102,8 +102,8 @@ const AddExercise = ({
   setIsSupersetSelected,
   setIsButtonDisabled,
 }) => {
-  const [sets, setSets] = useState(0);
-  const [reps, setReps] = useState(0);
+  const [sets, setSets] = useState();
+  const [reps, setReps] = useState();
   const [manipulation, setManipulation] = useState("");
 
   useEffect(() => {

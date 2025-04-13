@@ -14,7 +14,7 @@ const UpdateMesurement = () => {
             : "https://www.youtube.com/watch?v=uUo9Bw5ytrI"
         }
       />
-      <Title tilte={"הזנת מדדים"} />
+      <Title title="הזנת מדדים אישית" />
       <MeasurementUpdate />
     </div>
   );

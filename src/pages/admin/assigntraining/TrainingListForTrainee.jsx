@@ -35,6 +35,7 @@ import PaginationComp from "@/components/pagination";
 // import TrainingDetails from "./TrainingDetails";
 
 export function TrainingListForTrainee({ userId }) {
+  console.log("userId", userId);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -79,7 +80,7 @@ export function TrainingListForTrainee({ userId }) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          סנן לפי שם תוכנית אימון 
+          סנן לפי שם תוכנית אימון
           <ArrowUpDown />
         </Button>
       ),
@@ -94,7 +95,7 @@ export function TrainingListForTrainee({ userId }) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-        תיאור תוכנית אימון
+          תיאור תוכנית אימון
           <ArrowUpDown />
         </Button>
       ),
@@ -131,7 +132,9 @@ export function TrainingListForTrainee({ userId }) {
               className="bg-green-100 hover:bg-green-100 text-green-500 font-bold uppercase tracking-wide"
               size="sm"
             >
-              {row.original.status === "active" ? "תוכנית אימון פעילה" : "תוכנית אימון לא פעילה"}
+              {row.original.status === "active"
+                ? "תוכנית אימון פעילה"
+                : "תוכנית אימון לא פעילה"}
             </Button>
           </div>
         );
@@ -160,9 +163,9 @@ export function TrainingListForTrainee({ userId }) {
     }
   };
 
-const [page, setPage] = useState(1);
-const [totalPages, setTotalPages] = useState(1);
-const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -179,7 +182,7 @@ const [search, setSearch] = useState("");
       }
     };
     fetchData();
-  }, [userId, page,totalPages,search]);
+  }, [userId, page, totalPages, search]);
 
   const table = useReactTable({
     data: training,
@@ -200,16 +203,14 @@ const [search, setSearch] = useState("");
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <Input
-        dir='rtl'
+          dir="rtl"
           placeholder="סנן לפי שם תוכנית אימון ..."
-          onChange={(event) =>
-            setSearch(event.target.value)
-          }
+          onChange={(event) => setSearch(event.target.value)}
           className="max-w-sm"
         />
         <Link to={`/dashboard/training-list`} state={userId}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
-          סנן לפי שם תוכנית אימון 
+            סנן לפי שם תוכנית אימון
           </Button>
         </Link>
       </div>
@@ -280,7 +281,11 @@ const [search, setSearch] = useState("");
         </DialogContent>
       </Dialog>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
+        <PaginationComp
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

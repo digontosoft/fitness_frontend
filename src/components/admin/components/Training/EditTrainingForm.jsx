@@ -9,6 +9,7 @@ import { Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 
 const EditTrainingForm = () => {
   const { id } = useParams();
@@ -308,7 +309,7 @@ const EditTrainingForm = () => {
           defaultValue={training?.name}
         />
 
-        <DynamicInputField
+        <DynamicTextAreaField
           id="description"
           type="text"
           label="Description"
@@ -425,7 +426,6 @@ const EditTrainingForm = () => {
                       options={exerciseList}
                       valueField="_id"
                       labelField="name"
-                      multi
                       placeholder="בחר"
                       onChange={(selected) =>
                         handleAddExercise(workout._id, selected)
@@ -443,7 +443,6 @@ const EditTrainingForm = () => {
                       valueField="_id"
                       labelField="body_part"
                       options={exerciseList}
-                      multi
                       placeholder="סנן לפי חלק בגוף"
                       onChange={(selected) =>
                         handleAddExercise(workout._id, selected)
@@ -461,7 +460,6 @@ const EditTrainingForm = () => {
                       options={exerciseList}
                       valueField="_id"
                       labelField="equipment"
-                      multi
                       placeholder="סנן לפי ציוד"
                       onChange={(selected) =>
                         handleAddExercise(workout._id, selected)

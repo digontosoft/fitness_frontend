@@ -8,6 +8,7 @@ import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
 import { Trash } from "lucide-react";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
+import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 
 const AssignTrainingForm = ({ trainingId, user_id }) => {
   const [selectedTraining, setSelectedTraining] = useState(null);
@@ -28,22 +29,40 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
   } = useForm();
 
   // Check if any field (sets, reps, or manipulation) is empty in any exercise
-  useEffect(() => {
-    if (!selectedTraining) {
-      setIsButtonDisabled(false);
-      return;
-    }
-    const isAnyFieldEmpty = selectedTraining.workouts?.some((workout) =>
-      workout.exercises.some(
+  // useEffect(() => {
+  //   if (!selectedTraining) {
+  //     setIsButtonDisabled(false);
+  //     return;
+  //   }
+  //   const isAnyFieldEmpty = selectedTraining.workouts?.some((workout) =>
+  //     workout.exercises.some(
+  //       (exercise) =>
+  //         exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+  //     )
+  //   );
+
+  //   setIsButtonDisabled(isAnyFieldEmpty);
+  // }, [selectedTraining]);
+
+  const checkFormCompleteness = () => {
+    if (!trainingbyId?.workouts) return false;
+
+    // Check if name and description are filled
+    if (!trainingbyId.name || !trainingbyId.description) return false;
+
+    // Check all workouts and exercises
+    return trainingbyId.workouts.every((workout) =>
+      workout.exercises.every(
         (exercise) =>
-          exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+          exercise.sets > 0 && exercise.reps > 0 && exercise.manipulation
       )
     );
+  };
 
-    setIsButtonDisabled(isAnyFieldEmpty);
-  }, [selectedTraining]);
-
-  console.log("selectedTraining:", selectedTraining);
+  useEffect(() => {
+    const isAnyFieldEmpty = checkFormCompleteness();
+    setIsButtonDisabled(!isAnyFieldEmpty);
+  }, [trainingbyId]);
 
   // Fetch training
   useEffect(() => {
@@ -213,7 +232,6 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
 
   // When new exercises are selected (for "Add More Exercise")
   const handleNewExerciseSelection = (selectedExercises, workoutIndex) => {
-    console.log("selectedExercises:", selectedExercises);
     if (!trainingbyId) return;
     const updatedTraining = { ...trainingbyId };
     const currentWorkout = updatedTraining.workouts[workoutIndex];
@@ -223,8 +241,8 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
         _id: exercise._id,
         name: exercise.name,
         exercise_id: exercise._id,
-        sets: 0,
-        reps: 0,
+        sets: "",
+        reps: "",
         manipulation: "",
       });
     });
@@ -361,7 +379,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               defaultValue={trainingbyId?.name}
             />
 
-            <DynamicInputField
+            <DynamicTextAreaField
               className="sm:min-w-[350px]"
               id="description"
               type="text"
@@ -448,7 +466,6 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                             )
                           }
                           className="border p-2 rounded"
-                          placeholder="normal or superset"
                         />
                       </div>
                     </div>
@@ -479,7 +496,6 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                           options={exercise}
                           valueField="_id"
                           labelField="name"
-                          multi
                           placeholder="בחר"
                           onChange={(selected) =>
                             handleNewExerciseSelection(selected, workoutIndex)
@@ -497,7 +513,6 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                           valueField="_id"
                           labelField="body_part"
                           options={exercise}
-                          multi
                           placeholder="סנן לפי חלק בגוף"
                           onChange={(selected) =>
                             handleNewExerciseSelection(selected, workoutIndex)
@@ -515,7 +530,6 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                           options={exercise}
                           valueField="_id"
                           labelField="equipment"
-                          multi
                           placeholder="סנן לפי ציוד"
                           onChange={(selected) =>
                             handleNewExerciseSelection(selected, workoutIndex)
@@ -545,7 +559,6 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                   options={workout}
                   valueField="_id"
                   labelField="name"
-                  multi
                   onChange={(selected) => handleAddWorkout(selected)}
                   searchBy="name"
                 />

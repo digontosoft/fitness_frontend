@@ -1,5 +1,6 @@
 import { base_url } from "@/api/baseUrl";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
+import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 import SelectInputField from "@/components/measurements/measurementWatch/SelectInputField";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
@@ -112,7 +113,7 @@ const AddExerciseForm = ({ exerciseId }) => {
             watch={watch}
             defaultValue={exerciseId ? exerciseData?.name : ""}
           />
-          <DynamicInputField
+          <DynamicTextAreaField
             className="sm:w-[327px]"
             id="description"
             type="text"

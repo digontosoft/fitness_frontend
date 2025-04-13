@@ -227,7 +227,7 @@ const Navbar = () => {
         )}
 
         <div className="flex items-center md:justify-center  pr-[40%] md:pr-0">
-          <img src={redLogo} alt="logo" className="w-15 h-14" />
+          <img src={redLogo} alt="logo" className="w-15 h-14 object-cover" />
         </div>
 
         {/* Hamburger Menu Button */}

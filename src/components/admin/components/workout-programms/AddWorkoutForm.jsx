@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import AddExercise from "./AddExercise";
 import { useNavigate } from "react-router-dom";
+import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 
 const AddWorkoutForm = () => {
   const [selectedExercises, setSelectedExercises] = useState([]);
@@ -55,8 +56,6 @@ const AddWorkoutForm = () => {
   //   manipulation: ex.manipulation,
   // }));
 
-  console.log("selectedExercises", selectedExercises);
-
   const onSubmit = async (data) => {
     const workoutData = {
       name: data.name,
@@ -96,7 +95,7 @@ const AddWorkoutForm = () => {
             errors={errors}
           />
 
-          <DynamicInputField
+          <DynamicTextAreaField
             className="sm:min-w-[400px]"
             id="description"
             type="text"
@@ -118,7 +117,6 @@ const AddWorkoutForm = () => {
               }
               valueField="_id"
               labelField="name"
-              multi
               placeholder="סנן לפי שם תרגיל"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="name"
@@ -136,7 +134,6 @@ const AddWorkoutForm = () => {
               }
               valueField="_id"
               labelField="body_part"
-              multi
               placeholder="סנן לפי איזור גוף"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="body_part"
@@ -154,7 +151,6 @@ const AddWorkoutForm = () => {
               }
               valueField="_id"
               labelField="equipment"
-              multi
               placeholder="סנן לפי ציוד"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="equipment"

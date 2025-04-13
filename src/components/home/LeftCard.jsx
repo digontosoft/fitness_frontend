@@ -1,9 +1,11 @@
-import { icon, iconOne, iconThree, iconTwo, pixelCartImg } from "@/assets";
+import { pixelCartImg } from "@/assets";
+import muscle from "../../assets/image/muscle.png";
+import waist from "../../assets/image/weightloss.png";
+import hips from "../../assets/image/thigh.png";
+import chest from "../../assets/image/chest.png";
 import { Button } from "../ui/button";
 // import { icon, iconOne, iconThree, iconTwo, pixelCartImg } from "@assets/index";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { UserInfoContext } from "@/context";
 
 const LeftCard = ({ data }) => {
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
@@ -36,24 +38,24 @@ const LeftCard = ({ data }) => {
           <div className="flex justify-between gap-6 items-center flex-row-reverse">
             <div>
               <div className="flex items-center ">
-                <p className="text-sm text-white">זרוע:{avg}</p>
-                <img src={icon} alt="" />
+                <p className="text-lg text-white">זרוע:{avg}</p>
+                <img src={muscle} alt="" className="object-cover" />
               </div>
               <div className="flex items-center ">
-                <p className="text-sm text-white">
+                <p className="text-lg text-white">
                   חזה:{userDetails.gender === "male" ? data?.chest : data?.butt}
                 </p>
-                <img src={iconOne} alt="" />
+                <img src={chest} alt="" className="object-cover" />
               </div>
             </div>
             <div>
               <div className="flex items-center ">
                 <p className="text-lg text-white">מותניים:{data?.waist}</p>
-                <img src={iconTwo} alt="" />
+                <img src={waist} alt="" className="object-cover" />
               </div>
               <div className="flex items-center ">
-                <p className="text-sm text-white">יריכיים:{avgThigh}</p>
-                <img src={iconThree} alt="" />
+                <p className="text-lg text-white">יריכיים:{avgThigh}</p>
+                <img src={hips} alt="" className="object-cover" />
               </div>
             </div>
           </div>

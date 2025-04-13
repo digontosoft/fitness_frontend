@@ -16,7 +16,6 @@ const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openAnswer, setOpenAnswer] = useState(false);
-  console.log("user", userId);
 
   useEffect(() => {
     const getUser = async () => {
@@ -121,10 +120,7 @@ const TraineerUi = ({ userId }) => {
           link={`/dashboard/mesurements-watch?userId=${userId}`}
         />
 
-        <AdminArrowCardWithoutImage
-          title="יומן אכילה"
-          onClick={handleModal}
-        />
+        <AdminArrowCardWithoutImage title="יומן אכילה" onClick={handleModal} />
 
         <AdminArrowCardWithoutImage
           title="תשובות מתאמן"
