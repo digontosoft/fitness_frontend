@@ -9,6 +9,7 @@ import { Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 
 const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   const [training, setTraining] = useState({});
@@ -318,7 +319,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           errors={errors}
           defaultValue={training?.name}
         />
-        <DynamicInputField
+        <DynamicTextAreaField
           id="description"
           type="text"
           label="תיאור"

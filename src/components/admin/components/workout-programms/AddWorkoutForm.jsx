@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import AddExercise from "./AddExercise";
 import { useNavigate } from "react-router-dom";
+import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 
 const AddWorkoutForm = () => {
   const [selectedExercises, setSelectedExercises] = useState([]);
@@ -94,7 +95,7 @@ const AddWorkoutForm = () => {
             errors={errors}
           />
 
-          <DynamicInputField
+          <DynamicTextAreaField
             className="sm:min-w-[400px]"
             id="description"
             type="text"

@@ -445,6 +445,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
+import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 
 const EditWorkoutForm = ({ workoutId }) => {
   const [exercises, setExercises] = useState([]);
@@ -583,7 +584,7 @@ const EditWorkoutForm = ({ workoutId }) => {
             required
           />
 
-          <DynamicInputField
+          <DynamicTextAreaField
             className="w-full"
             id="description"
             type="text"

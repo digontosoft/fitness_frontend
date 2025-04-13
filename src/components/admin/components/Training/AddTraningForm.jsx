@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
 import { Trash } from "lucide-react";
+import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 
 const AddTrainingForm = () => {
   const [trainingExercises, setTrainingExercises] = useState([]);
@@ -65,7 +66,7 @@ const AddTrainingForm = () => {
     const isAnyFieldEmpty = selectedTrainingExercises.some((workout) =>
       workout.exercises.some(
         (exercise) =>
-          exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+          exercise.sets === "" || exercise.reps === "" || !exercise.manipulation
       )
     );
 
@@ -211,8 +212,8 @@ const AddTrainingForm = () => {
         workout.exercises.push({
           exercise_id: exercise._id,
           name: exercise.name,
-          sets: 0,
-          reps: 0,
+          sets: "",
+          reps: "",
           manipulation: exercise.manipulation || "",
         });
       });
@@ -279,7 +280,7 @@ const AddTrainingForm = () => {
             errors={errors}
           />
 
-          <DynamicInputField
+          <DynamicTextAreaField
             className="sm:min-w-[350px]"
             id="description"
             type="text"
