@@ -107,7 +107,7 @@ const Home = () => {
 
         {/* Tasks Section */}
         <div className="max-w-3xl mx-auto justify-center py-10" dir="ltr">
-          <div className="pt-16 sm:pt-20 md:pt-24 flex flex-wrap justify-center items-center w-full">
+          <div className="pt-10 sm:pt-20 md:pt-24 flex flex-wrap justify-center items-center w-full">
             <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A2533] text-center w-full">
               משימות
             </h1>

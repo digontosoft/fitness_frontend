@@ -70,37 +70,39 @@ export const adminLink = [
   },
   {
     _id: 2,
-    title: "Trainee Users List",
+    title: "ניהול מתאמנים קיימים",
     link: "dashboard/trainee-users-list",
     icon: NutrationGuide,
   },
   {
     _id: 3,
-    title: "Training List",
-    link: "dashboard/training-list",
-    icon: NutrationGuide,
-  },
-  {
-    _id: 4,
-    title: "Nutrition List",
+    title: "ניהול מדריכי תזונה",
     link: "dashboard/nutrition-lists",
     icon: NutrationGuide,
   },
   {
-    _id: 5,
-    title: "Workout List",
-    link: "/dashboard/workout-list",
-    icon: NutrationGuide,
-  },
-  {
-    _id: 6,
-    title: "Approve Email",
+    _id: 4,
+    title: "אישור מתאמנים חדשים",
     link: "/dashboard/approve-email",
     icon: NutrationGuide,
   },
   {
+    _id: 5,
+    title: "נהל תוכניות אימון",
+    link: "dashboard/training-list",
+    icon: NutrationGuide,
+  },
+
+  {
+    _id: 6,
+    title: "נהל אימונים",
+    link: "/dashboard/workout-list",
+    icon: NutrationGuide,
+  },
+
+  {
     _id: 7,
-    title: "Exercise List",
+    title: "נהל תרגילים",
     link: "/dashboard/exercise-list",
     icon: NutrationGuide,
   },

@@ -43,7 +43,7 @@ const EditTrainingForm = () => {
     const isAnyFieldEmpty = training.workouts?.some((workout) =>
       workout.exercises.some(
         (exercise) =>
-          exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+          exercise.sets === "" || exercise.reps === "" || !exercise.manipulation
       )
     );
 
@@ -118,8 +118,8 @@ const EditTrainingForm = () => {
                 {
                   _id: newExercise._id,
                   exercise_id: newExercise,
-                  sets: 0,
-                  reps: 0,
+                  sets: "",
+                  reps: "",
                   manipulation: "",
                 },
               ],
