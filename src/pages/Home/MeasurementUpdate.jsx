@@ -84,8 +84,6 @@ const MeasurementUpdate = () => {
     }
   }, [getMesurement]);
 
-  console.log("getMesurement", getMesurement);
-
   const onSubmit = async (data) => {
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
@@ -178,7 +176,7 @@ const MeasurementUpdate = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto justify-center py-20" dir="rtl">
+    <div className="p-6 max-w-6xl mx-auto justify-center sm:py-20" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
           <DynamicInputField
@@ -204,10 +202,10 @@ const MeasurementUpdate = () => {
           <DynamicInputField
             id={Gender === "male" ? "chest" : "butt"}
             type="number"
-            label={Gender === "male" ? "חָזֶה" : "קַת"}
+            label={Gender === "male" ? "חָזֶה" : "ישבן"}
             placeholder="הזן נתונים כאן..."
             register={register}
-            validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
+            validation={{ required: Gender === "male" ? "חָזֶה" : "ישבן" }}
             errors={errors}
             watch={watch}
           />
@@ -258,7 +256,7 @@ const MeasurementUpdate = () => {
             type="button"
             className="underline text-black text-xl font-bold hover:text-blue-600"
           >
-            לצפייה במדריך המדדים
+            לצפייה במדריך צילום תמונות
           </button>
         </Link>
 

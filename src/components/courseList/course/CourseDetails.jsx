@@ -61,10 +61,10 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
             <p className="text-sm text-gray-600 text-center px-4">
               {exerciseData?.description}
             </p>
-            <p className="text-sm text-gray-600 text-center px-4">
+            <p className="text-sm text-gray-600 text-center px-4" dir="rtl">
               {exerciseData?.body_part} : איזור בגוף
             </p>
-            <p className="text-sm text-gray-600 text-center px-4">
+            <p className="text-sm text-gray-600 text-center px-4" dir="rtl">
               {exerciseData?.equipment} : ציוד
             </p>
           </div>

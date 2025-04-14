@@ -1,6 +1,5 @@
 import Title from "@/components/measurements/Tilte";
 import HeroVideo from "@/components/startTraining/HeroVideo";
-import React from "react";
 import MeasurementUpdate from "../MeasurementUpdate";
 
 const UpdateMesurement = () => {
@@ -14,7 +13,7 @@ const UpdateMesurement = () => {
             : "https://www.youtube.com/watch?v=uUo9Bw5ytrI"
         }
       />
-      <Title title="הזנת מדדים אישית" />
+      <Title title="הזנת מדדים אישית" className="py-0" />
       <MeasurementUpdate />
     </div>
   );
