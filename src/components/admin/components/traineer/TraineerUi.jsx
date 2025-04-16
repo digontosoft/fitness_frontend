@@ -105,16 +105,21 @@ const TraineerUi = ({ userId }) => {
         </span>
       </div>
       <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-4 md:gap-5 max-w-5xl mx-auto">
-        <AdminArrowCard
-          image={ArrowBurger}
-          title="ניהול תפריטי תזונה אישיים"
-          link={`/dashboard/nutrition-lists/${userId}`}
-        />
-        <AdminArrowCard
-          image={ArrowDumbel}
-          title="ניהול תוכנית אימון"
-          link={`/dashboard/assigned-training-list/${userId}`}
-        />
+        <div className="w-[342px]">
+          <AdminArrowCard
+            image={ArrowBurger}
+            title="ניהול תפריטי תזונה אישיים"
+            link={`/dashboard/nutrition-lists/${userId}`}
+          />
+        </div>
+        <div className="w-[342px]">
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title="ניהול תוכנית אימון"
+            link={`/dashboard/assigned-training-list/${userId}`}
+            className="w-[342px]"
+          />
+        </div>
         <AdminArrowCardWithoutImage
           title="לדוח מדדים אישי"
           link={`/dashboard/mesurements-watch?userId=${userId}`}
