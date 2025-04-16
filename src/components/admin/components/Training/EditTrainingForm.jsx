@@ -398,7 +398,7 @@ const EditTrainingForm = () => {
                     </div>
                   </div>
                   <Trash
-                    className="cursor-pointer text-red-600"
+                    className="cursor-pointer text-red-600 size-9"
                     onClick={() => handleRemoveExercise(workout._id, ex._id)}
                   />
                 </div>
