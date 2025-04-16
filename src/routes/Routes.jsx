@@ -58,11 +58,13 @@ import FoodDairy from "@/pages/foodDairy/FoodDairy";
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 import EditExercise from "@/components/courseList/EditExercise";
 import CustomizeWorkout from "@/components/courseList/CustomizeWorkout";
+import ScrollTop from "@/shared/ScrollTop";
 
 export const routes = createBrowserRouter([
   {
     element: (
       <ProtectedRoutes>
+        <ScrollTop />
         <Main />
       </ProtectedRoutes>
     ),
@@ -177,6 +179,7 @@ export const routes = createBrowserRouter([
         path: "/dashboard",
         element: (
           <UserRoleProtectedRoutes allowedRoles={["admin"]}>
+            <ScrollTop />
             <Outlet />
           </UserRoleProtectedRoutes>
         ),
@@ -324,7 +327,7 @@ export const routes = createBrowserRouter([
   {
     element: (
       <ProtectedRoutes>
-        {" "}
+        <ScrollTop />
         <Main />
       </ProtectedRoutes>
     ),

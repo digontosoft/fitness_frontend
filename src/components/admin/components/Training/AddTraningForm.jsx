@@ -265,7 +265,7 @@ const AddTrainingForm = () => {
     }
   };
   return (
-    <div className="py-20" dir="rtl">
+    <div className="sm:py-20 py-6" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4">
           <DynamicInputField
@@ -316,7 +316,7 @@ const AddTrainingForm = () => {
                     <h4 className="font-medium">{exercise.name}</h4>
                     <div className="flex items-center justify-center gap-2 mt-2">
                       <Trash
-                        className="text-red-500 cursor-pointer"
+                        className="text-red-500 cursor-pointer size-9"
                         onClick={() =>
                           handleRemoveExercise(workoutIndex, exerciseIndex)
                         }

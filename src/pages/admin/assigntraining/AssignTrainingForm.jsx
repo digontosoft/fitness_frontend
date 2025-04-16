@@ -349,7 +349,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     }
   };
   return (
-    <div className="py-20  " dir="rtl">
+    <div className="sm:py-20 py-6" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* <Select
           className="rounded-lg h-12 sm:min-w-[400px] w-full"

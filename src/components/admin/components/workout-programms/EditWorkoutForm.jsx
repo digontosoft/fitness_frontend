@@ -570,7 +570,7 @@ const EditWorkoutForm = ({ workoutId }) => {
     );
   });
   return (
-    <div className="py-20" dir="rtl">
+    <div className="sm:py-20 py-6" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4">
           <DynamicInputField

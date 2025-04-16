@@ -94,7 +94,7 @@ const Home = () => {
           handleSubmit={handleSubmit}
         />
       )}
-      <div className="flex flex-col items-center justify-center pt-20">
+      <div className="flex flex-col items-center justify-center pt-10">
         <h1 className="sm:text-4xl text-2xl font-bold">
           {user?.firstName} {user?.lastName}
         </h1>

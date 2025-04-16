@@ -82,7 +82,7 @@ const EditExercise = () => {
   return (
     <div
       dir="rtl"
-      className="w-full bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753] min-h-screen border-b-8 border-white py-12"
+      className="w-full bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753] min-h-screen border-b-8 border-white sm:py-12 py-6"
     >
       <div className="flex flex-col justify-center items-center max-w-6xl mx-auto bg-white rounded-3xl p-2 md:p-10">
         <h1 className="text-2xl font-semibold">{workData?.task_name}</h1>
