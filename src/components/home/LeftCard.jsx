@@ -9,12 +9,6 @@ import { Link } from "react-router-dom";
 
 const LeftCard = ({ data }) => {
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
-
-  console.log("user ", userDetails);
-
-  // const arm=
-  console.log("M data", data);
-
   const leftArm = Number(data?.arml) || 0;
   const rightArm = Number(data?.armr) || 0;
   const total = leftArm + rightArm;
@@ -51,7 +45,8 @@ const LeftCard = ({ data }) => {
             </div>
             <div className="flex items-center gap-4">
               <p className="text-lg text-white">
-                חזה:{userDetails.gender === "male" ? data?.chest : data?.butt}
+                {userDetails.gender === "male" ? "חזה" : "ישבן"}:
+                {userDetails.gender === "male" ? data?.chest : data?.butt}
               </p>
               <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
                 <img src={chest} alt="" className="object-cover" />

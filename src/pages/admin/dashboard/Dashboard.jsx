@@ -56,8 +56,6 @@ const Dashboard = () => {
   return (
     <Container className="min-h-[72vh] my-10 sm:px-0 px-4">
       <div className="flex flex-col items-center justify-center space-y-6 px-4">
-        {/* <Title tilte="ניהול מתאמנים" className="py-0" /> */}
-
         <div className="sm:flex sm:flex-row flex-col items-center justify-center gap-5 sm:space-y-0 space-y-4">
           <div className="flex  items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 bg-custom-radial rounded-full">
@@ -79,7 +77,7 @@ const Dashboard = () => {
         </div>
 
         <Select
-          className="rounded-lg h-12 w-full min-w-80"
+          className="rounded-lg h-12 w-full min-w-[368px]"
           direction="rtl"
           valueField="_id"
           labelField="firstName"

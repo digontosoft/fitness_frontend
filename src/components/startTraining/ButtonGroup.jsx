@@ -1,10 +1,15 @@
-import React from "react";
 import { Button } from "../ui/button";
 
-const ButtonGroup = ({ onNext, onPrevious, showPrevious, isFinished,disabled }) => {
+const ButtonGroup = ({
+  onNext,
+  onPrevious,
+  showPrevious,
+  isFinished,
+  disabled,
+}) => {
   return (
     <div dir="rtl">
-      <div className="flex gap-2 flex-row-reverse md:gap-6 mt-20 justify-center items-center">
+      <div className="flex gap-2 flex-row-reverse md:gap-6 sm:mt-20 justify-center items-center">
         <Button
           onClick={onNext}
           disabled={disabled}
