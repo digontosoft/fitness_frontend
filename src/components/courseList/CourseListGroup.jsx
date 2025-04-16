@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import CourseCart from "./CourseCart";
 import axios from "axios";
@@ -123,17 +121,17 @@ export const CourseListGroup = () => {
 
   return (
     <div className="max-w-6xl mx-auto pb-10 px-2">
-      <div className="flex items-center justify-center gap-10 md:flex-row flex-col-reverse" >
+      <div className="flex items-center justify-center gap-10 md:flex-row flex-col-reverse">
         <input
           type="text"
           placeholder="סנן לפי שם"
-          className="w-40 rounded-sm border-blue-500 h-12 border-2 p-2 focus:border-blue-400"
+          className="min-w-[350px] rounded-sm border-blue-500 h-12 border-2 p-2 focus:border-blue-400"
           dir="rtl"
           onChange={(e) => setSearchValue(e.target.value)}
         />
         <Select
           direction="rtl"
-          className="min-w-40  rounded-lg h-12 border-2 p-2"
+          className="min-w-[350px] rounded-lg h-12 border-2 p-2"
           placeholder="סנן לפי חלק בגוף"
           options={bodyPartOptions}
           onChange={(e) => setBodyPart(e[0].value)}
@@ -141,7 +139,7 @@ export const CourseListGroup = () => {
         <Select
           direction="rtl"
           options={equipmentOptions}
-          className="min-w-40 rounded-lg h-12 border-2 p-2"
+          className="min-w-[350px] rounded-lg h-12 border-2 p-2"
           placeholder="סנן לפי ציוד"
           onChange={(e) => setEquipment(e[0].value)}
         />

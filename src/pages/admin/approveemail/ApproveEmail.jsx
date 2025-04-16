@@ -5,7 +5,7 @@ import Container from "@/shared/Container";
 const ApproveEmail = () => {
   return (
     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
-      <Title title="Approved Mail List" />
+      {/* <Title title="כתובות מייל מאושרות" className="py-0" /> */}
       <ApproveMailTable />
     </Container>
   );
