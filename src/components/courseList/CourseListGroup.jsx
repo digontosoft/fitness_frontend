@@ -125,27 +125,29 @@ export const CourseListGroup = () => {
         <input
           type="text"
           placeholder="סנן לפי שם"
-          className="min-w-[350px] rounded-sm border-blue-500 h-12 border-2 p-2 focus:border-blue-400"
+          className="min-w-[310px] rounded-sm border-blue-500 h-12 border-2 p-2 focus:border-blue-400"
           dir="rtl"
           onChange={(e) => setSearchValue(e.target.value)}
         />
-        <Select
-          direction="rtl"
-          className="min-w-[350px] rounded-lg h-12 border-2 p-2"
-          placeholder="סנן לפי חלק בגוף"
-          options={bodyPartOptions}
-          onChange={(e) => setBodyPart(e[0].value)}
-        />
-        <Select
-          direction="rtl"
-          options={equipmentOptions}
-          className="min-w-[350px] rounded-lg h-12 border-2 p-2"
-          placeholder="סנן לפי ציוד"
-          onChange={(e) => setEquipment(e[0].value)}
-        />
+        <div className="flex sm:gap-16 gap-4 w-full items-center justify-center">
+          <Select
+            direction="rtl"
+            className="sm:min-w-[310px] rounded-lg h-12 border-2 p-2"
+            placeholder="סנן לפי חלק בגוף"
+            options={bodyPartOptions}
+            onChange={(e) => setBodyPart(e[0].value)}
+          />
+          <Select
+            direction="rtl"
+            options={equipmentOptions}
+            className="sm:min-w-[310px] rounded-lg h-12 border-2 p-2"
+            placeholder="סנן לפי ציוד"
+            onChange={(e) => setEquipment(e[0].value)}
+          />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 items-center justify-items-center gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 items-center justify-items-center gap-6">
         {exercises.map((exercise) => (
           <CourseCart
             key={exercise._id}

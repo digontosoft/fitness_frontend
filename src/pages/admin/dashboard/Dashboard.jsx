@@ -54,7 +54,7 @@ const Dashboard = () => {
   const traineeUsersLength = JSON.parse(localStorage.getItem("traineeUsers"));
   const recipeUsersLength = JSON.parse(localStorage.getItem("recipeUsers"));
   return (
-    <Container className="min-h-[72vh] my-10 sm:px-0 px-4">
+    <Container className="min-h-[72vh] sm:my-10 sm:px-0 px-4">
       <div className="flex flex-col items-center justify-center space-y-6 px-4">
         <div className="sm:flex sm:flex-row flex-col items-center justify-center gap-5 sm:space-y-0 space-y-4">
           <div className="flex  items-center gap-3">

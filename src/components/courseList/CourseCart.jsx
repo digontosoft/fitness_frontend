@@ -4,7 +4,7 @@ import icon from "../../assets/image/courseList/Bicep.png";
 const CourseCart = ({ exercise, handleOpen }) => {
   return (
     <div
-      className="md:w-52 w-48 shadow-xl rounded-2xl p-3 mt-8 cursor-pointer"
+      className="w-[310px] sm:w-56 shadow-xl rounded-2xl p-3 mt-8 cursor-pointer"
       onClick={() => handleOpen(exercise._id)}
     >
       <div

@@ -328,9 +328,11 @@ const StartTraining = () => {
     <div className="px-2">
       <CommonContainer>
         <>
-          <Title title={workData?.task_name} />
           <Title title={currentExercise?.exercise_id?.name} />
-          <HeroVideo videoUrl={currentExercise?.exercise_id?.video_url} />
+          <HeroVideo
+            videoUrl={currentExercise?.exercise_id?.video_url}
+            className="mt-0 sm:mt-10"
+          />
           <CourseContent
             description={currentExercise?.exercise_id?.description}
           />

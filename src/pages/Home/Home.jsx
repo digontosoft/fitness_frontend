@@ -100,14 +100,14 @@ const Home = () => {
         </h1>
 
         {/* Cards Section */}
-        <div className="pt-10 sm:pt-16 md:pt-20 flex flex-col-reverse md:flex-row items-center justify-center gap-6 md:gap-10 w-full">
+        <div className="pt-5 sm:pt-16 md:pt-20 flex flex-col-reverse md:flex-row items-center justify-center gap-6 md:gap-10 w-full">
           <LeftCard data={getMesurement} className="w-full md:w-1/2" />
           <RightCard user={user} className="w-full md:w-1/2" />
         </div>
 
         {/* Tasks Section */}
-        <div className="max-w-3xl mx-auto justify-center py-10" dir="ltr">
-          <div className="pt-10 sm:pt-20 md:pt-24 flex flex-wrap justify-center items-center w-full">
+        <div className="max-w-3xl mx-auto justify-center sm:py-10" dir="ltr">
+          <div className="pt-10 sm:pt-10 flex flex-wrap justify-center items-center w-full">
             <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A2533] text-center w-full">
               משימות
             </h1>

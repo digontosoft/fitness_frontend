@@ -25,7 +25,6 @@ const RecipeBook = () => {
 
   return (
     <div>
-      <WorkOutListBaground bgImg={RecipeBookBg} />
       {user?.userType === "recipe"
         ? recipeBook
             .filter((item) => item.type === "trainer")

@@ -176,7 +176,10 @@ const MeasurementUpdate = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto justify-center sm:py-20" dir="rtl">
+    <div
+      className="px-4 sm:px-0 max-w-6xl mx-auto justify-center sm:py-20"
+      dir="rtl"
+    >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
           <DynamicInputField

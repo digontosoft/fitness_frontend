@@ -32,7 +32,7 @@ const ExcersizeInput = ({
   };
   // console.log("exercise data", exerciseData);
   return (
-    <div className="w-96 py-20" dir="rtl">
+    <div className="w-96 sm:py-20 py-6" dir="rtl">
       <div className="flex flex-row-reverse text-[#0A2533] text-xl font-bold justify-between items-center">
         <p className="sm:ml-[84px] ml-[100px]">סט אחרון:</p>
         <p>יעד:</p>
@@ -41,9 +41,11 @@ const ExcersizeInput = ({
         <form className="flex flex-col gap-6">
           {/* Input 1 */}
           <div className="flex justify-between  w-80">
-            <p className="text-xs font-bold text-[#000000] flex">
+            <p className="text-base font-bold text-[#000000] flex">
               סטים:
-              <span className="text-xs font-normal">{exerciseData?.sets}</span>
+              <span className="text-base font-normal">
+                {exerciseData?.sets}
+              </span>
             </p>
             <div className="flex flex-col relative">
               <label
@@ -72,9 +74,11 @@ const ExcersizeInput = ({
 
           {/* Input 2 */}
           <div className="flex justify-between  w-80">
-            <p className="text-xs font-bold text-[#000000] flex">
+            <p className="text-base font-bold text-[#000000] flex">
               חזרות:
-              <span className="text-xs font-normal">{exerciseData?.reps}</span>
+              <span className="text-base font-normal">
+                {exerciseData?.reps}
+              </span>
             </p>
             <div className="flex flex-col relative">
               <label
@@ -103,9 +107,9 @@ const ExcersizeInput = ({
 
           {/* Input 3 */}
           <div className="flex justify-between  w-80">
-            <p className="text-xs font-bold text-[#000000] flex">
+            <p className="text-base font-bold text-[#000000] flex">
               מניפולציה:
-              <span className="text-xs font-normal">
+              <span className="text-base font-normal">
                 :{exerciseData?.manipulation}
               </span>
             </p>

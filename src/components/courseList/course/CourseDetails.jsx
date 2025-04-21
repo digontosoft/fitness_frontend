@@ -54,8 +54,11 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
           <p className="text-center text-gray-500">Loading...</p>
         ) : (
           <div className="flex flex-col items-center gap-4">
-            <div className="w-full aspect-video rounded-lg">
-              <HeroVideo videoUrl={exerciseData?.video_url} />
+            <div className="w-full">
+              <HeroVideo
+                videoUrl={exerciseData?.video_url}
+                className="sm:mt-10 mt-0"
+              />
             </div>
             <h2 className="text-lg font-bold">{exerciseData?.name}</h2>
             <p className="text-sm text-gray-600 text-center px-4">

@@ -45,7 +45,11 @@ const Navbar = () => {
     <nav className="bg-transparent md:bg-white shadow-md ">
       <div className="container mx-auto flex items-center justify-between p-4">
         {/* Logo */}
-        <a href="" className="flex items-center space-x-2" onClick={logout}>
+        <a
+          href=""
+          className="hidden sm:flex items-center space-x-2"
+          onClick={logout}
+        >
           <span className="text-xl font-bold text-gray-800" dir="rtl">
             התנתק
           </span>
@@ -359,7 +363,7 @@ const Navbar = () => {
             )}
           </div>
           <a href="" className="flex items-center space-x-2" onClick={logout}>
-            <span className="text-xl font-bold text-gray-800" dir="rtl">
+            <span className="font-semibold text-gray-800" dir="rtl">
               התנתק
             </span>
             <LogOut className="w-5 h-5" />
