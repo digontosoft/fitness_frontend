@@ -150,12 +150,12 @@ const AddExercise = ({
 
   return (
     <div className="border p-2 flex flex-col items-center justify-center space-y-4 rounded-md">
-      <div className="flex items-center justify-center bg-customBg py-4 w-1/2 h-5 rounded-md text-white">
+      <div className="flex items-center justify-center bg-customBg py-1 w-auto h-auto rounded-md text-white px-2">
         <p className="text-center">{exercise?.name}</p>
       </div>
       <div className="grid grid-cols-3 gap-4 sm:w-[400px]">
         <div className="flex flex-col space-y-2">
-          <label htmlFor={`sets-${exercise?.name}`}>Sets</label>
+          <label htmlFor={`sets-${exercise?.name}`}>סטים</label>
           <input
             id={`sets-${exercise?.name}`}
             type="number"
@@ -166,7 +166,7 @@ const AddExercise = ({
           />
         </div>
         <div className="flex flex-col space-y-2">
-          <label htmlFor={`reps-${exercise?.name}`}>Reps</label>
+          <label htmlFor={`reps-${exercise?.name}`}>חזרות</label>
           <input
             id={`reps-${exercise?.name}`}
             type="number"
@@ -177,7 +177,7 @@ const AddExercise = ({
           />
         </div>
         <div className="flex flex-col space-y-2">
-          <label htmlFor={`manipulation-${exercise?.name}`}>Manipulation</label>
+          <label htmlFor={`manipulation-${exercise?.name}`}>מניפולציה</label>
           <input
             id={`manipulation-${exercise?.name}`}
             type="text"

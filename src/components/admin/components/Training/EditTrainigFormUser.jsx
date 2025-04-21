@@ -84,8 +84,8 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       currentWorkout.exercises.push({
         _id: exercise._id,
         name: exercise.name,
-        sets: 0,
-        reps: 0,
+        sets: "",
+        reps: "",
         manipulation: "",
       });
     });
@@ -428,25 +428,12 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                       handleNewExerciseSelection(selected, workoutIndex)
                     }
                   /> */}
+
                   <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      סנן לפי שם תרגיל
-                    </label>
-                    <Select
-                      className="rounded-lg h-12 w-auto"
-                      direction="rtl"
-                      options={exerciseList}
-                      valueField="_id"
-                      labelField="name"
-                      placeholder="בחר"
-                      onChange={(selected) =>
-                        handleNewExerciseSelection(selected, workoutIndex)
-                      }
-                      searchBy="name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      dir="rtl"
+                    >
                       אזור בגוף
                     </label>
                     <Select
@@ -463,7 +450,10 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                     />
                   </div>
                   <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      dir="rtl"
+                    >
                       ציוד
                     </label>
                     <Select
@@ -477,6 +467,26 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                         handleNewExerciseSelection(selected, workoutIndex)
                       }
                       searchBy="equipment"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      dir="rtl"
+                    >
+                      סנן לפי שם תרגיל
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      options={exerciseList}
+                      valueField="_id"
+                      labelField="name"
+                      placeholder="בחר"
+                      onChange={(selected) =>
+                        handleNewExerciseSelection(selected, workoutIndex)
+                      }
+                      searchBy="name"
                     />
                   </div>
                 </div>

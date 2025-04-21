@@ -486,23 +486,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         }
                         searchBy="name"
                       /> */}
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          סנן לפי שם תרגיל
-                        </label>
-                        <Select
-                          className="rounded-lg h-12 w-auto"
-                          direction="rtl"
-                          options={exercise}
-                          valueField="_id"
-                          labelField="name"
-                          placeholder="בחר"
-                          onChange={(selected) =>
-                            handleNewExerciseSelection(selected, workoutIndex)
-                          }
-                          searchBy="name"
-                        />
-                      </div>
+
                       <div>
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                           אזור בגוף
@@ -535,6 +519,23 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                             handleNewExerciseSelection(selected, workoutIndex)
                           }
                           searchBy="equipment"
+                        />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          סנן לפי שם תרגיל
+                        </label>
+                        <Select
+                          className="rounded-lg h-12 w-auto"
+                          direction="rtl"
+                          options={exercise}
+                          valueField="_id"
+                          labelField="name"
+                          placeholder="בחר"
+                          onChange={(selected) =>
+                            handleNewExerciseSelection(selected, workoutIndex)
+                          }
+                          searchBy="name"
                         />
                       </div>
                     </div>

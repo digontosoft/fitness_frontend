@@ -335,7 +335,6 @@ const AddTrainingForm = () => {
                               e.target.value
                             )
                           }
-                          placeholder="Sets"
                         />
                       </div>
                       <div>
@@ -352,7 +351,6 @@ const AddTrainingForm = () => {
                               e.target.value
                             )
                           }
-                          placeholder="Reps"
                         />
                       </div>
                       <div>
@@ -369,7 +367,6 @@ const AddTrainingForm = () => {
                               e.target.value
                             )
                           }
-                          placeholder="Manipulation"
                         />
                       </div>
                     </div>
@@ -388,21 +385,7 @@ const AddTrainingForm = () => {
                     multi
                     onChange={handleNewExerciseSelection}
                   /> */}
-                  <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      סנן לפי שם תרגיל
-                    </label>
-                    <Select
-                      className="rounded-lg h-12 w-auto"
-                      direction="rtl"
-                      options={exerciseList}
-                      valueField="_id"
-                      labelField="name"
-                      placeholder="בחר"
-                      onChange={handleNewExerciseSelection}
-                      searchBy="name"
-                    />
-                  </div>
+
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       אזור בגוף
@@ -431,6 +414,21 @@ const AddTrainingForm = () => {
                       placeholder="סנן לפי ציוד"
                       onChange={handleNewExerciseSelection}
                       searchBy="equipment"
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      סנן לפי שם תרגיל
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      options={exerciseList}
+                      valueField="_id"
+                      labelField="name"
+                      placeholder="בחר"
+                      onChange={handleNewExerciseSelection}
+                      searchBy="name"
                     />
                   </div>
                 </div>

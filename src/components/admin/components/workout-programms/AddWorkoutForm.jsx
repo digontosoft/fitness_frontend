@@ -105,23 +105,7 @@ const AddWorkoutForm = () => {
             validation={{ required: "Workout Description is required" }}
             errors={errors}
           />
-          <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              סנן לפי שם תרגיל
-            </label>
-            <Select
-              className="rounded-lg h-12 w-auto"
-              direction="rtl"
-              options={
-                selectedExercises?.length > 0 ? selectedExercises : exercises
-              }
-              valueField="_id"
-              labelField="name"
-              placeholder="סנן לפי שם תרגיל"
-              onChange={(values) => setSelectedExercises(values)}
-              searchBy="name"
-            />
-          </div>
+
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               אזור בגוף
@@ -154,6 +138,23 @@ const AddWorkoutForm = () => {
               placeholder="סנן לפי ציוד"
               onChange={(values) => setSelectedExercises(values)}
               searchBy="equipment"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              סנן לפי שם תרגיל
+            </label>
+            <Select
+              className="rounded-lg h-12 w-auto"
+              direction="rtl"
+              options={
+                selectedExercises?.length > 0 ? selectedExercises : exercises
+              }
+              valueField="_id"
+              labelField="name"
+              placeholder="סנן לפי שם תרגיל"
+              onChange={(values) => setSelectedExercises(values)}
+              searchBy="name"
             />
           </div>
           {selectedExercises.map((exercise) => (
