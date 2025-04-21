@@ -23,6 +23,19 @@ const MeasurementTracking = () => {
     fetchData();
   }, [userId?._id]);
 
+  const sortOrder = [
+    "מותן",
+    "חזה",
+    "ירך ימין",
+    "ירך שמאלה",
+    "זרוע ימין",
+    "זרוע שמאל",
+  ];
+
+  const sortedData = [...data].sort(
+    (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
+  );
+
   return (
     <div>
       <Title title={"מעקב מדדים"} />
@@ -30,7 +43,7 @@ const MeasurementTracking = () => {
         className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-20 pt-10 p-4"
         dir="rtl"
       >
-        {data.map((data) => (
+        {sortedData.map((data) => (
           <div
             key={data._id}
             dir="rtl"

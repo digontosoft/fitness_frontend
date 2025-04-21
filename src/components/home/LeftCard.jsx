@@ -31,7 +31,7 @@ const LeftCard = ({ data }) => {
         <div className="w-full flex justify-center items-center mt-6">
           <div className="grid grid-cols-2 gap-6 justify-items-center items-center">
             <div className="flex items-center gap-4">
-              <p className="text-lg text-white">זרוע:{avg}</p>
+              <p className="text-lg text-white">ידיים:{avg}</p>
               <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
                 <img src={muscle} alt="" className="object-cover" />
               </div>

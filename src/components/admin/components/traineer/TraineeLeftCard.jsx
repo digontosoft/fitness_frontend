@@ -98,9 +98,7 @@ import hips from "@/assets/image/thigh.png";
 import chest from "@/assets/image/chest.png";
 const TraineeLeftCard = ({ userId }) => {
   const [measurementData, setMesurementData] = useState({});
-
-  const userType = JSON.parse(localStorage.getItem("userInfo"));
-  console.log("userType", userType.gender);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     if (!userId) return;
@@ -108,18 +106,31 @@ const TraineeLeftCard = ({ userId }) => {
     const fetchMeasurement = async () => {
       try {
         const res = await axios.get(`${base_url}/measurement/${userId}`);
-        // console.log("measurement data Fatched:", res);
         if (res.status === 200) {
           setMesurementData(res.data.data);
-          console.log("measurement data Fatched:", res.data.data);
         }
       } catch (error) {
-        console.error("measurement data not Fatched");
+        console.error("measurement data not Fatched", error);
       }
     };
     fetchMeasurement();
   }, [userId]);
-  console.log("measurementData", measurementData);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchMeasurement = async () => {
+      try {
+        const res = await axios.get(`${base_url}/getUser/${userId}`);
+        if (res.status === 200) {
+          setUser(res.data.data);
+        }
+      } catch (error) {
+        console.error("measurement data not Fatched", error);
+      }
+    };
+    fetchMeasurement();
+  }, [userId]);
   const leftArm = Number(measurementData?.arml) || 0;
   const rightArm = Number(measurementData?.armr) || 0;
   const total = leftArm + rightArm;
@@ -128,7 +139,6 @@ const TraineeLeftCard = ({ userId }) => {
   const rightThigh = Number(measurementData?.thighr) || 0;
   const totalThigh = leftThigh + rightThigh;
   const avgThigh = Math.floor(totalThigh / 2);
-  console.log("userType", userType.gender);
 
   return (
     <div
@@ -140,7 +150,7 @@ const TraineeLeftCard = ({ userId }) => {
         <div className="grid grid-cols-2 gap-6 justify-items-center items-center">
           <div className="flex items-center gap-4">
             <p className="text-lg text-white" dir="rtl">
-              זרוע: {avg}
+              ידיים: {avg}
             </p>
             <div className="h-8 w-8 bg-[#D6D6D6] rounded-md flex justify-center items-center">
               <img src={muscle} alt="" className="object-cover" />
@@ -157,8 +167,8 @@ const TraineeLeftCard = ({ userId }) => {
           </div>
           <div className="flex items-center gap-4">
             <p className="text-lg text-white" dir="rtl">
-              <span>{userType.gender === "male" ? "חָזֶה" : "ישבן"}</span>:{" "}
-              {userType.gender === "male"
+              <span>{user.gender === "male" ? "חָזֶה" : "ישבן"}</span>:{" "}
+              {user.gender === "male"
                 ? measurementData?.chest
                 : measurementData?.butt}
             </p>
