@@ -1,6 +1,6 @@
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -92,32 +92,32 @@ const EditExercise = () => {
             key={item._id}
             className="w-full bg-gray-100 p-4 rounded-xl mb-4 shadow mt-4"
           >
-            <h2 className="text-lg font-semibold text-gray-800">
+            <h2 className="text-lg text-center font-semibold text-gray-800">
               {item.exercise_id?.name || "Exercise"}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-              <div className="flex items-center justify-between md:justify-center gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-items-center mt-2">
+              <div className="flex items-center  md:justify-center gap-3">
                 <label>סטים:</label>
                 <input
                   type="number"
                   value={item.sets}
                   onChange={(e) => handleChange(index, "sets", e.target.value)}
                   placeholder="Sets"
-                  className="p-2 rounded-lg border"
+                  className="p-2 rounded-lg border mr-[30px] sm:mr-0"
                 />
               </div>
-              <div className="flex items-center justify-between md:justify-center gap-3">
+              <div className="flex items-center  md:justify-center gap-3">
                 <label>חזרות:</label>
                 <input
                   type="number"
                   value={item.reps}
                   onChange={(e) => handleChange(index, "reps", e.target.value)}
                   placeholder="Reps"
-                  className="p-2 rounded-lg border"
+                  className="p-2 rounded-lg border mr-6 sm:mr-0"
                 />
               </div>
-              <div className="flex items-center justify-between md:justify-center gap-3">
-                <label>מָנִיפּוּלָצִיָה:</label>
+              <div className="flex items-center  md:justify-center gap-3">
+                <label>מניפולציה:</label>
                 <input
                   type="text"
                   value={item.manipulation || ""}

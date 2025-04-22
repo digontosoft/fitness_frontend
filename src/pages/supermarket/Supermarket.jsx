@@ -27,7 +27,11 @@ const Supermarket = () => {
     <div className="">
       <WorkOutListBaground bgImg={course?.cover} />
       <div className="bg-white ">
-        <SuperTitle title={course?.title} description={course?.description} />
+        <SuperTitle
+          title={course?.title}
+          description={course?.description}
+          className="py-5"
+        />
         <CourseGroup course={course} />
       </div>
     </div>
