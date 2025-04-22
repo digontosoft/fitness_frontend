@@ -8,6 +8,7 @@ import { set } from "react-hook-form";
 import ExerciseDetails from "@/components/admin/components/ExerciseTable/ExerciseDetails";
 import CourseDetails from "./course/CourseDetails";
 import PaginationComp from "@/components/pagination";
+import { GoSearch } from "react-icons/go";
 
 // const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
 //   const pageNumbers = [];
@@ -122,13 +123,22 @@ export const CourseListGroup = () => {
   return (
     <div className="max-w-6xl mx-auto pb-10 px-2">
       <div className="flex items-center justify-center gap-10 md:flex-row flex-col-reverse">
-        <input
-          type="text"
-          placeholder="סנן לפי שם"
-          className="min-w-[310px] rounded-sm border-blue-500 h-12 border-2 p-2 focus:border-blue-400"
+        <div
+          className="flex justify-between items-center relative min-w-[310px] h-12"
           dir="rtl"
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
+        >
+          <input
+            type="search"
+            name=""
+            id=""
+            placeholder="סנן לפי שם"
+            onChange={(e) => setSearchValue(e.target.value)}
+            className="border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
+          />
+          <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+            <GoSearch className="text-white" />
+          </div>
+        </div>
         <div className="flex sm:gap-16 gap-4 w-full items-center justify-center">
           <Select
             direction="rtl"

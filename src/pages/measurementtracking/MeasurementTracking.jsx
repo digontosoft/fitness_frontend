@@ -40,7 +40,7 @@ const MeasurementTracking = () => {
     <div>
       <Title title={"מעקב מדדים"} />
       <div
-        className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-20 pt-10 p-4"
+        className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-20 sm:pt-10 p-4"
         dir="rtl"
       >
         {sortedData.map((data) => (

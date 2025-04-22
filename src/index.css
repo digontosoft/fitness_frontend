@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.react-dropdown-select {
+  border-radius: 10px !important;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;

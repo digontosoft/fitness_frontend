@@ -1,10 +1,9 @@
-import React from "react";
 import { twMerge } from "tailwind-merge";
 
 const Title = ({ title, className }) => {
   return (
     <div
-      className={`w-full flex justify-center items-center py-10 ${twMerge(
+      className={`w-full flex justify-center items-center sm:py-10 py-5 ${twMerge(
         className
       )}`}
     >

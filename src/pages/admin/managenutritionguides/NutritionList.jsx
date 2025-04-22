@@ -29,6 +29,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { GoSearch } from "react-icons/go";
 
 export function NutritionList() {
   const [sorting, setSorting] = useState([]);
@@ -66,7 +67,7 @@ export function NutritionList() {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-    תיאור תפריט תזונה
+          תיאור תפריט תזונה
           <ArrowUpDown />
         </Button>
       ),
@@ -168,15 +169,25 @@ export function NutritionList() {
   return (
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
-        <Input
-        dir="rtl"
-          placeholder="שם מסנן...."
-          value={table.getColumn("name")?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <div
+          className="flex justify-between items-center relative max-w-sm h-12"
+          dir="rtl"
+        >
+          <input
+            type="search"
+            name=""
+            id=""
+            placeholder="שם מסנן...."
+            value={table.getColumn("title")?.getFilterValue() || ""}
+            onChange={(event) =>
+              table.getColumn("title")?.setFilterValue(event.target.value)
+            }
+            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
+          />
+          <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+            <GoSearch className="text-white" />
+          </div>
+        </div>
         <Link
           to={
             user_id
@@ -288,7 +299,6 @@ export function NutritionList() {
           onClick={() => table.nextPage()}
         >
           הבא
-
         </Button>
       </div>
     </div>

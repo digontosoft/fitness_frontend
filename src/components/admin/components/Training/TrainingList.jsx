@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import TrainingDetails from "./TrainingDetails";
 import PaginationComp from "@/components/pagination";
+import { GoSearch } from "react-icons/go";
 
 export function TrainingList() {
   const [sorting, setSorting] = useState([]);
@@ -42,7 +43,7 @@ export function TrainingList() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedTraining, setSelectedTraining] = useState(null);
   const { state: userId } = useLocation();
-  const [search,setSearch] = useState("")
+  const [search, setSearch] = useState("");
 
   const columns = [
     {
@@ -105,7 +106,7 @@ export function TrainingList() {
                 to={`/dashboard/assign-training/${row.original._id}/${userId}`}
               >
                 <Button className="bg-customBg" size="sm">
-                שייך תוכנית אימון
+                  שייך תוכנית אימון
                 </Button>
               </Link>
             ) : (
@@ -138,15 +139,16 @@ export function TrainingList() {
     }
   };
 
-
-const [page,setPage] = useState(1);
-const [totalPages,setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${base_url}/training?page=${page}&&limit=10&&search=${search}`);
+        const response = await axios.get(
+          `${base_url}/training?page=${page}&&limit=10&&search=${search}`
+        );
         console.log("response:", response);
-        
+
         setTraining(response.data.data);
         setTotalPages(response.data.pagination.pages);
         setPage(response.data.pagination.page);
@@ -156,10 +158,9 @@ const [totalPages,setTotalPages] = useState(1);
       }
     };
     fetchData();
-  }, [page,search]);
+  }, [page, search]);
 
   console.log("Page:", totalPages);
-  
 
   const table = useReactTable({
     data: training,
@@ -178,18 +179,26 @@ const [totalPages,setTotalPages] = useState(1);
   return (
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
-        <Input
-        dir="rtl"
-          placeholder="שם מסנן...."
-          //value={table.getColumn("name")?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            setSearch(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <div
+          className="flex justify-between items-center relative max-w-sm h-12"
+          dir="rtl"
+        >
+          <input
+            type="search"
+            name=""
+            id=""
+            placeholder="שם מסנן...."
+            onChange={(e) => setSearch(e.target.value)}
+            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
+          />
+          <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+            <GoSearch className="text-white" />
+          </div>
+        </div>
         <Link to="/dashboard/add-training-program">
           <Button className="bg-customBg uppercase font-medium" size="sm">
-          צור תוכנית אימון       </Button>
+            צור תוכנית אימון{" "}
+          </Button>
         </Link>
       </div>
       <div className="rounded-md border">
@@ -259,7 +268,11 @@ const [totalPages,setTotalPages] = useState(1);
         </DialogContent>
       </Dialog>
       <div className="flex items-center justify-end space-x-2 py-4">
-      <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
+        <PaginationComp
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

@@ -9,8 +9,6 @@ export const NutritionCart = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [nutrationData, setNutrationData] = useState([]);
   const [loading, setLoading] = useState(true);
- 
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +35,7 @@ export const NutritionCart = () => {
   );
   console.log(filterData);
   return (
-    <div className="my-20">
+    <div className="sm:my-20">
       <div className="flex justify-center">
         <div
           className="flex justify-between items-center py-10 relative w-56 "
