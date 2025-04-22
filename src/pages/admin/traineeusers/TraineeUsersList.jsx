@@ -33,6 +33,7 @@ import {
 import UserDetails from "./UserDetails";
 import { toast } from "sonner";
 import PaginationComp from "@/components/pagination";
+import { GoSearch } from "react-icons/go";
 
 export function TraineeUsersLists() {
   const [users, setUsers] = useState([]);
@@ -40,10 +41,8 @@ export function TraineeUsersLists() {
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
-  //   const [exercise, setExercise] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [traineeUsers, setTraineeUsers] = useState([]);
   const [search, setSearch] = useState("");
   const columns = [
     {
@@ -215,16 +214,22 @@ export function TraineeUsersLists() {
   return (
     <div className="w-full" dir="ltr">
       <div className="flex items-center justify-between py-4">
-        <Input
+        <div
+          className="flex justify-between items-center relative max-w-sm h-12"
           dir="rtl"
-          placeholder="סנן לפי שם..."
-          // value={table.getColumn("firstName")?.getFilterValue() ?? ""}
-          // onChange={(event) =>
-          //   table.getColumn("firstName")?.setFilterValue(event.target.value)
-          // }
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
-        />
+        >
+          <input
+            type="search"
+            name=""
+            id=""
+            placeholder="סנן לפי שם..."
+            onChange={(e) => setSearch(e.target.value)}
+            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
+          />
+          <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+            <GoSearch className="text-white" />
+          </div>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>

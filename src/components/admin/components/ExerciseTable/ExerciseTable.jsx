@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import Select from "react-dropdown-select";
 import PaginationComp from "@/components/pagination";
+import { GoSearch } from "react-icons/go";
 
 const bodyPartOptions = [
   { label: "כל חלקי הגוף", value: "" },
@@ -211,7 +212,7 @@ export function ExerciseTable() {
     }
   };
 
-  const [page,setPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     const fetchExercise = async () => {
@@ -228,7 +229,7 @@ export function ExerciseTable() {
       }
     };
     fetchExercise();
-  }, [searchValue, body_part, equipment,page,totalPages]);
+  }, [searchValue, body_part, equipment, page, totalPages]);
 
   const table = useReactTable({
     data: exercise,
@@ -247,17 +248,26 @@ export function ExerciseTable() {
   return (
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
-        <input
-          type="text"
-          placeholder="סנן לפי שם"
-          className="w-40 rounded-sm border-blue-500 h-12 border-2 p-2 focus:border-blue-400"
+        <div
+          className="flex justify-between items-center relative min-w-40 h-12"
           dir="rtl"
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
+        >
+          <input
+            type="search"
+            name=""
+            id=""
+            placeholder="סנן לפי שם"
+            onChange={(e) => setSearchValue(e.target.value)}
+            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-40 h-12"
+          />
+          <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+            <GoSearch className="text-white" />
+          </div>
+        </div>
 
         <Select
           direction="rtl"
-          className="min-w-40 rounded-lg h-12 border-2 p-2"
+          className="min-w-40 h-12 border-2 p-2"
           placeholder="סנן לפי חלק בגוף"
           options={bodyPartOptions}
           onChange={(e) => setBodyPart(e[0].value)}
@@ -343,8 +353,11 @@ export function ExerciseTable() {
       </Dialog>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-        <PaginationComp currentPage={page} totalPages={totalPages} onPageChange={setPage}/>
-        
+        <PaginationComp
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );
