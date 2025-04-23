@@ -210,7 +210,7 @@ export function TrainingListForTrainee({ userId }) {
         />
         <Link to={`/dashboard/training-list`} state={userId}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
-            סנן לפי שם תוכנית אימון
+            שייך אימון למתאמן
           </Button>
         </Link>
       </div>

@@ -9,7 +9,7 @@ const FoodDairy = () => {
     <div className="min-h-screen">
       <WorkOutListBaground bgImg={foodDairy} />
       <Title title={"יומן אכילה"} />
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto sm:-mt-0 -mt-8">
         <FoodDairyForm />
       </div>
     </div>

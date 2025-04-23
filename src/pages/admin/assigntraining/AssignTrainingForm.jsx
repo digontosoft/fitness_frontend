@@ -421,7 +421,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                       />
 
                       <div className="flex flex-col gap-y-4">
-                        <label htmlFor="sets">Sets</label>
+                        <label htmlFor="sets">סטים</label>
                         <input
                           type="number"
                           value={exercise.sets}
@@ -437,7 +437,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         />
                       </div>
                       <div className="flex flex-col gap-y-4">
-                        <label htmlFor="reps">Reps</label>
+                        <label htmlFor="reps">חזרות</label>
                         <input
                           type="number"
                           value={exercise.reps}
@@ -453,7 +453,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         />
                       </div>
                       <div className="flex flex-col gap-y-4">
-                        <label htmlFor="manipulation">Manipulation</label>
+                        <label htmlFor="manipulation">מניפולציה</label>
                         <input
                           type="text"
                           value={exercise.manipulation}
@@ -587,7 +587,8 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
             }
             disabled={isButtonDisabled || isSupersetIncomplete}
           >
-            שייך תוכנית אימון
+            {/* שייך תוכנית אימון */}
+            שייך אימון למתאמן
           </Button>
         </div>
       </form>
