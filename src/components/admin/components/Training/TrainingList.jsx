@@ -106,7 +106,8 @@ export function TrainingList() {
                 to={`/dashboard/assign-training/${row.original._id}/${userId}`}
               >
                 <Button className="bg-customBg" size="sm">
-                  שייך תוכנית אימון
+                  {/* שייך תוכנית אימון */}
+                  שייך אימון למתאמן
                 </Button>
               </Link>
             ) : (

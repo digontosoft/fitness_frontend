@@ -7,7 +7,7 @@ const Title = ({ title, className }) => {
         className
       )}`}
     >
-      <span className="text-4xl font-bold leading-[46.8px] text-center text-textColor">
+      <span className="sm:text-4xl text-[28px] font-bold leading-[46.8px] text-center text-textColor">
         {title}
       </span>
     </div>

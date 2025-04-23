@@ -2,12 +2,12 @@ import React from "react";
 
 const LastExercise = ({ currentExercise }) => {
   return (
-    <div className="w-96 ">
+    <div className="sm:w-96 w-full">
       <p className="text-[#0A2533] text-xl font-bold text-start" dir="rtl">
         מה עשית פעם שעברה:
       </p>
       <div
-        className="w-96 flex flex-row-reverse gap-10 justify-between items-center bg-white shadow-md rounded-xl p-2 md:p-6"
+        className="sm:w-96 w-full flex flex-row-reverse gap-10 justify-between items-center bg-white shadow-md rounded-xl p-2 md:p-6"
         dir="rtl"
       >
         <div className="flex flex-col gap-2 text-[#000000] text-xs">

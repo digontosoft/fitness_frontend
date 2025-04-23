@@ -30,7 +30,7 @@ const FoodDairyForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg my-10"
+      className="max-w-lg mx-auto sm:p-6 p-4 bg-white shadow-md rounded-lg sm:my-10"
       dir="rtl"
     >
       <h2 className="text-2xl font-semibold text-start mb-4" dir="rtl">
@@ -39,11 +39,13 @@ const FoodDairyForm = () => {
 
       {/* Date Input */}
       <label className="block font-medium">תאריך</label>
-      <input
-        type="date"
-        {...register("date", { required: true })}
-        className="w-full border p-2 rounded-md mb-4"
-      />
+      <div dir="rtl">
+        <input
+          type="date"
+          {...register("date", { required: true })}
+          className="w-full border p-2 rounded-md mb-4"
+        />
+      </div>
 
       {/* Breakfast Input */}
       <label className="block font-medium" dir="rtl">
