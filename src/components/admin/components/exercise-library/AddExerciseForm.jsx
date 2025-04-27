@@ -98,11 +98,11 @@ const AddExerciseForm = ({ exerciseId }) => {
   };
 
   return (
-    <div className="sm:py-20 py-6" dir="rtl">
+    <div className="sm:py-20 py-6 sm:w-[500px]" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-ful grid gap-4">
           <DynamicInputField
-            className="sm:w-[327px]"
+            className="w-full"
             id="name"
             type="text"
             label="שם התרגיל"
@@ -114,7 +114,7 @@ const AddExerciseForm = ({ exerciseId }) => {
             defaultValue={exerciseId ? exerciseData?.name : ""}
           />
           <DynamicTextAreaField
-            className="sm:w-[327px]"
+            className="w-full"
             id="description"
             type="text"
             label="הוראות לתרגיל"
@@ -126,7 +126,7 @@ const AddExerciseForm = ({ exerciseId }) => {
             defaultValue={exerciseId ? exerciseData?.description : ""}
           />
           <DynamicInputField
-            className="sm:w-[327px]"
+            className="w-full"
             id="video_url"
             type="text"
             label="לינק לסרטון התרגיל"

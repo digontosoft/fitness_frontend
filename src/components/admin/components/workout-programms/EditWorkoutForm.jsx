@@ -446,6 +446,7 @@ import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
+import { Input } from "@/components/ui/input";
 
 const EditWorkoutForm = ({ workoutId }) => {
   const [exercises, setExercises] = useState([]);
@@ -570,7 +571,7 @@ const EditWorkoutForm = ({ workoutId }) => {
     );
   });
   return (
-    <div className="sm:py-20 py-6" dir="rtl">
+    <div className="sm:py-20 py-6 sm:w-[500px]" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-4">
           <DynamicInputField
@@ -627,16 +628,14 @@ const EditWorkoutForm = ({ workoutId }) => {
               key={exercise._id || index}
               className="border p-2 flex flex-col items-center justify-center space-y-4 rounded-md"
             >
-              <div className="flex items-center justify-center bg-customBg py-4 min-w-1/2 w-auto h-5 px-2 rounded-md text-white">
-                <p className="text-center">{exercise.exercise_id?.name}</p>
-              </div>
+              <p className="text-center">{exercise.exercise_id?.name}</p>
               <div className="grid sm:grid-cols-3 grid-cols-1 gap-4 sm:w-[327px]">
                 <div className="flex flex-col space-y-2">
                   <label htmlFor={`sets-${exercise._id}`}>סטים</label>
-                  <input
+                  <Input
                     id={`sets-${exercise._id}`}
                     type="number"
-                    className="w-full border border-red-200 h-10 px-2"
+                    className="w-full  h-10 px-2"
                     {...register(`exercises.${index}.sets`, {
                       valueAsNumber: true,
                     })}
@@ -644,10 +643,10 @@ const EditWorkoutForm = ({ workoutId }) => {
                 </div>
                 <div className="flex flex-col space-y-2">
                   <label htmlFor={`reps-${exercise._id}`}>חזרות</label>
-                  <input
+                  <Input
                     id={`reps-${exercise._id}`}
                     type="number"
-                    className="w-full border border-red-200 h-10 px-2"
+                    className="w-full  h-10 px-2"
                     {...register(`exercises.${index}.reps`, {
                       valueAsNumber: true,
                     })}
@@ -657,14 +656,14 @@ const EditWorkoutForm = ({ workoutId }) => {
                   <label htmlFor={`manipulation-${exercise._id}`}>
                     מניפולציה
                   </label>
-                  <input
+                  <Input
                     type="text"
                     value={exercise.manipulation || ""}
                     onChange={(e) =>
                       handleManipulationChange(e, index, exercise)
                     }
                     placeholder="Enter a manipulation"
-                    className="w-full border border-red-200 p-2 rounded"
+                    className="w-full  p-2 rounded"
                   />
                 </div>
               </div>
