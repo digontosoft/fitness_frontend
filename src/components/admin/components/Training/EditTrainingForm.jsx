@@ -346,8 +346,8 @@ const EditTrainingForm = () => {
                   className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
                 >
                   <div>
-                    <p className="py-4" dir="rtl">
-                      {ex?.name} {ex?.exercise_id?.name}
+                    <p className="py-4 text-center" dir="rtl">
+                      {ex?.name}
                     </p>
                     <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
                       <div className="flex flex-col items-center space-y-4">

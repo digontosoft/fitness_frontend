@@ -96,7 +96,7 @@ const Home = () => {
       )}
       <div className="flex flex-col items-center justify-center pt-10">
         <h1 className="sm:text-4xl text-2xl font-bold">
-          {user?.firstName} {user?.lastName}
+          היי {user?.firstName} {user?.lastName}
         </h1>
 
         {/* Cards Section */}
