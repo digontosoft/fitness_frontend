@@ -2,9 +2,12 @@ import { foodDairy } from "@/assets";
 import FoodDairyForm from "@/components/foodDairy/FoodDairyForm";
 import Title from "@/components/measurements/Tilte";
 import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
-import React from "react";
+import { useEffect } from "react";
 
 const FoodDairy = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="min-h-screen">
       <WorkOutListBaground bgImg={foodDairy} />

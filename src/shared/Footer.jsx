@@ -14,7 +14,7 @@ const Footer = () => {
                 target="_blank"
               >
                 <div className="h-8 w-8 bg-white rounded-full flex justify-center items-center">
-                  <img src={insta} alt="instagram" />
+                  <img src={insta} alt="instagram" className="h-4 w-4" />
                 </div>
               </a>
               <a
@@ -23,7 +23,7 @@ const Footer = () => {
               >
                 {" "}
                 <div className="h-8 w-8 bg-white rounded-full flex justify-center items-center">
-                  <img src={tiktok} alt="tiktok" />
+                  <img src={tiktok} alt="tiktok" className="h-4 w-4" />
                 </div>
               </a>
             </div>
