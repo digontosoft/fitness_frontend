@@ -3,6 +3,7 @@ import RecipeParagraph from "../recipe/RecipeParagraph";
 import VideoCourseCart from "../common/VideoCourseCart";
 import { Button } from "../ui/button";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 const ActionCourseCart = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -11,10 +12,16 @@ const ActionCourseCart = () => {
 
   const handleCourse = () => {
     navigate("/startTraining", { state: { data: workoutData } });
+    window.scrollTo(0, 0);
   };
   const EditCourse = () => {
     navigate("/edit-exercise", { state: { data: workoutData } });
+    window.scrollTo(0, 0);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className=" bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753] min-h-screen border-b-8 border-white py-12  ">
       <div className="flex flex-col justify-center items-center max-w-6xl mx-auto bg-white rounded-3xl p-2 md:p-10">

@@ -46,7 +46,7 @@ const LoginPage = () => {
         <LoginButton
           role="trainee"
           text="התחברות מהירה באמצעות גוגל"
-          className="bg-[#151515] hover:bg-gray-700 transition duration-300 px-2"
+          className="bg-[#151515] hover:bg-gray-700 transition duration-300 w-full px-4"
         />
         <LoginButton
           role="recipe"

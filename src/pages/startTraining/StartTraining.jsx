@@ -270,6 +270,7 @@ const StartTraining = () => {
       setCurrentIndex(nextIndex);
       setShowPrevious(true);
       setIsFinished(nextIndex === allExercises.length - 1);
+      window.scrollTo(0, 0);
     }
   };
 
@@ -280,6 +281,7 @@ const StartTraining = () => {
       setCurrentIndex(prevIndex);
       setShowPrevious(prevIndex > 0);
       setIsFinished(false);
+      window.scrollTo(0, 0);
     }
   };
 

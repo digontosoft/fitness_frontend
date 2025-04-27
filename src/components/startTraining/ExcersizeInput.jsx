@@ -30,7 +30,10 @@ const ExcersizeInput = ({
   const handleInputChange = (field, val) => {
     onChange({ ...getValues(), [field]: val });
   };
-  // console.log("exercise data", exerciseData);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="sm:w-96 w-full sm:py-20 py-6" dir="rtl">
       <div className="flex flex-row-reverse text-[#0A2533] text-xl font-bold justify-between items-center">
