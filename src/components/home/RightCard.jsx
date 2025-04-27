@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  Ractanglebg,
   Ellipse,
-  Running,
   vector2,
   vector3,
   female2,
@@ -23,6 +21,8 @@ const RightCard = ({ user }) => {
   const offset = circumference - (parcentage / 100) * circumference;
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userDetails?.gender;
+
+  console.log("stroke:", offset);
 
   useEffect(() => {
     const fetchUserSteps = async () => {
