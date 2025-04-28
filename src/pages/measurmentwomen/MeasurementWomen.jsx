@@ -35,6 +35,7 @@ const MeasurementWomen = () => {
             navigate("/");
           }
         });
+      console.log("questionnaries", questionnaries);
     } catch (err) {
       toast.error(err);
       console.log("quesntionariesError:", err);
@@ -89,6 +90,12 @@ const MeasurementWomen = () => {
             className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto"
             dir="rtl"
           >
+            <FInput
+              label="שם מלא"
+              placeholder="התשובה שלך"
+              name="full_name"
+              dir="rtl"
+            />
             <FInput
               label="גובה"
               placeholder="התשובה שלך"

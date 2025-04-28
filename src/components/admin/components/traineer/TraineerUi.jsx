@@ -23,16 +23,8 @@ const TraineerUi = ({ userId }) => {
         const response = await axios.get(`${base_url}/getUser/${userId}`);
         setUser(response.data.data);
         localStorage.setItem(
-          "firstName",
-          JSON.stringify(response.data.data.firstName)
-        );
-        localStorage.setItem(
           "selectedUserId",
           JSON.stringify(response.data.data._id)
-        );
-        localStorage.setItem(
-          "lastName",
-          JSON.stringify(response.data.data.lastName)
         );
       } catch (error) {
         console.log(error);
@@ -64,16 +56,13 @@ const TraineerUi = ({ userId }) => {
   const handleAnswer = () => {
     setOpenAnswer(true);
   };
-  const userFirstName = JSON.parse(localStorage.getItem("firstName"));
-  const userLastName = JSON.parse(localStorage.getItem("lastName"));
-  const userName = userFirstName + " " + userLastName;
 
   return (
     <div className="space-y-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
         <span className="flex items-center gap-2 flex-row-reverse">
-          {userName}
+          {user?.full_name}
           <Button
             className="bg-customBg"
             size="sm"
