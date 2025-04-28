@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
+import Loading from "@/components/common/Loading";
 
 const EditTrainingForm = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const EditTrainingForm = () => {
   const [exerciseSelectVisible, setExerciseSelectVisible] = useState({});
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -52,6 +54,7 @@ const EditTrainingForm = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const [exerciseRes, workoutRes, trainingRes] = await Promise.all([
           axios.get(`${base_url}/exercise`),
@@ -59,9 +62,18 @@ const EditTrainingForm = () => {
           axios.get(`${base_url}/training/${id}`),
         ]);
 
-        if (exerciseRes.status === 200) setExerciseList(exerciseRes.data.data);
-        if (workoutRes.status === 200) setWorkouts(workoutRes.data.data);
-        if (trainingRes.status === 200) setTraining(trainingRes.data.data);
+        if (exerciseRes.status === 200) {
+          setExerciseList(exerciseRes.data.data);
+          setLoading(false);
+        }
+        if (workoutRes.status === 200) {
+          setWorkouts(workoutRes.data.data);
+          setLoading(false);
+        }
+        if (trainingRes.status === 200) {
+          setTraining(trainingRes.data.data);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -297,116 +309,122 @@ const EditTrainingForm = () => {
 
   return (
     <div className="py-10 sm:w-[500px]">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <DynamicInputField
-          id="name"
-          type="text"
-          label="Training Name"
-          placeholder="Enter training name..."
-          register={register}
-          validation={{ required: !id && "Name is required" }}
-          errors={errors}
-          defaultValue={training?.name}
-        />
-
-        <DynamicTextAreaField
-          id="description"
-          type="text"
-          label="Description"
-          placeholder="Enter description..."
-          register={register}
-          validation={{ required: !id && "Description is required" }}
-          errors={errors}
-          defaultValue={training?.description}
-        />
-
-        {showWorkoutSelect && (
-          <Select
-            options={workouts}
-            valueField="_id"
-            labelField="name"
-            onChange={handleAddWorkout}
-            searchBy="name"
+      {loading ? (
+        <Loading />
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <DynamicInputField
+            id="name"
+            type="text"
+            label="Training Name"
+            placeholder="Enter training name..."
+            register={register}
+            validation={{ required: !id && "Name is required" }}
+            errors={errors}
+            defaultValue={training?.name}
           />
-        )}
 
-        <div className="my-5">
-          {training?.workouts?.map((workout, workoutIndex) => (
-            <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
-              <h1 className="font-semibold">{workout?.name}</h1>
-              <div className="flex items-center gap-x-2" dir="rtl">
-                <Trash
-                  className="cursor-pointer text-red-600"
-                  onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
-                />
-              </div>
-              {workout?.exercises?.map((ex, exerciseIndex) => (
-                <div
-                  key={ex._id}
-                  className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
-                >
-                  <div>
-                    <p className="py-4 text-center" dir="rtl">
-                      {ex?.name}
-                    </p>
-                    <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
-                      <div className="flex flex-col items-center space-y-4">
-                        <p>סטים</p>
-                        <Input
-                          type="number"
-                          defaultValue={ex?.sets}
-                          onChange={(e) =>
-                            handleExerciseChange(
-                              workoutIndex,
-                              exerciseIndex,
-                              "sets",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex flex-col items-center space-y-4">
-                        <p>חזרות</p>
-                        <Input
-                          type="number"
-                          defaultValue={ex?.reps}
-                          onChange={(e) =>
-                            handleExerciseChange(
-                              workoutIndex,
-                              exerciseIndex,
-                              "reps",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex flex-col items-center space-y-4">
-                        <p>מניפולציה</p>
-                        <Input
-                          type="text"
-                          defaultValue={ex?.manipulation}
-                          onChange={(e) =>
-                            handleExerciseChange(
-                              workoutIndex,
-                              exerciseIndex,
-                              "manipulation",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
+          <DynamicTextAreaField
+            id="description"
+            type="text"
+            label="Description"
+            placeholder="Enter description..."
+            register={register}
+            validation={{ required: !id && "Description is required" }}
+            errors={errors}
+            defaultValue={training?.description}
+          />
+
+          {showWorkoutSelect && (
+            <Select
+              options={workouts}
+              valueField="_id"
+              labelField="name"
+              onChange={handleAddWorkout}
+              searchBy="name"
+            />
+          )}
+
+          <div className="my-5">
+            {training?.workouts?.map((workout, workoutIndex) => (
+              <div
+                key={workout._id}
+                className="border py-2 px-4 rounded-md my-4"
+              >
+                <h1 className="font-semibold">{workout?.name}</h1>
+                <div className="flex items-center gap-x-2" dir="rtl">
                   <Trash
-                    className="cursor-pointer text-red-600 size-9"
-                    onClick={() => handleRemoveExercise(workout._id, ex._id)}
+                    className="cursor-pointer text-red-600"
+                    onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
                   />
                 </div>
-              ))}
+                {workout?.exercises?.map((ex, exerciseIndex) => (
+                  <div
+                    key={ex._id}
+                    className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
+                  >
+                    <div>
+                      <p className="py-4 text-center" dir="rtl">
+                        {ex?.name}
+                      </p>
+                      <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
+                        <div className="flex flex-col items-center space-y-4">
+                          <p>סטים</p>
+                          <Input
+                            type="number"
+                            defaultValue={ex?.sets}
+                            onChange={(e) =>
+                              handleExerciseChange(
+                                workoutIndex,
+                                exerciseIndex,
+                                "sets",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+                        <div className="flex flex-col items-center space-y-4">
+                          <p>חזרות</p>
+                          <Input
+                            type="number"
+                            defaultValue={ex?.reps}
+                            onChange={(e) =>
+                              handleExerciseChange(
+                                workoutIndex,
+                                exerciseIndex,
+                                "reps",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+                        <div className="flex flex-col items-center space-y-4">
+                          <p>מניפולציה</p>
+                          <Input
+                            type="text"
+                            defaultValue={ex?.manipulation}
+                            onChange={(e) =>
+                              handleExerciseChange(
+                                workoutIndex,
+                                exerciseIndex,
+                                "manipulation",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <Trash
+                      className="cursor-pointer text-red-600 size-9"
+                      onClick={() => handleRemoveExercise(workout._id, ex._id)}
+                    />
+                  </div>
+                ))}
 
-              {exerciseSelectVisible[workout._id] && (
-                <div dir="rtl">
-                  {/* <Select
+                {exerciseSelectVisible[workout._id] && (
+                  <div dir="rtl">
+                    {/* <Select
                     options={exerciseList}
                     valueField="_id"
                     labelField="name"
@@ -416,97 +434,98 @@ const EditTrainingForm = () => {
                     searchBy="name"
                   /> */}
 
-                  <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      אזור בגוף
-                    </label>
-                    <Select
-                      className="rounded-lg h-12 w-auto"
-                      direction="rtl"
-                      valueField="_id"
-                      labelField="body_part"
-                      options={exerciseList}
-                      placeholder="סנן לפי חלק בגוף"
-                      onChange={(selected) =>
-                        handleAddExercise(workout._id, selected)
-                      }
-                      searchBy="body_part"
-                    />
+                    <div>
+                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        אזור בגוף
+                      </label>
+                      <Select
+                        className="rounded-lg h-12 w-auto"
+                        direction="rtl"
+                        valueField="_id"
+                        labelField="body_part"
+                        options={exerciseList}
+                        placeholder="סנן לפי חלק בגוף"
+                        onChange={(selected) =>
+                          handleAddExercise(workout._id, selected)
+                        }
+                        searchBy="body_part"
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        ציוד
+                      </label>
+                      <Select
+                        className="rounded-lg h-12 w-auto"
+                        direction="rtl"
+                        options={exerciseList}
+                        valueField="_id"
+                        labelField="equipment"
+                        placeholder="סנן לפי ציוד"
+                        onChange={(selected) =>
+                          handleAddExercise(workout._id, selected)
+                        }
+                        searchBy="equipment"
+                      />
+                    </div>
+                    <div>
+                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        סנן לפי שם תרגיל
+                      </label>
+                      <Select
+                        className="rounded-lg h-12 w-auto"
+                        direction="rtl"
+                        options={exerciseList}
+                        valueField="_id"
+                        labelField="name"
+                        placeholder="בחר"
+                        onChange={(selected) =>
+                          handleAddExercise(workout._id, selected)
+                        }
+                        searchBy="name"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      ציוד
-                    </label>
-                    <Select
-                      className="rounded-lg h-12 w-auto"
-                      direction="rtl"
-                      options={exerciseList}
-                      valueField="_id"
-                      labelField="equipment"
-                      placeholder="סנן לפי ציוד"
-                      onChange={(selected) =>
-                        handleAddExercise(workout._id, selected)
-                      }
-                      searchBy="equipment"
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      סנן לפי שם תרגיל
-                    </label>
-                    <Select
-                      className="rounded-lg h-12 w-auto"
-                      direction="rtl"
-                      options={exerciseList}
-                      valueField="_id"
-                      labelField="name"
-                      placeholder="בחר"
-                      onChange={(selected) =>
-                        handleAddExercise(workout._id, selected)
-                      }
-                      searchBy="name"
-                    />
-                  </div>
-                </div>
-              )}
+                )}
 
-              <Button
-                type="button"
-                onClick={() =>
-                  setExerciseSelectVisible((prev) => ({
-                    ...prev,
-                    [workout._id]: true,
-                  }))
-                }
-                className="mt-2 bg-customBg flex mx-auto"
-              >
-                הוסף תרגילים לאימון
-              </Button>
-            </div>
-          ))}
-        </div>
+                <Button
+                  type="button"
+                  onClick={() =>
+                    setExerciseSelectVisible((prev) => ({
+                      ...prev,
+                      [workout._id]: true,
+                    }))
+                  }
+                  className="mt-2 bg-customBg flex mx-auto"
+                >
+                  הוסף תרגילים לאימון
+                </Button>
+              </div>
+            ))}
+          </div>
 
-        <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-y-0 gap-y-2">
-          <Button
-            type="submit"
-            className={
-              isButtonDisabled || isSupersetIncomplete
-                ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200 sm:order-first order-last"
-                : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg sm:order-first order-last"
-            }
-            disabled={isButtonDisabled || isSupersetIncomplete}
-          >
-            שמור תוכנית אימון חדשה
-          </Button>
-          <Button
-            type="button"
-            className=" bg-customBg"
-            onClick={() => setShowWorkoutSelect(true)}
-          >
-            הוסף אימון לתוכנית
-          </Button>
-        </div>
-      </form>
+          <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-y-0 gap-y-2">
+            <Button
+              type="submit"
+              className={
+                isButtonDisabled || isSupersetIncomplete
+                  ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200 sm:order-first order-last"
+                  : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg sm:order-first order-last"
+              }
+              disabled={isButtonDisabled || isSupersetIncomplete}
+            >
+              שמור תוכנית אימון חדשה
+            </Button>
+            <Button
+              type="button"
+              className=" bg-customBg"
+              onClick={() => setShowWorkoutSelect(true)}
+            >
+              הוסף אימון לתוכנית
+            </Button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

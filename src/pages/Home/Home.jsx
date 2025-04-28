@@ -6,15 +6,16 @@ import { WelcomeModal } from "@/components/home/WelcomeModal";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { TaskModal } from "./TaskModal";
+import Loading from "@/components/common/Loading";
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskModalOpen, setIsTaskModalOpen] = useState(false);
   const [userTasks, setUserTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [loading, setLoading] = useState(false);
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const Id = user._id;
-  console.log("user", Id);
 
   const [getMesurement, setMesurement] = useState([]);
   useEffect(() => {
@@ -47,12 +48,14 @@ const Home = () => {
 
   useEffect(() => {
     const fetchUserTask = async () => {
+      setLoading(true);
       try {
         await axios
           .get(`${base_url}/get-user-task/${user._id}`)
           .then((response) => {
             if (response.status === 200) {
               setUserTasks(response.data.data);
+              setLoading(false);
             }
           });
       } catch (error) {
@@ -112,14 +115,18 @@ const Home = () => {
               משימות
             </h1>
 
-            {userTasks?.map((task) => (
-              <div
-                className="w-full sm:w-1/2 p-2 flex-shrink-0 cursor-pointer"
-                key={task?._id}
-              >
-                <ArrowGroup onclick={handleOpenModal} task={task} />
-              </div>
-            ))}
+            {loading ? (
+              <Loading />
+            ) : (
+              userTasks?.map((task) => (
+                <div
+                  className="w-full sm:w-1/2 p-2 flex-shrink-0 cursor-pointer"
+                  key={task?._id}
+                >
+                  <ArrowGroup onclick={handleOpenModal} task={task} />
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

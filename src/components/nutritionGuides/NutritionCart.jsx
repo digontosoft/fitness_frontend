@@ -55,25 +55,27 @@ export const NutritionCart = () => {
           </div>
         </div>
       </div>
-      {loading && <Loading />}
-      {/* {error && <p className="text-red-500 text-center">{error}</p>} */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center items-center px-2">
-        {filterData.length > 0 ? (
-          filterData.map((item) => (
-            <SingleCart
-              key={item._id}
-              id={item._id}
-              icon={item.icon}
-              title={item.title}
-              description={item.description}
-              pdfLink={item.pdf_link}
-              type="guide"
-            />
-          ))
-        ) : (
-          <p className="text-center col-span-full">No results found.</p>
-        )}
-      </div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center items-center px-2">
+          {filterData.length > 0 ? (
+            filterData.map((item) => (
+              <SingleCart
+                key={item._id}
+                id={item._id}
+                icon={item.icon}
+                title={item.title}
+                description={item.description}
+                pdfLink={item.pdf_link}
+                type="guide"
+              />
+            ))
+          ) : (
+            <p className="text-center col-span-full">No results found.</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };

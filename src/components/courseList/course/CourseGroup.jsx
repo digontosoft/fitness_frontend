@@ -2,18 +2,21 @@ import { useEffect, useState } from "react";
 import CourseCart from "./CourseCart";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+import Loading from "@/components/common/Loading";
 // import { FaLock } from "react-icons/fa6";
 // import cartFor from "../../../assets/image/course/cartFour.png";
 
 const CourseGroup = () => {
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchCourses = async () => {
+      setLoading(true);
       try {
         axios.get(`${base_url}/course`).then((res) => {
           if (res.status === 200) {
             setCourses(res.data.data);
-            console.log("courses:", res?.data.data);
+            setLoading(false);
           }
         });
       } catch (err) {
@@ -26,8 +29,11 @@ const CourseGroup = () => {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-10 pb-10 justify-items-center items-center">
-        {/* <div className="relative w-80 h-[450px] bg-white shadow-md rounded-2xl p-4 overflow-hidden">
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-10 pb-10 justify-items-center items-center">
+          {/* <div className="relative w-80 h-[450px] bg-white shadow-md rounded-2xl p-4 overflow-hidden">
         
           <div className="flex flex-col justify-between items-center gap-6 relative z-10">
             <img src={cartFor} alt="Course" className="rounded-xl" />
@@ -54,12 +60,13 @@ const CourseGroup = () => {
             </div>
           </div>
         </div> */}
-        {courses
-          ?.sort((a, b) => b.video.length - a.video.length)
-          ?.map((course) => (
-            <CourseCart key={course._id} course={course} />
-          ))}
-      </div>
+          {courses
+            ?.sort((a, b) => b.video.length - a.video.length)
+            ?.map((course) => (
+              <CourseCart key={course._id} course={course} />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

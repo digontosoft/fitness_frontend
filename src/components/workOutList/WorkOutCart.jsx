@@ -20,9 +20,9 @@ const WorkOutCart = () => {
           `${base_url}/get-training-by-user-id/${user?._id}`
         );
 
-        // setTrainings(response.data.data);
-        // setPage(response.data.pagination.page);
-        // setTotalPages(response.data.pagination.pages);
+        setTrainings(response.data.data);
+        setPage(response.data.pagination.page);
+        setTotalPages(response.data.pagination.pages);
         console.log(response);
       } catch (error) {
         console.error("Error fetching exercises:", error);
@@ -34,16 +34,11 @@ const WorkOutCart = () => {
   return (
     <div className="max-w-6xl mx-auto px-2 pb-10">
       <div className="flex items-center justify-center my-5" dir="rtl">
-        {/* <Input
+        <Input
           dir="rtl"
           placeholder="סנן לפי שם תוכנית אימון ..."
           onChange={(e) => setSearch(e.target.value)}
           className="max-w-sm"
-        /> */}
-        <Select
-          // dir="rtl"
-          placeholder="סנן לפי שם תוכנית אימון ..."
-          className="max-w-sm h-10"
         />
       </div>
       {trainings.length > 0 ? (
