@@ -47,18 +47,18 @@ export function TraineeUsersLists() {
   const [loading, setLoading] = useState(false);
   const columns = [
     {
-      accessorKey: "firstName",
+      accessorKey: "full_name",
       header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          שם מתאמן
+          שם מלא
           <ArrowUpDown />
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("firstName")}</div>
+        <div className="lowercase">{row.getValue("full_name")}</div>
       ),
     },
     {

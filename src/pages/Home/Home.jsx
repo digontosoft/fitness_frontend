@@ -12,6 +12,7 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskModalOpen, setIsTaskModalOpen] = useState(false);
   const [userTasks, setUserTasks] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
   const [selectedTask, setSelectedTask] = useState(null);
   const [loading, setLoading] = useState(false);
   const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -22,8 +23,10 @@ const Home = () => {
     const fetchMeasurement = async () => {
       try {
         const response = await axios.get(`${base_url}/measurement/${Id}`);
+        const user_response = await axios.get(`${base_url}/getUser/${Id}`);
         if (response.status === 200) {
           setMesurement(response.data.data);
+          setUserInfo(user_response.data.data);
         }
       } catch (error) {
         console.error("Measurement data not found", error);
@@ -99,7 +102,7 @@ const Home = () => {
       )}
       <div className="flex flex-col items-center justify-center pt-10">
         <h1 className="sm:text-4xl text-2xl font-bold">
-          היי {user?.firstName} {user?.lastName}
+          היי {userInfo?.full_name}
         </h1>
 
         {/* Cards Section */}

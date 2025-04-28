@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const questionnaries = z.object({
+  full_name: z.string().nonempty({ message: "Full name is required" }),
   height: z.string().optional(),
   weight: z.string().optional(),
   highest_weight: z.string().optional(),
