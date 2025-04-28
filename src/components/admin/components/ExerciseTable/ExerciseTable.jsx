@@ -33,6 +33,7 @@ import {
 import Select from "react-dropdown-select";
 import PaginationComp from "@/components/pagination";
 import { GoSearch } from "react-icons/go";
+import Loading from "@/components/common/Loading";
 
 const bodyPartOptions = [
   { label: "כל חלקי הגוף", value: "" },
@@ -73,7 +74,7 @@ export function ExerciseTable() {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [body_part, setBodyPart] = useState("");
   const [equipment, setEquipment] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
   const columns = [
@@ -216,14 +217,17 @@ export function ExerciseTable() {
   const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     const fetchExercise = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `${base_url}/exercise?search=${searchValue}&body_part=${body_part}&equipment=${equipment}&page=${page}&limit=10`
         );
-        setExercise(response.data.data);
-        setTotalPages(response.data.pagination.totalPages);
-        setPage(response.data.pagination.currentPage);
-        //console.log(response.data);
+        if (response.status === 200) {
+          setExercise(response.data.data);
+          setTotalPages(response.data.pagination.totalPages);
+          setPage(response.data.pagination.currentPage);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching exercises:", error);
       }
@@ -247,93 +251,98 @@ export function ExerciseTable() {
 
   return (
     <div className="w-full" dir="ltr">
-      <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
-        <div
-          className="flex justify-between items-center relative min-w-40 h-12"
-          dir="rtl"
-        >
-          <input
-            type="search"
-            name=""
-            id=""
-            placeholder="סנן לפי שם"
-            onChange={(e) => setSearchValue(e.target.value)}
-            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-40 h-12"
-          />
-          <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
-            <GoSearch className="text-white" />
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
+            <div
+              className="flex justify-between items-center relative min-w-40 h-12"
+              dir="rtl"
+            >
+              <input
+                type="search"
+                name=""
+                id=""
+                placeholder="סנן לפי שם"
+                onChange={(e) => setSearchValue(e.target.value)}
+                className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-40 h-12"
+              />
+              <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+                <GoSearch className="text-white" />
+              </div>
+            </div>
+
+            <Select
+              direction="rtl"
+              className="min-w-40 h-12 border-2 p-2"
+              placeholder="סנן לפי חלק בגוף"
+              options={bodyPartOptions}
+              onChange={(e) => setBodyPart(e[0].value)}
+            />
+            <Select
+              direction="rtl"
+              options={equipmentOptions}
+              className=" min-w-40   rounded-lg h-12 border-2 p-2"
+              placeholder="סנן לפי ציוד"
+              onChange={(e) => setEquipment(e[0].value)}
+            />
+            <Link to="/dashboard/exercise-library">
+              <Button className="bg-customBg uppercase font-medium" size="sm">
+                הוסף תרגיל חדש
+              </Button>
+            </Link>
           </div>
-        </div>
-
-        <Select
-          direction="rtl"
-          className="min-w-40 h-12 border-2 p-2"
-          placeholder="סנן לפי חלק בגוף"
-          options={bodyPartOptions}
-          onChange={(e) => setBodyPart(e[0].value)}
-        />
-        <Select
-          direction="rtl"
-          options={equipmentOptions}
-          className=" min-w-40   rounded-lg h-12 border-2 p-2"
-          placeholder="סנן לפי ציוד"
-          onChange={(e) => setEquipment(e[0].value)}
-        />
-        <Link to="/dashboard/exercise-library">
-          <Button className="bg-customBg uppercase font-medium" size="sm">
-            הוסף תרגיל חדש
-          </Button>
-        </Link>
-      </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </>
+      )}
       {/* Delete Confirmation Modal */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent>

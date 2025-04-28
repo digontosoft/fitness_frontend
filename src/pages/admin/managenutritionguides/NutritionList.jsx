@@ -30,6 +30,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { GoSearch } from "react-icons/go";
+import Loading from "@/components/common/Loading";
 
 export function NutritionList() {
   const [sorting, setSorting] = useState([]);
@@ -39,6 +40,7 @@ export function NutritionList() {
   const [nutritionGuide, setNutritionGuide] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedNutrition, setSelectedNutrition] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   if (!id) {
     localStorage.removeItem("selectedUserId");
@@ -135,14 +137,15 @@ export function NutritionList() {
   const user_id = JSON.parse(userId);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const url = userId
         ? `${base_url}/nutritionGuide/user/${user_id}`
         : `${base_url}/nutritionGuide`;
 
       const response = await axios.get(url);
-
       setNutritionGuide(response.data.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching exercises:", error);
     }
@@ -168,86 +171,92 @@ export function NutritionList() {
 
   return (
     <div className="w-full" dir="ltr">
-      <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
-        <div
-          className="flex justify-between items-center relative max-w-sm h-12"
-          dir="rtl"
-        >
-          <input
-            type="search"
-            name=""
-            id=""
-            placeholder="שם מסנן...."
-            value={table.getColumn("title")?.getFilterValue() || ""}
-            onChange={(event) =>
-              table.getColumn("title")?.setFilterValue(event.target.value)
-            }
-            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
-          />
-          <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
-            <GoSearch className="text-white" />
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
+            <div
+              className="flex justify-between items-center relative max-w-sm h-12"
+              dir="rtl"
+            >
+              <input
+                type="search"
+                name=""
+                id=""
+                placeholder="שם מסנן...."
+                value={table.getColumn("title")?.getFilterValue() || ""}
+                onChange={(event) =>
+                  table.getColumn("title")?.setFilterValue(event.target.value)
+                }
+                className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
+              />
+              <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+                <GoSearch className="text-white" />
+              </div>
+            </div>
+            <Link
+              to={
+                user_id
+                  ? `/dashboard/add-nutrition-menu/${user_id}`
+                  : `/dashboard/add-nutrition-guide`
+              }
+            >
+              <Button className="bg-customBg uppercase font-medium" size="sm">
+                {user_id ? "הוסף תפריט תזונה" : " הוסף מדריך תזונה"}
+              </Button>
+            </Link>
           </div>
-        </div>
-        <Link
-          to={
-            user_id
-              ? `/dashboard/add-nutrition-menu/${user_id}`
-              : `/dashboard/add-nutrition-guide`
-          }
-        >
-          <Button className="bg-customBg uppercase font-medium" size="sm">
-            {user_id ? "הוסף תפריט תזונה" : " הוסף מדריך תזונה"}
-          </Button>
-        </Link>
-      </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      לא הוקצה תפריט תזונה
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  לא הוקצה תפריט תזונה
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </>
+      )}
 
       {/* Delete Confirmation Modal */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>

@@ -9,6 +9,7 @@ import ExerciseDetails from "@/components/admin/components/ExerciseTable/Exercis
 import CourseDetails from "./course/CourseDetails";
 import PaginationComp from "@/components/pagination";
 import { GoSearch } from "react-icons/go";
+import Loading from "../common/Loading";
 
 // const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
 //   const pageNumbers = [];
@@ -89,11 +90,11 @@ export const CourseListGroup = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [body_part, setBodyPart] = useState("");
   const [equipment, setEquipment] = useState("");
-
-  console.log(body_part, equipment);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchExercise = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `${base_url}/exercise?search=${searchValue}&page=${page}&body_part=${body_part}&equipment=${equipment}`
@@ -101,6 +102,7 @@ export const CourseListGroup = () => {
         setExercises(response.data.data);
         setTotalPages(response.data.pagination.totalPages);
         setPage(response.data.pagination.currentPage);
+        setLoading(false);
         //console.log(response.data);
       } catch (error) {
         console.error("Error fetching exercises:", error);
@@ -139,6 +141,7 @@ export const CourseListGroup = () => {
             <GoSearch className="text-white" />
           </div>
         </div>
+
         <div className="flex sm:gap-16 gap-4 w-full items-center justify-center">
           <Select
             direction="rtl"
@@ -156,17 +159,21 @@ export const CourseListGroup = () => {
           />
         </div>
       </div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 items-center justify-items-center gap-6">
+          {exercises.map((exercise) => (
+            <CourseCart
+              key={exercise._id}
+              _id={exercise._id}
+              exercise={exercise}
+              handleOpen={() => handleOpen(exercise._id)}
+            />
+          ))}
+        </div>
+      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 items-center justify-items-center gap-6">
-        {exercises.map((exercise) => (
-          <CourseCart
-            key={exercise._id}
-            _id={exercise._id}
-            exercise={exercise}
-            handleOpen={() => handleOpen(exercise._id)}
-          />
-        ))}
-      </div>
       {open && <CourseDetails open={open} setOpen={setOpen} exerciseId={id} />}
       {totalPages > 1 && (
         <PaginationComp

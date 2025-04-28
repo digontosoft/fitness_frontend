@@ -447,11 +447,13 @@ import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 import { Input } from "@/components/ui/input";
+import Loading from "@/components/common/Loading";
 
 const EditWorkoutForm = ({ workoutId }) => {
   const [exercises, setExercises] = useState([]);
   const [disableUpdateButton, setDisableUpdateButton] = useState(false);
-  const [hasSuperset, setHasSuperset] = useState(false); // Track if "superset" is already used
+  const [hasSuperset, setHasSuperset] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -468,9 +470,13 @@ const EditWorkoutForm = ({ workoutId }) => {
 
   useEffect(() => {
     const fetchExercise = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(`${base_url}/exercise`);
-        setExercises(response.data.data);
+        if (response.status === 200) {
+          setLoading(false);
+          setExercises(response.data.data);
+        }
       } catch (error) {
         console.error("Error fetching exercises:", error);
       }
@@ -572,115 +578,119 @@ const EditWorkoutForm = ({ workoutId }) => {
   });
   return (
     <div className="sm:py-20 py-6 sm:w-[500px]" dir="rtl">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid gap-4">
-          <DynamicInputField
-            className="w-full"
-            id="name"
-            type="text"
-            label="שם האימון"
-            placeholder="Add שם האימון...."
-            register={register}
-            errors={errors}
-            required
-          />
+      {loading ? (
+        <Loading />
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid gap-4">
+            <DynamicInputField
+              className="w-full"
+              id="name"
+              type="text"
+              label="שם האימון"
+              placeholder="Add שם האימון...."
+              register={register}
+              errors={errors}
+              required
+            />
 
-          <DynamicTextAreaField
-            className="w-full"
-            id="description"
-            type="text"
-            label="דגשים מיוחדים (במידה ויש)"
-            placeholder="דגשים מיוחדים (במידה ויש)..."
-            register={register}
-            errors={errors}
-          />
+            <DynamicTextAreaField
+              className="w-full"
+              id="description"
+              type="text"
+              label="דגשים מיוחדים (במידה ויש)"
+              placeholder="דגשים מיוחדים (במידה ויש)..."
+              register={register}
+              errors={errors}
+            />
 
-          <Select
-            direction="rtl"
-            options={exercises}
-            valueField="_id"
-            labelField="name"
-            searchBy="name"
-            values={exercisesForm?.map((ex) => ({
-              _id: ex.exercise_id?._id,
-              name: ex.exercise_id?.name,
-            }))}
-            onChange={(selected) => {
-              const newExercises = selected.map((option) => {
-                const existing = exercisesForm.find(
-                  (ex) => ex.exercise_id._id === option._id
-                );
-                return existing
-                  ? existing
-                  : {
-                      exercise_id: { _id: option._id, name: option.name },
-                      sets: 0,
-                      reps: 0,
-                      manipulation: "",
-                    };
-              });
-              setValue("exercises", newExercises);
-            }}
-          />
+            <Select
+              direction="rtl"
+              options={exercises}
+              valueField="_id"
+              labelField="name"
+              searchBy="name"
+              values={exercisesForm?.map((ex) => ({
+                _id: ex.exercise_id?._id,
+                name: ex.exercise_id?.name,
+              }))}
+              onChange={(selected) => {
+                const newExercises = selected.map((option) => {
+                  const existing = exercisesForm.find(
+                    (ex) => ex.exercise_id._id === option._id
+                  );
+                  return existing
+                    ? existing
+                    : {
+                        exercise_id: { _id: option._id, name: option.name },
+                        sets: 0,
+                        reps: 0,
+                        manipulation: "",
+                      };
+                });
+                setValue("exercises", newExercises);
+              }}
+            />
 
-          {exercisesForm?.map((exercise, index) => (
-            <div
-              key={exercise._id || index}
-              className="border p-2 flex flex-col items-center justify-center space-y-4 rounded-md"
-            >
-              <p className="text-center">{exercise.exercise_id?.name}</p>
-              <div className="grid sm:grid-cols-3 grid-cols-1 gap-4 sm:w-[327px]">
-                <div className="flex flex-col space-y-2">
-                  <label htmlFor={`sets-${exercise._id}`}>סטים</label>
-                  <Input
-                    id={`sets-${exercise._id}`}
-                    type="number"
-                    className="w-full  h-10 px-2"
-                    {...register(`exercises.${index}.sets`, {
-                      valueAsNumber: true,
-                    })}
-                  />
-                </div>
-                <div className="flex flex-col space-y-2">
-                  <label htmlFor={`reps-${exercise._id}`}>חזרות</label>
-                  <Input
-                    id={`reps-${exercise._id}`}
-                    type="number"
-                    className="w-full  h-10 px-2"
-                    {...register(`exercises.${index}.reps`, {
-                      valueAsNumber: true,
-                    })}
-                  />
-                </div>
-                <div className="flex flex-col space-y-2">
-                  <label htmlFor={`manipulation-${exercise._id}`}>
-                    מניפולציה
-                  </label>
-                  <Input
-                    type="text"
-                    value={exercise.manipulation || ""}
-                    onChange={(e) =>
-                      handleManipulationChange(e, index, exercise)
-                    }
-                    placeholder="Enter a manipulation"
-                    className="w-full  p-2 rounded"
-                  />
+            {exercisesForm?.map((exercise, index) => (
+              <div
+                key={exercise._id || index}
+                className="border p-2 flex flex-col items-center justify-center space-y-4 rounded-md"
+              >
+                <p className="text-center">{exercise.exercise_id?.name}</p>
+                <div className="grid sm:grid-cols-3 grid-cols-1 gap-4 sm:w-[327px]">
+                  <div className="flex flex-col space-y-2">
+                    <label htmlFor={`sets-${exercise._id}`}>סטים</label>
+                    <Input
+                      id={`sets-${exercise._id}`}
+                      type="number"
+                      className="w-full  h-10 px-2"
+                      {...register(`exercises.${index}.sets`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <label htmlFor={`reps-${exercise._id}`}>חזרות</label>
+                    <Input
+                      id={`reps-${exercise._id}`}
+                      type="number"
+                      className="w-full  h-10 px-2"
+                      {...register(`exercises.${index}.reps`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <label htmlFor={`manipulation-${exercise._id}`}>
+                      מניפולציה
+                    </label>
+                    <Input
+                      type="text"
+                      value={exercise.manipulation || ""}
+                      onChange={(e) =>
+                        handleManipulationChange(e, index, exercise)
+                      }
+                      placeholder="Enter a manipulation"
+                      className="w-full  p-2 rounded"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        <div className="flex justify-center">
-          <Button
-            type="submit"
-            className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
-            disabled={disableUpdateButton || !isFormValid}
-          >
-            עדכן תוכנית אימון
-          </Button>
-        </div>
-      </form>
+          <div className="flex justify-center">
+            <Button
+              type="submit"
+              className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+              disabled={disableUpdateButton || !isFormValid}
+            >
+              עדכן תוכנית אימון
+            </Button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

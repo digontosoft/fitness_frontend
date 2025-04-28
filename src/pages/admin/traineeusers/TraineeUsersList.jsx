@@ -6,9 +6,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Edit, Trash } from "lucide-react";
+import { ArrowUpDown, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -34,6 +33,7 @@ import UserDetails from "./UserDetails";
 import { toast } from "sonner";
 import PaginationComp from "@/components/pagination";
 import { GoSearch } from "react-icons/go";
+import Loading from "@/components/common/Loading";
 
 export function TraineeUsersLists() {
   const [users, setUsers] = useState([]);
@@ -44,6 +44,7 @@ export function TraineeUsersLists() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const columns = [
     {
       accessorKey: "firstName",
@@ -157,14 +158,17 @@ export function TraineeUsersLists() {
 
   useEffect(() => {
     const fetchUsers = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `${base_url}/getUsers?page=${page}&&limit=10&&search=${search}`
         );
-        console.log("Users:", response.data);
-        setPage(response.data.pagination.currentPage);
-        setTotalPages(response.data.pagination.totalPages);
-        setUsers(response.data.data);
+        if (response.status === 200) {
+          setPage(response.data.pagination.currentPage);
+          setTotalPages(response.data.pagination.totalPages);
+          setUsers(response.data.data);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching email:", error);
         throw error;
@@ -213,72 +217,78 @@ export function TraineeUsersLists() {
 
   return (
     <div className="w-full" dir="ltr">
-      <div className="flex items-center justify-between py-4">
-        <div
-          className="flex justify-between items-center relative max-w-sm h-12"
-          dir="rtl"
-        >
-          <input
-            type="search"
-            name=""
-            id=""
-            placeholder="סנן לפי שם..."
-            onChange={(e) => setSearch(e.target.value)}
-            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
-          />
-          <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
-            <GoSearch className="text-white" />
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex items-center justify-between py-4">
+            <div
+              className="flex justify-between items-center relative max-w-sm h-12"
+              dir="rtl"
+            >
+              <input
+                type="search"
+                name=""
+                id=""
+                placeholder="סנן לפי שם..."
+                onChange={(e) => setSearch(e.target.value)}
+                className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
+              />
+              <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+                <GoSearch className="text-white" />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </>
+      )}
 
       {/* Delete Confirmation Modal */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
