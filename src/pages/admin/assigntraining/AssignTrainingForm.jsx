@@ -349,7 +349,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     }
   };
   return (
-    <div className="sm:py-20 py-6" dir="rtl">
+    <div className="sm:py-20 py-6 sm:w-[550px] w-full mx-auto" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* <Select
           className="rounded-lg h-12 sm:min-w-[400px] w-full"
@@ -367,8 +367,8 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               className="sm:min-w-[350px] "
               id="name"
               type="text"
-              label="Training Name"
-              placeholder="Add Training Name..."
+              label="שם תוכנית אימון"
+              placeholder="שם תוכנית אימון "
               register={register}
               validation={{
                 required: !trainingbyId?.name
@@ -383,8 +383,8 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               className="sm:min-w-[350px]"
               id="description"
               type="text"
-              label="Training Description"
-              placeholder="Add Training Description..."
+              label="תיאור תוכנית אימון"
+              placeholder="תיאור תוכנית אימון..."
               register={register}
               validation={{
                 required: !trainingbyId?.description
@@ -409,12 +409,12 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                 </div>
                 {workout.exercises.map((exercise, exerciseIndex) => (
                   <div key={exercise._id} className="space-y-4 mt-4">
-                    <div className="space-y-4">
+                    <div>
                       <p>{exercise.name}</p>
                     </div>
-                    <div className="flex sm:flex-row flex-col items-center justify-center gap-4">
+                    <div className="flex items-center justify-center gap-4">
                       <Trash
-                        className="text-red-500 hover:text-red-700 cursor-pointer"
+                        className="text-red-500 cursor-pointer sm:size-9 size-16"
                         onClick={() =>
                           handleRemoveExercise(workoutIndex, exerciseIndex)
                         }
@@ -433,7 +433,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                               e.target.value
                             )
                           }
-                          className="border p-2 rounded"
+                          className="border p-2 rounded w-full"
                         />
                       </div>
                       <div className="flex flex-col gap-y-4">
@@ -449,7 +449,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                               e.target.value
                             )
                           }
-                          className="border p-2 rounded"
+                          className="border p-2 rounded w-full"
                         />
                       </div>
                       <div className="flex flex-col gap-y-4">
@@ -465,7 +465,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                               e.target.value
                             )
                           }
-                          className="border p-2 rounded"
+                          className="border p-2 rounded w-full"
                         />
                       </div>
                     </div>
