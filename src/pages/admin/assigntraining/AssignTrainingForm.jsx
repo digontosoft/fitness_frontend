@@ -367,8 +367,8 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               className="sm:min-w-[350px] "
               id="name"
               type="text"
-              label="Training Name"
-              placeholder="Add Training Name..."
+              label="שם תוכנית אימון"
+              placeholder="שם תוכנית אימון "
               register={register}
               validation={{
                 required: !trainingbyId?.name
@@ -383,8 +383,8 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               className="sm:min-w-[350px]"
               id="description"
               type="text"
-              label="Training Description"
-              placeholder="Add Training Description..."
+              label="תיאור תוכנית אימון"
+              placeholder="תיאור תוכנית אימון..."
               register={register}
               validation={{
                 required: !trainingbyId?.description
