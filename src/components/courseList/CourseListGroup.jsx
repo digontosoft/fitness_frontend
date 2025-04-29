@@ -81,6 +81,7 @@ const equipmentOptions = [
   { label: "משקולות", value: "משקולות" },
   { label: "מכונות", value: "מכונות" },
   { label: "מוטות", value: "מוטות" },
+  { label: "פולי", value: "פולי" },
 ];
 
 export const CourseListGroup = () => {

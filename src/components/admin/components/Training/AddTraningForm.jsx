@@ -54,8 +54,6 @@ const AddTrainingForm = () => {
     []
   );
 
-  console.log("addtraining", selectedTrainingExercises);
-
   // Check if any field (sets, reps, or manipulation) is empty in any exercise
   useEffect(() => {
     if (!selectedTrainingExercises) {
