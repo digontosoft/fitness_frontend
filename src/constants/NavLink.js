@@ -10,51 +10,51 @@ import {
 export const traineeLink = [
   {
     _id: 1,
-    title: "דף הבית",
-    link: "/",
-    icon: nutrationGuide,
+    title: "קורסים",
+    link: "/courses",
+    icon: course,
   },
   {
     _id: 2,
-    title: "המדדים שלי",
-    link: "/measurements-tracking",
-    icon: measurement,
-  },
-  {
-    _id: 3,
-    title: "התפריט שלי",
-    link: "/personal-nutration",
-    icon: persomalNutration,
-  },
-  {
-    _id: 4,
-    title: "מדריך תזונה",
-    link: "/nutrition-guide",
-    icon: nutrationGuide,
-  },
-  {
-    _id: 5,
-    title: "מתכונים של פיטל",
-    link: "/recipe",
-    icon: recipe,
-  },
-  {
-    _id: 6,
-    title: "האימונים שלי",
-    link: "/trainings",
-    icon: training,
-  },
-  {
-    _id: 7,
     title: "מאגר תרגילים",
     link: "/exercise-library",
     icon: exercise,
   },
   {
+    _id: 3,
+    title: "האימונים שלי",
+    link: "/trainings",
+    icon: training,
+  },
+  {
+    _id: 4,
+    title: "מתכונים של פיטל",
+    link: "/recipe",
+    icon: recipe,
+  },
+  {
+    _id: 5,
+    title: "מדריך תזונה",
+    link: "/nutrition-guide",
+    icon: nutrationGuide,
+  },
+  {
+    _id: 6,
+    title: "התפריט שלי",
+    link: "/personal-nutration",
+    icon: persomalNutration,
+  },
+  {
+    _id: 7,
+    title: "המדדים שלי",
+    link: "/measurements-tracking",
+    icon: measurement,
+  },
+  {
     _id: 8,
-    title: "קורסים",
-    link: "/courses",
-    icon: course,
+    title: "דף הבית",
+    link: "/",
+    icon: nutrationGuide,
   },
 ];
 export const adminLink = [
