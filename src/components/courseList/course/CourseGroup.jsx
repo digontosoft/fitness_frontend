@@ -32,7 +32,7 @@ const CourseGroup = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-10 pb-10 justify-items-center items-center">
+        <div className="flex sm:flex-row flex-col gap-10 md:gap-10 pb-10 justify-center items-center">
           {/* <div className="relative w-80 h-[450px] bg-white shadow-md rounded-2xl p-4 overflow-hidden">
         
           <div className="flex flex-col justify-between items-center gap-6 relative z-10">

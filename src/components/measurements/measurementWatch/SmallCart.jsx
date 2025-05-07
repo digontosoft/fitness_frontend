@@ -15,7 +15,7 @@ const months = [
   "דצמבר",
 ];
 
-const SmallCart = ({ data,setOpen,setId }) => {
+const SmallCart = ({ data, setOpen, setId }) => {
   return (
     <div className="flex sm:flex-nowrap flex-wrap sm:justify-between justify-center items-center gap-4 px-2 md:px-10">
       {data.item.map(
@@ -28,9 +28,20 @@ const SmallCart = ({ data,setOpen,setId }) => {
                 setOpen(true);
                 setId(item.id);
               }}
-              className="min-w-24 w-auto min-h-[90px] h-auto flex justify-center items-center bg-white bg-transparent bg-opacity-50 p-2 rounded-lg"
+              className="min-w-24 w-auto min-h-[90px] h-auto flex flex-col justify-center items-center bg-white p-2 rounded-lg"
             >
-              <div
+              <span className=" text-[#000000] text-xs font-bold text-center">
+                {months[moment(item?.date).month()]}
+              </span>
+
+              <span className="text-[#BF2033] text-lg font-extrabold">
+                {item.data}
+              </span>
+
+              <span className="text-[#8C8C8C] text-[10px] font-normal">
+                {"CM"}
+              </span>
+              {/* <div
                 key={index}
                 className="min-w-[70px] w-auto min-h-[70px] h-auto flex flex-col items-center justify-center   bg-white  shadow-md rounded-lg p-2  border-red-50 cursor-pointer"
               >
@@ -45,7 +56,7 @@ const SmallCart = ({ data,setOpen,setId }) => {
                 <span className="text-[#8C8C8C] text-[10px] font-normal">
                   {"CM"}
                 </span>
-              </div>
+              </div> */}
             </div>
           )
         )

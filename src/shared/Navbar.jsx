@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
-import logo from "@/assets/image/Logo.png";
+import logo from "@/assets/image/logo.svg";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userTasks, setUserTasks] = useState([]);
@@ -43,7 +43,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-transparent md:bg-white shadow-md ">
-      <div className="container mx-auto flex items-center justify-between p-4">
+      <div className="container mx-auto flex items-center sm:justify-between justify-end p-4">
         {/* Logo */}
         <a
           href=""
@@ -226,7 +226,7 @@ const Navbar = () => {
           <div>No valid user type or token found.</div>
         )}
 
-        <div className="flex items-center md:justify-center  pr-[40%] md:pr-0">
+        <div className="flex items-center md:justify-center  pr-[35%] md:pr-0">
           <img src={logo} alt="logo" className="w-15 h-14 object-cover" />
         </div>
 

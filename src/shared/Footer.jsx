@@ -1,6 +1,7 @@
 import { whiteLogo } from "../assets/index";
-import insta from "@/assets/image/instagram.png";
-import tiktok from "@/assets/image/tiktok.png";
+// import insta from "@/assets/image/instagram.png";
+import tiktok from "@/assets/image/tik-tok-1.svg";
+import insta from "../assets/image/instagram-1.svg";
 const Footer = () => {
   return (
     <div className="bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753]  min-h-[100px]  max-h-full ">
