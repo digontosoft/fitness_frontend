@@ -4,8 +4,8 @@ import Title from "@/components/measurements/Tilte";
 import { CourseListGroup } from "@/components/courseList/CourseListGroup";
 const CourseList = () => {
   return (
-    <div>
-      <WorkOutListBaground bgImg={excersizeBg} />
+    <div className="bg-[#FDFDFD]">
+      {/* <WorkOutListBaground bgImg={excersizeBg} /> */}
       <Title title={"ספריית תרגילים"} />
       <CourseListGroup />
     </div>

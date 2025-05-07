@@ -163,7 +163,7 @@ export const CourseListGroup = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 items-center justify-items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-6">
           {exercises.map((exercise) => (
             <CourseCart
               key={exercise._id}

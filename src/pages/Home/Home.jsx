@@ -100,11 +100,13 @@ const Home = () => {
           handleSubmit={handleSubmit}
         />
       )}
-      <div className="flex flex-col items-center justify-center pt-10">
+      <div className="flex flex-col sm:items-center items-end gap-2 sm:mr-0 mr-10 mt-10">
+        <h1 className="sm:text-4xl text-2xl font-bold">היי</h1>
         <h1 className="sm:text-4xl text-2xl font-bold">
-          היי {userInfo?.full_name}
+          {userInfo?.full_name}
         </h1>
-
+      </div>
+      <div className="flex flex-col items-center justify-center pt-10">
         {/* Cards Section */}
         <div className="pt-5 sm:pt-16 md:pt-20 flex flex-col-reverse md:flex-row items-center justify-center gap-6 md:gap-10 w-full">
           <LeftCard data={getMesurement} className="w-full md:w-1/2" />

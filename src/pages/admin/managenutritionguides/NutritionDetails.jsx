@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 const NutritionDetails = () => {
   const { id } = useParams();
   const [nutrition, setNutrition] = useState(null);
+  console.log("nutrition-guide:", nutrition);
 
   useEffect(() => {
     axios.get(`${base_url}/nutritionGuide/${id}`).then((response) => {

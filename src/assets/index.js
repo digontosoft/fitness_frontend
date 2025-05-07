@@ -71,7 +71,21 @@ import iconOne from "./image/icons/IconOne.png";
 import iconTwo from "./image/icons/IconTwo.png";
 import iconThree from "./image/icons/IconThree.png";
 import foodDairy from "./image/food-dairy.png";
+import course from "./image/course.svg";
+import training from "./image/training.svg";
+import exercise from "./image/exercise.svg";
+import recipe from "./image/recipe.svg";
+import nutrationGuide from "./image/nutrition-guide.svg";
+import persomalNutration from "./image/personal-nutrition.svg";
+import measurement from "./image/measurement.svg";
 export {
+  measurement,
+  nutrationGuide,
+  persomalNutration,
+  exercise,
+  recipe,
+  course,
+  training,
   foodDairy,
   icon,
   iconOne,
