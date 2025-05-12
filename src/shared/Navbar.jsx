@@ -134,7 +134,7 @@ const Navbar = () => {
                 }
                 dir="rtl"
               >
-                <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
+                {/* <img src={Icon} alt={`${title} icon`} className="w-5 h-5" /> */}
                 <span dir="rtl">{title}</span>
               </NavLink>
             ))}
@@ -263,7 +263,7 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     dir="rtl"
                   >
-                    <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
+                    {/* <img src={Icon} alt={`${title} icon`} className="w-5 h-5" /> */}
                     <span dir="rtl">{title}</span>
                   </NavLink>
                 ))}

@@ -112,7 +112,6 @@ const Home = () => {
           <LeftCard data={getMesurement} className="w-full md:w-1/2" />
           <RightCard user={user} className="w-full md:w-1/2" />
         </div>
-
         {/* Tasks Section */}
         <div className="max-w-3xl mx-auto justify-center sm:py-10" dir="ltr">
           <div className="pt-10 sm:pt-10 flex flex-wrap justify-center items-center w-full">

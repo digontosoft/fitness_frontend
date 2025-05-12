@@ -8,6 +8,7 @@ import rightLeg from "@/assets/image/right-leg.svg";
 import leftLeg from "@/assets/image/left-leg.svg";
 import thigh from "@/assets/image/thigh.svg";
 import butt from "@/assets/image/butt.svg";
+import cardBg from "@/assets/image/image.svg";
 const TraineeLeftCard = ({ userId }) => {
   const [measurementData, setMesurementData] = useState({});
   const [user, setUser] = useState({});
@@ -53,42 +54,58 @@ const TraineeLeftCard = ({ userId }) => {
   const avgThigh = Math.floor(totalThigh / 2);
 
   return (
-    <div className="sm:w-[400px] w-full h-[245px] flex items-center justify-center rounded-md bg-[#EEEEEE]">
-      <div className="w-full flex justify-center items-center py-4 px-2">
-        <div className="grid grid-cols-2 gap-6 justify-items-center items-center">
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center  gap-2 w-full">
-              <img src={rightArmIcon} alt="" className="object-cover h-8 w-8" />
-              <p className="text-lg">זרוע ימין: {avg}</p>
-            </div>
-
-            <div className="flex items-center  gap-2 w-full">
-              <img src={leftArmIcon} alt="" className="object-cover h-8 w-8" />
-              <p className="text-lg">זרוע שמאל: {measurementData?.waist}</p>
-            </div>
-            <div className="flex items-center  gap-2 w-full">
-              <img src={butt} alt="" className="object-cover h-8 w-8" />
-              <p className="text-lg">ישבן: {avgThigh}</p>
-            </div>
+    <div className="relative sm:w-[500px] w-full h-[245px] rounded-2xl bg-[#EEEEEE]">
+      <div className="absolute top-0 right-0">
+        <img src={cardBg} alt="" className="sm:w-[250px] h-full" />
+      </div>
+      <h1 className="text-2xl text-black font-bold text-right py-4 px-10 relative z-50">
+        מדדים
+      </h1>
+      <div className="relative grid grid-cols-2 gap-6 justify-items-center items-center">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center  gap-2 w-full">
+            <img src={rightArmIcon} alt="" className="object-cover h-8 w-8" />
+            <p className="sm:text-lg text-xs font-bold text-black">
+              זרוע ימין:{" "}
+              <span className="font-normal">{measurementData?.armr}</span>
+            </p>
           </div>
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center  gap-2 w-full">
-              <img src={rightLeg} alt="" className="object-cover h-8 w-8" />
-              <p className="text-lg">
-                ירך ימין:
-                {user.gender === "male"
-                  ? measurementData?.chest
-                  : measurementData?.butt}
-              </p>
-            </div>
-            <div className="flex items-center  gap-2 w-full">
-              <img src={leftLeg} alt="" className="object-cover h-8 w-8" />
-              <p className="text-lg">ירך שמאל: {avgThigh}</p>
-            </div>
-            <div className="flex items-center  gap-2 w-full">
-              <img src={thigh} alt="" className="object-cover h-8 w-8" />
-              <p className="text-lg">היקף מותניים: {avgThigh}</p>
-            </div>
+
+          <div className="flex items-center  gap-2 w-full">
+            <img src={leftArmIcon} alt="" className="object-cover h-8 w-8" />
+            <p className="sm:text-lg text-xs font-bold text-black">
+              זרוע שמאל:{" "}
+              <span className="font-normal">{measurementData?.arml}</span>
+            </p>
+          </div>
+          <div className="flex items-center  gap-2 w-full">
+            <img src={butt} alt="" className="object-cover h-8 w-8" />
+            <p className="sm:text-lg text-xs font-bold text-black">
+              ישבן: <span className="font-normal">{avgThigh}</span>
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center  gap-2 w-full">
+            <img src={rightLeg} alt="" className="object-cover h-8 w-8" />
+            <p className="sm:text-lg text-xs font-bold text-black">
+              ירך ימין:
+              <span className="font-normal">{measurementData?.thighr}</span>
+            </p>
+          </div>
+          <div className="flex items-center  gap-2 w-full">
+            <img src={leftLeg} alt="" className="object-cover h-8 w-8" />
+            <p className="sm:text-lg text-xs font-bold text-black">
+              ירך שמאל:{" "}
+              <span className="font-normal">{measurementData?.thighl}</span>
+            </p>
+          </div>
+          <div className="flex items-center  gap-2 w-full">
+            <img src={thigh} alt="" className="object-cover h-8 w-8" />
+            <p className="sm:text-lg text-xs font-bold text-black">
+              היקף מותניים:{" "}
+              <span className="font-normal">{measurementData?.waist}</span>
+            </p>
           </div>
         </div>
       </div>

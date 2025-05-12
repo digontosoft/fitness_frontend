@@ -12,8 +12,10 @@ import rightLeg from "@/assets/image/right-leg.svg";
 import leftLeg from "@/assets/image/left-leg.svg";
 import thigh from "@/assets/image/thigh.svg";
 import butt from "@/assets/image/butt.svg";
+import cardBg from "@/assets/image/image.svg";
 
 const LeftCard = ({ data }) => {
+  console.log("measurement data:", data);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const leftArm = Number(data?.arml) || 0;
   const rightArm = Number(data?.armr) || 0;
@@ -24,8 +26,11 @@ const LeftCard = ({ data }) => {
   const totalThigh = leftThigh + rightThigh;
   const avgThigh = Math.floor(totalThigh / 2);
   return (
-    <div className="sm:w-[400px] w-full h-[245px] rounded-md bg-[#EEEEEE]">
-      <div className="flex items-center justify-between p-4">
+    <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#EEEEEE]">
+      <div className="absolute top-0 right-0">
+        <img src={cardBg} alt="" className="w-[250px] h-full" />
+      </div>
+      <div className="flex items-center justify-between p-4 relative">
         <Link to="/mesurement-update">
           <Button className="bg-black text-white  text-xs border border-white rounded-full px-3 py-1 font-bold">
             להזנת המדדים
@@ -33,37 +38,47 @@ const LeftCard = ({ data }) => {
         </Link>
         <h1 className="text-2xl font-bold">מדדים</h1>
       </div>
-      <div className="w-full flex justify-end items-center py-4 px-2">
+      <div className="relative w-full flex justify-end items-center py-4 px-2">
         <div className="grid grid-cols-2 gap-6 justify-items-center items-center">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-end gap-2 w-full">
-              <p className="text-lg">
+              <p className="sm:text-lg text-xs font-bold text-black">
                 ירך ימין:
-                {userDetails.gender === "male" ? data?.chest : data?.butt}
+                {data?.thighr}
               </p>
               <img src={rightLeg} alt="" className="object-cover h-8 w-8" />
             </div>
             <div className="flex items-center justify-end gap-2 w-full">
-              <p className="text-lg">ירך שמאל: {avgThigh}</p>
+              <p className="sm:text-lg text-xs font-bold text-black">
+                ירך שמאל: {data?.thighl}
+              </p>
               <img src={leftLeg} alt="" className="object-cover h-8 w-8" />
             </div>
             <div className="flex items-center justify-end gap-2 w-full">
-              <p className="text-lg">היקף מותניים: {avgThigh}</p>
+              <p className="sm:text-lg text-xs font-bold text-black">
+                היקף מותניים: {data?.waist}
+              </p>
               <img src={thigh} alt="" className="object-cover h-8 w-8" />
             </div>
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-end gap-2 w-full">
-              <p className="text-lg">זרוע ימין::{avg}</p>
+              <p className="sm:text-lg text-xs font-bold text-black">
+                זרוע ימין::{data?.armr}
+              </p>
               <img src={rightArmIcon} alt="" className="object-cover h-8 w-8" />
             </div>
 
             <div className="flex items-center justify-end gap-2 w-full">
-              <p className="text-lg">זרוע שמאל: {data?.waist}</p>
+              <p className="sm:text-lg text-xs font-bold text-black">
+                זרוע שמאל: {data?.arml}
+              </p>
               <img src={leftArmIcon} alt="" className="object-cover h-8 w-8" />
             </div>
             <div className="flex items-center justify-end gap-2 w-full">
-              <p className="text-lg">ישבן: {avgThigh}</p>
+              <p className="sm:text-lg text-xs font-bold text-black">
+                ישבן: {avgThigh}
+              </p>
               <img src={butt} alt="" className="object-cover h-8 w-8" />
             </div>
           </div>
