@@ -6,7 +6,7 @@ import googleIcon from "./image/google-icon.png";
 import female from "./image/female.png";
 import female2 from "./image/female2.png";
 import whiteLogo from "./image/whiteLogo.png";
-import bodyBuilder from "./image/bodybuilder-2.png";
+import bodyBuilder from "./image/bodybuilder.svg";
 import bodyBuilder3 from "./image/bodybuilder-3.png";
 import tiktok from "./image/icons/tiktok.png";
 import facebookIcon from "./image/icons/facebook-icon.png";

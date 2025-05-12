@@ -60,22 +60,23 @@ export const traineeLink = [
 export const adminLink = [
   {
     _id: 1,
-    title: "דף הבית",
-    link: "/dashboard",
+    title: "נהל תרגילים",
+    link: "/dashboard/exercise-list",
     icon: nutrationGuide,
   },
   {
     _id: 2,
-    title: "ניהול מתאמנים קיימים",
-    link: "dashboard/trainee-users-list",
+    title: "נהל אימונים",
+    link: "/dashboard/workout-list",
     icon: nutrationGuide,
   },
   {
     _id: 3,
-    title: "ניהול מדריכי תזונה",
-    link: "dashboard/nutrition-lists",
+    title: "נהל תוכניות אימון",
+    link: "dashboard/training-list",
     icon: nutrationGuide,
   },
+
   {
     _id: 4,
     title: "אישור מתאמנים חדשים",
@@ -84,22 +85,20 @@ export const adminLink = [
   },
   {
     _id: 5,
-    title: "נהל תוכניות אימון",
-    link: "dashboard/training-list",
+    title: "ניהול מדריכי תזונה",
+    link: "dashboard/nutrition-lists",
     icon: nutrationGuide,
   },
-
   {
     _id: 6,
-    title: "נהל אימונים",
-    link: "/dashboard/workout-list",
+    title: "ניהול מתאמנים קיימים",
+    link: "dashboard/trainee-users-list",
     icon: nutrationGuide,
   },
-
   {
     _id: 7,
-    title: "נהל תרגילים",
-    link: "/dashboard/exercise-list",
+    title: "דף הבית",
+    link: "/dashboard",
     icon: nutrationGuide,
   },
 ];

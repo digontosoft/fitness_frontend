@@ -1,9 +1,10 @@
 import cartBg from "../../assets/image/workoutList/Bg.png";
 import whiteLogo from "../../assets/image/whiteLogo.png";
-import icon from "../../assets/image/courseList/Bicep.png";
+import icon from "../../assets/image/right-arm.svg";
 import HeroVideo from "../startTraining/HeroVideo";
 import ReactPlayer from "react-player";
 const CourseCart = ({ exercise, handleOpen }) => {
+  console.log("exercise:", exercise);
   return (
     <div
       className="w-[310px] sm:w-56 shadow-xl rounded-2xl p-3 mt-8 cursor-pointer"

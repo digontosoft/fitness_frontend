@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
-import { female2, men2 } from "../../assets/index";
+
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+
+import circle from "@/assets/image/circle.svg";
+import men from "@/assets/image/men.svg";
+import women from "@/assets/image/women.svg";
+import bgCard from "@/assets/image/image.svg";
 
 const RightCard = ({ user }) => {
   const [userSteps, setUserSteps] = useState(null);
@@ -35,7 +40,10 @@ const RightCard = ({ user }) => {
   }, [user?._id]);
 
   return (
-    <div className="relative sm:w-[400px] w-full h-[245px] rounded-md bg-[#EEEEEE] p-4">
+    <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#EEEEEE] p-4">
+      <div className="absolute top-0 right-0">
+        <img src={bgCard} alt="" className="w-[250px] h-full" />
+      </div>
       <div className="h-32 w-32 rounded-full bg-[#f8f8f8] flex items-center justify-center">
         <div className="h-28 w-28 rounded-full shadow-md shadow-slate-200 bg-white flex items-center justify-center">
           <div className="flex items-center justify-center">
@@ -74,12 +82,14 @@ const RightCard = ({ user }) => {
           </div>
         </div>
       </div>
-      <div className="absolute -top-4 -right-5 w-[134px] h-[134px] bg-white rounded-full"></div>
-      <div className="absolute top-2 left-[265px] w-full h-full">
+      <div className="absolute top-0 right-0">
+        <img src={circle} alt="" className="w-[200px] h-[180px]" />
+      </div>
+      <div className="absolute top-2 -right-[340px] w-full h-full">
         <img
-          src={gender === "male" ? men2 : female2}
+          src={gender === "male" ? men : women}
           alt="female"
-          className="h-[102px] w-8 relative left-[60px] top-4"
+          className="h-[130px] w-12 relative left-[60px] top-4"
         />
       </div>
       <div className="flex flex-col items-end justify-end pr-4 absolute bottom-5 right-0">

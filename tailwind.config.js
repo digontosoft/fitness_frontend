@@ -16,7 +16,7 @@ export default {
           "radial-gradient(62.54% 65.93% at 50.15% 58.14%, #404040 0%, #000000 100%)",
       },
       fontFamily: {
-        hebbo: ["Hebbo", "sans-serif"],
+        hebbo: ["Heebo", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

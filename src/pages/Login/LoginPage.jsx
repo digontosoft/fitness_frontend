@@ -21,7 +21,7 @@ const LoginPage = () => {
       onClick={() => handleLoginWithGoogle(role)}
     >
       <p>{text}</p>
-      {role === "admin" && (
+      {role === "trainee" && (
         <img className="w-8" src={googleIcon} alt="Google Icon" />
       )}
     </Button>
