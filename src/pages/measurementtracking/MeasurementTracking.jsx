@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import Loading from "@/components/common/Loading";
 import rightArm from "@/assets/image/right-arm.svg";
 import leftArm from "@/assets/image/left-arm.svg";
+import butt from "@/assets/image/butt.svg";
+import chest from "@/assets/image/chest.svg";
 
 const MeasurementTracking = () => {
   const [data, setData] = useState([]);
@@ -62,6 +64,10 @@ const MeasurementTracking = () => {
               customImage = rightArm;
             } else if (data.cartTitle === "זרוע שמאל") {
               customImage = leftArm;
+            } else if (data.cartTitle === "חזה") {
+              customImage = chest;
+            } else if (data.cartTitle === "ישבן") {
+              customImage = butt;
             }
 
             return (
@@ -71,7 +77,7 @@ const MeasurementTracking = () => {
                 className="border rounded-2xl p-4 flex flex-col space-y-4 bg-[#EEEEEE]"
               >
                 {/* Title and Icon */}
-                <div className="flex gap-2 items-center space-x-2">
+                <div className="relative z-50 flex gap-2 items-center space-x-2">
                   {customImage ? (
                     <img
                       src={customImage}
@@ -88,6 +94,12 @@ const MeasurementTracking = () => {
                 <div className="flex justify-center items-center">
                   <SmallCart data={data} />
                 </div>
+                <a
+                  href=""
+                  className="text-lg font-semibold text-center underline"
+                >
+                  הצגת מדדים קודמים
+                </a>
               </div>
             );
           })}

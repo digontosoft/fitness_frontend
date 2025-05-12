@@ -9,9 +9,9 @@ const TraineeRightCard = ({ gender, stepAverage, stepTarget }) => {
   const strokeWidth = 4;
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
-  // const parcentage = ((progress / target) * 100).toFixed(1);
-  const parcentage = Math.min((progress / target) * 100, 100).toFixed(1);
+  const parcentage = Math.min((progress / target) * 100, 100);
   const offset = circumference - (parcentage / 100) * circumference;
+  // const parcentage = ((progress / target) * 100).toFixed(1);
 
   return (
     <div className="relative sm:w-[500px] w-full h-[245px] rounded-2xl bg-[#EEEEEE] p-4">

@@ -15,7 +15,7 @@ const RightCard = ({ user }) => {
   const strokeWidth = 8;
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
-  const parcentage = Math.min((progress / target) * 100, 100).toFixed(1);
+  const parcentage = Math.min((progress / target) * 100, 100);
   const offset = circumference - (parcentage / 100) * circumference;
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userDetails?.gender;
@@ -85,11 +85,11 @@ const RightCard = ({ user }) => {
       <div className="absolute top-0 right-0">
         <img src={circle} alt="" className="w-[200px] h-[180px]" />
       </div>
-      <div className="absolute top-2 -right-[340px] w-full h-full">
+      <div className="absolute top-6 -right-[300px] sm:-right-[400px] w-full h-full">
         <img
           src={gender === "male" ? men : women}
           alt="female"
-          className="h-[130px] w-12 relative left-[60px] top-4"
+          className="h-[130px] w-12"
         />
       </div>
       <div className="flex flex-col items-end justify-end pr-4 absolute bottom-5 right-0">
