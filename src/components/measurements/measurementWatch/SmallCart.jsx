@@ -18,8 +18,8 @@ const months = [
 const SmallCart = ({ data, setOpen, setId }) => {
   return (
     <div className="relative flex sm:flex-nowrap flex-wrap sm:justify-between justify-center items-center gap-4 px-2 md:px-10">
-      <div className="absolute -top-[77px] -right-[86px]">
-        <img src={bgCard} alt="" className="w-[250px] h-full" />
+      <div className="absolute -top-[77px] -right-[145px] sm:-right-[95px]">
+        <img src={bgCard} alt="" className="w-[180px] h-full" />
       </div>
       {data.item.map(
         (item, index) => (
@@ -33,16 +33,16 @@ const SmallCart = ({ data, setOpen, setId }) => {
               }}
               className="min-w-24 w-auto min-h-[90px] h-auto flex flex-col justify-center items-center bg-white p-2 rounded-lg"
             >
-              <span className=" text-[#000000] text-xs font-bold text-center">
+              <span className=" text-[#000000] text-base font-black text-center">
                 {months[moment(item?.date).month()]}
               </span>
 
-              <span className="text-[#BF2033] text-lg font-extrabold">
+              <span className="text-[#BF2033] text-xl font-extrabold">
                 {item.data}
               </span>
 
               <span className="text-[#8C8C8C] text-[10px] font-normal">
-                {"CM"}
+                {"ס׳׳מ"}
               </span>
             </div>
           )
