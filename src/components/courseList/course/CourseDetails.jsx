@@ -36,6 +36,7 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
       .then((response) => {
         if (response.status === 200) {
           setExerciseData(response.data.data);
+          console.log("first", response.data.data);
         }
       })
       .finally(() => setLoading(false));

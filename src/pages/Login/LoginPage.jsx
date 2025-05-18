@@ -1,8 +1,10 @@
 import { base_url } from "@/api/baseUrl";
-import { blackLogo, googleIcon, whiteLogo, bodyBuilder } from "../../assets";
+import { blackLogo, bodyBuilder } from "../../assets";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Loading from "@/components/common/Loading";
+import googleIcon from "../../assets/image/google.svg";
+import { whiteLogo } from "../../assets/index";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);

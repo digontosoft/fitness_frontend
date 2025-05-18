@@ -42,7 +42,7 @@ const bodyPartOptions = [
     value: "יד קדמית",
   },
   {
-    label: "יד אחורית ",
+    label: "יד אחורית",
     value: "יד אחורית",
   },
   { label: "כתפיים", value: "כתפיים" },

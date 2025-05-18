@@ -161,7 +161,8 @@ const Navbar = () => {
           // </div>
           <div className="hidden md:flex justify-between items-center space-x-9">
             {traineeLink.map(({ _id, title, link, icon: Icon }) => {
-              const isTrainingLink = link === "/trainings";
+              const isTrainingLink =
+                link === "/trainings" || link === "/exercise-library";
               if (isTrainingLink && !hasWorkoutTask) {
                 return (
                   <a
