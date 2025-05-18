@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 import Loading from "@/components/common/Loading";
+import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 
 const EditTrainingForm = () => {
   const { id } = useParams();
@@ -22,6 +23,9 @@ const EditTrainingForm = () => {
   const [exerciseSelectVisible, setExerciseSelectVisible] = useState({});
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [selectedBodyPart, setSelectedBodyPart] = useState(null);
+  const [selectedEquipment, setSelectedEquipment] = useState(null);
+  const [selectedExercise, setSelectedExercise] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -142,6 +146,24 @@ const EditTrainingForm = () => {
 
     setExerciseSelectVisible((prev) => ({ ...prev, [workoutId]: false }));
   };
+
+  useEffect(() => {
+    const fetchSelectedExercises = async () => {
+      if (selectedBodyPart && selectedEquipment) {
+        try {
+          const response = await axios.get(
+            `${base_url}/exercise?body_part=${selectedBodyPart}&equipment=${selectedEquipment}`
+          );
+          setSelectedExercise(response.data.data);
+          console.log("selectedExercises:", response.data.data);
+        } catch (error) {
+          console.error("Error fetching selected exercises:", error);
+        }
+      }
+    };
+
+    fetchSelectedExercises();
+  }, [selectedBodyPart, selectedEquipment]);
 
   // // Remove an exercise from a workout
   const handleRemoveExercise = (workoutId, exerciseId) => {
@@ -424,16 +446,6 @@ const EditTrainingForm = () => {
 
                 {exerciseSelectVisible[workout._id] && (
                   <div dir="rtl">
-                    {/* <Select
-                    options={exerciseList}
-                    valueField="_id"
-                    labelField="name"
-                    onChange={(selected) =>
-                      handleAddExercise(workout._id, selected)
-                    }
-                    searchBy="name"
-                  /> */}
-
                     <div>
                       <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         אזור בגוף
@@ -441,14 +453,17 @@ const EditTrainingForm = () => {
                       <Select
                         className="rounded-lg h-12 w-auto"
                         direction="rtl"
-                        valueField="_id"
-                        labelField="body_part"
-                        options={exerciseList}
+                        valueField="id"
+                        labelField="label"
+                        options={bodyPartOptions}
                         placeholder="סנן לפי חלק בגוף"
-                        onChange={(selected) =>
-                          handleAddExercise(workout._id, selected)
-                        }
-                        searchBy="body_part"
+                        onChange={(selectedOptions) => {
+                          const values = selectedOptions.map(
+                            (option) => option.value
+                          );
+                          setSelectedBodyPart(values[0]);
+                        }}
+                        searchBy="label"
                       />
                     </div>
                     <div>
@@ -458,14 +473,17 @@ const EditTrainingForm = () => {
                       <Select
                         className="rounded-lg h-12 w-auto"
                         direction="rtl"
-                        options={exerciseList}
-                        valueField="_id"
-                        labelField="equipment"
+                        options={equipmentOptions}
+                        valueField="id"
+                        labelField="label"
                         placeholder="סנן לפי ציוד"
-                        onChange={(selected) =>
-                          handleAddExercise(workout._id, selected)
-                        }
-                        searchBy="equipment"
+                        onChange={(selectedOptions) => {
+                          const values = selectedOptions.map(
+                            (option) => option.value
+                          );
+                          setSelectedEquipment(values[0]);
+                        }}
+                        searchBy="label"
                       />
                     </div>
                     <div>
@@ -475,7 +493,7 @@ const EditTrainingForm = () => {
                       <Select
                         className="rounded-lg h-12 w-auto"
                         direction="rtl"
-                        options={exerciseList}
+                        options={selectedExercise}
                         valueField="_id"
                         labelField="name"
                         placeholder="בחר"
@@ -487,7 +505,6 @@ const EditTrainingForm = () => {
                     </div>
                   </div>
                 )}
-
                 <Button
                   type="button"
                   onClick={() =>

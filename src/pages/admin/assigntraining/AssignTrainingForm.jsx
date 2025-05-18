@@ -2,13 +2,14 @@ import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
 import { Trash } from "lucide-react";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
+import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 
 const AssignTrainingForm = ({ trainingId, user_id }) => {
   const [selectedTraining, setSelectedTraining] = useState(null);
@@ -20,6 +21,9 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
   const [workout, setWorkout] = useState([]);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [selectedBodyPart, setSelectedBodyPart] = useState(null);
+  const [selectedEquipment, setSelectedEquipment] = useState(null);
+  const [selectedExercise, setSelectedExercise] = useState([]);
   const navigate = useNavigate();
 
   const {
@@ -235,7 +239,6 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     if (!trainingbyId) return;
     const updatedTraining = { ...trainingbyId };
     const currentWorkout = updatedTraining.workouts[workoutIndex];
-
     selectedExercises.forEach((exercise) => {
       currentWorkout.exercises.push({
         _id: exercise._id,
@@ -246,11 +249,28 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
         manipulation: "",
       });
     });
-
     setIsSupersetIncomplete(false);
     setTrainingById(updatedTraining);
     setAddMoreExerciseIndex(null);
   };
+
+  useEffect(() => {
+    const fetchSelectedExercises = async () => {
+      if (selectedBodyPart && selectedEquipment) {
+        try {
+          const response = await axios.get(
+            `${base_url}/exercise?body_part=${selectedBodyPart}&equipment=${selectedEquipment}`
+          );
+          setSelectedExercise(response.data.data);
+          console.log("selectedExercises:", response.data.data);
+        } catch (error) {
+          console.error("Error fetching selected exercises:", error);
+        }
+      }
+    };
+
+    fetchSelectedExercises();
+  }, [selectedBodyPart, selectedEquipment]);
 
   const fetchWorkoutData = async (workoutId) => {
     try {
@@ -351,16 +371,6 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
   return (
     <div className="sm:py-20 py-6 sm:w-[550px] w-full mx-auto" dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* <Select
-          className="rounded-lg h-12 sm:min-w-[400px] w-full"
-          direction="rtl"
-          options={trainingList}
-          valueField="_id"
-          labelField="name"
-          onChange={handleTrainingChange}
-          searchBy="name"
-        /> */}
-
         {trainingbyId && (
           <div className="space-y-4">
             <DynamicInputField
@@ -474,19 +484,6 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                 <div className="my-4">
                   {addMoreExerciseIndex === workoutIndex && (
                     <div>
-                      {/* <Select
-                        className="rounded-lg h-12"
-                        direction="rtl"
-                        options={exercise}
-                        valueField="_id"
-                        labelField="name"
-                        multi
-                        onChange={(selected) =>
-                          handleNewExerciseSelection(selected, workoutIndex)
-                        }
-                        searchBy="name"
-                      /> */}
-
                       <div>
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                           אזור בגוף
@@ -494,14 +491,17 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         <Select
                           className="rounded-lg h-12 w-auto"
                           direction="rtl"
-                          valueField="_id"
-                          labelField="body_part"
-                          options={exercise}
+                          valueField="id"
+                          labelField="label"
+                          options={bodyPartOptions}
                           placeholder="סנן לפי חלק בגוף"
-                          onChange={(selected) =>
-                            handleNewExerciseSelection(selected, workoutIndex)
-                          }
-                          searchBy="body_part"
+                          onChange={(selectedOptions) => {
+                            const values = selectedOptions.map(
+                              (option) => option.value
+                            );
+                            setSelectedBodyPart(values[0]);
+                          }}
+                          searchBy="label"
                         />
                       </div>
                       <div>
@@ -511,24 +511,27 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         <Select
                           className="rounded-lg h-12 w-auto"
                           direction="rtl"
-                          options={exercise}
-                          valueField="_id"
-                          labelField="equipment"
+                          options={equipmentOptions}
+                          valueField="id"
+                          labelField="label"
                           placeholder="סנן לפי ציוד"
-                          onChange={(selected) =>
-                            handleNewExerciseSelection(selected, workoutIndex)
-                          }
-                          searchBy="equipment"
+                          onChange={(selectedOptions) => {
+                            const values = selectedOptions.map(
+                              (option) => option.value
+                            );
+                            setSelectedEquipment(values[0]);
+                          }}
+                          searchBy="label"
                         />
                       </div>
-                      <div>
+                      <div className="mt-6">
                         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                           סנן לפי שם תרגיל
                         </label>
                         <Select
                           className="rounded-lg h-12 w-auto"
                           direction="rtl"
-                          options={exercise}
+                          options={selectedExercise}
                           valueField="_id"
                           labelField="name"
                           placeholder="בחר"
