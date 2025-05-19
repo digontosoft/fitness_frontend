@@ -8,6 +8,8 @@ import { base_url } from "@/api/baseUrl";
 const Supermarket = () => {
   const { id } = useParams();
   const [course, setCourse] = useState([]);
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const gender = user?.gender;
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -28,7 +30,11 @@ const Supermarket = () => {
       <WorkOutListBaground bgImg={course?.cover} />
       <div className="bg-white ">
         <SuperTitle
-          title={course?.title}
+          title={
+            gender === "male"
+              ? course?.male_supermaket || course?.male_kitchen
+              : course?.female_supermaket || course?.female_kitchen
+          }
           description={course?.description}
           className="py-5"
         />

@@ -45,10 +45,7 @@ const ExcersizeInput = ({
           {/* Input 1 */}
           <div className="flex justify-between  w-80">
             <p className="text-base font-bold text-[#000000] flex">
-              סטים:
-              <span className="text-base font-normal">
-                {exerciseData?.sets}
-              </span>
+              סטים: {exerciseData?.sets}
             </p>
             <div className="flex flex-col relative">
               <label
@@ -78,10 +75,7 @@ const ExcersizeInput = ({
           {/* Input 2 */}
           <div className="flex justify-between  w-80">
             <p className="text-base font-bold text-[#000000] flex">
-              חזרות:
-              <span className="text-base font-normal">
-                {exerciseData?.reps}
-              </span>
+              חזרות: {exerciseData?.reps}
             </p>
             <div className="flex flex-col relative">
               <label
@@ -111,10 +105,7 @@ const ExcersizeInput = ({
           {/* Input 3 */}
           <div className="flex justify-between  w-80">
             <p className="text-base font-bold text-[#000000] flex">
-              מניפולציה:
-              <span className="text-base font-normal">
-                :{exerciseData?.manipulation}
-              </span>
+              מניפולציה: {exerciseData?.manipulation}
             </p>
             <div className="flex flex-col relative">
               <label

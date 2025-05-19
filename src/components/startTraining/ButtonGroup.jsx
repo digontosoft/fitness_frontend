@@ -15,7 +15,7 @@ const ButtonGroup = ({
           disabled={disabled}
           className="bg-gradient-to-tr from-red-800 to-red-600 uppercase text-white font-bold text-xs px-8 md:px-10 rounded-full"
         >
-          {isFinished ? "Finish" : "הַבָּא"}
+          {isFinished ? "סיום" : "הבא"}
         </Button>
         {showPrevious && (
           <Button

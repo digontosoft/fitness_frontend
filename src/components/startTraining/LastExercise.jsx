@@ -12,22 +12,26 @@ const LastExercise = ({ currentExercise }) => {
       >
         <div className="flex flex-col gap-2 text-[#000000] text-xs">
           <p className="flex items-center text-base font-normal">
-            <span className="font-bold  pl-1">מניפולציה:</span>
-            {currentExercise?.manipulation}
+            <span className="font-bold  pl-1">
+              מניפולציה: {currentExercise?.manipulation}
+            </span>{" "}
           </p>
         </div>
         <div className="flex flex-col gap-2 text-[#000000] text-xs">
           <p className="flex text-base items-center font-normal">
-            <span className="font-bold">חזרות שבוצעו: </span>{" "}
-            {currentExercise?.reps}
+            <span className="font-bold">
+              חזרות שבוצעו: {currentExercise?.reps}
+            </span>{" "}
           </p>
           <p className="flex text-base items-center font-normal">
-            <span className=" font-bold">סטים שבוצעו: </span>{" "}
-            {currentExercise?.sets}
+            <span className=" font-bold">
+              סטים שבוצעו: {currentExercise?.sets}
+            </span>{" "}
           </p>
           <p className="flex text-base items-center font-normal">
-            <span className=" font-bold">משקל: </span>{" "}
-            {currentExercise?.last_set_weight}
+            <span className=" font-bold">
+              משקל: {currentExercise?.last_set_weight}
+            </span>{" "}
           </p>
         </div>
       </div>

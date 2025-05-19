@@ -61,6 +61,11 @@ import shoulder from "../../assets/image/shoulder.svg";
 import chest from "../../assets/image/chest.svg";
 import butt from "../../assets/image/butt.svg";
 import trx from "../../assets/image/trx.svg";
+import machine from "../../assets/image/machine.svg";
+import weights from "../../assets/image/weights.svg";
+import pully from "../../assets/image/pully.svg";
+import bands from "../../assets/image/bands.svg";
+import dumbles from "../../assets/image/dumbles.svg";
 import HeroVideo from "../startTraining/HeroVideo";
 import ReactPlayer from "react-player";
 import { useEffect, useState } from "react";
@@ -108,18 +113,16 @@ const CourseCart = ({ exerciseId, handleOpen }) => {
   let customEquipment = null;
   if (exerciseData?.equipment === "TRX") {
     customEquipment = trx;
-  } else if (exerciseData?.equipment === "יד קדמית") {
-    customEquipment = frontHand;
-  } else if (exerciseData?.equipment === "יד אחורית") {
-    customEquipment = backHand;
-  } else if (exerciseData?.equipment === "כתפיים") {
-    customEquipment = shoulder;
-  } else if (exerciseData?.equipment === "חזה") {
-    customEquipment = chest;
-  } else if (exerciseData?.equipment === "ישבן") {
-    customEquipment = butt;
-  } else if (exerciseData?.equipment === "גב תחתון") {
-    customEquipment = lowerBack;
+  } else if (exerciseData?.equipment === "מכונות") {
+    customEquipment = machine;
+  } else if (exerciseData?.equipment === "משקולות") {
+    customEquipment = weights;
+  } else if (exerciseData?.equipment === "פולי") {
+    customEquipment = pully;
+  } else if (exerciseData?.equipment === "גומיות") {
+    customEquipment = bands;
+  } else if (exerciseData?.equipment === "מוטות") {
+    customEquipment = dumbles;
   }
 
   return (
@@ -137,7 +140,7 @@ const CourseCart = ({ exerciseId, handleOpen }) => {
           />
         </div>
       )}
-      <div className="px-6 py-4">
+      <div className="px-6 py-4 space-y-4">
         <p className="text-[#0A2533]  text-sm font-bold text-end">
           {exerciseData?.name}
         </p>
@@ -146,7 +149,7 @@ const CourseCart = ({ exerciseId, handleOpen }) => {
           <p>{exerciseData?.body_part}</p>
         </div>
         <div className="flex gap-2  items-center flex-row-reverse">
-          <img src={customEquipment} alt="" />
+          <img src={customEquipment} alt="" className="w-6 h-6" />
           <p>{exerciseData?.equipment}</p>
         </div>
       </div>

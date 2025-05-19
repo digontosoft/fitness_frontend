@@ -169,6 +169,8 @@ const AddNutritionForm = () => {
         file: base64File,
       };
 
+      console.log("nutritionGuide:", payload);
+
       const response = await axios.post(`${base_url}/nutritionGuide`, payload, {
         headers: {
           Accept: "application/json",
@@ -176,11 +178,11 @@ const AddNutritionForm = () => {
         },
       });
 
-      if (response.status === 201) {
-        toast.success("Nutrition saved successfully!");
-        reset();
-        navigate("/dashboard/nutrition-lists");
-      }
+      // if (response.status === 201) {
+      //   toast.success("Nutrition saved successfully!");
+      //   reset();
+      //   navigate("/dashboard/nutrition-lists");
+      // }
     } catch (error) {
       console.error("Error submitting nutrition guide:", error);
       toast.error("Failed to save nutrition.");

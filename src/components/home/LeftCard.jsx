@@ -43,8 +43,7 @@ const LeftCard = ({ data }) => {
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-end gap-2 w-full">
               <p className="sm:text-lg text-xs font-bold text-black">
-                ירך ימין:
-                {data?.thighr}
+                ירך ימין: {data?.thighr}
               </p>
               <img src={rightLeg} alt="" className="object-cover h-8 w-8" />
             </div>
@@ -64,7 +63,7 @@ const LeftCard = ({ data }) => {
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-end gap-2 w-full">
               <p className="sm:text-lg text-xs font-bold text-black">
-                זרוע ימין::{data?.armr}
+                זרוע ימין: {data?.armr}
               </p>
               <img src={rightArmIcon} alt="" className="object-cover h-8 w-8" />
             </div>
