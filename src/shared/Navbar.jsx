@@ -250,24 +250,27 @@ const Navbar = () => {
           <div className="space-y-2">
             {userType === "admin" ? (
               <div className="flex flex-col space-y-2">
-                {adminLink.map(({ _id, title, link, icon: Icon }) => (
-                  <NavLink
-                    key={_id}
-                    to={link}
-                    className={({ isActive }) =>
-                      `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
-                        isActive
-                          ? "text-red-500"
-                          : "text-gray-600 hover:text-gray-900"
-                      }`
-                    }
-                    onClick={() => setIsOpen(false)}
-                    dir="rtl"
-                  >
-                    {/* <img src={Icon} alt={`${title} icon`} className="w-5 h-5" /> */}
-                    <span dir="rtl">{title}</span>
-                  </NavLink>
-                ))}
+                {adminLink
+                  .slice()
+                  .reverse()
+                  .map(({ _id, title, link, icon: Icon }) => (
+                    <NavLink
+                      key={_id}
+                      to={link}
+                      className={({ isActive }) =>
+                        `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
+                          isActive
+                            ? "text-red-500"
+                            : "text-gray-600 hover:text-gray-900"
+                        }`
+                      }
+                      onClick={() => setIsOpen(false)}
+                      dir="rtl"
+                    >
+                      {/* <img src={Icon} alt={`${title} icon`} className="w-5 h-5" /> */}
+                      <span dir="rtl">{title}</span>
+                    </NavLink>
+                  ))}
               </div>
             ) : userType === "trainee" ? (
               // <div className="flex flex-col space-y-2">
@@ -291,30 +294,62 @@ const Navbar = () => {
               //   ))}
               // </div>
               <div className="flex flex-col space-y-2">
-                {traineeLink.map(({ _id, title, link, icon: Icon }) => {
-                  const isTrainingLink = link === "/trainings";
+                {traineeLink
+                  .slice()
+                  .reverse()
+                  .map(({ _id, title, link, icon: Icon }) => {
+                    const isTrainingLink = link === "/trainings";
 
-                  if (isTrainingLink && !hasWorkoutTask) {
+                    if (isTrainingLink && !hasWorkoutTask) {
+                      return (
+                        <a
+                          key={_id}
+                          href="https://wa.link/gmt4t4"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center text-gray-400 font-semibold gap-x-4 cursor-not-allowed"
+                          dir="rtl"
+                        >
+                          <img
+                            src={Icon}
+                            alt={`${title} icon`}
+                            className="w-5 h-5 opacity-50"
+                          />
+                          <span>{title}</span>
+                        </a>
+                      );
+                    }
+
                     return (
-                      <a
+                      <NavLink
                         key={_id}
-                        href="https://wa.link/gmt4t4"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center text-gray-400 font-semibold gap-x-4 cursor-not-allowed"
+                        to={link}
+                        className={({ isActive }) =>
+                          `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
+                            isActive
+                              ? "text-red-500"
+                              : "text-gray-600 hover:text-gray-900"
+                          }`
+                        }
+                        onClick={() => setIsOpen(false)}
                         dir="rtl"
                       >
                         <img
                           src={Icon}
                           alt={`${title} icon`}
-                          className="w-5 h-5 opacity-50"
+                          className="w-5 h-5"
                         />
                         <span>{title}</span>
-                      </a>
+                      </NavLink>
                     );
-                  }
-
-                  return (
+                  })}
+              </div>
+            ) : userType === "recipe" ? (
+              <div className="flex flex-col space-y-2">
+                {recipeLink
+                  .slice()
+                  .reverse()
+                  .map(({ _id, title, link, icon: Icon }) => (
                     <NavLink
                       key={_id}
                       to={link}
@@ -333,31 +368,9 @@ const Navbar = () => {
                         alt={`${title} icon`}
                         className="w-5 h-5"
                       />
-                      <span>{title}</span>
+                      <span dir="rtl">{title}</span>
                     </NavLink>
-                  );
-                })}
-              </div>
-            ) : userType === "recipe" ? (
-              <div className="flex flex-col space-y-2">
-                {recipeLink.map(({ _id, title, link, icon: Icon }) => (
-                  <NavLink
-                    key={_id}
-                    to={link}
-                    className={({ isActive }) =>
-                      `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
-                        isActive
-                          ? "text-red-500"
-                          : "text-gray-600 hover:text-gray-900"
-                      }`
-                    }
-                    onClick={() => setIsOpen(false)}
-                    dir="rtl"
-                  >
-                    <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-                    <span dir="rtl">{title}</span>
-                  </NavLink>
-                ))}
+                  ))}
               </div>
             ) : (
               <div>No valid user type or token found.</div>

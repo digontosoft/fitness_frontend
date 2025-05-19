@@ -373,7 +373,7 @@ const EditTrainingForm = () => {
                 key={workout._id}
                 className="border py-2 px-4 rounded-md my-4"
               >
-                <h1 className="font-semibold">{workout?.name}</h1>
+                <h1 className="font-semibold text-center">{workout?.name}</h1>
                 <div className="flex items-center gap-x-2" dir="rtl">
                   <Trash
                     className="cursor-pointer text-red-600"

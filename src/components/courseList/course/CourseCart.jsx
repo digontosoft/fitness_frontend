@@ -38,24 +38,25 @@ import { Link } from "react-router-dom";
 const CourseCart = ({ course }) => {
   const imageUrl = `${base_url}/${course?.image}`;
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  console.log("course", course);
+  // // Determine the appropriate title based on course type and user gender
+  // const getCourseTitle = () => {
+  //   if (course?.title === "חכם בסופר") {
+  //     // Supermarket course
+  //     return user.gender === "male"
+  //       ? course?.male_supermaket || course?.title
+  //       : course?.female_supermaket || course?.title;
+  //   } else if (course?.title === "חכם במטבח") {
+  //     // Kitchen course
+  //     return user.gender === "male"
+  //       ? course?.male_kitchen || course?.title
+  //       : course?.female_kitchen || course?.title;
+  //   }
+  //   return course?.title; // Fallback
+  // };
 
-  // Determine the appropriate title based on course type and user gender
-  const getCourseTitle = () => {
-    if (course?.title === "חכם בסופר") {
-      // Supermarket course
-      return user.gender === "male"
-        ? course?.male_supermaket || course?.title
-        : course?.female_supermaket || course?.title;
-    } else if (course?.title === "חכם במטבח") {
-      // Kitchen course
-      return user.gender === "male"
-        ? course?.male_kitchen || course?.title
-        : course?.female_kitchen || course?.title;
-    }
-    return course?.title; // Fallback
-  };
-
-  const title = getCourseTitle();
+  // const title = getCourseTitle();
+  const gender = user.gender;
 
   return (
     <Link to={`/supermarket/${course?._id}`}>
@@ -64,10 +65,9 @@ const CourseCart = ({ course }) => {
       >
         <div className="flex flex-col justify-between items-center gap-6">
           <img src={imageUrl} alt={course?.title} className="rounded-xl" />
-
           <div className="flex justify-center items-center flex-col gap-4 text-[#0A2533]">
             <h1 className="text-2xl font-bold text-center" dir="rtl">
-              {title}
+              {gender === "male" ? "חכם בסופר" : course?.female_supermaket}
             </h1>
             <p className="text-sm font-normal text-center" dir="rtl">
               {course?.description}

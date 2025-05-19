@@ -89,7 +89,7 @@ const TraineeLeftCard = ({ userId }) => {
           <div className="flex items-center  gap-2 w-full">
             <img src={rightLeg} alt="" className="object-cover h-8 w-8" />
             <p className="sm:text-lg text-xs font-bold text-black">
-              ירך ימין:
+              ירך ימין:{" "}
               <span className="font-normal">{measurementData?.thighr}</span>
             </p>
           </div>
