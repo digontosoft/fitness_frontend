@@ -9,6 +9,7 @@ const BasicButton = ({ type = "Submit", title, icon, className }) => {
         "w-auto min-h-10 bg-[#CD2738] hover:bg-[#961521] duration-200 ease-in-out delay-75 text-[#FFFFFF] hover:text-[#FFFFFF] flex items-center justify-center",
         className
       )}
+      dir="rtl"
     >
       <span>{title}</span>
       <span>{icon}</span>
