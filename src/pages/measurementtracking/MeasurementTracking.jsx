@@ -9,6 +9,7 @@ import leftArm from "@/assets/image/left-arm.svg";
 import butt from "@/assets/image/butt.svg";
 import chest from "@/assets/image/chest.svg";
 import womenWaist from "@/assets/image/thigh.svg";
+import leftLeg from "@/assets/image/left-leg.svg";
 
 const MeasurementTracking = () => {
   const [data, setData] = useState([]);
@@ -71,6 +72,8 @@ const MeasurementTracking = () => {
               customImage = butt;
             } else if (data.cartTitle === "מותן") {
               customImage = womenWaist;
+            } else if (data.cartTitle === "ירך שמאל") {
+              customImage = leftLeg;
             }
 
             return (
