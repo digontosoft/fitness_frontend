@@ -320,6 +320,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     updatedTraining.workouts[workoutIndex].exercises.splice(exerciseIndex, 1);
     setSelectedTraining(updatedTraining);
     checkSupersetCompletion();
+    setIsButtonDisabled(false);
   };
 
   const handleRemoveWorkout = (workoutIndex) => {
