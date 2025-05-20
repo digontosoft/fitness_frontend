@@ -9,6 +9,7 @@ import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
 import { Trash } from "lucide-react";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
+import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 
 const AddTrainingForm = () => {
   const [trainingExercises, setTrainingExercises] = useState([]);
@@ -16,6 +17,9 @@ const AddTrainingForm = () => {
   const [addMoreExercise, setAddMoreExercise] = useState(null);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [selectedBodyPart, setSelectedBodyPart] = useState(null);
+  const [selectedEquipment, setSelectedEquipment] = useState(null);
+  const [selectedExercise, setSelectedExercise] = useState([]);
   const navigate = useNavigate();
 
   const {
@@ -198,6 +202,24 @@ const AddTrainingForm = () => {
   const handleAddMoreExercise = (workoutIndex) => {
     setAddMoreExercise(workoutIndex);
   };
+
+  useEffect(() => {
+    const fetchSelectedExercises = async () => {
+      if (selectedBodyPart && selectedEquipment) {
+        try {
+          const response = await axios.get(
+            `${base_url}/exercise?body_part=${selectedBodyPart}&equipment=${selectedEquipment}`
+          );
+          setSelectedExercise(response.data.data);
+          console.log("selectedExercises:", response.data.data);
+        } catch (error) {
+          console.error("Error fetching selected exercises:", error);
+        }
+      }
+    };
+
+    fetchSelectedExercises();
+  }, [selectedBodyPart, selectedEquipment]);
 
   const handleNewExerciseSelection = (selectedExercises) => {
     // if (addMoreExercise === null) return;
@@ -391,12 +413,17 @@ const AddTrainingForm = () => {
                     <Select
                       className="rounded-lg h-12 w-auto"
                       direction="rtl"
-                      valueField="_id"
-                      labelField="body_part"
-                      options={exerciseList}
+                      valueField="id"
+                      labelField="label"
+                      options={bodyPartOptions}
                       placeholder="סנן לפי חלק בגוף"
-                      onChange={handleNewExerciseSelection}
-                      searchBy="body_part"
+                      onChange={(selectedOptions) => {
+                        const values = selectedOptions.map(
+                          (option) => option.value
+                        );
+                        setSelectedBodyPart(values[0]);
+                      }}
+                      searchBy="label"
                     />
                   </div>
                   <div>
@@ -406,12 +433,17 @@ const AddTrainingForm = () => {
                     <Select
                       className="rounded-lg h-12 w-auto"
                       direction="rtl"
-                      options={exerciseList}
-                      valueField="_id"
-                      labelField="equipment"
+                      options={equipmentOptions}
+                      valueField="id"
+                      labelField="label"
                       placeholder="סנן לפי ציוד"
-                      onChange={handleNewExerciseSelection}
-                      searchBy="equipment"
+                      onChange={(selectedOptions) => {
+                        const values = selectedOptions.map(
+                          (option) => option.value
+                        );
+                        setSelectedEquipment(values[0]);
+                      }}
+                      searchBy="label"
                     />
                   </div>
                   <div>
@@ -421,7 +453,7 @@ const AddTrainingForm = () => {
                     <Select
                       className="rounded-lg h-12 w-auto"
                       direction="rtl"
-                      options={exerciseList}
+                      options={selectedExercise}
                       valueField="_id"
                       labelField="name"
                       placeholder="בחר"
