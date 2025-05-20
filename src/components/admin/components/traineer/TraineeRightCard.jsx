@@ -4,14 +4,21 @@ import women from "@/assets/image/women.svg";
 import bgCard from "@/assets/image/image.svg";
 
 const TraineeRightCard = ({ gender, stepAverage, stepTarget }) => {
+  // const progress = stepAverage || 0;
+  // const target = Math.max(stepTarget || 1, 1);
+  // const strokeWidth = 4;
+  // const radius = 50;
+  // const circumference = 2 * Math.PI * radius;
+  // const parcentage = Math.min((progress / target) * 100, 100);
+  // // const parcentage = ((progress / target) * 100, 100).toFixed(1);
+  // const offset = circumference - (parcentage / 100) * circumference;
   const progress = stepAverage || 0;
   const target = Math.max(stepTarget || 1, 1);
   const strokeWidth = 4;
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
-  const parcentage = Math.min((progress / target) * 100, 100);
-  const offset = circumference - (parcentage / 100) * circumference;
-  // const parcentage = ((progress / target) * 100).toFixed(1);
+  const percentage = Math.min(Math.round((progress / target) * 100), 100);
+  const offset = circumference - (percentage / 100) * circumference;
 
   return (
     <div className="relative sm:w-[500px] w-full h-[245px] rounded-2xl bg-[#EEEEEE] p-4">
@@ -49,7 +56,7 @@ const TraineeRightCard = ({ gender, stepAverage, stepTarget }) => {
             </svg>
             <div className="absolute flex flex-col items-center justify-center">
               <p className="text-sm font-semibold text-green-500">
-                {parcentage}%
+                {percentage}%
               </p>
               <p className="text-sm font-semibold text-[#BCBCBC]">הושלם</p>
             </div>

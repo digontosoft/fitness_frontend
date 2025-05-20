@@ -15,8 +15,8 @@ const RightCard = ({ user }) => {
   const strokeWidth = 8;
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
-  const parcentage = Math.min((progress / target) * 100, 100);
-  const offset = circumference - (parcentage / 100) * circumference;
+  const percentage = Math.min(Math.round((progress / target) * 100), 100);
+  const offset = circumference - (percentage / 100) * circumference;
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userDetails?.gender;
 
@@ -75,7 +75,7 @@ const RightCard = ({ user }) => {
             </svg>
             <div className="absolute flex flex-col items-center justify-center">
               <p className="text-sm font-semibold text-green-500">
-                {parcentage}%
+                {percentage}%
               </p>
               <p className="text-sm font-semibold text-[#BCBCBC]">הושלם</p>
             </div>
