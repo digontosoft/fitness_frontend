@@ -30,13 +30,22 @@ const ThankYou = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md text-center">
-        <h1 className="text-4xl font-bold text-black mb-4">Thank You!</h1>
-        <p className="text-gray-600 mb-6">
-          Please enter your email to receive approval confirmation.
+      <div
+        className="bg-white shadow-lg rounded-lg p-8 w-full max-w-xl text-center"
+        dir="rtl"
+      >
+        <h1 className="text-4xl font-bold text-black mb-4" dir="rtl">
+          תודה שרכשת את הספר מתכונים לחטובים של פיטל🍫
+        </h1>
+        <p className="text-gray-600 mb-6" dir="rtl">
+          מהיום החיטוב שלך יהיה הרבה יותר מהנה וטעים! תכתבי את המייל שלך כאן
+          לכניסה לספר😊
+        </p>
+        <p className="text-gray-600 mb-6" dir="rtl">
+          דרך אגב , בסוף הספר מחכה לך הטבה מיוחדת:
         </p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="text-left" dir="rtl">
+          <div className="text-right" dir="rtl">
             <Label
               htmlFor="email"
               className="block text-gray-700 font-medium mb-4"
