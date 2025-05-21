@@ -1,7 +1,6 @@
 import { base_url } from "@/api/baseUrl";
 import BasicButton from "@/components/admin/components/ui/BasicButton";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -37,19 +36,12 @@ const ThankYou = () => {
         <h1 className="sm:text-4xl text-xl font-bold text-black mb-4" dir="rtl">
           תודה שרכשת את הספר מתכונים לחטובים של פיטל🍫
         </h1>
-        <p className="text-gray-600 mb-6" dir="rtl">
+        <p className="text-sm text-gray-600 mb-6" dir="rtl">
           מהיום החיטוב שלך יהיה הרבה יותר מהנה וטעים! תכתבי את המייל שלך כאן
           לכניסה לספר😊
         </p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="text-right" dir="rtl">
-            <Label
-              htmlFor="email"
-              className="block text-gray-700 font-medium mb-4"
-              dir="rtl"
-            >
-              כתובת דואר להתחברות
-            </Label>
             <Input
               id="email"
               type="email"
