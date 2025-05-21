@@ -40,7 +40,7 @@ export function TaskModal({
 
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen} dir="rtl">
-      <DialogContent className="sm:max-w-[739px] sm:h-[546px] border-none flex flex-col justify-between items-center">
+      <DialogContent className="border-none flex flex-col justify-between items-center top-[35%]">
         <div className="space-y-5 w-full">
           <div className="flex flex-col items-center justify-center space-y-2">
             <h1 className="text-2xl font-bold">{selectedTask?.task_name}</h1>
