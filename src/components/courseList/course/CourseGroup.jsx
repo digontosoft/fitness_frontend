@@ -63,37 +63,9 @@ const CourseGroup = () => {
             </div>
           </div>
         </div> */}
-          {/* {courses
-            ?.sort((a, b) => b.video.length - a.video.length)
-            ?.map((course) => (
-              // <CourseCart key={course._id} course={course} />
-              <Link to={`/supermarket/${course?._id}`} key={course._id}>
-                <div
-                  className={`relative w-80 h-[450px] bg-white shadow-md rounded-2xl p-4`}
-                >
-                  <div className="flex flex-col justify-between items-center gap-6">
-                    <img
-                      src={`${base_url}/${course?.image}`}
-                      alt={course?.title}
-                      className="rounded-xl"
-                    />
-                    <div className="flex justify-center items-center flex-col gap-4 text-[#0A2533]">
-                      <h1 className="text-2xl font-bold text-center" dir="rtl">
-                        {gender === "male"
-                          ? course?.male_supermaket || course?.male_kitchen
-                          : course?.female_supermaket || course?.female_kitchen}
-                      </h1>
-                      <p className="text-sm font-normal text-center" dir="rtl">
-                        {course?.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))} */}
           {courses
             // ?.sort((a, b) => b.video.length - a.video.length)
-            ?.reverse()
+            // ?.reverse()
             ?.map((course, index) => {
               let courseTitle = "";
 
@@ -110,6 +82,8 @@ const CourseGroup = () => {
               } else {
                 courseTitle = course?.title;
               }
+
+              console.log("courseTitle:", courseTitle);
 
               return (
                 <Link to={`/supermarket/${course?._id}`} key={course._id}>
