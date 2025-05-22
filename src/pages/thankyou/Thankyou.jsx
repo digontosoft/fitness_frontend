@@ -30,7 +30,7 @@ const ThankYou = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <div
-        className="bg-white shadow-lg rounded-lg p-8 w-full max-w-xl text-right"
+        className="bg-white shadow-lg rounded-lg p-8 w-full max-w-xl text-center"
         dir="rtl"
       >
         <h1 className="sm:text-4xl text-xl font-bold text-black mb-4" dir="rtl">

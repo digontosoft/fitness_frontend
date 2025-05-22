@@ -64,7 +64,7 @@ const CourseGroup = () => {
           </div>
         </div> */}
           {courses
-            ?.sort((a, b) => b.video.length - a.video.length)
+            // ?.sort((a, b) => b.video.length - a.video.length)
             // ?.reverse()
             ?.map((course, index) => {
               let courseTitle = "";
@@ -82,6 +82,8 @@ const CourseGroup = () => {
               } else {
                 courseTitle = course?.title;
               }
+
+              console.log("courseTitle:", courseTitle);
 
               return (
                 <Link to={`/supermarket/${course?._id}`} key={course._id}>
