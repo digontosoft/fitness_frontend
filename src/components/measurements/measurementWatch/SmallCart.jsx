@@ -17,7 +17,7 @@ const months = [
 
 const SmallCart = ({ data, setOpen, setId }) => {
   return (
-    <div className="relative flex sm:flex-nowrap flex-wrap sm:justify-between justify-center items-center gap-4 px-2 md:px-10">
+    <div className="relative flex sm:flex-nowrap flex-wrap sm:justify-between justify-center items-center gap-4 px-2 md:px-10 cursor-pointer">
       <div className="absolute -top-[77px] -right-[145px] sm:-right-[95px]">
         <img src={bgCard} alt="" className="w-[180px] h-full" />
       </div>
