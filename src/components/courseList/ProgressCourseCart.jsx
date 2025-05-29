@@ -3,6 +3,7 @@ import RecipeParagraph from "../recipe/RecipeParagraph";
 import VideoCourseCart from "../common/VideoCourseCart";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
+import PersonalExercise from "../PersonalExercise";
 const ProgressCourseCart = () => {
   const {
     state: { workout, training },
@@ -36,7 +37,7 @@ const ProgressCourseCart = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
           {workout.exercises.map((exercise) => (
-            <VideoCourseCart key={exercise._id} exercise={exercise} />
+            <PersonalExercise key={exercise._id} exercise={exercise} />
           ))}
         </div>
       </div>

@@ -220,6 +220,8 @@ export const CourseListGroup = () => {
     fetchExercise();
   }, [user?._id]);
 
+  console.log("training:", trainings);
+
   const [open, setOpen] = useState(false);
   const [id, setId] = useState("");
 

@@ -1,13 +1,7 @@
-import React from "react";
-
-// const CourseDetails = () => {
-//   return (
-//     <div>CourseDetails</div>
-//   )
-// }
-
-// export default CourseDetails
-import { Button } from "@/components/ui/button";
+import { base_url } from "@/api/baseUrl";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import VideoCourseCart from "./common/VideoCourseCart";
 import {
   Dialog,
   DialogClose,
@@ -16,12 +10,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Eye } from "lucide-react";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import HeroVideo from "@/components/startTraining/HeroVideo";
-import { base_url } from "@/api/baseUrl";
+} from "./ui/dialog";
+import { Button } from "./ui/button";
+import HeroVideo from "./startTraining/HeroVideo";
+import ReactPlayer from "react-player";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 import back from "@/assets/image/back.svg";
 import womenback from "@/assets/image/woman-back.svg";
@@ -38,23 +31,19 @@ import pully from "@/assets/image/pully.svg";
 import bands from "@/assets/image/bands.svg";
 import dumbles from "@/assets/image/dumbles.svg";
 
-export default function CourseDetails({ open, setOpen, exerciseId }) {
+const PersonalExercise = ({ exercise }) => {
+  console.log("exerciseP:", exercise.exercise_id);
+  const exerciseId = exercise?.exercise_id?._id;
   const [exerciseData, setExerciseData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     if (!exerciseId) return;
 
-    setLoading(true);
-    axios
-      .get(`${base_url}/exercise/${exerciseId}`)
-      .then((response) => {
-        if (response.status === 200) {
-          setExerciseData(response.data.data);
-          console.log("first", response.data.data);
-        }
-      })
-      .finally(() => setLoading(false));
+    axios.get(`${base_url}/exercise/${exerciseId}`).then((response) => {
+      if (response.status === 200) {
+        setExerciseData(response.data.data);
+        console.log("exerciseData:", response.data.data);
+      }
+    });
   }, [exerciseId]);
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -89,9 +78,29 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
   } else if (exerciseData?.equipment === "מוטות") {
     customEquipment = dumbles;
   }
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="w-full cursor-pointer md:w-96 flex gap-2 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300">
+          <Button className="rounded-2xl">
+            <FaArrowLeftLong />
+          </Button>
+          <div className="w-full flex items-center justify-center">
+            <h1 className="text-sm font-bold text-[#0A2533]">
+              {exerciseData?.name}
+            </h1>
+          </div>
+          <div className="w-full max-w-xs mx-auto">
+            <ReactPlayer
+              url={exerciseData?.video_url}
+              width="100%"
+              height="80px"
+              controls
+              className="rounded-lg border border-gray-200 shadow-sm"
+            />
+          </div>
+        </div>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-4xl p-6 rounded-lg">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-center">
@@ -99,37 +108,30 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
           </DialogTitle>
         </DialogHeader>
 
-        {loading ? (
-          <p className="text-center text-gray-500">Loading...</p>
-        ) : (
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-full">
-              <HeroVideo
-                videoUrl={exerciseData?.video_url}
-                className="sm:mt-10 mt-0"
-              />
-            </div>
-            <h2 className="text-lg font-bold">{exerciseData?.name}</h2>
-            <p className="text-sm text-gray-600 text-center px-4">
-              {exerciseData?.description}
-            </p>
-            <div className="flex gap-2 items-center flex-row-reverse" dir="rtl">
-              <img src={customIcon} alt="" className="w-6 h-6" />
-              <p className="flex flex-row-reverse gap-2">
-                <span>{exerciseData?.body_part}</span> : <span>איזור בגוף</span>
-              </p>
-            </div>
-            <div
-              className="flex gap-2  items-center flex-row-reverse"
-              dir="rtl"
-            >
-              <img src={customEquipment} alt="" className="w-6 h-6" />
-              <p className="flex flex-row-reverse gap-2">
-                <span>{exerciseData?.equipment}</span> : <span>ציוד</span>
-              </p>
-            </div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-full">
+            <HeroVideo
+              videoUrl={exerciseData?.video_url}
+              className="sm:mt-10 mt-0"
+            />
           </div>
-        )}
+          <h2 className="text-lg font-bold">{exerciseData?.name}</h2>
+          <p className="text-sm text-gray-600 text-center px-4">
+            {exerciseData?.description}
+          </p>
+          <div className="flex gap-2 items-center flex-row-reverse" dir="rtl">
+            <img src={customIcon} alt="" className="w-6 h-6" />
+            <p className="flex flex-row-reverse gap-2">
+              <span>{exerciseData?.body_part}</span> : <span>איזור בגוף</span>
+            </p>
+          </div>
+          <div className="flex gap-2  items-center flex-row-reverse" dir="rtl">
+            <img src={customEquipment} alt="" className="w-6 h-6" />
+            <p className="flex flex-row-reverse gap-2">
+              <span>{exerciseData?.equipment}</span> : <span>ציוד</span>
+            </p>
+          </div>
+        </div>
 
         <DialogFooter>
           <DialogClose asChild>
@@ -139,4 +141,6 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default PersonalExercise;

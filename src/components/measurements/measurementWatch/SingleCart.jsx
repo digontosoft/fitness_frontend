@@ -175,7 +175,11 @@ const SingleCart = ({ userId, setOpen, setId }) => {
             <div className="flex justify-center items-center">
               <SmallCart data={data} setOpen={setOpen} setId={setId} />
             </div>
-            <a href="" className="text-lg font-semibold text-center underline">
+            <a
+              href="/file/Copy of �היקפים�.xlsx"
+              download
+              className="text-lg font-semibold text-center underline"
+            >
               הצגת מדדים קודמים
             </a>
           </div>
