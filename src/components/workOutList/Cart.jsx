@@ -3,6 +3,7 @@ import whiteLogo from "../../assets/image/whiteLogo.png";
 import { Link } from "react-router-dom";
 const Cart = ({ workout, training }) => {
   console.log("workout", workout);
+  console.log("training", training);
 
   return (
     <Link to={`/personal-workout`} state={{ workout, training }}>

@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Loading from "@/components/common/Loading";
 import googleIcon from "../../assets/image/google.svg";
-import { whiteLogo } from "../../assets/index";
+// import { whiteLogo } from "../../assets/index";
+import whiteLogo from "@/assets/image/white-logo.svg";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
