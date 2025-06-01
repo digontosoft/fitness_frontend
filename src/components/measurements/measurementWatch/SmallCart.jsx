@@ -17,7 +17,7 @@ const months = [
 
 const SmallCart = ({ data, setOpen, setId }) => {
   return (
-    <div className="relative flex sm:flex-nowrap flex-wrap sm:justify-between justify-center items-center gap-4 px-2 md:px-10 cursor-pointer">
+    <div className="relative flex sm:flex-nowrap flex-wrap sm:justify-between justify-center items-center gap-4 px-2 md:px-10">
       <div className="absolute -top-[77px] -right-[145px] sm:-right-[95px]">
         <img src={bgCard} alt="" className="w-[180px] h-full" />
       </div>
@@ -31,7 +31,7 @@ const SmallCart = ({ data, setOpen, setId }) => {
                 setOpen(true);
                 setId(item.id);
               }}
-              className="min-w-24 w-auto min-h-[90px] h-auto flex flex-col justify-center items-center bg-white p-2 rounded-lg"
+              className="min-w-24 w-auto min-h-[90px] h-auto flex flex-col justify-center items-center bg-white p-2 rounded-lg cursor-pointer"
             >
               <span className=" text-[#000000] text-base font-black text-center">
                 {months[moment(item?.date).month()]}

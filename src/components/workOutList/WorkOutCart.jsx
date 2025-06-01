@@ -55,7 +55,7 @@ const WorkOutCart = () => {
       </div>
       {trainings.length > 0 ? (
         <>
-          <div className=" grid grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-6">
             {selectedTraining?.map((training) =>
               training.workouts.map((workout) => (
                 <Cart key={workout._id} workout={workout} training={training} />

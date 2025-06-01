@@ -1,6 +1,4 @@
-import { base_url } from "@/api/baseUrl";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import axios from "axios";
 
 export function WelcomeModal({ isModalOpen, setIsModalOpen, handleSubmit }) {
   return (

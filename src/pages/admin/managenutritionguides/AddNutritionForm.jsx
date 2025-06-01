@@ -171,7 +171,7 @@ const AddNutritionForm = () => {
 
       console.log("nutritionGuide:", payload);
 
-      const response = await axios.post(`${base_url}/nutritionGuide`, payload, {
+      await axios.post(`${base_url}/nutritionGuide`, payload, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

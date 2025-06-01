@@ -7,17 +7,20 @@ import Loading from "@/components/common/Loading";
 import rightArm from "@/assets/image/right-arm.svg";
 import leftArm from "@/assets/image/left-arm.svg";
 import butt from "@/assets/image/butt.svg";
-import menHips from "@/assets/image/men-hips.svg";
+// import menHips from "@/assets/image/men-hips.svg";
 import chest from "@/assets/image/chest.svg";
+import maleChest from "@/assets/image/male-chest.svg";
 import womenHips from "@/assets/image/women-hips.svg";
 import womenWaist from "@/assets/image/thigh.svg";
 import leftLeg from "@/assets/image/left-leg.svg";
 import rightLeg from "@/assets/image/right-thigh.svg";
+import manWaist from "@/assets/image/man-waist.svg";
 
 const MeasurementTracking = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const userId = JSON.parse(localStorage.getItem("userInfo"));
+  const gender = userId?.gender;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,11 +77,11 @@ const MeasurementTracking = () => {
             } else if (data.cartTitle === "ישבן") {
               customImage = butt;
             } else if (data.cartTitle === "מותן") {
-              customImage = userId.gender === "male" ? menHips : womenHips;
+              customImage = userId.gender === "male" ? manWaist : womenHips;
             } else if (data.cartTitle === "ירך שמאל") {
               customImage = leftLeg;
             } else if (data.cartTitle === "חזה") {
-              customImage = chest;
+              customImage = gender === "male" ? maleChest : chest;
             }
 
             return (
@@ -106,7 +109,8 @@ const MeasurementTracking = () => {
                   <SmallCart data={data} />
                 </div>
                 <a
-                  href=""
+                  href="/file/Copy of �היקפים�.xlsx"
+                  download
                   className="text-lg font-semibold text-center underline"
                 >
                   הצגת מדדים קודמים

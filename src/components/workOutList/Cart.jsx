@@ -7,7 +7,7 @@ const Cart = ({ workout, training }) => {
 
   return (
     <Link to={`/personal-workout`} state={{ workout, training }}>
-      <div className="md:w-56 w-48 shadow-xl rounded-2xl p-3 mt-8">
+      <div className="md:w-56 w-48 shadow-xl rounded-2xl p-3">
         <div
           className="w-full h-40 rounded-2xl flex justify-center items-center"
           style={{
