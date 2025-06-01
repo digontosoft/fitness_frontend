@@ -126,10 +126,8 @@ const Navbar = () => {
                 to={link}
                 end={link === "/dashboard"}
                 className={({ isActive }) =>
-                  `flex items-center text-gray-600 hover:text-gray-900 font-bold gap-x-4 ${
-                    isActive
-                      ? "text-red-500"
-                      : "text-gray-600 hover:text-gray-900"
+                  `flex items-center text-black  font-bold gap-x-4 ${
+                    isActive ? "text-red-500" : "text-black "
                   }`
                 }
                 dir="rtl"
@@ -170,7 +168,7 @@ const Navbar = () => {
                     href="https://wa.link/gmt4t4"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center text-gray-400 font-bold gap-x-4 cursor-not-allowed"
+                    className="flex items-center text-black font-bold gap-x-4 cursor-not-allowed"
                     onClick={(e) => e.stopPropagation()}
                     dir="rtl"
                   >
@@ -189,10 +187,8 @@ const Navbar = () => {
                   key={_id}
                   to={link}
                   className={({ isActive }) =>
-                    `flex items-center text-gray-600 hover:text-gray-900 font-bold gap-x-4 ${
-                      isActive
-                        ? "text-red-500"
-                        : "text-gray-600 hover:text-gray-900"
+                    `flex items-center text-black font-bold gap-x-4 ${
+                      isActive ? "text-red-500" : "text-black"
                     }`
                   }
                   dir="rtl"
@@ -258,10 +254,8 @@ const Navbar = () => {
                       key={_id}
                       to={link}
                       className={({ isActive }) =>
-                        `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
-                          isActive
-                            ? "text-red-500"
-                            : "text-gray-600 hover:text-gray-900"
+                        `flex items-center text-black font-semibold gap-x-4 ${
+                          isActive ? "text-red-500" : "text-black"
                         }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -307,7 +301,7 @@ const Navbar = () => {
                           href="https://wa.link/gmt4t4"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center text-gray-400 font-semibold gap-x-4 cursor-not-allowed"
+                          className="flex items-center text-black font-semibold gap-x-4 cursor-not-allowed"
                           dir="rtl"
                         >
                           <img
@@ -354,10 +348,8 @@ const Navbar = () => {
                       key={_id}
                       to={link}
                       className={({ isActive }) =>
-                        `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
-                          isActive
-                            ? "text-red-500"
-                            : "text-gray-600 hover:text-gray-900"
+                        `flex items-center text-black font-semibold gap-x-4 ${
+                          isActive ? "text-red-500" : "text-black"
                         }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -377,7 +369,7 @@ const Navbar = () => {
             )}
           </div>
           <a href="" className="flex items-center space-x-2" onClick={logout}>
-            <span className="font-semibold text-gray-800" dir="rtl">
+            <span className="font-semibold text-black" dir="rtl">
               התנתק
             </span>
             <LogOut className="w-5 h-5" />

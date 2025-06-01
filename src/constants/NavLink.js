@@ -34,7 +34,7 @@ export const traineeLink = [
   },
   {
     _id: 5,
-    title: "מדריך תזונה",
+    title: "מדריכי תזונה",
     link: "/nutrition-guide",
     icon: nutrationGuide,
   },

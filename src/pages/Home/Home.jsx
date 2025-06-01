@@ -89,7 +89,7 @@ const Home = () => {
   return (
     <div
       className="min-h-screen px-4 sm:px-6 md:px-10 lg:px-20 overflow-hidden"
-      onClick={() => handleSubmit()}
+      // onClick={() => handleSubmit()}
     >
       {/* Welcome Modal */}
       {user?.is_video_popup === true && (
@@ -106,32 +106,32 @@ const Home = () => {
           {userInfo?.full_name}
         </h1>
       </div>
-      <div className="flex flex-col items-center justify-center pt-10">
+      <div className="flex flex-col items-center justify-center gap-5 pt-10">
         {/* Cards Section */}
-        <div className="pt-5 sm:pt-16 md:pt-20 flex flex-col-reverse md:flex-row items-center justify-center gap-6 md:gap-10 w-full">
+        <div className="pt-5 sm:pt-16 md:pt-20 flex flex-col-reverse md:flex-row items-center justify-center gap-5 md:gap-10 w-full">
           <LeftCard data={getMesurement} className="w-full md:w-1/2" />
           <RightCard user={user} className="w-full md:w-1/2" />
         </div>
+        {/* title */}
+        <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A2533] text-center w-full">
+          משימות
+        </h1>
         {/* Tasks Section */}
-        <div className="max-w-3xl mx-auto justify-center sm:py-10" dir="ltr">
-          <div className="pt-10 sm:pt-10 flex flex-wrap justify-center items-center w-full">
-            <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A2533] text-center w-full">
-              משימות
-            </h1>
-
-            {loading ? (
-              <Loading />
-            ) : (
-              userTasks?.map((task) => (
-                <div
-                  className="w-full sm:w-1/2 p-2 flex-shrink-0 cursor-pointer"
-                  key={task?._id}
-                >
-                  <ArrowGroup onclick={handleOpenModal} task={task} />
-                </div>
-              ))
-            )}
-          </div>
+        {/* <div className="max-w-3xl mx-auto justify-center" dir="ltr">
+        </div> */}
+        <div className="flex flex-wrap justify-center items-center gap-10 max-w-3xl w-full">
+          {loading ? (
+            <Loading />
+          ) : (
+            userTasks?.map((task) => (
+              <div
+                // className="w-full sm:w-1/2 cursor-pointer"
+                key={task?._id}
+              >
+                <ArrowGroup onclick={handleOpenModal} task={task} />
+              </div>
+            ))
+          )}
         </div>
       </div>
 

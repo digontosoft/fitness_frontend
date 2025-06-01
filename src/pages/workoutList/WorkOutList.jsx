@@ -6,7 +6,7 @@ import { workoutBg } from "@/assets";
 const WorkOutList = () => {
   return (
     <div>
-      <WorkOutListBaground bgImg={workoutBg} />
+      {/* <WorkOutListBaground bgImg={workoutBg} /> */}
       <CartTitle title={"אימונים"} />
       <WorkOutCart />
     </div>
