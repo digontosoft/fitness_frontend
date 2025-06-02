@@ -47,7 +47,7 @@ const AddNutritionMenu = ({ userId }) => {
       });
 
       if (response.status === 201) {
-        toast.success("Nutrition saved successfully!");
+        toast.success("Nutrition menu saved successfully!");
         reset();
         navigate(`/dashboard/nutrition-lists/${userId}`);
       }

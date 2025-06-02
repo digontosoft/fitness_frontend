@@ -79,8 +79,6 @@ const CourseGroup = () => {
                   gender === "male"
                     ? course?.male_kitchen
                     : course?.female_kitchen;
-              } else {
-                courseTitle = course?.title;
               }
 
               console.log("courseTitle:", courseTitle);
