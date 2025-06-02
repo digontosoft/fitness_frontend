@@ -1,7 +1,8 @@
 import AdminArrowCard from "@/components/admin/components/ui/AdminArrowCard";
 import Title from "@/components/measurements/Tilte";
 import Container from "@/shared/Container";
-import { ArrowBurger, ArrowDumbel } from "@/assets";
+import ArrowBurger from "@/assets/image/burger.svg";
+import ArrowDumbel from "@/assets/image/arrowDumble.svg";
 import { useEffect, useState } from "react";
 import { women1, women2 } from "@/assets/index";
 import Select from "react-dropdown-select";

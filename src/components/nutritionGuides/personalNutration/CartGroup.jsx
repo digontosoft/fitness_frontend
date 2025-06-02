@@ -39,7 +39,7 @@ const CartGroup = () => {
   return (
     <div
       dir="rtl"
-      className="sm:py-10 max-w-6xl mx-auto justify-items-center items-center grid grid-cols-1 md:grid-cols-2 gap-10"
+      className="sm:py-10 max-w-6xl mx-auto justify-items-center items-center grid grid-cols-2 md:grid-cols-2 gap-10"
     >
       {nutrationData?.map((item) => (
         <SingleCart

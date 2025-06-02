@@ -1,5 +1,5 @@
 import ArrowCard from "./ArrowCard";
-import { bodyBuilder3 } from "@/assets";
+import bodyBuilder3 from "@/assets/image/body-builder.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
@@ -16,7 +16,6 @@ const ArrowGroup = ({ task, onclick }) => {
           taskId: task?._id,
         };
 
-        console.log("dependency", requestBody);
         const response = await axios.post(
           `${base_url}/get-user-workout-task`,
           requestBody

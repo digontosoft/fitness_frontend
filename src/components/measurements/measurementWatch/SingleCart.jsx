@@ -86,6 +86,8 @@ import womenHips from "@/assets/image/women-hips.svg";
 import womenWaist from "@/assets/image/thigh.svg";
 import leftLeg from "@/assets/image/left-leg.svg";
 import rightLeg from "@/assets/image/right-thigh.svg";
+import maleChest from "@/assets/image/male-chest.svg";
+import manWaist from "@/assets/image/man-waist.svg";
 const SingleCart = ({ userId, setOpen, setId }) => {
   const getButtonClass = (data) => {
     if (data.green) {
@@ -99,6 +101,8 @@ const SingleCart = ({ userId, setOpen, setId }) => {
   };
 
   const [data, setData] = useState([]);
+
+  const user = JSON.parse(localStorage.getItem("userInfo"));
 
   console.log("userId", userId);
 
@@ -147,11 +151,11 @@ const SingleCart = ({ userId, setOpen, setId }) => {
         } else if (data.cartTitle === "ישבן") {
           customImage = butt;
         } else if (data.cartTitle === "מותן") {
-          customImage = userId.gender === "male" ? menHips : womenHips;
+          customImage = user?.gender === "male" ? manWaist : womenHips;
         } else if (data.cartTitle === "ירך שמאל") {
           customImage = leftLeg;
         } else if (data.cartTitle === "חזה") {
-          customImage = chest;
+          customImage = user?.gender === "male" ? maleChest : chest;
         }
 
         return (
