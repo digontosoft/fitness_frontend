@@ -171,18 +171,18 @@ const AddNutritionForm = () => {
 
       console.log("nutritionGuide:", payload);
 
-      await axios.post(`${base_url}/nutritionGuide`, payload, {
+      const response = await axios.post(`${base_url}/nutritionGuide`, payload, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
       });
 
-      // if (response.status === 201) {
-      //   toast.success("Nutrition saved successfully!");
-      //   reset();
-      //   navigate("/dashboard/nutrition-lists");
-      // }
+      if (response.status === 201) {
+        toast.success("Nutrition Guide saved successfully!");
+        reset();
+        navigate("/dashboard/nutrition-lists");
+      }
     } catch (error) {
       console.error("Error submitting nutrition guide:", error);
       toast.error("Failed to save nutrition.");

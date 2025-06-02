@@ -15,10 +15,21 @@ import womenWaist from "@/assets/image/thigh.svg";
 import leftLeg from "@/assets/image/left-leg.svg";
 import rightLeg from "@/assets/image/right-thigh.svg";
 import manWaist from "@/assets/image/man-waist.svg";
+import MeasurementSmallCart from "./MeasurementSmallCart";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const MeasurementTracking = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [id, setId] = useState(null);
+  const [measurements, setMeasurements] = useState([]);
+  const [open, setOpen] = useState(false);
   const userId = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userId?.gender;
 
@@ -31,6 +42,7 @@ const MeasurementTracking = () => {
         );
         if (response.status === 200) {
           setData(response?.data);
+          console.log("measurement tracking data", response?.data);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -41,6 +53,20 @@ const MeasurementTracking = () => {
 
     fetchData();
   }, [userId?._id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${base_url}/get-measurement-by-id/${id}`
+        );
+        setMeasurements(response?.data?.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   // const sortOrder = [
   //   "מותן",
@@ -106,7 +132,11 @@ const MeasurementTracking = () => {
 
                 <div className="flex justify-center items-start"></div>
                 <div className="flex justify-center items-center">
-                  <SmallCart data={data} />
+                  <MeasurementSmallCart
+                    data={data}
+                    setId={setId}
+                    setOpen={setOpen}
+                  />
                 </div>
                 <a
                   href="/file/Copy of �היקפים�.xlsx"
@@ -120,6 +150,29 @@ const MeasurementTracking = () => {
           })}
         </div>
       )}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <div className="min-h-44 px-6" dir="rtl">
+            {!measurements.photo1 && (
+              <span dir="rtl">לא הוספת תמונות למדידה״</span>
+            )}
+            {measurements.photo1 && (
+              <div className="grid justify-center gap-3">
+                <img src={`${base_url}/${measurements.photo1}`} alt="" />
+                <img src={`${base_url}/${measurements.photo2}`} alt="" />
+                <img src={`${base_url}/${measurements.photo3}`} alt="" />
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button className="w-full bg-customBg hover:bg-customBg-dark transition-all duration-200">
+                סגור
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

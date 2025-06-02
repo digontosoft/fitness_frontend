@@ -35,7 +35,7 @@ export const NutritionCart = () => {
   );
   console.log(filterData);
   return (
-    <div className="sm:my-20">
+    <div className="sm:my-20 mb-5">
       <div className="flex justify-center">
         <div
           className="flex justify-between items-center py-10 relative w-56 "
@@ -58,7 +58,13 @@ export const NutritionCart = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center items-center px-2">
+        <div
+          className={`max-w-6xl mx-auto grid  gap-6 justify-items-center items-center px-2 ${
+            filterData.length === 1
+              ? "grid-cols-1"
+              : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          }`}
+        >
           {filterData.length > 0 ? (
             filterData.map((item) => (
               <SingleCart
