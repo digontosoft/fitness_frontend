@@ -5,7 +5,7 @@ const SingleCart = ({ id, title, description, icon, type }) => {
   return (
     <div
       key={id}
-      className="bg-white shadow-xl w-40 md:w-64 flex flex-col gap-6 rounded-3xl sm:mt-10"
+      className="bg-white shadow-xl w-40 md:w-64 min-h-72 h-auto flex flex-col gap-6 rounded-3xl sm:mt-10"
     >
       <img className="px-3  " src={icon} alt="" />
       <p className="text-center text-[#0A2533]">{title}</p>

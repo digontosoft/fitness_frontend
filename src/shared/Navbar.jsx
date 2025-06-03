@@ -168,7 +168,7 @@ const Navbar = () => {
                     href="https://wa.link/gmt4t4"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center text-black font-bold gap-x-4 cursor-not-allowed"
+                    className="flex items-center text-gray-400 font-bold gap-x-4 cursor-not-allowed"
                     onClick={(e) => e.stopPropagation()}
                     dir="rtl"
                   >
@@ -292,7 +292,8 @@ const Navbar = () => {
                   .slice()
                   .reverse()
                   .map(({ _id, title, link, icon: Icon }) => {
-                    const isTrainingLink = link === "/trainings";
+                    const isTrainingLink =
+                      link === "/trainings" || link === "/exercise-library";
 
                     if (isTrainingLink && !hasWorkoutTask) {
                       return (
@@ -301,7 +302,7 @@ const Navbar = () => {
                           href="https://wa.link/gmt4t4"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center text-black font-semibold gap-x-4 cursor-not-allowed"
+                          className="flex items-center text-gray-400 font-semibold gap-x-4 cursor-not-allowed"
                           dir="rtl"
                         >
                           <img

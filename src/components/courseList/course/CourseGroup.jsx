@@ -63,57 +63,48 @@ const CourseGroup = () => {
             </div>
           </div>
         </div> */}
-          {courses
-            // ?.sort((a, b) => b.video.length - a.video.length)
-            // ?.reverse()
-            ?.map((course, index) => {
-              let courseTitle = "";
+          {courses?.map((course, index) => {
+            let courseTitle = "";
 
-              if (index === 0) {
-                courseTitle =
-                  gender === "male"
-                    ? course?.male_supermaket
-                    : course?.female_supermaket;
-              } else if (index === 1) {
-                courseTitle =
-                  gender === "male"
-                    ? course?.male_kitchen
-                    : course?.female_kitchen;
-              }
+            if (index === 0) {
+              courseTitle =
+                gender === "male"
+                  ? course?.male_supermaket
+                  : course?.female_supermaket;
+            } else if (index === 1) {
+              courseTitle =
+                gender === "male"
+                  ? course?.male_kitchen
+                  : course?.female_kitchen;
+            }
 
-              console.log("courseTitle:", courseTitle);
+            console.log("courseTitle:", courseTitle);
 
-              return (
-                <Link to={`/supermarket/${course?._id}`} key={course._id}>
-                  <div
-                    className="relative w-80 h-[450px] bg-white shadow-md rounded-2xl p-4"
-                    key={course._id}
-                  >
-                    <div className="flex flex-col justify-between items-center gap-6">
-                      <img
-                        src={`${base_url}/${course?.image}`}
-                        alt={course?.title}
-                        className="rounded-xl"
-                      />
-                      <div className="flex justify-center items-center flex-col gap-4 text-[#0A2533]">
-                        <h1
-                          className="text-2xl font-bold text-center"
-                          dir="rtl"
-                        >
-                          {courseTitle}
-                        </h1>
-                        <p
-                          className="text-sm font-normal text-center"
-                          dir="rtl"
-                        >
-                          {course?.description}
-                        </p>
-                      </div>
+            return (
+              <Link to={`/supermarket/${course?._id}`} key={course._id}>
+                <div
+                  className="relative w-80 h-[450px] bg-white shadow-md rounded-2xl p-4"
+                  key={course._id}
+                >
+                  <div className="flex flex-col justify-between items-center gap-6">
+                    <img
+                      src={`${base_url}/${course?.image}`}
+                      alt={course?.title}
+                      className="rounded-xl"
+                    />
+                    <div className="flex justify-center items-center flex-col gap-4 text-[#0A2533]">
+                      <h1 className="text-2xl font-bold text-center" dir="rtl">
+                        {courseTitle}
+                      </h1>
+                      <p className="text-sm font-normal text-center" dir="rtl">
+                        {course?.description}
+                      </p>
                     </div>
                   </div>
-                </Link>
-              );
-            })}
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>
