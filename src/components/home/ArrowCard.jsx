@@ -1,9 +1,21 @@
-import React from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button } from "../ui/button";
+import buger from "@/assets/image/burger.svg";
+import measurement from "@/assets/image/measurementRope.svg";
+import dumble from "@/assets/image/dumble-square.svg";
 
-const ArrowCard = ({ image, tilte, tilte1, onClick }) => {
+const ArrowCard = ({ image, tilte, tilte1, taskType, onClick }) => {
   console.log("title", tilte);
+  let taskImage = null;
+  if (taskType === "workout") {
+    taskImage = dumble;
+  } else if (taskType === "measurement") {
+    taskImage = measurement;
+  } else if (taskType === "food_dairy") {
+    taskImage = buger;
+  } else {
+    taskImage = image;
+  }
   return (
     <div
       onClick={onClick}
@@ -17,7 +29,11 @@ const ArrowCard = ({ image, tilte, tilte1, onClick }) => {
         <h1 className="text-xs font-normal text-[#97A2B0]">{tilte1}</h1>
       </div>
       <div className="w-full">
-        <img src={image} alt="" className="w-full sm:w-auto sm:h-auto h-full" />
+        <img
+          src={taskImage}
+          alt=""
+          className="w-full sm:w-auto sm:h-auto h-full"
+        />
       </div>
     </div>
   );
