@@ -42,6 +42,7 @@ const ArrowGroup = ({ task, onclick }) => {
       onClick={handleClick}
       tilte={task?.task_name}
       tilte1={task?.task_description}
+      taskType={task?.task_type}
       image={bodyBuilder3}
     />
   );
