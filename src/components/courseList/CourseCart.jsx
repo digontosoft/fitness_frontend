@@ -116,13 +116,13 @@ const CourseCart = ({ exerciseId, handleOpen }) => {
   } else if (exerciseData?.equipment === "מכונות") {
     customEquipment = machine;
   } else if (exerciseData?.equipment === "משקולות") {
-    customEquipment = weights;
+    customEquipment = dumbles;
   } else if (exerciseData?.equipment === "פולי") {
     customEquipment = pully;
   } else if (exerciseData?.equipment === "גומיות") {
     customEquipment = bands;
   } else if (exerciseData?.equipment === "מוטות") {
-    customEquipment = dumbles;
+    customEquipment = weights;
   }
 
   return (

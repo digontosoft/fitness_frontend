@@ -51,13 +51,13 @@ const VideoCourseCart = ({ exercise }) => {
   } else if (exercise.exercise_id?.equipment === "מכונות") {
     customEquipment = machine;
   } else if (exercise.exercise_id?.equipment === "משקולות") {
-    customEquipment = weights;
+    customEquipment = dumbles;
   } else if (exercise.exercise_id?.equipment === "פולי") {
     customEquipment = pully;
   } else if (exercise.exercise_id?.equipment === "גומיות") {
     customEquipment = bands;
   } else if (exercise.exercise_id?.equipment === "מוטות") {
-    customEquipment = dumbles;
+    customEquipment = weights;
   }
   console.log("exercise:", exercise);
   return (
