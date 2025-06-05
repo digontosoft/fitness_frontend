@@ -82,6 +82,7 @@ const TraineerUi = ({ userId }) => {
         <TraineeRightCard
           gender={user?.gender}
           userId={userId}
+          user={user}
           stepAverage={user?.step_average}
           stepTarget={user?.step_target}
         />

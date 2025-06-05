@@ -2,16 +2,15 @@ import circle from "@/assets/image/circle.svg";
 import men from "@/assets/image/men.svg";
 import women from "@/assets/image/women.svg";
 import bgCard from "@/assets/image/image.svg";
+import AddStepAverageForUser from "./AddStepAverageForUser";
 
-const TraineeRightCard = ({ gender, stepAverage, stepTarget }) => {
-  // const progress = stepAverage || 0;
-  // const target = Math.max(stepTarget || 1, 1);
-  // const strokeWidth = 4;
-  // const radius = 50;
-  // const circumference = 2 * Math.PI * radius;
-  // const parcentage = Math.min((progress / target) * 100, 100);
-  // // const parcentage = ((progress / target) * 100, 100).toFixed(1);
-  // const offset = circumference - (parcentage / 100) * circumference;
+const TraineeRightCard = ({
+  gender,
+  stepAverage,
+  stepTarget,
+  userId,
+  user,
+}) => {
   const progress = stepAverage || 0;
   const target = Math.max(stepTarget || 1, 1);
   const strokeWidth = 4;
@@ -61,6 +60,9 @@ const TraineeRightCard = ({ gender, stepAverage, stepTarget }) => {
               <p className="text-sm font-semibold text-[#BCBCBC]">הושלם</p>
             </div>
           </div>
+        </div>
+        <div className="z-10">
+          <AddStepAverageForUser user={user} />
         </div>
       </div>
       <div className="absolute top-0 right-0">
