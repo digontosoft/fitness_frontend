@@ -64,7 +64,11 @@ const TraineeLeftCard = ({ userId }) => {
       <div className="relative grid grid-cols-2 gap-6 justify-items-center items-center">
         <div className="flex flex-col gap-4">
           <div className="flex items-center  gap-2 w-full">
-            <img src={rightArmIcon} alt="" className="object-cover h-8 w-8" />
+            <img
+              src={rightArmIcon}
+              alt=""
+              className="object-cover h-4 w-4 sm:h-5 sm:w-5"
+            />
             <p className="sm:text-lg text-xs font-bold text-black">
               זרוע ימין:{" "}
               <span className="font-normal">{measurementData?.armr}</span>
@@ -72,14 +76,22 @@ const TraineeLeftCard = ({ userId }) => {
           </div>
 
           <div className="flex items-center  gap-2 w-full">
-            <img src={leftArmIcon} alt="" className="object-cover h-8 w-8" />
+            <img
+              src={leftArmIcon}
+              alt=""
+              className="object-cover h-4 w-4 sm:h-5 sm:w-5"
+            />
             <p className="sm:text-lg text-xs font-bold text-black">
               זרוע שמאל:{" "}
               <span className="font-normal">{measurementData?.arml}</span>
             </p>
           </div>
           <div className="flex items-center  gap-2 w-full">
-            <img src={butt} alt="" className="object-cover h-8 w-8" />
+            <img
+              src={butt}
+              alt=""
+              className="object-cover h-4 w-4 sm:h-5 sm:w-5"
+            />
             <p className="sm:text-lg text-xs font-bold text-black">
               ישבן: <span className="font-normal">{avgThigh}</span>
             </p>
@@ -87,21 +99,33 @@ const TraineeLeftCard = ({ userId }) => {
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex items-center  gap-2 w-full">
-            <img src={rightLeg} alt="" className="object-cover h-8 w-8" />
+            <img
+              src={rightLeg}
+              alt=""
+              className="object-cover h-4 w-4 sm:h-5 sm:w-5"
+            />
             <p className="sm:text-lg text-xs font-bold text-black">
               ירך ימין:{" "}
               <span className="font-normal">{measurementData?.thighr}</span>
             </p>
           </div>
           <div className="flex items-center  gap-2 w-full">
-            <img src={leftLeg} alt="" className="object-cover h-8 w-8" />
+            <img
+              src={leftLeg}
+              alt=""
+              className="object-cover h-4 w-4 sm:h-5 sm:w-5"
+            />
             <p className="sm:text-lg text-xs font-bold text-black">
               ירך שמאל:{" "}
               <span className="font-normal">{measurementData?.thighl}</span>
             </p>
           </div>
           <div className="flex items-center  gap-2 w-full">
-            <img src={thigh} alt="" className="object-cover h-8 w-8" />
+            <img
+              src={thigh}
+              alt=""
+              className="object-cover h-4 w-4 sm:h-5 sm:w-5"
+            />
             <p className="sm:text-lg text-xs font-bold text-black">
               היקף מותניים:{" "}
               <span className="font-normal">{measurementData?.waist}</span>
