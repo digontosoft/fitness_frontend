@@ -52,7 +52,7 @@ export const traineeLink = [
   },
   {
     _id: 8,
-    title: "דף הבית",
+    // title: "דף הבית",
     link: "/",
     icon: nutrationGuide,
   },

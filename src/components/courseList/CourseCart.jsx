@@ -127,7 +127,7 @@ const CourseCart = ({ exerciseId, handleOpen }) => {
 
   return (
     <div
-      className="w-[310px] sm:w-56 shadow-xl rounded-2xl p-3 mt-8 cursor-pointer"
+      className="w-[310px] sm:w-56 min-h-80 h-auto shadow-xl rounded-2xl p-3 mt-8 cursor-pointer"
       onClick={() => handleOpen(exerciseData?._id)}
     >
       {exerciseData?.video_url && (

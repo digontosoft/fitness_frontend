@@ -50,7 +50,7 @@ const Navbar = () => {
           className="hidden sm:flex items-center space-x-2"
           onClick={logout}
         >
-          <span className="text-xl font-bold text-gray-800" dir="rtl">
+          <span className="font-bold text-gray-800" dir="rtl">
             התנתק
           </span>
           <LogOut className="w-5 h-5" />

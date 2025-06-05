@@ -15,7 +15,6 @@ import butt from "@/assets/image/butt.svg";
 import cardBg from "@/assets/image/image.svg";
 
 const LeftCard = ({ data }) => {
-  console.log("measurement data:", data);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const leftArm = Number(data?.arml) || 0;
   const rightArm = Number(data?.armr) || 0;
@@ -45,19 +44,31 @@ const LeftCard = ({ data }) => {
               <p className="sm:text-lg text-xs font-bold text-black">
                 ירך ימין: {data?.thighr}
               </p>
-              <img src={rightLeg} alt="" className="object-cover h-8 w-8" />
+              <img
+                src={rightLeg}
+                alt=""
+                className="object-cover sm:h-5 sm:w-5 h-4 w-4"
+              />
             </div>
             <div className="flex items-center justify-end gap-2 w-full">
               <p className="sm:text-lg text-xs font-bold text-black">
                 ירך שמאל: {data?.thighl}
               </p>
-              <img src={leftLeg} alt="" className="object-cover h-8 w-8" />
+              <img
+                src={leftLeg}
+                alt=""
+                className="object-cover sm:h-5 sm:w-5 h-4 w-4"
+              />
             </div>
             <div className="flex items-center justify-end gap-2 w-full">
               <p className="sm:text-lg text-xs font-bold text-black">
                 היקף מותניים: {data?.waist}
               </p>
-              <img src={thigh} alt="" className="object-cover h-8 w-8" />
+              <img
+                src={thigh}
+                alt=""
+                className="object-cover sm:h-5 sm:w-5 h-4 w-4"
+              />
             </div>
           </div>
           <div className="flex flex-col gap-4">
@@ -65,20 +76,32 @@ const LeftCard = ({ data }) => {
               <p className="sm:text-lg text-xs font-bold text-black">
                 זרוע ימין: {data?.armr}
               </p>
-              <img src={rightArmIcon} alt="" className="object-cover h-8 w-8" />
+              <img
+                src={rightArmIcon}
+                alt=""
+                className="object-cover sm:h-5 sm:w-5 h-4 w-4"
+              />
             </div>
 
             <div className="flex items-center justify-end gap-2 w-full">
               <p className="sm:text-lg text-xs font-bold text-black">
                 זרוע שמאל: {data?.arml}
               </p>
-              <img src={leftArmIcon} alt="" className="object-cover h-8 w-8" />
+              <img
+                src={leftArmIcon}
+                alt=""
+                className="object-cover sm:h-5 sm:w-5 h-4 w-4"
+              />
             </div>
             <div className="flex items-center justify-end gap-2 w-full">
               <p className="sm:text-lg text-xs font-bold text-black">
                 ישבן: {avgThigh}
               </p>
-              <img src={butt} alt="" className="object-cover h-8 w-8" />
+              <img
+                src={butt}
+                alt=""
+                className="object-cover sm:h-5 sm:w-5 h-4 w-4"
+              />
             </div>
           </div>
         </div>
