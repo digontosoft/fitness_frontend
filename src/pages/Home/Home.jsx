@@ -106,9 +106,9 @@ const Home = () => {
           {userInfo?.full_name}
         </h1>
       </div>
-      <div className="flex flex-col items-center justify-center gap-5 pt-10">
+      <div className="flex flex-col items-center justify-center gap-5">
         {/* Cards Section */}
-        <div className="pt-5 sm:pt-16 md:pt-20 flex flex-col-reverse md:flex-row items-center justify-center gap-5 md:gap-10 w-full">
+        <div className="pt-5 sm:pt-16 flex flex-col-reverse md:flex-row items-center justify-center gap-5 md:gap-10 w-full">
           <LeftCard data={getMesurement} className="w-full md:w-1/2" />
           <RightCard user={user} className="w-full md:w-1/2" />
         </div>

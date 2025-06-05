@@ -1,12 +1,9 @@
 import CartTitle from "@/components/workOutList/CartTitle";
 import WorkOutCart from "@/components/workOutList/WorkOutCart";
-import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
-import { workoutBg } from "@/assets";
 
 const WorkOutList = () => {
   return (
-    <div>
-      {/* <WorkOutListBaground bgImg={workoutBg} /> */}
+    <div className="min-h-[75vh]">
       <CartTitle title={"אימונים"} />
       <WorkOutCart />
     </div>
