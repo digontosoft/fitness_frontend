@@ -9,8 +9,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const ParsonalPdf = ({ data }) => {
-  const pdfUrl = `${base_url}/${data?.pdf_link}`;
-  console.log("pdfUrl", pdfUrl);
+  // const pdfUrl = `${base_url}/${data?.pdf_link}`;
+  console.log("pdfUrl", data?.pdf_link);
+  const pdfUrl = `${data?.pdf_link}`;
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
