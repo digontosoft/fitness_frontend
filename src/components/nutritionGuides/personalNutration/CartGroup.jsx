@@ -3,7 +3,6 @@ import { cartFour } from "@/assets";
 import { base_url } from "@/api/baseUrl.js";
 import axios from "axios";
 import SingleCart from "@/components/nutritionGuides/SingleCart.jsx";
-import Title from "@/components/measurements/Tilte.jsx";
 import Loading from "@/components/common/Loading";
 
 const CartGroup = () => {
@@ -12,7 +11,6 @@ const CartGroup = () => {
 
   const auth = localStorage.getItem("userInfo");
   const data = JSON.parse(auth);
-  console.log(data);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +28,6 @@ const CartGroup = () => {
     };
     fetchData();
   }, [data._id]);
-  console.log("nutrationData", nutrationData);
 
   if (loading) {
     return <Loading />;
