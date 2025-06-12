@@ -1,5 +1,4 @@
 import { base_url } from "@/api/baseUrl";
-import SmallCart from "@/components/measurements/measurementWatch/SmallCart";
 import Title from "@/components/measurements/Tilte";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -11,7 +10,6 @@ import butt from "@/assets/image/butt.svg";
 import chest from "@/assets/image/chest.svg";
 import maleChest from "@/assets/image/male-chest.svg";
 import womenHips from "@/assets/image/women-hips.svg";
-import womenWaist from "@/assets/image/thigh.svg";
 import leftLeg from "@/assets/image/left-leg.svg";
 import rightLeg from "@/assets/image/right-thigh.svg";
 import manWaist from "@/assets/image/man-waist.svg";
@@ -68,18 +66,18 @@ const MeasurementTracking = () => {
     fetchData();
   }, [id]);
 
-  // const sortOrder = [
-  //   "מותן",
-  //   "חזה",
-  //   "ירך ימין",
-  //   "ירך שמאלה",
-  //   "זרוע ימין",
-  //   "זרוע שמאל",
-  // ];
+  const sortOrder = [
+    "מותן",
+    "חזה",
+    "ירך ימין",
+    "ירך שמאלה",
+    "זרוע ימין",
+    "זרוע שמאל",
+  ];
 
-  // const sortedData = [...data].sort(
-  //   (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
-  // );
+  const sortedData = [...data].sort(
+    (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
+  );
 
   return (
     <div>
@@ -91,7 +89,7 @@ const MeasurementTracking = () => {
           className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-20 sm:pt-10 p-4"
           dir="rtl"
         >
-          {data.map((data) => {
+          {sortedData.map((data) => {
             let customImage = null;
 
             if (data.cartTitle === "זרוע ימין") {

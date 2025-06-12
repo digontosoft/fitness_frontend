@@ -121,25 +121,25 @@ const SingleCart = ({ userId, setOpen, setId }) => {
     fetchData();
   }, [userId]);
 
-  // const sortOrder = [
-  //   "מותן",
-  //   "חזה",
-  //   "ירך ימין",
-  //   "ירך שמאלה",
-  //   "זרוע ימין",
-  //   "זרוע שמאל",
-  // ];
+  const sortOrder = [
+    "מותן",
+    "חזה",
+    "ירך ימין",
+    "ירך שמאלה",
+    "זרוע ימין",
+    "זרוע שמאל",
+  ];
 
-  // const sortedData = [...data].sort(
-  //   (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
-  // );
+  const sortedData = [...data].sort(
+    (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
+  );
 
   return (
     <div
       className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:pt-10 sm:p-4 sm:px-0 px-4"
       dir="rtl"
     >
-      {data.map((data) => {
+      {sortedData.map((data) => {
         let customImage = null;
 
         if (data.cartTitle === "זרוע ימין") {

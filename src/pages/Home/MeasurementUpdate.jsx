@@ -257,7 +257,7 @@ const MeasurementUpdate = () => {
         <Link to="/mesurement-pdf">
           <button
             type="button"
-            className="underline text-black text-xl font-bold hover:text-blue-600"
+            className="underline text-black text-base font-bold hover:text-blue-600"
           >
             לצפייה במדריך צילום תמונות
           </button>
@@ -346,7 +346,7 @@ const MeasurementUpdate = () => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            className=" text-white px-4 md:px-8 py-2 rounded-full"
+            className=" text-white px-4 md:px-8 py-2 rounded-full mb-5 sm:mb-0"
           >
             שמירת מדדים
           </Button>

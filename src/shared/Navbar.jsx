@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MdOutlineClose } from "react-icons/md";
 import { CiMenuFries } from "react-icons/ci";
 import { adminLink, recipeLink, traineeLink } from "@/constants/NavLink";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
@@ -223,9 +223,21 @@ const Navbar = () => {
           <div>No valid user type or token found.</div>
         )}
 
-        <div className="flex items-center md:justify-center  pr-[35%] md:pr-0">
-          <img src={logo} alt="logo" className="w-15 h-14 object-cover" />
-        </div>
+        {userType === "trainee" ? (
+          <Link
+            to="/"
+            className="flex items-center md:justify-center  pr-[35%] md:pr-0"
+          >
+            <img src={logo} alt="logo" className="w-15 h-14 object-cover" />
+          </Link>
+        ) : (
+          <Link
+            to="/dashboard"
+            className="flex items-center md:justify-center  pr-[35%] md:pr-0"
+          >
+            <img src={logo} alt="logo" className="w-15 h-14 object-cover" />
+          </Link>
+        )}
 
         {/* Hamburger Menu Button */}
         <div className="md:hidden">

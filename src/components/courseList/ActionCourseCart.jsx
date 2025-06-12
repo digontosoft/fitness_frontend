@@ -23,29 +23,28 @@ const ActionCourseCart = () => {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <div className=" bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753] min-h-screen border-b-8 border-white py-12  ">
-      <div className="flex flex-col justify-center items-center max-w-6xl mx-auto bg-white rounded-3xl p-2 md:p-10">
+    <div className="bg-gradient-to-br from-[rgb(148,0,25)] to-[#FD4753] min-h-screen h-auto py-12">
+      <div className="flex flex-col justify-center items-center max-w-6xl mx-auto bg-[#FDFDFD] rounded-3xl p-2 md:p-10">
         <Title title={workoutData?.task_name} />
         <RecipeParagraph trainingDesc={workoutData?.task_description} />
-        <div className="flex items-center flex-col md:flex-row gap-10">
-          {" "}
-          <Button
-            onClick={handleCourse}
-            className="text-sm font-bold text-white  bg-gradient-to-tr from-[rgb(148,0,25)] to-[#FD4753] px-8 py-4 rounded-full sm:mt-10 mt-0 w-52 md:w-40 h-12"
-          >
-            התחלת אימון
-          </Button>
+        <div className="flex items-center justify-center gap-4">
           <Button
             onClick={EditCourse}
-            className="text-sm font-bold text-black  bg-gradient-to-tr from-gray-100 to-gray-200 px-8 py-4 rounded-full sm:mt-10 mt-0 w-52 md:w-40 h-12 border border-black"
+            className="text-sm font-bold text-black  bg-gradient-to-tr from-gray-100 to-gray-200 px-8 py-4 rounded-full sm:mt-10 mt-0 w-48 md:w-40 h-12 border border-black"
           >
             עריכת האימון
+          </Button>
+          <Button
+            onClick={handleCourse}
+            className="text-sm font-bold text-white  bg-gradient-to-tr from-[rgb(148,0,25)] to-[#FD4753] px-8 py-4 rounded-full sm:mt-10 mt-0 w-48 md:w-40 h-12"
+          >
+            התחלת אימון
           </Button>
         </div>
 
         <p
           dir="rtl"
-          className="text-[#0A2533] font-bold text-xl py-10 text center"
+          className="text-[#0A2533] font-bold text-xl px-4 py-10 relative transform sm:-translate-x-0 sm:left-0 -translate-x-1/2 left-1/2"
         >
           תרגילים:
         </p>

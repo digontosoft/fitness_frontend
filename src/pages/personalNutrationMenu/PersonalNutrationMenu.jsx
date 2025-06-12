@@ -5,7 +5,7 @@ import Title from "@/components/measurements/Tilte";
 
 const PersonalNutrationMenu = () => {
   return (
-    <div>
+    <div className="min-h-[78vh] h-auto">
       <WorkOutListBaground bgImg={personalNutrationBg} />
       <Title title={"תפריט תזונה אישי"} />
       <CartGroup />
