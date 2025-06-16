@@ -80,7 +80,10 @@ export default function TrainingDetails({ trainingId }) {
                                           {exercise.reps}
                                         </span>
                                       </span>
-                                      <span className="text-sm  px-3 py-1 rounded-md  uppercase font-bold" dir="rtl">
+                                      <span
+                                        className="text-sm  px-3 py-1 rounded-md  uppercase font-bold"
+                                        dir="rtl"
+                                      >
                                         מניפולציה:{" "}
                                         <span className="font-normal">
                                           {exercise.manipulation || "N/A"}
