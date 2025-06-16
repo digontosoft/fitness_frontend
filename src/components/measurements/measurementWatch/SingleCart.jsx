@@ -101,10 +101,9 @@ const SingleCart = ({ userId, setOpen, setId }) => {
   };
 
   const [data, setData] = useState([]);
+  const [user, setUser] = useState({});
 
-  const user = JSON.parse(localStorage.getItem("userInfo"));
-
-  console.log("userId", userId);
+  console.log("user", user);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,6 +118,22 @@ const SingleCart = ({ userId, setOpen, setId }) => {
       }
     };
     fetchData();
+  }, [userId]);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await axios.get(`${base_url}/getUser/${userId}`);
+        setUser(response.data.data);
+        localStorage.setItem(
+          "selectedUserId",
+          JSON.stringify(response.data.data._id)
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
   }, [userId]);
 
   const sortOrder = [
@@ -139,7 +154,7 @@ const SingleCart = ({ userId, setOpen, setId }) => {
       className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:pt-10 sm:p-4 sm:px-0 px-4"
       dir="rtl"
     >
-      {sortedData.map((data) => {
+      {data.map((data) => {
         let customImage = null;
 
         if (data.cartTitle === "זרוע ימין") {

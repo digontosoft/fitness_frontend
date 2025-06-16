@@ -344,10 +344,12 @@ const CustomizeWorkoutForm = () => {
           />
         )}
 
-        <div className="my-5" >
+        <div className="my-5">
           {training?.workouts?.map((workout, workoutIndex) => (
             <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
-              <h1 className="font-semibold" dir="rtl">{workout?.workout?.name}</h1>
+              <h1 className="font-semibold" dir="rtl">
+                {workout?.workout?.name}
+              </h1>
 
               {workout?.exercises?.map((ex, exerciseIndex) => (
                 <div
@@ -358,7 +360,10 @@ const CustomizeWorkoutForm = () => {
                     <p className="py-4" dir="rtl">
                       {ex?.name} {ex?.exercise_id?.name}
                     </p>
-                    <div className="flex sm:flex-row flex-col items-center justify-between sm:gap-x-2 gap-y-2" dir="rtl">
+                    <div
+                      className="flex sm:flex-row flex-col items-center justify-between sm:gap-x-2 gap-y-2"
+                      dir="rtl"
+                    >
                       <div className="flex flex-col items-center space-y-4">
                         <p>סטים</p>
 

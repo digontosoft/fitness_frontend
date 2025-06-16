@@ -150,19 +150,19 @@ export default function WorkoutDetails({ workoutId }) {
                         </div>
                         <div className="flex flex-wrap justify-center gap-4">
                           <p className="text-sm py-2 px-4 font-bold rounded-md text-black uppercase tracking-wide">
-                          סטים:{" "}
+                            סטים:{" "}
                             <span className="font-normal">
                               {exercise?.sets}
                             </span>
                           </p>
                           <p className="text-sm py-2 px-4 rounded-md text-black uppercase font-bold tracking-wide">
-                          חזרות:{" "}
+                            חזרות:{" "}
                             <span className="font-normal">
                               {exercise?.reps}
                             </span>
                           </p>
                           <p className="text-sm py-2 px-4 rounded-md text-black uppercase font-bold tracking-wide">
-                          מניפולציה:{" "}
+                            מניפולציה:{" "}
                             <span className="font-normal">
                               {exercise?.manipulation}
                             </span>

@@ -327,7 +327,7 @@ const StartTraining = () => {
   };
 
   return (
-    <div className="px-2">
+    <div className="sm:px-0 px-2">
       <CommonContainer>
         <>
           <Title title={currentExercise?.exercise_id?.name} />

@@ -25,7 +25,11 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
           size="sm"
           key={number}
           onClick={() => onPageChange(number)}
-          className={`${currentPage === number ? "bg-customBg" : "bg-white text-black border hover:text-white"}`}
+          className={`${
+            currentPage === number
+              ? "bg-customBg"
+              : "bg-white text-black border hover:text-white"
+          }`}
         >
           {number}
         </Button>
