@@ -1,5 +1,3 @@
-import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
-import { RecipeBookBg } from "@/assets";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
