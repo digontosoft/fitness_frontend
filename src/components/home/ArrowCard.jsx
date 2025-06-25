@@ -1,20 +1,19 @@
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button } from "../ui/button";
-import buger from "@/assets/image/burger.svg";
-import measurement from "@/assets/image/measurementRope.svg";
+import burger from "@/assets/image/burger.svg";
+import measurement from "@/assets/image/measuring-tape.svg";
 import dumble from "@/assets/image/dumble-square.svg";
-
-const ArrowCard = ({ image, tilte, tilte1, taskType, onClick }) => {
-  console.log("title", tilte);
+import manBody from "@/assets/image/man-body.svg";
+const ArrowCard = ({ tilte, tilte1, taskType, onClick }) => {
   let taskImage = null;
   if (taskType === "workout") {
     taskImage = dumble;
   } else if (taskType === "measurement") {
     taskImage = measurement;
   } else if (taskType === "food_dairy") {
-    taskImage = buger;
+    taskImage = burger;
   } else {
-    taskImage = image;
+    taskImage = manBody;
   }
   return (
     <div

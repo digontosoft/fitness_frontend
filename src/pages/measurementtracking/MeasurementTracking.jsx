@@ -89,7 +89,7 @@ const MeasurementTracking = () => {
           className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-20 sm:pt-10 p-4"
           dir="rtl"
         >
-          {sortedData.map((data) => {
+          {data.map((data) => {
             let customImage = null;
 
             if (data.cartTitle === "זרוע ימין") {
