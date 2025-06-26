@@ -355,30 +355,30 @@ const AddWorkoutForm = () => {
     console.log("Submitting workoutData", workoutData);
 
     // Basic validation: Check if exercises have been added and have details
-    // if (workoutExercises.length === 0) {
-    //   toast.error("Please add at least one exercise to the workout.");
-    //   return;
-    // }
+    if (workoutExercises.length === 0) {
+      toast.error("Please add at least one exercise to the workout.");
+      return;
+    }
     // Add more specific validation if needed (e.g., all exercises have sets and reps)
 
-    // try {
-    //   const response = await axios.post(`${base_url}/workout`, workoutData);
-    //   if (response.status === 201) {
-    //     toast.success("Workout created successfully");
-    //     reset(); // Resets react-hook-form fields (name, description)
-    //     setSelectedExercisesFromDropdown([]); // Clear selected exercises from dropdown
-    //     setWorkoutExercises([]); // Clear the detailed exercises
-    //     setSelectedBodyPart(null); // Reset filters
-    //     setSelectedEquipment(null); // Reset filters
-    //     setFilteredExercisesForSelection([]); // Clear the dropdown options
-    //     // Potentially reset Select component values if they don't clear automatically
-    //     // For react-dropdown-select, clearing the 'values' prop by resetting selectedExercisesFromDropdown should work
-    //     navigate("/dashboard/workout-list");
-    //   }
-    // } catch (error) {
-    //   toast.error(error.response?.data?.message || "Failed to create workout");
-    //   console.error(error);
-    // }
+    try {
+      const response = await axios.post(`${base_url}/workout`, workoutData);
+      if (response.status === 201) {
+        toast.success("Workout created successfully");
+        reset(); // Resets react-hook-form fields (name, description)
+        setSelectedExercisesFromDropdown([]); // Clear selected exercises from dropdown
+        setWorkoutExercises([]); // Clear the detailed exercises
+        setSelectedBodyPart(null); // Reset filters
+        setSelectedEquipment(null); // Reset filters
+        setFilteredExercisesForSelection([]); // Clear the dropdown options
+        // Potentially reset Select component values if they don't clear automatically
+        // For react-dropdown-select, clearing the 'values' prop by resetting selectedExercisesFromDropdown should work
+        navigate("/dashboard/workout-list");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to create workout");
+      console.error(error);
+    }
   };
 
   return (

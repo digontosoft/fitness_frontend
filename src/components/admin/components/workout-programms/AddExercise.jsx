@@ -163,6 +163,7 @@ const AddExercise = ({
             value={sets}
             onChange={(e) => setSets(e.target.value)}
             onBlur={handleInputChange}
+            required
           />
         </div>
         <div className="flex flex-col space-y-2">
@@ -174,6 +175,7 @@ const AddExercise = ({
             value={reps}
             onChange={(e) => setReps(e.target.value)}
             onBlur={handleInputChange}
+            required
           />
         </div>
         <div className="flex flex-col space-y-2">
@@ -185,6 +187,7 @@ const AddExercise = ({
             value={manipulation}
             onChange={handleManipulationChange}
             onBlur={handleInputChange}
+            required
           />
         </div>
       </div>

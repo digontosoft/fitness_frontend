@@ -10,6 +10,7 @@ import butt from "@/assets/image/butt.svg";
 import cardBg from "@/assets/image/image.svg";
 import chest from "@/assets/image/man-chest.svg";
 import manWaist from "@/assets/image/man-waist.svg";
+import womanWaist from "@/assets/image/women-hips.svg";
 
 const LeftCard = ({ data }) => {
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
@@ -80,7 +81,7 @@ const LeftCard = ({ data }) => {
                 היקף מותניים: {data?.waist}
               </p>
               <img
-                src={manWaist}
+                src={userDetails.gender === "female" ? womanWaist : manWaist}
                 alt=""
                 className="object-cover sm:h-5 sm:w-5 h-4 w-4"
               />
