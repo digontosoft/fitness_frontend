@@ -83,6 +83,7 @@ const TraineerUi = ({ userId }) => {
           gender={user?.gender}
           userId={userId}
           user={user}
+          setUser={setUser}
           stepAverage={user?.step_average}
           stepTarget={user?.step_target}
         />

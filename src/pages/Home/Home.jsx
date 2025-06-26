@@ -124,12 +124,16 @@ const Home = () => {
             <Loading />
           ) : (
             userTasks?.map((task) => (
-              <div
-                // className="w-full sm:w-1/2 cursor-pointer"
+              // <div
+              //    className="w-full cursor-pointer"
+              //   key={task?._id}
+              // >
+              // </div>
+              <ArrowGroup
                 key={task?._id}
-              >
-                <ArrowGroup onclick={handleOpenModal} task={task} />
-              </div>
+                onclick={handleOpenModal}
+                task={task}
+              />
             ))
           )}
         </div>

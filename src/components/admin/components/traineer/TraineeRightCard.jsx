@@ -10,6 +10,7 @@ const TraineeRightCard = ({
   stepTarget,
   userId,
   user,
+  setUser,
 }) => {
   const progress = stepAverage || 0;
   const target = Math.max(stepTarget || 1, 1);
@@ -62,7 +63,7 @@ const TraineeRightCard = ({
           </div>
         </div>
         <div className="z-10">
-          <AddStepAverageForUser user={user} />
+          <AddStepAverageForUser user={user} setUser={setUser} />
         </div>
       </div>
       <div className="absolute top-0 right-0">
