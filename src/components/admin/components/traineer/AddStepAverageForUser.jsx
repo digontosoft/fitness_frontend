@@ -13,24 +13,31 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const AddStepAverageForUser = ({ user }) => {
+const AddStepAverageForUser = ({ user, setUser }) => {
   const [stepCount, setStepCount] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async () => {
     if (!stepCount) return alert("Please enter a valid step count.");
 
     try {
+      setIsLoading(true);
       const payload = {
-        number_of_steps: stepCount,
+        step_target: stepCount,
         user_id: user._id,
       };
       console.log("stepCount", payload);
-      //    await axios
-      //  .post(`${base_url}/update-user-steps-task`, payload)
-      //  .then((res) => {
-      //    if (res.status === 200) {
-      //      toast.success(res.data.message);
-      //    }
-      //  });
+      await axios.post(`${base_url}/updateUserInfo`, payload).then((res) => {
+        if (res.status === 200) {
+          toast.success("User Step Target Updated Successfully");
+          setUser((prevUser) => ({
+            ...prevUser,
+            step_target: stepCount,
+          }));
+          setIsModalOpen(false);
+          setIsLoading(false);
+        }
+      });
     } catch (error) {
       console.error("Error submitting steps:", error);
       alert("Failed to submit steps.");
@@ -40,7 +47,7 @@ const AddStepAverageForUser = ({ user }) => {
   console.log("user:", user);
 
   return (
-    <Dialog dir="rtl">
+    <Dialog dir="rtl" open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogTrigger asChild>
         <Button className="absolute top-40 left-1 bg-customBg cursor-pointer">
           הוסף ממוצע צעדים
@@ -61,6 +68,7 @@ const AddStepAverageForUser = ({ user }) => {
               id="steps"
               type="number"
               value={stepCount}
+              required
               onChange={(e) => setStepCount(e.target.value)}
               placeholder="יש למלא מספר צעדים יומי"
             />
@@ -72,6 +80,7 @@ const AddStepAverageForUser = ({ user }) => {
             type="submit"
             onClick={handleSubmit}
             className="bg-red-600 hover:bg-red-500 w-full"
+            disabled={isLoading}
           >
             עדכן מעקב
           </Button>

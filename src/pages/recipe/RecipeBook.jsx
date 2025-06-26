@@ -31,7 +31,7 @@ const RecipeBook = () => {
                 key={recipe?._id}
                 className="flex flex-col items-center justify-center w-full"
               >
-                <ParsonalPdf data={recipe} />
+                <ParsonalPdf data={recipe} isBaseUrl={true} />
               </div>
             ))
         : recipeBook
@@ -41,7 +41,7 @@ const RecipeBook = () => {
                 key={recipe?._id}
                 className="flex flex-col items-center justify-center max-w-5xl mx-auto"
               >
-                <ParsonalPdf data={recipe} />
+                <ParsonalPdf data={recipe} isBaseUrl={true} />
               </div>
             ))}
     </div>
