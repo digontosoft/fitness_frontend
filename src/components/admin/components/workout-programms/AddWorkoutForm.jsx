@@ -617,6 +617,20 @@ const AddWorkoutForm = () => {
     fetchFilteredExercises();
   }, [selectedBodyPart, selectedEquipment, allExercises]); // Add allExercises as a dependency
 
+  // Remove Exercise
+
+  const handleRemoveExercise = (exerciseIdToRemove) => {
+    // Remove from workoutExercises
+    setWorkoutExercises((prevExercises) =>
+      prevExercises.filter((ex) => ex.exercise_id !== exerciseIdToRemove)
+    );
+
+    // Remove from selectedExercisesFromDropdown
+    setSelectedExercisesFromDropdown((prevSelected) =>
+      prevSelected.filter((ex) => ex._id !== exerciseIdToRemove)
+    );
+  };
+
   // When items from the multi-select dropdown change
   const handleDropdownSelectionChange = (selectedItems) => {
     setSelectedExercisesFromDropdown(selectedItems);
@@ -754,7 +768,6 @@ const AddWorkoutForm = () => {
               placeholder="בחר תרגילים מהרשימה"
               onChange={handleDropdownSelectionChange}
               searchBy="name"
-              multi
               values={selectedExercisesFromDropdown}
               keepSelectedInList
               dropdownHandle={true}
@@ -777,6 +790,7 @@ const AddWorkoutForm = () => {
               setIsSupersetSelected={setIsSupersetSelected}
               isButtonDisabled={isButtonDisabled}
               setIsButtonDisabled={setIsButtonDisabled}
+              handleRemoveExercise={handleRemoveExercise}
             />
           ))}
         </div>

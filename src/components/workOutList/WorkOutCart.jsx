@@ -39,7 +39,7 @@ const WorkOutCart = () => {
         download
         className="text-lg font-semibold flex items-center justify-center underline"
       >
-        הצגת מדדים קודמים
+        הצגת ביצועים קודמים
       </a>
       <div className="flex items-center justify-center my-5" dir="rtl">
         <Select
@@ -50,7 +50,7 @@ const WorkOutCart = () => {
           valueField="_id"
           labelField="name"
           onChange={(value) => setSelectedTraining(value)}
-          placeholder="הַדְרָכָה..."
+          placeholder="חפש תוכנית אימון"
           searchBy="name"
         />
       </div>

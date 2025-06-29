@@ -39,7 +39,9 @@ const Navbar = () => {
     fetchUserTask();
   }, [userData?._id]);
 
-  const hasWorkoutTask = userTasks.some((task) => task.task_type === "workout");
+  const hasWorkoutTask = userTasks.some(
+    (task) => task?.task_type === "workout" && task?.task_status !== "Disabled"
+  );
 
   return (
     <nav className="bg-transparent md:bg-white shadow-md ">
@@ -56,68 +58,6 @@ const Navbar = () => {
           <LogOut className="w-5 h-5" />
         </a>
 
-        {/* <div className="text-xl font-bold text-gray-800 hidden md:flex">
-          {userType === "admin" ? (
-            <>
-              <a
-                href={adminLink.find((item) => item.title === "התנתקות")?.link}
-                className="flex items-center space-x-2"
-              >
-                <span>
-                  {adminLink.find((item) => item.title === "התנתקות")?.title ||
-                    "Brand"}
-                </span>
-                <img
-                  src={adminLink.find((item) => item.title === "התנתקות")?.icon}
-                  alt="התנתקות icon"
-                  className="w-5 h-5"
-                />
-              </a>
-            </>
-          ) : userType === "trainee" ? (
-            <>
-              <a
-                href={
-                  traineeLink.find((item) => item.title === "התנתקות")?.link
-                }
-                className="flex items-center space-x-2"
-              >
-                <span>
-                  {traineeLink.find((item) => item.title === "התנתקות")
-                    ?.title || "Brand"}
-                </span>
-                <img
-                  src={
-                    traineeLink.find((item) => item.title === "התנתקות")?.icon
-                  }
-                  alt="התנתקות icon"
-                  className="w-5 h-5"
-                />
-              </a>
-            </>
-          ) : userType === "recipe" ? (
-            <>
-              <a
-                href={recipeLink.find((item) => item.title === "התנתקות")?.link}
-                className="flex items-center space-x-2"
-              >
-                <span>
-                  {recipeLink.find((item) => item.title === "התנתקות")?.title ||
-                    "Brand"}
-                </span>
-                <img
-                  src={
-                    recipeLink.find((item) => item.title === "התנתקות")?.icon
-                  }
-                  alt="התנתקות icon"
-                  className="w-5 h-5"
-                />
-              </a>
-            </>
-          ) : (
-            <></>
-          )}
-        </div> */}
         {userType === "admin" ? (
           <div className="hidden md:flex justify-between items-center space-x-9">
             {adminLink.map(({ _id, title, link, icon: Icon }) => (
@@ -138,25 +78,6 @@ const Navbar = () => {
             ))}
           </div>
         ) : userType === "trainee" ? (
-          // <div className="hidden md:flex justify-between items-center space-x-9">
-          //   {traineeLink.map(({ _id, title, link, icon: Icon }) => (
-          //     <NavLink
-          //       key={_id}
-          //       to={link}
-          //       className={({ isActive }) =>
-          //         `flex items-center text-gray-600 hover:text-gray-900 font-bold gap-x-4 ${
-          //           isActive
-          //             ? "text-red-500"
-          //             : "text-gray-600 hover:text-gray-900"
-          //         }`
-          //       }
-          //       dir="rtl"
-          //     >
-          //       <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-          //       <span dir="rtl">{title}</span>
-          //     </NavLink>
-          //   ))}
-          // </div>
           <div className="hidden md:flex justify-between items-center space-x-9">
             {traineeLink.map(({ _id, title, link, icon: Icon }) => {
               const isTrainingLink =
@@ -279,26 +200,6 @@ const Navbar = () => {
                   ))}
               </div>
             ) : userType === "trainee" ? (
-              // <div className="flex flex-col space-y-2">
-              //   {traineeLink.map(({ _id, title, link, icon: Icon }) => (
-              //     <NavLink
-              //       key={_id}
-              //       to={link}
-              //       className={({ isActive }) =>
-              //         `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
-              //           isActive
-              //             ? "text-red-500"
-              //             : "text-gray-600 hover:text-gray-900"
-              //         }`
-              //       }
-              //       onClick={() => setIsOpen(false)}
-              //       dir="rtl"
-              //     >
-              //       <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-              //       <span dir="rtl">{title}</span>
-              //     </NavLink>
-              //   ))}
-              // </div>
               <div className="flex flex-col space-y-2">
                 {traineeLink
                   .slice()
