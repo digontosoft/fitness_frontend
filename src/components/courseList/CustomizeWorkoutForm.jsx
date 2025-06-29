@@ -9,13 +9,17 @@ import { Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 
 const CustomizeWorkoutForm = () => {
   const {
     state: { workout, training: trainings },
   } = useLocation();
   const [training, setTraining] = useState(trainings);
-  const [exerciseList, setExerciseList] = useState([]);
+  const [allExercises, setAllExercises] = useState([]);
+  const [selectedBodyPart, setSelectedBodyPart] = useState(null);
+  const [selectedEquipment, setSelectedEquipment] = useState(null);
+  const [selectedExercise, setSelectedExercise] = useState([]);
   const [workouts, setWorkouts] = useState(workout);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
@@ -60,7 +64,7 @@ const CustomizeWorkoutForm = () => {
           //   axios.get(`${base_url}/get-training-by-id/${trainingId}`),
         ]);
 
-        if (exerciseRes.status === 200) setExerciseList(exerciseRes.data.data);
+        if (exerciseRes.status === 200) setAllExercises(exerciseRes.data.data);
         // if (workoutRes.status === 200) setWorkouts(workoutRes.data.data);
         // if (trainingRes.status === 200) setTraining(trainingRes.data.data);
       } catch (error) {
@@ -70,6 +74,35 @@ const CustomizeWorkoutForm = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchFilteredExercises = async () => {
+      if (selectedBodyPart || selectedEquipment) {
+        let url = `${base_url}/exercise?`;
+        if (selectedBodyPart) {
+          url += `body_part=${selectedBodyPart}&`;
+        }
+        if (selectedEquipment) {
+          url += `equipment=${selectedEquipment}&`;
+        }
+        url = url.slice(0, -1); // Remove trailing '&' or '?'
+
+        try {
+          const response = await axios.get(url);
+          setSelectedExercise(response.data.data || []);
+          console.log("Filtered exercises for selection:", response.data.data);
+        } catch (error) {
+          console.error("Error fetching filtered exercises:", error);
+          setSelectedExercise([]);
+        }
+      } else {
+        // If no filters are selected, show all exercises again
+        setSelectedExercise(allExercises);
+      }
+    };
+
+    fetchFilteredExercises();
+  }, [selectedBodyPart, selectedEquipment, allExercises]);
 
   const handleMoreExercise = (workoutIndex, e) => {
     e.preventDefault();
@@ -431,24 +464,7 @@ const CustomizeWorkoutForm = () => {
                     handleNewExerciseSelection(selected, workoutIndex)
                   }
                 /> */}
-                  <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      סנן לפי שם תרגיל
-                    </label>
-                    <Select
-                      className="rounded-lg h-12 w-auto"
-                      direction="rtl"
-                      options={exerciseList}
-                      valueField="_id"
-                      labelField="name"
-                      multi
-                      placeholder="בחר"
-                      onChange={(selected) =>
-                        handleNewExerciseSelection(selected, workoutIndex)
-                      }
-                      searchBy="name"
-                    />
-                  </div>
+
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       אזור בגוף
@@ -456,15 +472,17 @@ const CustomizeWorkoutForm = () => {
                     <Select
                       className="rounded-lg h-12 w-auto"
                       direction="rtl"
-                      valueField="_id"
-                      labelField="body_part"
-                      options={exerciseList}
-                      multi
+                      valueField="id"
+                      labelField="label"
+                      options={bodyPartOptions}
                       placeholder="סנן לפי חלק בגוף"
-                      onChange={(selected) =>
-                        handleNewExerciseSelection(selected, workoutIndex)
-                      }
-                      searchBy="body_part"
+                      onChange={(selectedOptions) => {
+                        const values = selectedOptions.map(
+                          (option) => option.value
+                        );
+                        setSelectedBodyPart(values[0]);
+                      }}
+                      searchBy="label"
                     />
                   </div>
                   <div>
@@ -474,15 +492,34 @@ const CustomizeWorkoutForm = () => {
                     <Select
                       className="rounded-lg h-12 w-auto"
                       direction="rtl"
-                      options={exerciseList}
-                      valueField="_id"
-                      labelField="equipment"
-                      multi
+                      options={equipmentOptions}
+                      valueField="id"
+                      labelField="label"
                       placeholder="סנן לפי ציוד"
+                      onChange={(selectedOptions) => {
+                        const values = selectedOptions.map(
+                          (option) => option.value
+                        );
+                        setSelectedEquipment(values[0]);
+                      }}
+                      searchBy="label"
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      סנן לפי שם תרגיל
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      options={selectedExercise}
+                      valueField="_id"
+                      labelField="name"
+                      placeholder="בחר"
                       onChange={(selected) =>
                         handleNewExerciseSelection(selected, workoutIndex)
                       }
-                      searchBy="equipment"
+                      searchBy="name"
                     />
                   </div>
                 </div>

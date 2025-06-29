@@ -104,6 +104,7 @@ const EditExercise = () => {
                   onChange={(e) => handleChange(index, "sets", e.target.value)}
                   placeholder="Sets"
                   className="p-2 rounded-lg border mr-[30px] sm:mr-0"
+                  required
                 />
               </div>
               <div className="flex items-center  md:justify-center gap-3">
@@ -114,6 +115,7 @@ const EditExercise = () => {
                   onChange={(e) => handleChange(index, "reps", e.target.value)}
                   placeholder="Reps"
                   className="p-2 rounded-lg border mr-6 sm:mr-0"
+                  required
                 />
               </div>
               <div className="flex items-center  md:justify-center gap-3">
@@ -126,6 +128,7 @@ const EditExercise = () => {
                   }
                   placeholder="Manipulation"
                   className="p-2 rounded border"
+                  required
                 />
               </div>
             </div>

@@ -1,4 +1,9 @@
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 export function WelcomeModal({ isModalOpen, setIsModalOpen, handleSubmit }) {
   return (
@@ -36,6 +41,16 @@ export function WelcomeModal({ isModalOpen, setIsModalOpen, handleSubmit }) {
             ></iframe>
           </div>
         </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <button
+              className="w-full bg-customBg uppercase text-white"
+              onClick={() => handleSubmit()}
+            >
+              הבנתי
+            </button>
+          </DialogClose>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

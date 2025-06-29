@@ -114,7 +114,7 @@ export default function TrainingForTraineeDetails({ trainingId }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg uppercase ">Close</Button>
+            <Button className="w-full bg-customBg uppercase ">סגור</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

@@ -34,13 +34,14 @@ const WorkOutCart = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-2 pb-10">
+      <a
+        href="/file/Copy of �היקפים�.xlsx"
+        download
+        className="text-lg font-semibold flex items-center justify-center underline"
+      >
+        הצגת מדדים קודמים
+      </a>
       <div className="flex items-center justify-center my-5" dir="rtl">
-        {/* <Input
-          dir="rtl"
-          placeholder="סנן לפי שם תוכנית אימון ..."
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
-        />{" "} */}
         <Select
           // className="max-w-lg"
           style={{ width: "380px", height: "50px" }}

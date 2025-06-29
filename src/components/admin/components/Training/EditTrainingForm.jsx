@@ -16,7 +16,7 @@ import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 const EditTrainingForm = () => {
   const { id } = useParams();
   const [training, setTraining] = useState({});
-  const [exerciseList, setExerciseList] = useState([]);
+  const [allExercises, setAllExercises] = useState([]);
   const [workouts, setWorkouts] = useState([]);
   // const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
@@ -67,7 +67,7 @@ const EditTrainingForm = () => {
         ]);
 
         if (exerciseRes.status === 200) {
-          setExerciseList(exerciseRes.data.data);
+          setAllExercises(exerciseRes.data.data);
           setLoading(false);
         }
         if (workoutRes.status === 200) {
@@ -147,25 +147,55 @@ const EditTrainingForm = () => {
     setExerciseSelectVisible((prev) => ({ ...prev, [workoutId]: false }));
   };
 
+  // useEffect(() => {
+  //   const fetchSelectedExercises = async () => {
+  //     if (selectedBodyPart && selectedEquipment) {
+  //       try {
+  //         const response = await axios.get(
+  //           `${base_url}/exercise?body_part=${selectedBodyPart}&equipment=${selectedEquipment}`
+  //         );
+  //         setSelectedExercise(response.data.data);
+  //         console.log("selectedExercises:", response.data.data);
+  //       } catch (error) {
+  //         console.error("Error fetching selected exercises:", error);
+  //       }
+  //     }
+  //   };
+
+  //   fetchSelectedExercises();
+  // }, [selectedBodyPart, selectedEquipment]);
+
+  // // Remove an exercise from a workout
+
   useEffect(() => {
-    const fetchSelectedExercises = async () => {
-      if (selectedBodyPart && selectedEquipment) {
-        try {
-          const response = await axios.get(
-            `${base_url}/exercise?body_part=${selectedBodyPart}&equipment=${selectedEquipment}`
-          );
-          setSelectedExercise(response.data.data);
-          console.log("selectedExercises:", response.data.data);
-        } catch (error) {
-          console.error("Error fetching selected exercises:", error);
+    const fetchFilteredExercises = async () => {
+      if (selectedBodyPart || selectedEquipment) {
+        let url = `${base_url}/exercise?`;
+        if (selectedBodyPart) {
+          url += `body_part=${selectedBodyPart}&`;
         }
+        if (selectedEquipment) {
+          url += `equipment=${selectedEquipment}&`;
+        }
+        url = url.slice(0, -1); // Remove trailing '&' or '?'
+
+        try {
+          const response = await axios.get(url);
+          setSelectedExercise(response.data.data || []);
+          console.log("Filtered exercises for selection:", response.data.data);
+        } catch (error) {
+          console.error("Error fetching filtered exercises:", error);
+          setSelectedExercise([]);
+        }
+      } else {
+        // If no filters are selected, show all exercises again
+        setSelectedExercise(allExercises);
       }
     };
 
-    fetchSelectedExercises();
-  }, [selectedBodyPart, selectedEquipment]);
+    fetchFilteredExercises();
+  }, [selectedBodyPart, selectedEquipment, allExercises]);
 
-  // // Remove an exercise from a workout
   const handleRemoveExercise = (workoutId, exerciseId) => {
     setTraining((prev) => ({
       ...prev,

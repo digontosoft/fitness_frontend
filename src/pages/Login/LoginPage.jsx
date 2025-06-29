@@ -56,11 +56,6 @@ const LoginPage = () => {
           text="התחברות ללקוחות ספר המתכונים"
           className="w-full bg-gradient-to-tr from-[#FD4753] to-[#940019] hover:opacity-80 transition duration-300 px-4"
         />
-        <p
-          className={`underline text-sm font-semibold ${textColor} hover:text-blue-600`}
-        >
-          יצירת חשבון חדש
-        </p>
       </div>
     </div>
   );
