@@ -417,7 +417,7 @@ const EditTrainingForm = () => {
                   >
                     <div>
                       <p className="py-4 text-center" dir="rtl">
-                        {ex?.name}
+                        {ex?.name} {ex?.exercise_id?.name}
                       </p>
                       <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
                         <div className="flex flex-col items-center space-y-4">
