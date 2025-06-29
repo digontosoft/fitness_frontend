@@ -9,6 +9,7 @@ const ActionCourseCart = () => {
   const navigate = useNavigate();
 
   const workoutData = location.state.data;
+  console.log("workoutData:", workoutData);
 
   const handleCourse = () => {
     navigate("/startTraining", { state: { data: workoutData } });
@@ -32,7 +33,7 @@ const ActionCourseCart = () => {
         <div className="flex items-center justify-center gap-4">
           <Button
             onClick={EditCourse}
-            className="text-sm font-bold text-black  bg-white px-8 py-4 rounded-full sm:mt-10 mt-0 w-48 md:w-40 h-12 border border-black"
+            className="text-sm font-bold text-black hover:text-white bg-gray-100  border border-gray-400 px-10 py-4 rounded-full sm:mt-10 mt-0 w-48 md:w-40 h-12 "
           >
             עריכת האימון
           </Button>

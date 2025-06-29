@@ -1,8 +1,12 @@
 import { base_url } from "@/api/baseUrl";
+import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import axios from "axios";
+import { Trash } from "lucide-react";
 import { useEffect, useState } from "react";
+import Select from "react-dropdown-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
 
 const EditExercise = () => {
   const location = useLocation();
@@ -11,49 +15,134 @@ const EditExercise = () => {
   const [exerciseList, setExerciseList] = useState(
     workData?.userTrainingExercise || []
   );
-  console.log("workdata", workData);
   const workoutId = workData?.user_training_workout_id;
-  const [exercise, setExercise] = useState([]);
+  const [allExercises, setAllExercises] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedExerciseId, setSelectedExerciseId] = useState("");
+
+  // States for filtering and selecting a new exercise
+  const [selectedExerciseIdForAdd, setSelectedExerciseIdForAdd] = useState("");
+  const [selectedExerciseOptions, setSelectedExerciseOptions] = useState(null); // This will hold the filtered exercises for the dropdown
+  const [selectedBodyPart, setSelectedBodyPart] = useState(null);
+  const [selectedEquipment, setSelectedEquipment] = useState(null);
+
+  // States for the new exercise's sets, reps, manipulation
+  const [newExerciseSets, setNewExerciseSets] = useState("");
+  const [newExerciseReps, setNewExerciseReps] = useState("");
+  const [newExerciseManipulation, setNewExerciseManipulation] = useState("");
 
   useEffect(() => {
     const fetchExercises = async () => {
       try {
         const response = await axios.get(`${base_url}/exercise`);
-        setExercise(response.data.data);
+        setAllExercises(response.data.data);
+        setSelectedExerciseOptions(response.data.data); // Initially show all exercises
       } catch (error) {
         console.error("Error fetching exercises:", error);
+        toast.error("Failed to fetch exercises.");
       }
     };
     fetchExercises();
   }, []);
 
-  const handleAddExercise = () => {
-    const selected = exercise.find((ex) => ex._id === selectedExerciseId);
+  // Filter exercises based on selected body part and equipment
+  useEffect(() => {
+    let filtered = allExercises;
+
+    if (selectedBodyPart) {
+      filtered = filtered.filter((ex) => ex.body_part === selectedBodyPart);
+    }
+
+    if (selectedEquipment) {
+      filtered = filtered.filter((ex) => ex.equipment === selectedEquipment);
+    }
+    setSelectedExerciseOptions(filtered);
+    setSelectedExerciseIdForAdd(""); // Reset selected exercise when filters change
+  }, [selectedBodyPart, selectedEquipment, allExercises]);
+
+  const handleAddMoreExerciseClick = () => {
+    setShowDropdown(true);
+  };
+
+  const handleAddNewExercise = () => {
+    if (!selectedExerciseIdForAdd) {
+      toast.error("Please select an exercise to add.");
+      return;
+    }
+    if (!newExerciseSets || Number(newExerciseSets) <= 0) {
+      toast.error("Please enter a valid number of sets for the new exercise.");
+      return;
+    }
+    if (!newExerciseReps || Number(newExerciseReps) <= 0) {
+      toast.error("Please enter a valid number of reps for the new exercise.");
+      return;
+    }
+
+    const selected = allExercises.find(
+      (ex) => ex._id === selectedExerciseIdForAdd
+    );
+
     if (selected) {
-      setExerciseList([
-        ...exerciseList,
+      setExerciseList((prevList) => [
+        ...prevList,
         {
-          _id: Date.now().toString(),
+          _id: selected._id + Date.now(), // Use a unique ID for new entries
           exercise_id: selected,
-          sets: 0,
-          reps: 0,
-          manipulation: "",
+          sets: Number(newExerciseSets),
+          reps: Number(newExerciseReps),
+          manipulation: newExerciseManipulation,
         },
       ]);
-      setSelectedExerciseId("");
-      setShowDropdown(false);
+      // Reset states for adding new exercise
+      setSelectedExerciseIdForAdd("");
+      setSelectedBodyPart(null);
+      setSelectedEquipment(null);
+      setNewExerciseSets("");
+      setNewExerciseReps("");
+      setNewExerciseManipulation("");
+      setShowDropdown(false); // Hide dropdowns after adding
+      toast.success("Exercise added successfully!");
+    } else {
+      toast.error("Selected exercise not found.");
     }
+  };
+
+  const handleRemoveExercise = (idToRemove) => {
+    setExerciseList(exerciseList.filter((item) => item._id !== idToRemove));
+    toast.info("Exercise removed.");
   };
 
   const handleChange = (index, field, value) => {
     const updatedExercises = [...exerciseList];
+    // Basic validation for sets and reps
+    if ((field === "sets" || field === "reps") && Number(value) < 0) {
+      toast.error(`${field} cannot be negative.`);
+      return;
+    }
     updatedExercises[index][field] = value;
     setExerciseList(updatedExercises);
   };
 
   const handleSubmit = async () => {
+    // Validate existing exercises before submission
+    for (const item of exerciseList) {
+      if (!item.sets || Number(item.sets) <= 0) {
+        toast.error(
+          `Please enter valid sets for ${
+            item.exercise_id?.name || "an exercise"
+          }.`
+        );
+        return;
+      }
+      if (!item.reps || Number(item.reps) <= 0) {
+        toast.error(
+          `Please enter valid reps for ${
+            item.exercise_id?.name || "an exercise"
+          }.`
+        );
+        return;
+      }
+    }
+
     const payload = {
       user_training_workout_id: workoutId,
       exercises: exerciseList.map((item) => ({
@@ -70,12 +159,12 @@ const EditExercise = () => {
         payload
       );
       if (response.status === 200) {
-        toast.success("workout update successful");
+        toast.success("Workout updated successfully!");
         navigate("/");
       }
     } catch (error) {
       console.error("Error updating workout:", error);
-      // optional: show toast or alert
+      toast.error("Error updating workout.");
     }
   };
 
@@ -90,93 +179,218 @@ const EditExercise = () => {
         {exerciseList.map((item, index) => (
           <div
             key={item._id}
-            className="w-full bg-gray-100 p-4 rounded-xl mb-4 shadow mt-4"
+            className="w-full flex items-center justify-center gap-4 bg-gray-100 p-4 rounded-xl mb-4 shadow mt-4"
           >
-            <h2 className="text-lg text-center font-semibold text-gray-800">
-              {item.exercise_id?.name || "Exercise"}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-items-center mt-2">
-              <div className="flex items-center  md:justify-center gap-3">
-                <label>סטים:</label>
-                <input
-                  type="number"
-                  value={item.sets}
-                  onChange={(e) => handleChange(index, "sets", e.target.value)}
-                  placeholder="Sets"
-                  className="p-2 rounded-lg border mr-[30px] sm:mr-0"
-                  required
-                />
-              </div>
-              <div className="flex items-center  md:justify-center gap-3">
-                <label>חזרות:</label>
-                <input
-                  type="number"
-                  value={item.reps}
-                  onChange={(e) => handleChange(index, "reps", e.target.value)}
-                  placeholder="Reps"
-                  className="p-2 rounded-lg border mr-6 sm:mr-0"
-                  required
-                />
-              </div>
-              <div className="flex items-center  md:justify-center gap-3">
-                <label>מניפולציה:</label>
-                <input
-                  type="text"
-                  value={item.manipulation || ""}
-                  onChange={(e) =>
-                    handleChange(index, "manipulation", e.target.value)
-                  }
-                  placeholder="Manipulation"
-                  className="p-2 rounded border"
-                  required
-                />
+            <Trash
+              onClick={() => handleRemoveExercise(item._id)}
+              className="text-red-600 cursor-pointer"
+            />
+            <div>
+              <h2 className="text-lg text-center font-semibold text-gray-800">
+                {item.exercise_id?.name || "Exercise"}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-items-center mt-2">
+                <div className="flex flex-col items-center md:justify-center gap-3">
+                  <label>סטים:</label>
+                  <input
+                    type="number"
+                    value={item.sets}
+                    onChange={(e) =>
+                      handleChange(index, "sets", e.target.value)
+                    }
+                    className="p-2 rounded-lg border mr-[30px] sm:mr-0"
+                    required
+                    min="1" // Ensure positive input
+                  />
+                </div>
+                <div className="flex flex-col items-center md:justify-center gap-3">
+                  <label>חזרות:</label>
+                  <input
+                    type="number"
+                    value={item.reps}
+                    onChange={(e) =>
+                      handleChange(index, "reps", e.target.value)
+                    }
+                    className="p-2 rounded-lg border mr-6 sm:mr-0"
+                    required
+                    min="1" // Ensure positive input
+                  />
+                </div>
+                <div className="flex flex-col items-center md:justify-center gap-3">
+                  <label>מניפולציה:</label>
+                  <input
+                    type="text"
+                    value={item.manipulation || ""}
+                    onChange={(e) =>
+                      handleChange(index, "manipulation", e.target.value)
+                    }
+                    className="p-2 rounded border"
+                  />
+                </div>
               </div>
             </div>
           </div>
         ))}
 
-        {/* Dropdown section */}
-        {showDropdown && (
-          <div className="w-full flex flex-col md:flex-row items-center gap-3 mb-6">
-            <select
-              value={selectedExerciseId}
-              onChange={(e) => setSelectedExerciseId(e.target.value)}
-              className="w-full p-3 border rounded-lg"
-            >
-              <option value="">בחר תרגיל</option>
-              {exercise.map((ex) => (
-                <option key={ex._id} value={ex._id}>
-                  {ex.name}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={handleAddExercise}
-              className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-400"
-            >
-              הוסף
-            </button>
-          </div>
-        )}
-
-        {/* Add More Exercise Button - aligned right */}
         {!showDropdown && (
-          <div className="w-full flex justify-start">
-            <button
-              onClick={() => setShowDropdown(true)}
-              className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-400 mb-6"
+          <div className="flex items-center justify-end gap-4 mt-4">
+            <Button
+              onClick={handleAddMoreExerciseClick}
+              className="bg-customBg rounded-lg text-white px-6 py-2"
             >
               הוסף תרגיל נוסף
-            </button>
+            </Button>
           </div>
         )}
 
-        <button
+        {showDropdown && (
+          <div className="w-full bg-gray-100 p-4 rounded-xl mb-4 shadow mt-4">
+            <h2 className="text-lg text-center font-semibold text-gray-800 mb-4">
+              הוסף תרגיל חדש
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-items-center">
+              <div className="w-full">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  אזור בגוף
+                </label>
+                <Select
+                  className="rounded-lg h-12 w-full"
+                  direction="rtl"
+                  valueField="id"
+                  labelField="label"
+                  options={bodyPartOptions}
+                  placeholder="סנן לפי חלק בגוף"
+                  onChange={(selectedOptions) => {
+                    setSelectedBodyPart(selectedOptions[0]?.value || null);
+                  }}
+                  searchBy="label"
+                  values={
+                    selectedBodyPart
+                      ? [
+                          {
+                            id: selectedBodyPart,
+                            label: bodyPartOptions.find(
+                              (opt) => opt.id === selectedBodyPart
+                            )?.label,
+                          },
+                        ]
+                      : []
+                  }
+                />
+              </div>
+              <div className="w-full">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  ציוד
+                </label>
+                <Select
+                  className="rounded-lg h-12 w-full"
+                  direction="rtl"
+                  options={equipmentOptions}
+                  valueField="id"
+                  labelField="label"
+                  placeholder="סנן לפי ציוד"
+                  onChange={(selectedOptions) => {
+                    setSelectedEquipment(selectedOptions[0]?.value || null);
+                  }}
+                  searchBy="label"
+                  values={
+                    selectedEquipment
+                      ? [
+                          {
+                            id: selectedEquipment,
+                            label: equipmentOptions.find(
+                              (opt) => opt.id === selectedEquipment
+                            )?.label,
+                          },
+                        ]
+                      : []
+                  }
+                />
+              </div>
+              <div className="w-full">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  סנן לפי שם תרגיל
+                </label>
+                <Select
+                  className="rounded-lg h-12 w-full"
+                  direction="rtl"
+                  options={selectedExerciseOptions}
+                  valueField="_id"
+                  labelField="name"
+                  placeholder="בחר"
+                  onChange={(selected) => {
+                    setSelectedExerciseIdForAdd(selected[0]?._id || "");
+                  }}
+                  searchBy="name"
+                  values={
+                    selectedExerciseIdForAdd
+                      ? [
+                          {
+                            _id: selectedExerciseIdForAdd,
+                            name: allExercises.find(
+                              (ex) => ex._id === selectedExerciseIdForAdd
+                            )?.name,
+                          },
+                        ]
+                      : []
+                  }
+                />
+              </div>
+            </div>
+
+            {selectedExerciseIdForAdd && ( // Show input fields only after an exercise is selected
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-items-center mt-4">
+                <div className="flex flex-col items-center md:justify-center gap-3 w-full">
+                  <label>סטים:</label>
+                  <input
+                    type="number"
+                    value={newExerciseSets}
+                    onChange={(e) => setNewExerciseSets(e.target.value)}
+                    className="p-2 rounded-lg border w-full"
+                    required
+                    min="1"
+                  />
+                </div>
+                <div className="flex flex-col items-center md:justify-center gap-3 w-full">
+                  <label>חזרות:</label>
+                  <input
+                    type="number"
+                    value={newExerciseReps}
+                    onChange={(e) => setNewExerciseReps(e.target.value)}
+                    className="p-2 rounded-lg border w-full"
+                    required
+                    min="1"
+                  />
+                </div>
+                <div className="flex flex-col items-center md:justify-center gap-3 w-full">
+                  <label>מניפולציה:</label>
+                  <input
+                    type="text"
+                    value={newExerciseManipulation}
+                    onChange={(e) => setNewExerciseManipulation(e.target.value)}
+                    className="p-2 rounded border w-full"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-center mt-4">
+              <Button
+                onClick={handleAddNewExercise}
+                className="bg-customBg rounded-lg text-white px-6 py-2 hover:bg-red-400 mt-4"
+              >
+                הוסף תרגיל
+              </Button>
+            </div>
+          </div>
+        )}
+
+        <Button
           onClick={handleSubmit}
-          className="bg-red-600 rounded-lg text-white px-6 py-2 hover:bg-red-400 mt-4"
+          className="bg-customBg rounded-lg text-white px-6 py-2 hover:bg-red-400 mt-4"
         >
           שמור שינויים
-        </button>
+        </Button>
       </div>
     </div>
   );
