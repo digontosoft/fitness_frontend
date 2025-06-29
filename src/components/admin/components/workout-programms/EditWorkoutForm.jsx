@@ -11,6 +11,7 @@ import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/common/Loading";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+import { Trash } from "lucide-react";
 
 const EditWorkoutForm = ({ workoutId }) => {
   const [exercises, setExercises] = useState([]);
@@ -115,23 +116,42 @@ const EditWorkoutForm = ({ workoutId }) => {
     setAddMoreExercise(false);
   };
 
+  // Filter exercises based on selected body part and equipment
   useEffect(() => {
-    const fetchSelectedExercises = async () => {
-      if (selectedBodyPart && selectedEquipment) {
-        try {
-          const response = await axios.get(
-            `${base_url}/exercise?body_part=${selectedBodyPart}&equipment=${selectedEquipment}`
-          );
-          setSelectedExercise(response.data.data);
-          console.log("selectedExercises:", response.data.data);
-        } catch (error) {
-          console.error("Error fetching selected exercises:", error);
+    const fetchFilteredExercises = async () => {
+      if (selectedBodyPart || selectedEquipment) {
+        let url = `${base_url}/exercise?`;
+        if (selectedBodyPart) {
+          url += `body_part=${selectedBodyPart}&`;
         }
+        if (selectedEquipment) {
+          url += `equipment=${selectedEquipment}&`;
+        }
+        url = url.slice(0, -1); // Remove trailing '&' or '?'
+
+        try {
+          const response = await axios.get(url);
+          setSelectedExercise(response.data.data || []);
+          console.log("Filtered exercises for selection:", response.data.data);
+        } catch (error) {
+          console.error("Error fetching filtered exercises:", error);
+          setSelectedExercise([]);
+        }
+      } else {
+        // If no filters are selected, show all exercises again
+        setSelectedExercise(exercises);
       }
     };
 
-    fetchSelectedExercises();
-  }, [selectedBodyPart, selectedEquipment]);
+    fetchFilteredExercises();
+  }, [selectedBodyPart, selectedEquipment, exercises]);
+
+  // Remove an exercise from a workout
+  const handleRemoveExercise = (index) => {
+    const updatedExercises = [...exercisesForm];
+    updatedExercises.splice(index, 1);
+    setValue("exercises", updatedExercises);
+  };
 
   // const onSubmit = (data) => {
   //   const workoutData = {
@@ -256,7 +276,11 @@ const EditWorkoutForm = ({ workoutId }) => {
                 className="border p-2 flex flex-col items-center justify-center space-y-4 rounded-md"
               >
                 <p className="text-center">{exercise.exercise_id?.name}</p>
-                <div className="grid sm:grid-cols-3 grid-cols-1 gap-4 sm:w-[327px]">
+                <div className="flex items-center gap-8 sm:w-[327px]">
+                  <Trash
+                    className="cursor-pointer text-red-600 size-10"
+                    onClick={() => handleRemoveExercise(index)}
+                  />
                   <div className="flex flex-col space-y-2">
                     <label htmlFor={`sets-${exercise._id}`}>סטים</label>
                     <Input
@@ -414,7 +438,7 @@ const EditWorkoutForm = ({ workoutId }) => {
                 className="mt-2 bg-customBg flex mx-auto"
                 onClick={() => setAddMoreExercise(!addMoreExercise)}
               >
-                Add More Exercise
+                הוסף עוד פעילות גופנית
               </Button>
             </div>
           </div>
@@ -423,7 +447,11 @@ const EditWorkoutForm = ({ workoutId }) => {
             <Button
               type="submit"
               className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
-              disabled={disableUpdateButton || !isFormValid}
+              disabled={
+                disableUpdateButton ||
+                !isFormValid ||
+                exercisesForm.length === 0
+              }
             >
               עדכן תוכנית אימון
             </Button>

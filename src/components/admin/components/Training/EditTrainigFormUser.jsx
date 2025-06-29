@@ -10,10 +10,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
+import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 
 const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   const [training, setTraining] = useState({});
-  const [exerciseList, setExerciseList] = useState([]);
+  const [selectedBodyPart, setSelectedBodyPart] = useState(null);
+  const [selectedEquipment, setSelectedEquipment] = useState(null);
+  const [selectedExercise, setSelectedExercise] = useState([]);
+  const [allExercises, setAllExercises] = useState([]);
   const [workouts, setWorkouts] = useState([]);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
@@ -56,7 +60,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           axios.get(`${base_url}/get-training-by-id/${trainingId}`),
         ]);
 
-        if (exerciseRes.status === 200) setExerciseList(exerciseRes.data.data);
+        if (exerciseRes.status === 200) setAllExercises(exerciseRes.data.data);
         if (workoutRes.status === 200) setWorkouts(workoutRes.data.data);
         if (trainingRes.status === 200) setTraining(trainingRes.data.data);
       } catch (error) {
@@ -94,6 +98,35 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
     setTraining(updatedTraining);
     setAddMoreExerciseIndex(null);
   };
+
+  useEffect(() => {
+    const fetchFilteredExercises = async () => {
+      if (selectedBodyPart || selectedEquipment) {
+        let url = `${base_url}/exercise?`;
+        if (selectedBodyPart) {
+          url += `body_part=${selectedBodyPart}&`;
+        }
+        if (selectedEquipment) {
+          url += `equipment=${selectedEquipment}&`;
+        }
+        url = url.slice(0, -1); // Remove trailing '&' or '?'
+
+        try {
+          const response = await axios.get(url);
+          setSelectedExercise(response.data.data || []);
+          console.log("Filtered exercises for selection:", response.data.data);
+        } catch (error) {
+          console.error("Error fetching filtered exercises:", error);
+          setSelectedExercise([]);
+        }
+      } else {
+        // If no filters are selected, show all exercises again
+        setSelectedExercise(allExercises);
+      }
+    };
+
+    fetchFilteredExercises();
+  }, [selectedBodyPart, selectedEquipment, allExercises]);
 
   // Add selected workout with exercises
   const handleAddWorkout = (selected) => {
@@ -343,7 +376,9 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         <div className="my-5">
           {training?.workouts?.map((workout, workoutIndex) => (
             <div key={workout._id} className="border py-2 px-4 rounded-md my-4">
-              <h1 className="font-semibold">{workout?.workout?.name}</h1>
+              <h1 className="font-semibold" dir="rtl">
+                {workout?.workout?.name}
+              </h1>
               <div className="flex items-center gap-x-2" dir="rtl">
                 <Trash
                   className="cursor-pointer text-red-600"
@@ -358,12 +393,12 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                   className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
                 >
                   <div>
-                    <p className="py-4">
+                    <p className="py-4" dir="rtl">
                       {ex?.name} {ex?.exercise_id?.name}
                     </p>
                     <div className="flex sm:flex-row flex-col items-center justify-between sm:gap-x-2 gap-y-2">
                       <div className="flex flex-col items-center space-y-4">
-                        <p>Sets</p>
+                        <p>סטים</p>
 
                         <Input
                           type="number"
@@ -379,7 +414,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                         />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
-                        <p>Reps</p>
+                        <p>חזרות</p>
                         <Input
                           type="number"
                           defaultValue={ex?.reps}
@@ -394,7 +429,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                         />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
-                        <p>Manipulation</p>
+                        <p>מניפולציה</p>
                         <Input
                           type="text"
                           defaultValue={ex?.manipulation}
@@ -439,14 +474,17 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                     <Select
                       className="rounded-lg h-12 w-auto"
                       direction="rtl"
-                      valueField="_id"
-                      labelField="body_part"
-                      options={exerciseList}
+                      valueField="id"
+                      labelField="label"
+                      options={bodyPartOptions}
                       placeholder="סנן לפי חלק בגוף"
-                      onChange={(selected) =>
-                        handleNewExerciseSelection(selected, workoutIndex)
-                      }
-                      searchBy="body_part"
+                      onChange={(selectedOptions) => {
+                        const values = selectedOptions.map(
+                          (option) => option.value
+                        );
+                        setSelectedBodyPart(values[0]);
+                      }}
+                      searchBy="label"
                     />
                   </div>
                   <div>
@@ -459,14 +497,17 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                     <Select
                       className="rounded-lg h-12 w-auto"
                       direction="rtl"
-                      options={exerciseList}
-                      valueField="_id"
-                      labelField="equipment"
+                      options={equipmentOptions}
+                      valueField="id"
+                      labelField="label"
                       placeholder="סנן לפי ציוד"
-                      onChange={(selected) =>
-                        handleNewExerciseSelection(selected, workoutIndex)
-                      }
-                      searchBy="equipment"
+                      onChange={(selectedOptions) => {
+                        const values = selectedOptions.map(
+                          (option) => option.value
+                        );
+                        setSelectedEquipment(values[0]);
+                      }}
+                      searchBy="label"
                     />
                   </div>
                   <div>
@@ -479,7 +520,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                     <Select
                       className="rounded-lg h-12 w-auto"
                       direction="rtl"
-                      options={exerciseList}
+                      options={selectedExercise}
                       valueField="_id"
                       labelField="name"
                       placeholder="בחר"

@@ -9,18 +9,17 @@ import { toast } from "sonner";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import { verifyToken } from "@/constants/verifyToken";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Loading from "@/components/common/Loading";
 import { useNavigate } from "react-router-dom";
-import { UserInfoContext } from "@/context";
 const MeasurementWomen = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("authToken");
   const { id } = verifyToken(token);
-  const { userInfo } = useContext(UserInfoContext);
 
   const handleFormSubmit = (data) => {
+    console.log("data:", data);
     setLoading(true);
     const questionnaries = {
       user_id: id,
@@ -42,10 +41,10 @@ const MeasurementWomen = () => {
     } finally {
       setLoading(false);
     }
-    if (loading) {
-      return <Loading />;
-    }
   };
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <>
       <div className="py-12 relative overflow-hidden sm:px-0 px-4">
@@ -125,13 +124,6 @@ const MeasurementWomen = () => {
                 name="weight"
                 dir="rtl"
               />
-              {/* <FInput
-              label="המייל שלך שנרשמת איתו לגוגל דרייב*"
-              placeholder="התשובה שלך"
-              name="email"
-              type="email"
-              dir="rtl"
-            /> */}
               <FInput
                 label="המשקל הגבוה שהגעת אליו במהלך חייך (לא חובה)"
                 placeholder="התשובה שלך"

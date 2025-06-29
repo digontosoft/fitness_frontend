@@ -8,10 +8,10 @@ export const questionnaries = z.object({
   cell_phone_number: z
     .string()
     .nonempty({ message: "Cell phone number is required" }),
-  email: z
-    .string()
-    .email({ message: "Please enter a valid email" })
-    .nonempty({ message: "Email is required" }),
+  // email: z
+  //   .string()
+  //   .email({ message: "Please enter a valid email" })
+  //   .nonempty({ message: "Email is required" }),
   age: z.string().optional(),
   favorite_cardio: z.string().optional(),
   preferred_training_location: z.string().optional(),
@@ -34,10 +34,10 @@ export const questionnaries = z.object({
   favorite_recipes: z.string().optional(),
   long_term_goals: z.string({ required_error: "Long-term goals are required" }),
   alcohol_consumption: z.string().optional(),
-  motivation_level: z
-    .string()
-    .regex(/^\d+$/, { message: "Motivation level must be a number" })
-    .nonempty({ message: "Motivation level is required" }),
+  // motivation_level: z
+  //   .string()
+  //   .regex(/^\d+$/, { message: "Motivation level must be a number" })
+  //   .nonempty({ message: "Motivation level is required" }),
   supplements_will_use: z.string().optional(),
   sleep_hours: z.string().optional(),
   daily_meds: z.string({ required_error: "Daily eating routine is required" }),
