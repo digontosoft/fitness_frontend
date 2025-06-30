@@ -4,10 +4,13 @@ import VideoCourseCart from "../common/VideoCourseCart";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
 import PersonalExercise from "../PersonalExercise";
+import { useEffect } from "react";
 const ProgressCourseCart = () => {
-  const {
-    state: { workout, training },
-  } = useLocation();
+  const location = useLocation();
+  const workout = location.state?.workout;
+  const training = location.state?.training;
+
+  useEffect(() => {}, [workout, training]);
 
   console.log("workout:", workout);
   return (

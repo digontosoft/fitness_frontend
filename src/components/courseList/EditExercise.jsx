@@ -12,11 +12,11 @@ const EditExercise = () => {
   const location = useLocation();
   const workData = location.state?.data;
   const navigate = useNavigate();
-  const [exerciseList, setExerciseList] = useState(
-    workData?.userTrainingExercise || []
-  );
+  const [exerciseList, setExerciseList] = useState([]);
   const workoutId = workData?.user_training_workout_id;
+
   const [allExercises, setAllExercises] = useState([]);
+  const [workoutData, setWorkoutData] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   // States for filtering and selecting a new exercise
@@ -29,22 +29,74 @@ const EditExercise = () => {
   const [newExerciseSets, setNewExerciseSets] = useState("");
   const [newExerciseReps, setNewExerciseReps] = useState("");
   const [newExerciseManipulation, setNewExerciseManipulation] = useState("");
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+
+  const fetchWorkout = async () => {
+    try {
+      const response = await axios.get(`${base_url}/get-user-task/${user._id}`);
+      console.log("workout:", response.data.data);
+      setWorkoutData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching exercises:", error);
+      toast.error("Failed to fetch exercises.");
+    }
+  };
 
   useEffect(() => {
-    const fetchExercises = async () => {
+    fetchWorkout();
+  }, [user._id]);
+
+  const filteredExercises = workoutData?.filter(
+    (ex) => ex?._id === workData?.task_id
+  );
+  console.log("filteredExercises:", filteredExercises);
+
+  const fetchExercises = async () => {
+    try {
+      const response = await axios.get(`${base_url}/exercise`);
+      setAllExercises(response.data.data);
+      setSelectedExerciseOptions(response.data.data); // Initially show all exercises
+    } catch (error) {
+      console.error("Error fetching exercises:", error);
+      toast.error("Failed to fetch exercises.");
+    }
+  };
+
+  useEffect(() => {
+    fetchExercises();
+  }, []);
+
+  useEffect(() => {
+    const getWorkout = async () => {
+      const matchedExercise = workoutData.find(
+        (ex) => ex._id === workData?.task_id
+      );
+      if (!matchedExercise) return;
+
+      const requestBody = {
+        userId: user._id,
+        workoutId: matchedExercise?.workout_id,
+        taskId: matchedExercise?._id,
+      };
+
       try {
-        const response = await axios.get(`${base_url}/exercise`);
-        setAllExercises(response.data.data);
-        setSelectedExerciseOptions(response.data.data); // Initially show all exercises
+        const response = await axios.post(
+          `${base_url}/get-user-workout-task`,
+          requestBody
+        );
+        setExerciseList(response.data.data.userTrainingExercise);
+        console.log("filteredWorkoutData:", response.data.data);
       } catch (error) {
         console.error("Error fetching exercises:", error);
         toast.error("Failed to fetch exercises.");
       }
     };
-    fetchExercises();
-  }, []);
 
-  // Filter exercises based on selected body part and equipment
+    if (user._id && workoutData.length && workData?.task_id) {
+      getWorkout();
+    }
+  }, [user._id, workoutData, workData?.task_id]);
+
   useEffect(() => {
     let filtered = allExercises;
 
@@ -160,7 +212,11 @@ const EditExercise = () => {
       );
       if (response.status === 200) {
         toast.success("Workout updated successfully!");
-        navigate("/");
+        setAllExercises((prevExercises) => [
+          ...prevExercises,
+          response?.data.data.userTrainingExercise,
+        ]);
+        navigate(-1);
       }
     } catch (error) {
       console.error("Error updating workout:", error);
