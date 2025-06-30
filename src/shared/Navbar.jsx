@@ -40,7 +40,9 @@ const Navbar = () => {
   }, [userData?._id]);
 
   const hasWorkoutTask = userTasks.some(
-    (task) => task?.task_type === "workout" && task?.task_status !== "Disabled"
+    (task) =>
+      (task?.task_type === "workout" && task?.task_status !== "Disabled") ||
+      task?.task_status !== "Completed"
   );
 
   return (
