@@ -15,7 +15,8 @@ const CustomizeWorkoutForm = () => {
   const {
     state: { workout, training: trainings },
   } = useLocation();
-  const [training, setTraining] = useState(trainings);
+  console.log("trainings:", trainings);
+  const [training, setTraining] = useState({});
   const [allExercises, setAllExercises] = useState([]);
   const [selectedBodyPart, setSelectedBodyPart] = useState(null);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
@@ -26,7 +27,9 @@ const CustomizeWorkoutForm = () => {
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [userTraining, setUserTraining] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const user_Id = userInfo._id;
@@ -38,6 +41,30 @@ const CustomizeWorkoutForm = () => {
     formState: { errors },
     reset,
   } = useForm();
+
+  const fetchTrainingByUserId = async () => {
+    try {
+      const response = await axios.get(
+        `${base_url}/get-training-by-user-id/${user_Id}`
+      );
+      if (response.status === 200) {
+        console.log("userTrainingId:", response.data.data);
+        setUserTraining(response.data.data);
+        const filteredTrainings = response.data.data.filter(
+          (training) => training._id === trainings._id
+        );
+        setTraining(filteredTrainings[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching training:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTrainingByUserId();
+  }, []);
+
+  // console.log("filteredTrainings:", filteredTrainings);
 
   useEffect(() => {
     if (!training) {
@@ -335,7 +362,8 @@ const CustomizeWorkoutForm = () => {
       );
       if (response.status === 200) {
         toast.success("Workout customized successfully!");
-        navigate("/trainings");
+        fetchTrainingByUserId();
+        navigate(-1);
       }
     } catch (error) {
       console.log(error);

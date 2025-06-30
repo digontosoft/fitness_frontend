@@ -6,7 +6,10 @@ const Cart = ({ workout, training }) => {
   console.log("training", training);
 
   return (
-    <Link to={`/personal-workout`} state={{ workout, training }}>
+    <Link
+      to={`/personal-workout`}
+      state={{ workout, training, from: location.pathname }}
+    >
       <div className="md:w-56 w-48 shadow-xl rounded-2xl p-3">
         <div
           className="w-full h-40 rounded-2xl flex justify-center items-center"
