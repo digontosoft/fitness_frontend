@@ -14,6 +14,22 @@ const WorkOutCart = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [totalPages, setTotalPages] = useState(1);
+  const [exerciseReport, setExerciseReport] = useState(null);
+
+  useEffect(() => {
+    const fetchExerciseReport = async () => {
+      try {
+        const response = await axios.get(
+          `${base_url}/report/excercise/${user?._id}`
+        );
+        setExerciseReport(response.data.data.report_link);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
+    fetchExerciseReport();
+  }, [user?._id]);
+
   useEffect(() => {
     const fetchExercise = async () => {
       try {
@@ -35,9 +51,9 @@ const WorkOutCart = () => {
   return (
     <div className="max-w-6xl mx-auto px-2 pb-10">
       <a
-        href="/file/Copy of �היקפים�.xlsx"
+        href={exerciseReport}
         download
-        className="text-lg font-semibold flex items-center justify-center underline"
+        className="text-lg font-semibold flex items-center justify-center underline cursor-pointer"
       >
         הצגת ביצועים קודמים
       </a>

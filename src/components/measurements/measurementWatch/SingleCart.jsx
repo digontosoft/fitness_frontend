@@ -102,8 +102,9 @@ const SingleCart = ({ userId, setOpen, setId }) => {
 
   const [data, setData] = useState([]);
   const [user, setUser] = useState({});
+  const [measurementReport, setMeasurementReport] = useState(null);
 
-  console.log("user", user);
+  console.log("user", userId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,6 +112,14 @@ const SingleCart = ({ userId, setOpen, setId }) => {
         const response = await axios.get(
           `${base_url}/measurement/calculate/${userId}`
         );
+
+        const measurementResponse = await axios.get(
+          `${base_url}/report/measurement/${userId}`
+        );
+
+        if (measurementResponse.status === 200) {
+          setMeasurementReport(measurementResponse?.data.data.report_link);
+        }
 
         setData(response?.data);
       } catch (error) {
@@ -195,9 +204,9 @@ const SingleCart = ({ userId, setOpen, setId }) => {
               <SmallCart data={data} setOpen={setOpen} setId={setId} />
             </div>
             <a
-              href="/file/Copy of �היקפים�.xlsx"
+              href={measurementReport}
               download
-              className="text-lg font-semibold text-center underline"
+              className="text-lg font-semibold text-center underline cursor-pointer"
             >
               הצגת מדדים קודמים
             </a>

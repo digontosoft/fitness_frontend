@@ -38,12 +38,6 @@ export function ApproveMailTable() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [emails, setEmails] = React.useState([]);
 
-  // const handleOpen = (email) => {
-  //   setOpen(true);
-  //   setApproveMail(email);
-  // };
-  // console.log("approveMail", approveMail,open);
-
   const columns = [
     {
       accessorKey: "email",
@@ -172,8 +166,8 @@ export function ApproveMailTable() {
   const handleDelete = async (rowData) => {
     const payload = {
       email: rowData?.email,
-      isActive: false,
-      status: 0,
+      // isActive: false,
+      // status: 0,
     };
     console.log("emaildDelete:", payload);
     try {
