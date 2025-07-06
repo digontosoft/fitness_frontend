@@ -24,9 +24,9 @@ const LoginPage = () => {
       onClick={() => handleLoginWithGoogle(role)}
     >
       <p>{text}</p>
-      {role === "trainee" && (
+      {/* {role === "trainee" && (
         <img className="w-8" src={googleIcon} alt="Google Icon" />
-      )}
+      )} */}
     </Button>
   );
 
@@ -48,7 +48,7 @@ const LoginPage = () => {
       <div className="flex flex-col justify-center items-center gap-8 w-full">
         <LoginButton
           role="trainee"
-          text="התחברות מהירה באמצעות גוגל"
+          text="התחברות למתאמני משפחת פיטל"
           className="bg-[#151515] hover:bg-gray-700 transition duration-300 w-full px-4"
         />
         <LoginButton

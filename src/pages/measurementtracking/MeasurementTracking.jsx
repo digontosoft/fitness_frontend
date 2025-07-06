@@ -28,6 +28,7 @@ const MeasurementTracking = () => {
   const [id, setId] = useState(null);
   const [measurements, setMeasurements] = useState([]);
   const [open, setOpen] = useState(false);
+  const [measurementReport, setMeasurementReport] = useState(null);
   const userId = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userId?.gender;
 
@@ -41,6 +42,13 @@ const MeasurementTracking = () => {
         if (response.status === 200) {
           setData(response?.data);
           console.log("measurement tracking data", response?.data);
+        }
+        const measurementResponse = await axios.get(
+          `${base_url}/report/measurement/${userId._id}`
+        );
+
+        if (measurementResponse.status === 200) {
+          setMeasurementReport(measurementResponse?.data.data.report_link);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -137,9 +145,9 @@ const MeasurementTracking = () => {
                   />
                 </div>
                 <a
-                  href="/file/Copy of �היקפים�.xlsx"
+                  href={measurementReport}
                   download
-                  className="text-lg font-semibold text-center underline"
+                  className="text-lg font-semibold text-center underline cursor-pointer"
                 >
                   הצגת מדדים קודמים
                 </a>

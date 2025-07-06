@@ -142,9 +142,16 @@ export function TraineeUsersLists() {
     try {
       const data = {
         user_id: selectedUser,
-        userStatus: "Inactive",
+        // userStatus: "Inactive",
       };
-      await deleteUser(data);
+      // await deleteUser(data);
+      const response = await axios.delete(
+        `${base_url}/deleteUser/${selectedUser}`
+      );
+      console.log("delete:", data.user_id);
+      if (response.status === 200) {
+        toast.success("User deleted successfully.");
+      }
       setUsers((prevUsers) => prevUsers.filter((e) => e._id !== selectedUser));
       setDeleteModalOpen(false);
       setSelectedUser(null);

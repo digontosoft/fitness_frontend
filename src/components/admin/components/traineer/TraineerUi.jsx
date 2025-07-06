@@ -17,6 +17,8 @@ const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openAnswer, setOpenAnswer] = useState(false);
+  const [exerciseReport, setExerciseReport] = useState(null);
+  const [measurementReport, setMeasurementReport] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -27,6 +29,26 @@ const TraineerUi = ({ userId }) => {
           "selectedUserId",
           JSON.stringify(response.data.data._id)
         );
+        const exerciseResponse = await axios.get(
+          `${base_url}/report/excercise/${userId}`
+        );
+        if (exerciseResponse.status === 200) {
+          setExerciseReport(exerciseResponse?.data.data.report_link);
+          console.log(
+            "exercise report",
+            exerciseResponse?.data.data.report_link
+          );
+        }
+        const measurementResponse = await axios.get(
+          `${base_url}/report/measurement/${userId}`
+        );
+        if (measurementResponse.status === 200) {
+          setMeasurementReport(measurementResponse?.data.data.report_link);
+          console.log(
+            "measurement report",
+            measurementResponse?.data.data.report_link
+          );
+        }
       } catch (error) {
         console.log(error);
       }
@@ -51,7 +73,6 @@ const TraineerUi = ({ userId }) => {
   };
   const handleModal = () => {
     setOpenModal(true);
-    console.log("modal clicked");
   };
 
   const handleAnswer = () => {
@@ -132,11 +153,28 @@ const TraineerUi = ({ userId }) => {
           </Button>
           <div className="flex items-center">
             <a
-              href="/file/Copy of �היקפים�.xlsx"
+              href={measurementReport}
               download
               className="text-base font-bold leading-5 text-[#0A2533]"
             >
               הצגת מדדים קודמים
+            </a>
+          </div>
+        </div>
+        <div
+          className="w-[342px] h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
+          dir="ltr"
+        >
+          <Button className="rounded-2xl w-[25px] h-6">
+            <FaArrowLeftLong />
+          </Button>
+          <div className="flex items-center">
+            <a
+              href={exerciseReport}
+              download
+              className="text-base font-bold leading-5 text-[#0A2533]"
+            >
+              לדוח ביצועי תרגילים
             </a>
           </div>
         </div>
