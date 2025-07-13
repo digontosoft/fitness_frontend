@@ -9,6 +9,7 @@ import { TaskModal } from "./TaskModal";
 import Loading from "@/components/common/Loading";
 
 const Home = () => {
+  const [userSteps, setUserSteps] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskModalOpen, setIsTaskModalOpen] = useState(false);
   const [userTasks, setUserTasks] = useState([]);
@@ -49,6 +50,21 @@ const Home = () => {
     }
   }, [user?.is_video_popup]);
 
+  const fetchUserSteps = async () => {
+    try {
+      await axios
+        .get(`${base_url}/get-user-steps-vs-target/${user?._id}`)
+        .then((response) => {
+          if (response.status === 200) {
+            const userData = response.data.data;
+            setUserSteps(userData);
+          }
+        });
+    } catch (err) {
+      console.log("error:", err);
+    }
+  };
+
   useEffect(() => {
     const fetchUserTask = async () => {
       setLoading(true);
@@ -65,6 +81,8 @@ const Home = () => {
         console.error("Error fetching recipe book:", error);
       }
     };
+
+    fetchUserSteps();
     fetchUserTask();
   }, [user?._id]);
 
@@ -98,19 +116,24 @@ const Home = () => {
           setIsModalOpen={setIsModalOpen}
           userId={user?._id}
           handleSubmit={handleSubmit}
+          user={user}
         />
       )}
-      <div className="flex flex-col sm:items-center items-end gap-2 sm:mr-0 mr-10 mt-10">
-        <h1 className="sm:text-4xl text-2xl font-bold">היי</h1>
+      <div className="flex items-center sm:justify-center justify-end gap-2 mt-10">
         <h1 className="sm:text-4xl text-2xl font-bold">
           {userInfo?.full_name}
         </h1>
+        <h1 className="sm:text-4xl text-2xl font-bold">היי</h1>
       </div>
       <div className="flex flex-col items-center justify-center gap-5">
         {/* Cards Section */}
         <div className="pt-5 sm:pt-16 flex flex-col-reverse md:flex-row items-center justify-center gap-5 md:gap-10 w-full">
           <LeftCard data={getMesurement} className="w-full md:w-1/2" />
-          <RightCard user={user} className="w-full md:w-1/2" />
+          <RightCard
+            user={user}
+            userSteps={userSteps}
+            className="w-full md:w-1/2"
+          />
         </div>
         {/* title */}
         <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A2533] text-center w-full">
@@ -144,6 +167,7 @@ const Home = () => {
         isModalOpen={taskModalOpen}
         setIsModalOpen={setIsTaskModalOpen}
         selectedTask={selectedTask}
+        fetchUserSteps={fetchUserSteps}
         user_id={user?._id}
       />
     </div>

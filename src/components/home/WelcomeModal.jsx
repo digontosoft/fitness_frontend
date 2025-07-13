@@ -5,7 +5,13 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-export function WelcomeModal({ isModalOpen, setIsModalOpen, handleSubmit }) {
+export function WelcomeModal({
+  isModalOpen,
+  setIsModalOpen,
+  handleSubmit,
+  user,
+}) {
+  console.log("gender:", user?.gender);
   return (
     <Dialog
       open={isModalOpen}
@@ -16,15 +22,20 @@ export function WelcomeModal({ isModalOpen, setIsModalOpen, handleSubmit }) {
         <div className="space-y-5">
           <div className="flex flex-col items-center justify-center space-y-2">
             <h1 className="text-xl sm:text-2xl font-bold text-center" dir="rtl">
-              היי, ברוך הבא (:
+              {user?.gender === "male"
+                ? "היי, ברוך הבא (:"
+                : "היי, ברוכה הבאה :) י"}
             </h1>
             <p
               className="text-sm sm:text-base font-normal text-center leading-5 sm:leading-6"
               dir="rtl"
             >
-              לפניך סרטון היכרות עם הממשק, קצת הסברים על איך להשתמש ומה ניתן
-              לעשות. הולך להיות לנו תהליך מדהים ביחד! יאללה יוצאים לדרך תצפה
-              בסרטון 😊
+              {user?.gender === "male"
+                ? `לפניך סרטון היכרות עם הממשק, קצת הסברים על איך להשתמש ומה ניתן
+לעשות. הולך להיות לנו תהליך מדהים ביחד! יאללה יוצאים לדרך תצפה
+בסרטון 😊`
+                : `לפניך סרטון היכרות עם הממשק, קצת הסברים על איך להשתמש ומה ניתן לעשות. הולך להיות לנו תהליך מדהים ביחד!
+יאללה יוצאים לדרך תצפי בסרטון 😊`}
             </p>
           </div>
 

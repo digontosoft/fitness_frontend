@@ -12,6 +12,7 @@ export function TaskModal({
   setIsModalOpen,
   selectedTask,
   user_id,
+  fetchUserSteps,
 }) {
   const [stepCount, setStepCount] = useState("");
 
@@ -29,6 +30,7 @@ export function TaskModal({
         .then((res) => {
           if (res.status === 200) {
             toast.success(res.data.message);
+            fetchUserSteps();
             setIsModalOpen(false);
           }
         });
