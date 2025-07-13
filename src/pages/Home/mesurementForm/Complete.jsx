@@ -1,7 +1,6 @@
 import Title from "@/components/measurements/Tilte";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 
-import React from "react";
 import TaskCompleteForm from "../TaskCompleteForm";
 import { useLocation } from "react-router-dom";
 

@@ -1,15 +1,9 @@
-import { useEffect, useState } from "react";
-
-import axios from "axios";
-import { base_url } from "@/api/baseUrl";
-
 import circle from "@/assets/image/circle.svg";
 import men from "@/assets/image/men.svg";
 import women from "@/assets/image/women.svg";
 import bgCard from "@/assets/image/image.svg";
 
-const RightCard = ({ user }) => {
-  const [userSteps, setUserSteps] = useState(null);
+const RightCard = ({ userSteps }) => {
   const progress = userSteps?.step_average || 0;
   const target = Math.max(userSteps?.step_target || 1, 1);
   const strokeWidth = 8;
@@ -19,25 +13,6 @@ const RightCard = ({ user }) => {
   const offset = circumference - (percentage / 100) * circumference;
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userDetails?.gender;
-
-  useEffect(() => {
-    const fetchUserSteps = async () => {
-      try {
-        await axios
-          .get(`${base_url}/get-user-steps-vs-target/${user?._id}`)
-          .then((response) => {
-            if (response.status === 200) {
-              const userData = response.data.data;
-              setUserSteps(userData);
-              console.log("info:", response.data.data);
-            }
-          });
-      } catch (err) {
-        console.log("error:", err);
-      }
-    };
-    fetchUserSteps();
-  }, [user?._id]);
 
   return (
     <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#EEEEEE] p-4">

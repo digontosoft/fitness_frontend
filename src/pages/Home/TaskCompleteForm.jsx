@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { upload } from "../../assets/index";
@@ -18,25 +18,23 @@ const TaskCompleteForm = ({ data }) => {
   const Id = userDetails._id;
   const [getMesurement, setMesurement] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchMeasurement = async () => {
       try {
         const response = await axios.get(`${base_url}/measurement/${Id}`);
         if (response.status === 200) {
+          console.log("measurement:", response.data.data);
           setMesurement(response.data.data);
         }
       } catch (error) {
         console.error("Measurement data not found", error);
       }
     };
-
-    if (Id) {
-      fetchMeasurement();
-    }
+    fetchMeasurement();
   }, [Id]);
 
   console.log("getMesurement", getMesurement);
-  
 
   const id = data.measurement_id;
 
@@ -45,8 +43,6 @@ const TaskCompleteForm = ({ data }) => {
     handleSubmit,
     watch,
     reset,
-    setValue,
-
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -86,42 +82,43 @@ const TaskCompleteForm = ({ data }) => {
     }
   }, [getMesurement]);
 
-  console.log("id",id);
-  
+  console.log("id", id);
 
   const onSubmit = async (data) => {
-  const formData = new FormData();
+    const formData = new FormData();
 
-  Object.keys(data).forEach((key) => {
-    formData.append(key, data[key]);
-  });
-
-  if (files && files.length > 0) {
-    files.forEach((file, index) => {
-      formData.append(`photo${index + 1}`, file);
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
     });
-  }
 
-  formData.append("user_id", Id);
-
-  try {
-    const response = await axios.put(
-      `${base_url}/measurement/${id}`,
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
-    if (response.status === 200) {
-      toast.success("Measurement Task Complete successfully!");
-      navigate("/");
+    if (files && files.length > 0) {
+      files.forEach((file, index) => {
+        formData.append(`photo${index + 1}`, file);
+      });
     }
-  } catch (error) {
-    toast.error("Error updating measurement. Please try again.");
-    console.error("Error updating measurement:", error);
+
+    formData.append("user_id", Id);
+
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}:`, pair[1]);
+    }
+
+    try {
+      const response = await axios.put(
+        `${base_url}/measurement/${id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Measurement Task Complete successfully!");
+        navigate("/");
       }
-  
-  
+    } catch (error) {
+      toast.error("Error updating measurement. Please try again.");
+      console.error("Error updating measurement:", error);
+    }
   };
 
   const handleDragOver = (e) => {
@@ -191,8 +188,6 @@ const TaskCompleteForm = ({ data }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-full justify-center flex flex-col md:flex-row-reverse gap-4">
           <div className="w-full">
-          
-
             <DynamicInputField
               id="waist"
               type="text"
@@ -203,9 +198,7 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
-           
 
-        
             <DynamicInputField
               id="arml"
               type="number"
@@ -226,7 +219,7 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
-               <DynamicInputField
+            <DynamicInputField
               id={Gender === "male" ? "chest" : "butt"}
               type="number"
               label={Gender === "male" ? "חָזֶה" : "קַת"}
@@ -248,7 +241,7 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
-                <DynamicInputField
+            <DynamicInputField
               id="armr"
               type="number"
               label="זרוע ימין"
@@ -258,7 +251,7 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
-             <DynamicInputField
+            <DynamicInputField
               id="thighr"
               type="number"
               label="ירך ימין"
@@ -268,10 +261,6 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
-
-         
-
-          
           </div>
         </div>
         <Link to="/mesurement-pdf">

@@ -32,13 +32,15 @@ export const questionnaries = z.object({
     required_error: "Description of your look is required",
   }),
   favorite_recipes: z.string().optional(),
-  long_term_goals: z.string({ required_error: "Long-term goals are required" }),
+  long_term_goals: z.string().optional(),
   alcohol_consumption: z.string().optional(),
   // motivation_level: z
   //   .string()
   //   .regex(/^\d+$/, { message: "Motivation level must be a number" })
   //   .nonempty({ message: "Motivation level is required" }),
-  supplements_will_use: z.string().optional(),
+  supplements_will_use: z.string({
+    required_error: "Supplements are required",
+  }),
   sleep_hours: z.string().optional(),
   daily_meds: z.string({ required_error: "Daily eating routine is required" }),
   additional_notes: z.string().optional(),

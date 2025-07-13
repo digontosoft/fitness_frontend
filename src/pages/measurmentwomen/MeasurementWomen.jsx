@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import { verifyToken } from "@/constants/verifyToken";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "@/components/common/Loading";
 import { useNavigate } from "react-router-dom";
 const MeasurementWomen = () => {
@@ -17,7 +17,9 @@ const MeasurementWomen = () => {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("authToken");
   const { id } = verifyToken(token);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const handleFormSubmit = (data) => {
     console.log("data:", data);
     setLoading(true);
@@ -86,12 +88,20 @@ const MeasurementWomen = () => {
           resolver={zodResolver(questionnaries)}
         >
           <div className="max-w-3xl mx-auto space-y-8">
-            <h1
-              className="text-right text-[28px] font-bold text-[#0A2533]"
-              dir="rtl"
-            >
-              פרטים אישיים
-            </h1>
+            <div className="space-y-4">
+              <h1
+                className="text-right text-[28px] font-bold text-[#0A2533]"
+                dir="rtl"
+              >
+                *אם נרשמת רק לתזונה לדלג על השאלות הרגלי כושר
+              </h1>
+              <h1
+                className="text-right text-[28px] font-bold text-[#0A2533]"
+                dir="rtl"
+              >
+                פרטים אישיים
+              </h1>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5" dir="rtl">
               <FInput
                 label="שם מלא"
@@ -134,12 +144,20 @@ const MeasurementWomen = () => {
           </div>
           <hr className="max-w-3xl mx-auto my-10" />
           <div className="max-w-3xl mx-auto space-y-8">
-            <h1
-              className="text-right text-[28px] font-bold text-[#0A2533]"
-              dir="rtl"
-            >
-              הרגלי כושר
-            </h1>
+            <div className="space-y-4">
+              <h1
+                className="text-right text-[28px] font-bold text-[#0A2533]"
+                dir="rtl"
+              >
+                הרגלי כושר
+              </h1>
+              <h1
+                className="text-right text-[28px] font-bold text-[#0A2533]"
+                dir="rtl"
+              >
+                *אם נרשמת רק לתזונה לדלג עלזה
+              </h1>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 ">
               <div className="space-y-5">
                 <FRadioInput

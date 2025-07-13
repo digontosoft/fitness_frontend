@@ -96,7 +96,7 @@ export function FoodDairyModal({ userId, onClose }) {
                 <h4 className="text-xl font-bold mb-2">No Date</h4>
               )}
 
-              <div>
+              <div className="tracking-wide leading-relaxed">
                 <strong></strong> {item?.breakfast || "No data"}
               </div>
             </div>
