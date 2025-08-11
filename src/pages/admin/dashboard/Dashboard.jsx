@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [traineeUsers, setTraineeUsers] = useState([]);
   const [recipeUsers, setRecipeUsers] = useState([]);
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   const fetchData = async () => {
     try {
       const response = await axios.get(`${base_url}/getUsers`);
@@ -92,38 +93,53 @@ const Dashboard = () => {
           משימות
         </span>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
-          <AdminArrowCard
-            image={women1}
-            title="אישור מתאמנים חדשים"
-            link="/dashboard/approve-email"
-          />
-          <AdminArrowCard
-            image={ArrowBurger}
-            title="ניהול מדריכי תזונה"
-            link="/dashboard/nutrition-lists"
-          />
-          <AdminArrowCard
-            image={women2}
-            title="ניהול מתאמנים קיימים"
-            link="/dashboard/trainee-users-list"
-          />
-          <AdminArrowCard
-            image={ArrowDumbel}
-            title="נהל תרגילים"
-            link="/dashboard/exercise-list"
-          />
-          <AdminArrowCard
-            image={ArrowDumbel}
-            title="נהל אימונים"
-            link="/dashboard/workout-list"
-          />
-          <AdminArrowCard
-            image={ArrowDumbel}
-            title="נהל תוכניות אימון"
-            link="/dashboard/training-list"
-          />
-        </div>
+        {user.userType === "admin" ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:w-2/3 w-full">
+            <AdminArrowCard
+              image={women1}
+              title="אישור מתאמנים חדשים"
+              link="/dashboard/approve-email"
+            />
+            <AdminArrowCard
+              image={women2}
+              title="ניהול מתאמנים קיימים"
+              link="/dashboard/trainee-users-list"
+            />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+            <AdminArrowCard
+              image={women1}
+              title="אישור מתאמנים חדשים"
+              link="/dashboard/approve-email"
+            />
+            <AdminArrowCard
+              image={ArrowBurger}
+              title="ניהול מדריכי תזונה"
+              link="/dashboard/nutrition-lists"
+            />
+            <AdminArrowCard
+              image={women2}
+              title="ניהול מתאמנים קיימים"
+              link="/dashboard/trainee-users-list"
+            />
+            <AdminArrowCard
+              image={ArrowDumbel}
+              title="נהל תרגילים"
+              link="/dashboard/exercise-list"
+            />
+            <AdminArrowCard
+              image={ArrowDumbel}
+              title="נהל אימונים"
+              link="/dashboard/workout-list"
+            />
+            <AdminArrowCard
+              image={ArrowDumbel}
+              title="נהל תוכניות אימון"
+              link="/dashboard/training-list"
+            />
+          </div>
+        )}
       </div>
     </Container>
   );

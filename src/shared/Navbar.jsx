@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MdOutlineClose } from "react-icons/md";
 import { CiMenuFries } from "react-icons/ci";
-import { adminLink, recipeLink, traineeLink } from "@/constants/NavLink";
+import {
+  adminLink,
+  recipeLink,
+  supperAdminLink,
+  traineeLink,
+} from "@/constants/NavLink";
 import { Link, NavLink } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import axios from "axios";
@@ -68,13 +73,12 @@ const Navbar = () => {
                 to={link}
                 end={link === "/dashboard"}
                 className={({ isActive }) =>
-                  `flex items-center text-black  font-bold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black "
+                  `flex items-center text-black font-bold gap-x-4 ${
+                    isActive ? "text-red-500" : "text-black"
                   }`
                 }
                 dir="rtl"
               >
-                {/* <img src={Icon} alt={`${title} icon`} className="w-5 h-5" /> */}
                 <span dir="rtl">{title}</span>
               </NavLink>
             ))}
@@ -138,6 +142,24 @@ const Navbar = () => {
                 dir="rtl"
               >
                 <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
+                <span dir="rtl">{title}</span>
+              </NavLink>
+            ))}
+          </div>
+        ) : userType === "supperadmin" ? (
+          <div className="hidden md:flex justify-between items-center space-x-9">
+            {supperAdminLink.map(({ _id, title, link, icon: Icon }) => (
+              <NavLink
+                key={_id}
+                to={link}
+                end={link === "/dashboard"}
+                className={({ isActive }) =>
+                  `flex items-center text-black font-bold gap-x-4 ${
+                    isActive ? "text-red-500" : "text-black"
+                  }`
+                }
+                dir="rtl"
+              >
                 <span dir="rtl">{title}</span>
               </NavLink>
             ))}

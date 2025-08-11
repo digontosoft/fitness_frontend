@@ -12,7 +12,7 @@ const ProtectedRoutes = ({ children }) => {
 
   // Redirect admin to "/dashboard" only if they're trying to access the root "/"
   if (userType === "admin" && location.pathname === "/") {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/admin-dashboard" replace />;
   }
 
   return children;

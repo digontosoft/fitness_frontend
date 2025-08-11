@@ -46,6 +46,8 @@ export function NutritionList() {
     localStorage.removeItem("selectedUserId");
   }
 
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+
   const columns = [
     {
       accessorKey: "title",
@@ -195,17 +197,19 @@ export function NutritionList() {
                 <GoSearch className="text-white" />
               </div>
             </div>
-            <Link
-              to={
-                user_id
-                  ? `/dashboard/add-nutrition-menu/${user_id}`
-                  : `/dashboard/add-nutrition-guide`
-              }
-            >
-              <Button className="bg-customBg uppercase font-medium" size="sm">
-                {user_id ? "הוסף תפריט תזונה" : " הוסף מדריך תזונה"}
-              </Button>
-            </Link>
+            {user.userType === "supperadmin" && (
+              <Link
+                to={
+                  user_id
+                    ? `/dashboard/add-nutrition-menu/${user_id}`
+                    : `/dashboard/add-nutrition-guide`
+                }
+              >
+                <Button className="bg-customBg uppercase font-medium" size="sm">
+                  {user_id ? "הוסף תפריט תזונה" : " הוסף מדריך תזונה"}
+                </Button>
+              </Link>
+            )}
           </div>
           <div className="rounded-md border">
             <Table>
