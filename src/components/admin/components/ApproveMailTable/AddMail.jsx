@@ -68,6 +68,29 @@ export default function AddMail({ setEmails }) {
                   {errors.email.message}
                 </p>
               )}
+
+              <Label htmlFor="role" dir="rtl">
+                סוג הרשאה
+              </Label>
+              <select
+                id="role"
+                {...register("role", { required: "סוג הרשאה נדרש" })}
+                className={`w-full border border-gray-300 rounded-lg p-3 text-right ${
+                  errors.role ? "border-red-500" : ""
+                }`}
+                dir="rtl"
+              >
+                <option value="">בחר סוג הרשאה</option>
+                <option value="admin">trainee</option>
+                <option value="editor">admin</option>
+                <option value="viewer">supperadmin</option>
+              </select>
+              {errors.role && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.role.message}
+                </p>
+              )}
+
               <Label htmlFor="expiry_date" dir="rtl">
                 תאריך סיום
               </Label>
