@@ -14,6 +14,8 @@ const GlobalLoading = () => {
 
   useEffect(() => {
     if (id?.userType === "admin") {
+      navigate("/admin-dashboard");
+    } else if (id?.userType === "supperadmin") {
       navigate("/dashboard");
     } else if (id?.userType === "trainee") {
       id?.isNewUser ? navigate("/gender") : navigate("/");

@@ -46,7 +46,7 @@ export function TrainingList() {
   const { state: userId } = useLocation();
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   const columns = [
     {
       accessorKey: "name",
@@ -201,11 +201,13 @@ export function TrainingList() {
                 <GoSearch className="text-white" />
               </div>
             </div>
-            <Link to="/dashboard/add-training-program">
-              <Button className="bg-customBg uppercase font-medium" size="sm">
-                צור תוכנית אימון{" "}
-              </Button>
-            </Link>
+            {user.userType === "supperadmin" && (
+              <Link to="/dashboard/add-training-program">
+                <Button className="bg-customBg uppercase font-medium" size="sm">
+                  צור תוכנית אימון{" "}
+                </Button>
+              </Link>
+            )}
           </div>
           <div className="rounded-md border">
             <Table>

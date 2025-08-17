@@ -57,7 +57,7 @@ export const traineeLink = [
   //   icon: nutrationGuide,
   // },
 ];
-export const adminLink = [
+export const supperAdminLink = [
   {
     _id: 1,
     title: "נהל תרגילים",
@@ -99,6 +99,51 @@ export const adminLink = [
     _id: 7,
     title: "דף הבית",
     link: "/dashboard",
+    icon: nutrationGuide,
+  },
+];
+export const adminLink = [
+  // {
+  //   _id: 1,
+  //   title: "נהל תרגילים",
+  //   link: "/dashboard/exercise-list",
+  //   icon: nutrationGuide,
+  // },
+  // {
+  //   _id: 2,
+  //   title: "נהל אימונים",
+  //   link: "/dashboard/workout-list",
+  //   icon: nutrationGuide,
+  // },
+  // {
+  //   _id: 3,
+  //   title: "נהל תוכניות אימון",
+  //   link: "dashboard/training-list",
+  //   icon: nutrationGuide,
+  // },
+  // {
+  //   _id: 5,
+  //   title: "ניהול מדריכי תזונה",
+  //   link: "dashboard/nutrition-lists",
+  //   icon: nutrationGuide,
+  // },
+
+  {
+    _id: 1,
+    title: "אישור מתאמנים חדשים",
+    link: "/admin-dashboard/approve-email",
+    icon: nutrationGuide,
+  },
+  {
+    _id: 2,
+    title: "ניהול מתאמנים קיימים",
+    link: "/admin-dashboard/trainee-users-list",
+    icon: nutrationGuide,
+  },
+  {
+    _id: 3,
+    title: "דף הבית",
+    link: "/admin-dashboard",
     icon: nutrationGuide,
   },
 ];

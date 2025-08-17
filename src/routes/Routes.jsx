@@ -177,7 +177,7 @@ export const routes = createBrowserRouter([
       {
         path: "/dashboard",
         element: (
-          <UserRoleProtectedRoutes allowedRoles={["admin"]}>
+          <UserRoleProtectedRoutes allowedRoles={["supperadmin"]}>
             <Outlet />
           </UserRoleProtectedRoutes>
         ),
@@ -316,6 +316,152 @@ export const routes = createBrowserRouter([
           },
           {
             path: "/dashboard/courses",
+            element: <Course />,
+          },
+        ],
+      },
+      {
+        path: "/admin-dashboard",
+        element: (
+          <UserRoleProtectedRoutes allowedRoles={["admin"]}>
+            <Outlet />
+          </UserRoleProtectedRoutes>
+        ),
+        children: [
+          {
+            path: "/admin-dashboard",
+            element: <Dashboard />,
+          },
+          {
+            path: "/admin-dashboard/mesurements/:id",
+            element: <Measurements />,
+          },
+          {
+            path: "/admin-dashboard/users",
+            element: <Users />,
+          },
+          {
+            path: "/admin-dashboard/manage-exercise",
+            element: <ManageExercise />,
+          },
+          {
+            path: "/admin-dashboard/answers-list/:Id",
+            element: <ShowAnswerModal />,
+          },
+          {
+            path: "/admin-dashboard/add-exercise",
+            element: <AddExercise />,
+          },
+          {
+            path: "/admin-dashboard/manage-nutrition-guides",
+            element: <ManageNutritionGuide />,
+          },
+          {
+            path: "/admin-dashboard/add-nutrition-guide",
+            element: <AddNutrition />,
+          },
+          {
+            path: "/admin-dashboard/add-nutrition-menu/:id",
+            element: <AddNutrition />,
+          },
+          {
+            path: "/admin-dashboard/nutrition-lists",
+            element: <NutritionLists />,
+          },
+          {
+            path: "/admin-dashboard/nutrition-lists/:id",
+            element: <NutritionLists />,
+          },
+          {
+            path: "/admin-dashboard/edit-nutrition/:id",
+            element: <EditNutrition />,
+          },
+          {
+            path: "/admin-dashboard/mesurements-watch",
+            element: <MeasurementsWatch />,
+          },
+          {
+            path: "/admin-dashboard/nutrition-details/:id",
+            element: <NutritionDetails />,
+          },
+          {
+            path: "/admin-dashboard/approve-email",
+            element: <ApproveEmail />,
+          },
+          {
+            path: "/admin-dashboard/exercise-list",
+            element: <ExerciseList />,
+          },
+          {
+            path: "/admin-dashboard/edit-exercise/:id",
+            element: <ExerciseLibrary />,
+          },
+          {
+            path: "/admin-dashboard/workout-programme",
+            element: <WorkoutProgramme />,
+          },
+          {
+            path: "/admin-dashboard/workout-list",
+            element: <WorkoutList />,
+          },
+          // {
+          //   path: "/admin-dashboard/workout-programme/:id",
+          //   element: <WorkoutProgramms />,
+          // },
+          {
+            path: "/admin-dashboard/edit-workout/:id",
+            element: <EditWorkout />,
+          },
+          {
+            path: "/admin-dashboard/add-training-program",
+            element: <TriningProgram />,
+          },
+          {
+            path: "/admin-dashboard/exercise-library",
+            element: <ExerciseLibrary />,
+          },
+          {
+            path: "/admin-dashboard/traineer",
+            element: <Trainer />,
+          },
+          {
+            path: "/admin-dashboard/traineer/:id",
+            element: <Trainer />,
+          },
+          {
+            path: "/admin-dashboard/trainee-users-list",
+            element: <TraineeUsers />,
+          },
+          {
+            path: "/admin-dashboard/training-list",
+            element: <TrainingLists />,
+          },
+          {
+            path: "/admin-dashboard/assigned-training-list/:id",
+            element: <AssignTrainingList />,
+          },
+          {
+            path: "/admin-dashboard/assign-training/:userId",
+            element: <TrainingLists />,
+          },
+          {
+            path: "/admin-dashboard/assign-training/:trainingId/:userId",
+            element: <AssignTraining />,
+          },
+          {
+            path: "/admin-dashboard/edit-training/:id",
+            element: <EditTraining />,
+          },
+          {
+            path: "/admin-dashboard/edit-training/:trainingId/:userId",
+            element: <EditTraineUser />,
+          },
+          {
+            path: "/admin-dashboard/recipe",
+            element: <RecipeBook />,
+          },
+          {
+            path: "/admin-dashboard/courses",
             element: <Course />,
           },
         ],
