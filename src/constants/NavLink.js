@@ -101,6 +101,12 @@ export const supperAdminLink = [
     link: "/dashboard",
     icon: nutrationGuide,
   },
+  {
+     _id: 8,
+    title: "רשימת מנהלים",
+    link: "/dashboard/admin-list",
+    icon: nutrationGuide,
+  }
 ];
 export const adminLink = [
   // {

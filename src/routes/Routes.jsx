@@ -58,6 +58,7 @@ import FoodDairy from "@/pages/foodDairy/FoodDairy";
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 import EditExercise from "@/components/courseList/EditExercise";
 import CustomizeWorkout from "@/components/courseList/CustomizeWorkout";
+import AdminTable from "@/components/admin/components/adminList/AdminList";
 // import ScrollTop from "@/shared/ScrollTop";
 
 export const routes = createBrowserRouter([
@@ -257,6 +258,10 @@ export const routes = createBrowserRouter([
           {
             path: "/dashboard/workout-list",
             element: <WorkoutList />,
+          },
+          {
+            path: "/dashboard/admin-list",
+            element: <AdminTable />,
           },
           // {
           //   path: "/dashboard/workout-programme/:id",
