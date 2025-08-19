@@ -66,7 +66,7 @@ const SupperAdminRecipeBook = () => {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto min-h-screen ">
+    <div className="max-w-6xl mx-auto min-h-screen py-20">
       <h2 className="text-xl font-semibold mb-4">📚 Recipe Books</h2>
     <div className="rounded-md border">
         <Table>
