@@ -157,23 +157,23 @@ import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -185,7 +185,7 @@ const AssignTraineeToAdmin = ({ adminId })=> {
   const [selectAll, setSelectAll] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [isOpen, setIsOpen] = useState(false);
  
   const fetchUsers = async () => {
     try {
@@ -237,6 +237,10 @@ const AssignTraineeToAdmin = ({ adminId })=> {
         if (res.status === 200) {
           toast.success("Trainees assigned to admin successfully");
           setIsLoading(false);
+          setIsOpen(false);
+          setSelectedUsers([]);
+          setSelectAll(false);
+          fetchUsers();
         }
       });
     } catch (error) {
@@ -247,11 +251,11 @@ const AssignTraineeToAdmin = ({ adminId })=> {
 
   // Filter trainees by email
   const filteredUsers = users.filter((user) =>
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    user.email.toLowerCase().includes(searchTerm.toLowerCase()) || user?.firstName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           variant="outline"
@@ -262,17 +266,17 @@ const AssignTraineeToAdmin = ({ adminId })=> {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Assign Trainees to Admin</DialogTitle>
+          <DialogTitle>שייך מתאמנים למאמן</DialogTitle>
           <DialogDescription>
-            Select one or more trainees from the list below and assign them to
-            an admin.
+בחר מתאמנים מהרשימה מטה ושייך למאמן המתאים 
           </DialogDescription>
         </DialogHeader>
 
         {/* Search Field */}
         <div className="mb-3">
           <Input
-            placeholder="Search by email..."
+            placeholder="
+...חפש לפי מייל או שם מלא"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -289,22 +293,26 @@ const AssignTraineeToAdmin = ({ adminId })=> {
                     onCheckedChange={(checked) => handleSelectAll(!!checked)}
                   />
                 </TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Admin</TableHead>
+                <TableHead>אימייל</TableHead>
+                <TableHead>שם המאמן</TableHead>
+                <TableHead>מאמן משוייך</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <TableRow key={user._id}>
+                  <TableRow key={user?._id}>
                     <TableCell>
                       <Checkbox
-                        checked={selectedUsers.includes(user._id)}
-                        onCheckedChange={() => handleSelect(user._id)}
+                        checked={selectedUsers.includes(user?._id)}
+                        onCheckedChange={() => handleSelect(user?._id)}
                       />
                     </TableCell>
                     <TableCell className="truncate max-w-[250px]">
-                      {user.email}
+                      {user?.email}
+                    </TableCell>
+                    <TableCell className="truncate max-w-[250px]">
+                      {user?.firstName} {user?.lastName}
                     </TableCell>
                     <TableCell className="truncate max-w-[250px]">
                       {user?.admin_id?.email}
@@ -324,14 +332,15 @@ const AssignTraineeToAdmin = ({ adminId })=> {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">בטל</Button>
           </DialogClose>
           <Button
+          className="mb-2 sm:mt-0 bg-customBg text-white hover:text-white"
             type="button"
             onClick={handleAssign}
             disabled={selectedUsers.length === 0 || isLoading}
           >
-            {isLoading ? "Assigning..." : "Assign Selected"}
+            {isLoading ? "שייך למאמן.." : "שייך למאמן"}
           </Button>
         </DialogFooter>
       </DialogContent>

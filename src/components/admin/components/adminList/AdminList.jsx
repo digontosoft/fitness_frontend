@@ -206,7 +206,7 @@ export default function AdminTable() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto min-h-screen " dir="ltr">
+    <div className="max-w-6xl mx-auto min-h-screen px-4 sm:px-0" dir="ltr">
       <div className="flex justify-between py-4">
         <input
           type="search"
