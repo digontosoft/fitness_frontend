@@ -1,16 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, Edit, Trash, Eye } from "lucide-react";
-import axios from "axios";
-import { toast } from "sonner";
 import { base_url } from "@/api/baseUrl";
+import PaginationComp from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -20,11 +9,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import PaginationComp from "@/components/pagination";
-import { use } from "react";
-import ViewAdmin from "./ViewAdmin";
-import EditAdmin from "./EditAdmin";
+import ScrollTop from "@/shared/ScrollTop";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import axios from "axios";
+import { ArrowUpDown, Edit, Eye, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import DeleteModal from "./DeleteModal";
+import EditAdmin from "./EditAdmin";
+import ViewAdmin from "./ViewAdmin";
 // import DeleteModal from "./DeleteModal";
 
 export default function AdminTable() {
@@ -38,6 +38,8 @@ export default function AdminTable() {
   const [openEdit, setIsEdit] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteAdmin, setDeleteAdmin] = useState(null);
+
+  ScrollTop();
 
   const fetchUsers = async () => {
     try {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const EditAdmin = ({ admin, onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -105,8 +105,7 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
               className="w-full border rounded px-3 py-2"
             >
               <option value="admin">Admin</option>
-              <option value="super-admin">Super Admin</option>
-              <option value="editor">Editor</option>
+              <option value="supperadmin">Super Admin</option>
             </select>
           </div>
 

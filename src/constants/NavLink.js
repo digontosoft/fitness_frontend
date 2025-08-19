@@ -1,11 +1,11 @@
 import {
-  training,
   course,
   exercise,
-  recipe,
+  measurement,
   nutrationGuide,
   persomalNutration,
-  measurement,
+  recipe,
+  training,
 } from "../assets/index";
 export const traineeLink = [
   {
@@ -95,18 +95,19 @@ export const supperAdminLink = [
     link: "dashboard/trainee-users-list",
     icon: nutrationGuide,
   },
+   {
+     _id: 7,
+    title: "רשימת מנהלים",
+    link: "/dashboard/admin-list",
+    icon: nutrationGuide,
+  },
   {
-    _id: 7,
+    _id: 8,
     title: "דף הבית",
     link: "/dashboard",
     icon: nutrationGuide,
   },
-  {
-     _id: 8,
-    title: "רשימת מנהלים",
-    link: "/dashboard/admin-list",
-    icon: nutrationGuide,
-  }
+ 
 ];
 export const adminLink = [
   // {
