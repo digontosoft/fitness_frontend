@@ -67,15 +67,15 @@ const SupperAdminRecipeBook = () => {
 
   return (
     <div className="max-w-6xl mx-auto min-h-screen py-20">
-      <h2 className="text-xl font-semibold mb-4">📚 Recipe Books</h2>
+      <h2 className="text-xl font-semibold mb-4">📚 ניהול ספרי מתכונים</h2>
     <div className="rounded-md border">
         <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Action</TableHead>
+            <TableHead>כותרת</TableHead>
+            <TableHead>תיאור</TableHead>
+            <TableHead>סוג</TableHead>
+            <TableHead>פעולות</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -85,7 +85,7 @@ const SupperAdminRecipeBook = () => {
               <TableCell className="max-w-xs truncate">
                 {book.description}
               </TableCell>
-              <TableCell>{book.type}</TableCell>
+              <TableCell>{book.type === "normalUser" ? "Recipe Book User" : "Trainee User"}</TableCell>
               <TableCell className="flex gap-2 items-center">
                <Link to={"/dashboard/view-recipe-book"}>
                 <Button

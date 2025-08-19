@@ -11,9 +11,25 @@ import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
   const [traineeUsers, setTraineeUsers] = useState([]);
+  const [adminTraineeLists, setAdminTraineeLists] = useState([]);
   const [recipeUsers, setRecipeUsers] = useState([]);
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  const adminId = user?._id;
+  console.log('adminId',adminId)
+  useEffect(() => {
+      const fetchAdminTraineeLists = async () => {
+    try {
+      const response = await axios.get(`${base_url}/traineelistforadmin?adminId=${adminId}`);
+      console.log("adminTraineeLists:", response.data.data);
+      setAdminTraineeLists(response.data.data);
+    } catch (error) {
+      console.error("Error fetching email:", error);
+      throw error;
+    }
+  };
+  fetchAdminTraineeLists();
+  }, [adminId]);
   const fetchData = async () => {
     try {
       const response = await axios.get(`${base_url}/getUsers`);
@@ -76,17 +92,30 @@ const Dashboard = () => {
             <span className="text-sm md:text-base">משתמשי מתכונים</span>
           </div>
         </div>
-
-        <Select
-          className="rounded-lg h-12 w-full min-w-[368px]"
-          direction="rtl"
-          valueField="_id"
-          labelField="firstName"
-          options={traineeUsers}
-          searchBy="firstName"
-          placeholder="בחר מתאמן"
-          onChange={handleSelectUser}
-        />
+        {
+          user.userType === "admin" ?
+          <Select
+           className="rounded-lg h-12 w-full min-w-[368px]"
+           direction="rtl"
+           valueField="_id"
+           labelField="firstName"
+           options={adminTraineeLists}
+           searchBy="firstName"
+           placeholder="בחר מתאמן"
+           onChange={handleSelectUser}
+         />
+          :
+            <Select
+            className="rounded-lg h-12 w-full min-w-[368px]"
+            direction="rtl"
+            valueField="_id"
+            labelField="firstName"
+            options={traineeUsers}
+            searchBy="firstName"
+            placeholder="בחר מתאמן"
+            onChange={handleSelectUser}
+          />
+        }
 
         <span className="text-lg md:text-xl font-bold text-textColor">
           משימות

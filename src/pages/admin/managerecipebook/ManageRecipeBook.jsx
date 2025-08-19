@@ -220,7 +220,7 @@ const ManageRecipeBook = () => {
     <div className="bg-customBg relative flex items-center justify-center min-h-screen mb-2">
       <div className="bg-white shadow-lg rounded-[60px] p-6 w-5/6 min-h-[80vh] h-auto flex flex-col items-center justify-center my-4">
         <div className="grid gap-4 items-center justify-items-center">
-          <FormTitle title={"ערוך מדריך תזונה"} />
+          <FormTitle title={"ערוך ספר מתכונים"} />
 
           <div className="py-20" dir="rtl">
             {loading ? (
@@ -236,7 +236,7 @@ const ManageRecipeBook = () => {
                     className="sm:min-w-[350px]"
                     id="title"
                     type="text"
-                    label="שם מדריך תזונה"
+                    label="שם ספר המתכונים"
                     placeholder="Add שם האימון...."
                     register={register}
                     validation={{ required: "שם האימון is required" }}
@@ -248,7 +248,7 @@ const ManageRecipeBook = () => {
                         htmlFor="description"
                         className="text-sm font-medium text-gray-700 mb-1"
                       >
-                        תיאור מדריך תזונה
+                       תיאור לספר המתכונים
                       </label>
                       <textarea
                         id="description"
@@ -268,14 +268,14 @@ const ManageRecipeBook = () => {
     htmlFor="type"
     className="text-sm font-medium text-gray-700 mb-1"
   >
-    סוג משתמש
+    סוג ספר המתכונים
   </label>
   <Select
     onValueChange={(value) => setValue("type", value, { shouldValidate: true })}
     defaultValue={nutrition?.type || ""}
   >
     <SelectTrigger className="sm:min-w-[350px] border border-gray-300 rounded-md">
-      <SelectValue placeholder="בחר סוג משתמש" />
+      <SelectValue placeholder="סוג ספר המתכונים" />
     </SelectTrigger>
     <SelectContent>
       <SelectItem value="normalUser">משתמש רגיל</SelectItem>
@@ -337,8 +337,9 @@ const ManageRecipeBook = () => {
                   <Button
                     type="submit"
                     className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+                    disabled={loading}
                   >
-                    {id ? "עדכון תפריט תזונה" : "הוסף מדריך תזונה"}
+                   עדכון ספר המתכונים
                   </Button>
                 </div>
               </form>
