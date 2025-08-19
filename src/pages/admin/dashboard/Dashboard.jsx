@@ -49,7 +49,7 @@ const Dashboard = () => {
 
   const handleSelectUser = (selectedUser) => {
     if (selectedUser.length > 0) {
-      navigate(`/dashboard/traineer/${selectedUser[0]._id}`);
+     user.userType === "admin" ?  navigate(`/admin-dashboard/traineer/${selectedUser[0]._id}`) : navigate(`/dashboard/traineer/${selectedUser[0]._id}`);
     }
   };
   const traineeUsersLength = JSON.parse(localStorage.getItem("traineeUsers"));
@@ -97,12 +97,12 @@ const Dashboard = () => {
             <AdminArrowCard
               image={women1}
               title="אישור מתאמנים חדשים"
-              link="/dashboard/approve-email"
+              link="/admin-dashboard/approve-email"
             />
             <AdminArrowCard
               image={women2}
               title="ניהול מתאמנים קיימים"
-              link="/dashboard/trainee-users-list"
+              link="/admin-dashboard/trainee-users-list"
             />
           </div>
         ) : (

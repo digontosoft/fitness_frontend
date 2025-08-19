@@ -1,17 +1,17 @@
-import FormTitle from "../ui/FormTitle";
-import AdminArrowCard from "../ui/AdminArrowCard";
-import { ArrowDumbel, ArrowBurger } from "@/assets";
-import AdminArrowCardWithoutImage from "../ui/AdminArrowCardWithoutImage";
-import { Button } from "@/components/ui/button";
-import TraineeRightCard from "./TraineeRightCard";
-import TraineeLeftCard from "./TraineeLeftCard";
-import { useEffect, useState } from "react";
 import { base_url } from "@/api/baseUrl";
-import axios from "axios";
-import { toast } from "sonner";
-import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
+import { ArrowBurger, ArrowDumbel } from "@/assets";
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
+import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
+import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { toast } from "sonner";
+import AdminArrowCard from "../ui/AdminArrowCard";
+import AdminArrowCardWithoutImage from "../ui/AdminArrowCardWithoutImage";
+import FormTitle from "../ui/FormTitle";
+import TraineeLeftCard from "./TraineeLeftCard";
+import TraineeRightCard from "./TraineeRightCard";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
@@ -19,6 +19,7 @@ const TraineerUi = ({ userId }) => {
   const [openAnswer, setOpenAnswer] = useState(false);
   const [exerciseReport, setExerciseReport] = useState(null);
   const [measurementReport, setMeasurementReport] = useState(null);
+  const userData = JSON.parse(localStorage.getItem("userInfo"));
 
   useEffect(() => {
     const getUser = async () => {
@@ -118,7 +119,42 @@ const TraineerUi = ({ userId }) => {
         </span>
       </div>
       <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-4 md:gap-5 max-w-5xl mx-auto">
+        {
+          userData?.userType === "admin" ?
+          <>
+          
+            <div className="w-[342px]">
+          <AdminArrowCard
+            image={ArrowBurger}
+            title="ניהול תפריטי תזונה אישיים"
+            link={`/admin-dashboard/nutrition-lists/${userId}`}
+          />
+        </div>
         <div className="w-[342px]">
+          <AdminArrowCard
+            image={ArrowDumbel}
+            title="ניהול תוכנית אימון"
+            link={`/admin-dashboard/assigned-training-list/${userId}`}
+            className="w-[342px]"
+          />
+        </div>
+        <AdminArrowCardWithoutImage
+          title="לדוח מדדים אישי"
+          link={`/admin-dashboard/mesurements-watch?userId=${userId}`}
+        />
+
+        <AdminArrowCardWithoutImage title="יומן אכילה" onClick={handleModal} />
+
+        <AdminArrowCardWithoutImage
+          title="תשובות מתאמן"
+          link={`/admin-dashboard/answers-list/${userId}`}
+        />
+          </>
+
+          :
+<>
+
+  <div className="w-[342px]">
           <AdminArrowCard
             image={ArrowBurger}
             title="ניהול תפריטי תזונה אישיים"
@@ -144,6 +180,9 @@ const TraineerUi = ({ userId }) => {
           title="תשובות מתאמן"
           link={`/dashboard/answers-list/${userId}`}
         />
+</>
+        }
+      
         <div
           className="w-[342px] h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
           dir="ltr"

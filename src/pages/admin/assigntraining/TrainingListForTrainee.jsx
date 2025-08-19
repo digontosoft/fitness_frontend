@@ -1,12 +1,4 @@
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, Edit, Trash } from "lucide-react";
+import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,12 +9,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import axios from "axios";
-import { base_url } from "@/api/baseUrl";
+import { ArrowUpDown, Edit, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import ExerciseDetails from "./ExerciseDetails";
 import { deleteTraining } from "@/api/deleteData";
+import PaginationComp from "@/components/pagination";
 import {
   Dialog,
   DialogContent,
@@ -31,11 +32,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import TrainingForTraineeDetails from "./TrainingForTraineeDetails";
-import PaginationComp from "@/components/pagination";
 // import TrainingDetails from "./TrainingDetails";
 
 export function TrainingListForTrainee({ userId }) {
-  console.log("userId", userId);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -44,6 +43,7 @@ export function TrainingListForTrainee({ userId }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedTraining, setSelectedTraining] = useState(null);
   const [user, setUser] = useState({});
+  const userData = JSON.parse(localStorage.getItem("userInfo"));
 
   useEffect(() => {
     const getUser = async () => {
@@ -197,7 +197,6 @@ export function TrainingListForTrainee({ userId }) {
     onRowSelectionChange: setRowSelection,
     state: { sorting, columnFilters, columnVisibility, rowSelection },
   });
-  console.log(training);
 
   return (
     <div className="w-full" dir="ltr">
@@ -208,11 +207,20 @@ export function TrainingListForTrainee({ userId }) {
           onChange={(event) => setSearch(event.target.value)}
           className="max-w-sm"
         />
-        <Link to={`/dashboard/training-list`} state={userId}>
+       {
+        userData?.userType === "admin" ?
+         <Link to={`/admin-dashboard/training-list`} state={userId}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
             שייך אימון למתאמן
           </Button>
         </Link>
+        :
+         <Link to={`/dashboard/training-list`} state={userId}>
+          <Button className="bg-customBg uppercase font-medium" size="sm">
+            שייך אימון למתאמן
+          </Button>
+        </Link>
+       }
       </div>
       <div className="rounded-md border">
         <Table>

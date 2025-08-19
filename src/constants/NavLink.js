@@ -95,14 +95,20 @@ export const supperAdminLink = [
     link: "dashboard/trainee-users-list",
     icon: nutrationGuide,
   },
+  {
+    _id: 7,
+    title: "ניהול ספר מתכונים",
+    link: "/dashboard/manage-recipe-book",
+    icon: nutrationGuide,
+  },
    {
-     _id: 7,
+     _id: 8,
     title: "רשימת מנהלים",
     link: "/dashboard/admin-list",
     icon: nutrationGuide,
   },
   {
-    _id: 8,
+    _id: 9,
     title: "דף הבית",
     link: "/dashboard",
     icon: nutrationGuide,

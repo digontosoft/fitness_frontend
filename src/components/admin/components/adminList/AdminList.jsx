@@ -22,6 +22,7 @@ import axios from "axios";
 import { ArrowUpDown, Edit, Eye, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import AssignTraineeToAdmin from "./AssignTraineeToAdmin";
 import DeleteModal from "./DeleteModal";
 import EditAdmin from "./EditAdmin";
 import ViewAdmin from "./ViewAdmin";
@@ -47,17 +48,25 @@ export default function AdminTable() {
         `${base_url}/getAdminUser?limit=1000&page=1&search=${search}`
       );
 
+      // শুধু admin ইউজারগুলো নেব
       const onlyAdmins = res.data.data.filter(
         (user) => user.userType === "admin"
       );
 
+      // যদি email search করতে চাও
+      const filteredAdmins = onlyAdmins.filter((user) =>
+        user.email?.toLowerCase().includes(search.toLowerCase())
+      );
+
+      // Pagination handle
       const itemsPerPage = 10;
       const startIndex = (page - 1) * itemsPerPage;
-      const paginatedAdmins = onlyAdmins.slice(
+      const paginatedAdmins = filteredAdmins.slice(
         startIndex,
         startIndex + itemsPerPage
       );
 
+      // name format
       const formattedAdmins = paginatedAdmins.map((user) => ({
         ...user,
         name: user.full_name
@@ -66,7 +75,7 @@ export default function AdminTable() {
       }));
 
       setAdmins(formattedAdmins);
-      setTotalPages(Math.ceil(onlyAdmins.length / itemsPerPage));
+      setTotalPages(Math.ceil(filteredAdmins.length / itemsPerPage));
     } catch (err) {
       console.error(err);
       toast.error("Failed to load users");
@@ -180,6 +189,7 @@ export default function AdminTable() {
             >
               <Trash />
             </Button>
+            <AssignTraineeToAdmin adminId={id} />
           </div>
         );
       },

@@ -71,7 +71,7 @@ const Navbar = () => {
               <NavLink
                 key={_id}
                 to={link}
-                end={link === "/dashboard"}
+                end={link === "/admin-dashboard"}
                 className={({ isActive }) =>
                   `flex items-center text-black font-bold gap-x-4 ${
                     isActive ? "text-red-500" : "text-black"
@@ -327,6 +327,7 @@ const Navbar = () => {
               <NavLink
                 key={_id}
                 to={link}
+                end="/admin-dashboard"
                 className={({ isActive }) =>
                   `flex items-center text-black font-semibold gap-x-4 ${
                     isActive ? "text-red-500" : "text-black"
@@ -419,6 +420,7 @@ const Navbar = () => {
               <NavLink
                 key={_id}
                 to={link}
+                end="/dashboard"
                 className={({ isActive }) =>
                   `flex items-center text-black font-semibold gap-x-4 ${
                     isActive ? "text-red-500" : "text-black"
