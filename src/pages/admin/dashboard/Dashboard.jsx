@@ -1,13 +1,12 @@
-import AdminArrowCard from "@/components/admin/components/ui/AdminArrowCard";
-import Title from "@/components/measurements/Tilte";
-import Container from "@/shared/Container";
-import ArrowBurger from "@/assets/image/burger.svg";
-import ArrowDumbel from "@/assets/image/arrowDumble.svg";
-import { useEffect, useState } from "react";
-import { women1, women2 } from "@/assets/index";
-import Select from "react-dropdown-select";
-import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+import ArrowDumbel from "@/assets/image/arrowDumble.svg";
+import ArrowBurger from "@/assets/image/burger.svg";
+import { women1, women2 } from "@/assets/index";
+import AdminArrowCard from "@/components/admin/components/ui/AdminArrowCard";
+import Container from "@/shared/Container";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
@@ -50,7 +49,7 @@ const Dashboard = () => {
 
   const handleSelectUser = (selectedUser) => {
     if (selectedUser.length > 0) {
-      navigate(`/dashboard/traineer/${selectedUser[0]._id}`);
+     user.userType === "admin" ?  navigate(`/admin-dashboard/traineer/${selectedUser[0]._id}`) : navigate(`/dashboard/traineer/${selectedUser[0]._id}`);
     }
   };
   const traineeUsersLength = JSON.parse(localStorage.getItem("traineeUsers"));
@@ -98,16 +97,18 @@ const Dashboard = () => {
             <AdminArrowCard
               image={women1}
               title="אישור מתאמנים חדשים"
-              link="/dashboard/approve-email"
+              link="/admin-dashboard/approve-email"
             />
             <AdminArrowCard
               image={women2}
               title="ניהול מתאמנים קיימים"
-              link="/dashboard/trainee-users-list"
+              link="/admin-dashboard/trainee-users-list"
             />
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+          <div 
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full"
+          >
             <AdminArrowCard
               image={women1}
               title="אישור מתאמנים חדשים"
@@ -137,6 +138,11 @@ const Dashboard = () => {
               image={ArrowDumbel}
               title="נהל תוכניות אימון"
               link="/dashboard/training-list"
+            />
+            <AdminArrowCard
+              image={ArrowDumbel}
+              title="רשימת מנהלים"
+              link="/dashboard/admin-list"
             />
           </div>
         )}

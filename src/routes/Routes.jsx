@@ -25,40 +25,43 @@ import Supermarket from "@/pages/supermarket/Supermarket";
 import WorkOutList from "@/pages/workoutList/WorkOutList";
 import WorkOutListVideo from "@/pages/workoutList/WorkOutListVideo";
 
-import { createBrowserRouter, Outlet } from "react-router-dom";
-import SuperMarketTwo from "@/pages/supermarket/SuperMarketTwo";
-import SideNavSupperShop from "@/pages/supermarket/SideNavSupperShop";
-import MeasurementsWatch from "@/pages/measurements/MeasurementsWatch";
-import MeasurementWomen from "@/pages/measurmentwomen/MeasurementWomen";
-import ProtectedRoutes from "./ProtectedRoutes";
-import Regulation from "@/pages/regulation/Regulation";
-import NotFound from "@/components/notFound/NotFound";
-import UserRoleProtectedRoutes from "./UserRoleProtectedRoutes";
-import ExerciseList from "@/pages/admin/exerciselist/ExerciseList";
-import WorkoutList from "@/pages/admin/workout-programme/WorkoutList";
-import EditWorkout from "@/components/admin/components/workout-programms/EditWorkout";
-import TriningProgram from "@/components/admin/components/Training/TriningProgram";
-import TrainingLists from "@/components/admin/components/Training/TrainingLists";
+import AdminTable from "@/components/admin/components/adminList/AdminList";
+import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
+import EditTraineUser from "@/components/admin/components/Training/EditTraineUser";
 import EditTraining from "@/components/admin/components/Training/EditTraining";
+import TrainingLists from "@/components/admin/components/Training/TrainingLists";
+import TriningProgram from "@/components/admin/components/Training/TriningProgram";
+import EditWorkout from "@/components/admin/components/workout-programms/EditWorkout";
 import GlobalLoading from "@/components/common/GlobalLoading";
+import CustomizeWorkout from "@/components/courseList/CustomizeWorkout";
+import EditExercise from "@/components/courseList/EditExercise";
+import MesurementPdf from "@/components/measurements/measurementWatch/MesurementPdf";
+import NotFound from "@/components/notFound/NotFound";
+import AssignTraining from "@/pages/admin/assigntraining/AssignTraining";
+import AssignTrainingList from "@/pages/admin/assigntraining/AssignTrainingList";
+import ExerciseList from "@/pages/admin/exerciselist/ExerciseList";
 import AddNutrition from "@/pages/admin/managenutritionguides/AddNutrition";
-import NutritionLists from "@/pages/admin/managenutritionguides/NutritionLists";
 import EditNutrition from "@/pages/admin/managenutritionguides/EditNutrition";
 import NutritionDetails from "@/pages/admin/managenutritionguides/NutritionDetails";
-import ThankYou from "@/pages/thankyou/Thankyou";
-import AssignTrainingList from "@/pages/admin/assigntraining/AssignTrainingList";
-import EditTraineUser from "@/components/admin/components/Training/EditTraineUser";
-import AssignTraining from "@/pages/admin/assigntraining/AssignTraining";
+import NutritionLists from "@/pages/admin/managenutritionguides/NutritionLists";
+import ManageRecipeBook from "@/pages/admin/managerecipebook/ManageRecipeBook";
+import SupperAdminRecipeBook from "@/pages/admin/managerecipebook/SupperAdminRecipeBook";
+import ViewRecipeBook from "@/pages/admin/managerecipebook/ViewReipeBook";
 import TraineeUsers from "@/pages/admin/traineeusers/TraineeUsers";
+import WorkoutList from "@/pages/admin/workout-programme/WorkoutList";
+import FoodDairy from "@/pages/foodDairy/FoodDairy";
 import Complete from "@/pages/Home/mesurementForm/Complete";
 import UpdateMesurement from "@/pages/Home/mesurementForm/UpdateMesurement";
-import MesurementPdf from "@/components/measurements/measurementWatch/MesurementPdf";
+import MeasurementsWatch from "@/pages/measurements/MeasurementsWatch";
 import MeasurementTracking from "@/pages/measurementtracking/MeasurementTracking";
-import FoodDairy from "@/pages/foodDairy/FoodDairy";
-import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
-import EditExercise from "@/components/courseList/EditExercise";
-import CustomizeWorkout from "@/components/courseList/CustomizeWorkout";
-import AdminTable from "@/components/admin/components/adminList/AdminList";
+import MeasurementWomen from "@/pages/measurmentwomen/MeasurementWomen";
+import Regulation from "@/pages/regulation/Regulation";
+import SideNavSupperShop from "@/pages/supermarket/SideNavSupperShop";
+import SuperMarketTwo from "@/pages/supermarket/SuperMarketTwo";
+import ThankYou from "@/pages/thankyou/Thankyou";
+import { createBrowserRouter, Outlet } from "react-router-dom";
+import ProtectedRoutes from "./ProtectedRoutes";
+import UserRoleProtectedRoutes from "./UserRoleProtectedRoutes";
 // import ScrollTop from "@/shared/ScrollTop";
 
 export const routes = createBrowserRouter([
@@ -206,6 +209,18 @@ export const routes = createBrowserRouter([
           {
             path: "/dashboard/add-exercise",
             element: <AddExercise />,
+          },
+          {
+            path: "/dashboard/manage-recipe-book",
+            element: <SupperAdminRecipeBook />,
+          },
+          {
+            path: "/dashboard/view-recipe-book",
+            element: <ViewRecipeBook />,
+          },
+          {
+            path: "/dashboard/edit-recipe-book/:id",
+            element: <ManageRecipeBook />,
           },
           {
             path: "/dashboard/manage-nutrition-guides",

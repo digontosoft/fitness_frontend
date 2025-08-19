@@ -1,16 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, Edit, Trash, Eye } from "lucide-react";
-import axios from "axios";
-import { toast } from "sonner";
 import { base_url } from "@/api/baseUrl";
+import PaginationComp from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -20,11 +9,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import PaginationComp from "@/components/pagination";
-import { use } from "react";
-import ViewAdmin from "./ViewAdmin";
-import EditAdmin from "./EditAdmin";
+import ScrollTop from "@/shared/ScrollTop";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import axios from "axios";
+import { ArrowUpDown, Edit, Eye, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import AssignTraineeToAdmin from "./AssignTraineeToAdmin";
 import DeleteModal from "./DeleteModal";
+import EditAdmin from "./EditAdmin";
+import ViewAdmin from "./ViewAdmin";
 // import DeleteModal from "./DeleteModal";
 
 export default function AdminTable() {
@@ -39,23 +40,33 @@ export default function AdminTable() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteAdmin, setDeleteAdmin] = useState(null);
 
+  ScrollTop();
+
   const fetchUsers = async () => {
     try {
       const res = await axios.get(
         `${base_url}/getAdminUser?limit=1000&page=1&search=${search}`
       );
 
+      // শুধু admin ইউজারগুলো নেব
       const onlyAdmins = res.data.data.filter(
         (user) => user.userType === "admin"
       );
 
+      // যদি email search করতে চাও
+      const filteredAdmins = onlyAdmins.filter((user) =>
+        user.email?.toLowerCase().includes(search.toLowerCase())
+      );
+
+      // Pagination handle
       const itemsPerPage = 10;
       const startIndex = (page - 1) * itemsPerPage;
-      const paginatedAdmins = onlyAdmins.slice(
+      const paginatedAdmins = filteredAdmins.slice(
         startIndex,
         startIndex + itemsPerPage
       );
 
+      // name format
       const formattedAdmins = paginatedAdmins.map((user) => ({
         ...user,
         name: user.full_name
@@ -64,7 +75,7 @@ export default function AdminTable() {
       }));
 
       setAdmins(formattedAdmins);
-      setTotalPages(Math.ceil(onlyAdmins.length / itemsPerPage));
+      setTotalPages(Math.ceil(filteredAdmins.length / itemsPerPage));
     } catch (err) {
       console.error(err);
       toast.error("Failed to load users");
@@ -178,6 +189,7 @@ export default function AdminTable() {
             >
               <Trash />
             </Button>
+            <AssignTraineeToAdmin adminId={id} />
           </div>
         );
       },
