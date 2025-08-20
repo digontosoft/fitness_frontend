@@ -1,12 +1,4 @@
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, Trash } from "lucide-react";
+import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -16,12 +8,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import axios from "axios";
-import { base_url } from "@/api/baseUrl";
+import { ArrowUpDown, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import ExerciseDetails from "./ExerciseDetails";
-import { deleteUser } from "@/api/deleteData";
+import Loading from "@/components/common/Loading";
+import PaginationComp from "@/components/pagination";
 import {
   Dialog,
   DialogContent,
@@ -29,14 +30,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import UserDetails from "./UserDetails";
-import { toast } from "sonner";
-import PaginationComp from "@/components/pagination";
 import { GoSearch } from "react-icons/go";
-import Loading from "@/components/common/Loading";
+import { toast } from "sonner";
+import UserDetails from "./UserDetails";
 
 export function TraineeUsersLists() {
   const [users, setUsers] = useState([]);
+  const [adminUsers, setAdminUsers] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -45,6 +45,22 @@ export function TraineeUsersLists() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const userData = JSON.parse(localStorage.getItem("userInfo"));
+
+  useEffect(() => {
+    const fetchAdminUser = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${base_url}/traineelistforadmin?adminId=${userData?._id}`);
+        setAdminUsers(response.data.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+    fetchAdminUser();
+  }, [userData?._id]);
+
   const columns = [
     {
       accessorKey: "full_name",
@@ -209,7 +225,7 @@ export function TraineeUsersLists() {
   };
 
   const table = useReactTable({
-    data: users,
+    data: userData.userType === "admin" ? adminUsers : users,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
