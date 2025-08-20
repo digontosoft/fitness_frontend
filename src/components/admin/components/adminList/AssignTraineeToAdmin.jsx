@@ -294,7 +294,7 @@ const AssignTraineeToAdmin = ({ adminId })=> {
                   />
                 </TableHead>
                 <TableHead>אימייל</TableHead>
-                <TableHead>שם המאמן</TableHead>
+                <TableHead>שם המתאמן</TableHead>
                 <TableHead>מאמן משוייך</TableHead>
               </TableRow>
             </TableHeader>

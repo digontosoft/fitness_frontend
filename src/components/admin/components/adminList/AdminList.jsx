@@ -19,7 +19,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import axios from "axios";
-import { ArrowUpDown, Edit, Eye, Trash } from "lucide-react";
+import { ArrowUpDown, Eye, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AssignTraineeToAdmin from "./AssignTraineeToAdmin";
@@ -174,13 +174,6 @@ export default function AdminTable() {
               onClick={() => handleView(row.original)}
             >
               <Eye />
-            </Button>
-            <Button
-              className="bg-customBg"
-              size="sm"
-              onClick={() => handleUpdate(row.original)}
-            >
-              <Edit />
             </Button>
             <Button
               variant="destructive"
