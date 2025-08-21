@@ -261,7 +261,7 @@ const AssignTraineeToAdmin = ({ adminId })=> {
           variant="outline"
           className="bg-customBg text-white hover:text-white"
         >
-          Assign Trainee
+          שייך מתאמנים
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">

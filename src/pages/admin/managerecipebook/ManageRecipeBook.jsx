@@ -278,8 +278,8 @@ const ManageRecipeBook = () => {
       <SelectValue placeholder="סוג ספר המתכונים" />
     </SelectTrigger>
     <SelectContent>
-      <SelectItem value="normalUser">משתמש רגיל</SelectItem>
-      <SelectItem value="trainer">מאמן</SelectItem>
+      <SelectItem value="normalUser">מתכונים בלבד</SelectItem>
+      <SelectItem value="trainer">למתאמנים</SelectItem>
     </SelectContent>
   </Select>
   {errors.type && (

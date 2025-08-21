@@ -173,6 +173,11 @@ const Dashboard = () => {
               title="רשימת מנהלים"
               link="/dashboard/admin-list"
             />
+            <AdminArrowCard
+              image={ArrowDumbel}
+              title="ניהול ספר מתכונים"
+              link="/dashboard/manage-recipe-book"
+            />
           </div>
         )}
       </div>

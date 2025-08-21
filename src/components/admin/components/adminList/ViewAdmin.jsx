@@ -141,7 +141,7 @@ const ViewAdmin = ({ admin, onClose }) => {
     </div> */}
 
     {/* Trainee Table */}
-    <h3 className="text-lg font-semibold mb-3 text-gray-700">👥 Trainee List</h3>
+    <h3 className="text-lg font-semibold mb-3 text-gray-700">👥 מתאמנים משוייכים</h3>
     <div className="border rounded-lg overflow-x-auto">
       <Table>
         <TableHeader>
