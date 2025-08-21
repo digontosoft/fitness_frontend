@@ -116,7 +116,7 @@ export function TraineeUsersLists() {
                 נהל מתאמן
               </Button>
             </Link>
-            <Button
+            {/* <Button
               className="bg-customBg"
               size="sm"
               onClick={() =>
@@ -129,7 +129,7 @@ export function TraineeUsersLists() {
               {row.original.userType === "trainee"
                 ? "הפוך למאמן"
                 : "הפוך למתאמן"}
-            </Button>
+            </Button> */}
             <Button
               className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
               size="sm"

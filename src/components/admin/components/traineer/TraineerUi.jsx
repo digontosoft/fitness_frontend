@@ -84,7 +84,7 @@ const TraineerUi = ({ userId }) => {
     <div className="space-y-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
-        <span className="flex items-center gap-2 flex-row-reverse">
+        {/* <span className="flex items-center gap-2 flex-row-reverse">
           {user?.full_name}
           <Button
             className="bg-customBg"
@@ -95,7 +95,7 @@ const TraineerUi = ({ userId }) => {
           >
             {user?.userType === "admin" ? "Make Trainer" : " הפוך למאמן"}
           </Button>
-        </span>
+        </span> */}
       </div>
 
       <div
