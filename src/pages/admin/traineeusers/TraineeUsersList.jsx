@@ -107,7 +107,7 @@ export function TraineeUsersLists() {
             >
               <Trash />
             </Button>
-            <Link to={`/dashboard/traineer/${userId}`}>
+            <Link to={`/admin-dashboard/traineer/${userId}`}>
               <Button
                 className="bg-customBg"
                 size="sm"
