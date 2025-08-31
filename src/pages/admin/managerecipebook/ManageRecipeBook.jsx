@@ -188,15 +188,18 @@ const ManageRecipeBook = () => {
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-      //   formData.append("user_id", id);
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("type", data.type);
-      formData.append("uploadType", "recipeBook");
       if (data.file && data.file[0]) {
-        formData.append("file", data.file[0]);
+        formData.append("pdf_link", data.file[0]);
       }
       console.log("formData", formData.get("type"));
+     for (let [key, value] of formData.entries()) {
+  console.log(key, value);
+}
+
+
 
       await axios
         .put(`${base_url}/recipeBook/${id}`, formData, {
