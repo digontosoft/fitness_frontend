@@ -37,6 +37,7 @@ import CustomizeWorkout from "@/components/courseList/CustomizeWorkout";
 import EditExercise from "@/components/courseList/EditExercise";
 import MesurementPdf from "@/components/measurements/measurementWatch/MesurementPdf";
 import NotFound from "@/components/notFound/NotFound";
+import AddCustomTask from "@/pages/admin/addcustomtask/AddCustomTask";
 import AssignTraining from "@/pages/admin/assigntraining/AssignTraining";
 import AssignTrainingList from "@/pages/admin/assigntraining/AssignTrainingList";
 import ExerciseList from "@/pages/admin/exerciselist/ExerciseList";
@@ -317,6 +318,10 @@ export const routes = createBrowserRouter([
           {
             path: "/dashboard/assign-training/:userId",
             element: <TrainingLists />,
+          },
+          {
+            path: "/dashboard/add-custom-task",
+            element: <AddCustomTask />,
           },
           {
             path: "/dashboard/assign-training/:trainingId/:userId",

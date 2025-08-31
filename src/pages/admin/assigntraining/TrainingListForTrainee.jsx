@@ -207,7 +207,8 @@ export function TrainingListForTrainee({ userId }) {
           onChange={(event) => setSearch(event.target.value)}
           className="max-w-sm"
         />
-       {
+      <div className="flex gap-3">
+         {
         userData?.userType === "admin" ?
          <Link to={`/admin-dashboard/training-list`} state={userId}>
           <Button className="bg-customBg uppercase font-medium" size="sm">
@@ -221,6 +222,12 @@ export function TrainingListForTrainee({ userId }) {
           </Button>
         </Link>
        }
+       <Link to={`/dashboard/add-custom-task`} state={userId}>
+          <Button className="bg-customBg uppercase font-medium" size="sm">
+           Assign Custom Task
+          </Button>
+        </Link>
+      </div>
       </div>
       <div className="rounded-md border">
         <Table>
