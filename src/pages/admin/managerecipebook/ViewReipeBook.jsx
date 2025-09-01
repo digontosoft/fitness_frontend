@@ -12,7 +12,7 @@ const ViewRecipeBook = () => {
       try {
         await axios.get(`${base_url}/recipeBook/${id}`).then((response) => {
           if (response.status === 200) {
-            setRecipeBook(response.data.data);
+            setRecipeBook(response?.data?.data);
             console.log("recipe book:", response?.data?.data);
           }
         });
@@ -50,7 +50,7 @@ const ViewRecipeBook = () => {
                 
                 className="flex flex-col items-center justify-center w-full"
               >
-                <ParsonalPdf data={recipeBook} isBaseUrl={false} />
+                <ParsonalPdf data={recipeBook} isBaseUrl={true} />
               </div>
     </div>
   );
