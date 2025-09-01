@@ -216,7 +216,7 @@ export const routes = createBrowserRouter([
             element: <SupperAdminRecipeBook />,
           },
           {
-            path: "/dashboard/view-recipe-book",
+            path: "/dashboard/view-recipe-book/:id",
             element: <ViewRecipeBook />,
           },
           {

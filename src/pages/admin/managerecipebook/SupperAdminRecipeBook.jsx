@@ -87,7 +87,7 @@ const SupperAdminRecipeBook = () => {
               </TableCell>
               <TableCell>{book.type === "normalUser" ? "Recipe Book User" : "Trainee User"}</TableCell>
               <TableCell className="flex gap-2 items-center">
-               <Link to={"/dashboard/view-recipe-book"}>
+               <Link to={`/dashboard/view-recipe-book/${book._id}`}>
                 <Button
                   variant="outline"
                   size="sm"
