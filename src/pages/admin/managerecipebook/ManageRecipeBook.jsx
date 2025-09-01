@@ -192,7 +192,7 @@ const ManageRecipeBook = () => {
       formData.append("description", data.description);
       formData.append("type", data.type);
       if (data.file && data.file[0]) {
-        formData.append("pdf_link", data.file[0]);
+        formData.append("file", data.file[0]);
       }
       console.log("formData", formData.get("type"));
      for (let [key, value] of formData.entries()) {
