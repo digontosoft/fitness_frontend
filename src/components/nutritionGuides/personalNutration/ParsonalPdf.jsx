@@ -1,6 +1,5 @@
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-import { base_url } from "@/api/baseUrl";
 import * as pdfjs from "pdfjs-dist/build/pdf";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -8,10 +7,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-const ParsonalPdf = ({ data, isBaseUrl }) => {
+const ParsonalPdf = ({ data }) => {
   // const pdfUrl = `${base_url}/${data?.pdf_link}`;
   console.log("pdfUrl", data);
-  const pdfUrl = isBaseUrl ? `${base_url}/${data?.pdf_link}` : data?.pdf_link;
+  const pdfUrl = data?.pdf_link;
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
