@@ -50,7 +50,7 @@ const ViewRecipeBook = () => {
                 
                 className="flex flex-col items-center justify-center w-full"
               >
-                <ParsonalPdf data={recipeBook} isBaseUrl={true} />
+                <ParsonalPdf data={recipeBook} isBaseUrl={false} />
               </div>
     </div>
   );

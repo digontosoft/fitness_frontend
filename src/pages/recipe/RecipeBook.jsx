@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import ParsonalPdf from "@/components/nutritionGuides/personalNutration/ParsonalPdf";
+import axios from "axios";
+import { useEffect, useState } from "react";
 const RecipeBook = () => {
   const [recipeBook, setRecipeBook] = useState([]);
   const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -41,7 +41,7 @@ const RecipeBook = () => {
                 key={recipe?._id}
                 className="flex flex-col items-center justify-center max-w-5xl mx-auto"
               >
-                <ParsonalPdf data={recipe} isBaseUrl={true} />
+                <ParsonalPdf data={recipe} isBaseUrl={false} />
               </div>
             ))}
     </div>
