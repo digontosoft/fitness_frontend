@@ -158,7 +158,7 @@ const response = await axios.delete(`${base_url}/delete-task-template/${taskToDe
     // Page/UI RTL
     <div className="w-full p-6 space-y-4" dir="ltr">
       <div dir="rtl">
-         <Button onClick={() => setOpen(true)} className="bg-customBg hover:bg-customBg-dark">Add Task</Button>
+         <Button onClick={() => setOpen(true)} className="bg-customBg hover:bg-customBg-dark">שייך משימה מותאמת אישית</Button>
       </div>
       {/* 🔧 Table itself LTR so columns render in the array order */}
       <div className="rounded-md border">
