@@ -62,20 +62,20 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="w-[95%] max-w-lg sm:max-w-xl md:max-w-2xl rounded-2xl p-6">
-        <DialogHeader>
-          <DialogTitle className="text-lg font-semibold sm:text-xl">
+      <DialogContent className="w-[95%] max-w-lg sm:max-w-xl md:max-w-2xl rounded-2xl p-6" dir="rtl">
+        <DialogHeader dir="rtl">
+          <DialogTitle className="text-lg font-semibold sm:text-xl text-right" dir="rtl">
             שייך משימה מותאמת אישית
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6" dir="rtl">
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title">כותרת המשימה</Label>
             <Input
               id="title"
-              placeholder="Enter task title"
+              placeholder="כותרת המשימה"
               {...register("title", { required: "Title is required" })}
             />
             {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
@@ -83,11 +83,11 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">תוכן המשימה</Label>
             <Textarea
               id="description"
               rows={4}
-              placeholder="Enter task description"
+              placeholder="תוכן המשימה"
               {...register("description", {
                 required: "Description is required",
                 minLength: { value: 10, message: "Minimum 10 characters required" },
@@ -100,10 +100,10 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
 
           {/* Name */}
           <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="name">שם המשימה</Label>
             <Input
               id="name"
-              placeholder="Enter task name"
+              placeholder="שם המשימה"
               {...register("name", { required: "Name is required" })}
             />
             {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
@@ -111,15 +111,15 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
 
           {/* Task Type */}
           <div className="space-y-2">
-            <Label htmlFor="type">Task Type</Label>
+            <Label htmlFor="type">אינטרוול משימה</Label>
             <Controller
               name="type"
               control={control}
               rules={{ required: "Task type is required" }}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger id="type" className="w-full">
-                    <SelectValue placeholder="Select a type" />
+                  <SelectTrigger id="type" className="w-full" dir="rtl">
+                    <SelectValue placeholder="בחר אינטרוול"  />
                   </SelectTrigger>
                   <SelectContent>
                     {[
@@ -130,7 +130,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
                       { value: "2weeks", label: "Two Weeks" },
                       { value: "1month", label: "One Month" },
                     ].map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
+                      <SelectItem key={item.value} value={item.value} dir="rtl">
                         {item.label}
                       </SelectItem>
                     ))}
@@ -142,19 +142,37 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
           </div>
 
           {/* Footer */}
-          <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-              className="w-full sm:w-auto"
-            >
-              Cancel
-            </Button>
-            <Button type="submit" className="w-full sm:w-auto bg-customBg" disabled={isLoading}>
-              {isLoading ? <><Loader className="mr-2 animate-spin" />שייך משימה מותאמת אישית</> : "שייך משימה מותאמת אישית"}
-            </Button>
-          </DialogFooter>
+       <DialogFooter 
+  className="flex flex-col-reverse sm:flex-row justify-end sm:gap-2" 
+  dir="ltr"   // force flexbox to work as LTR
+>
+  <Button
+    type="button"
+    variant="outline"
+    onClick={() => setOpen(false)}
+    className="w-full sm:w-auto"
+    dir="rtl"
+  >
+    בטל
+  </Button>
+  <Button 
+    type="submit" 
+    className="w-full sm:w-auto bg-customBg" 
+    disabled={isLoading}
+    dir="rtl"
+  >
+    {isLoading ? (
+      <>
+        <Loader className="mr-2 animate-spin" />
+        שייך משימה מותאמת אישית
+      </>
+    ) : (
+      "שייך משימה מותאמת אישית"
+    )}
+  </Button>
+</DialogFooter>
+
+
         </form>
       </DialogContent>
     </Dialog>

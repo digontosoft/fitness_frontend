@@ -107,7 +107,21 @@ export function TraineeUsersLists() {
             >
               <Trash />
             </Button>
-            <Link to={`/admin-dashboard/traineer/${userId}`}>
+            {
+              userData?.userType === "admin" ?(
+
+              <Link to={`/admin-dashboard/traineer/${userId}`}>
+                <Button
+                  className="bg-customBg"
+                  size="sm"
+                  onClick={() => handleOpenDeleteModal(row.original)}
+                >
+                  נהל מתאמן
+                </Button>
+              </Link>
+              ):
+              (
+            <Link to={`/dashboard/traineer/${userId}`}>
               <Button
                 className="bg-customBg"
                 size="sm"
@@ -116,6 +130,8 @@ export function TraineeUsersLists() {
                 נהל מתאמן
               </Button>
             </Link>
+              )
+            }
             {/* <Button
               className="bg-customBg"
               size="sm"

@@ -67,7 +67,7 @@ export default function AssignCustomTask({userId}) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          שם המשימה 
         </Button>
       ),
       // Text stays RTL, but column order stays LTR
@@ -84,7 +84,7 @@ export default function AssignCustomTask({userId}) {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Task Title
+          כותרת המשימה
         </Button>
       ),
       // Text stays RTL, but column order stays LTR
@@ -95,7 +95,7 @@ export default function AssignCustomTask({userId}) {
       ),
     },
     {
-    header: "Description",
+    header: "תוכן המשימה",
     accessorFn: (row) => row.description,
     cell: ({ row }) => {
       const desc = row.original.description || "";
@@ -109,7 +109,7 @@ export default function AssignCustomTask({userId}) {
   },
     {
       id: "actions",
-      header: "Actions",
+      header: "פעולות ",
       cell: ({ row }) => (
         <div className="flex gap-2">
           <Button size="sm" variant="outline" onClick={() => {setSelectedTask(row.original); setEditTaskModal(true);}}>
