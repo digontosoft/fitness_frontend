@@ -1,16 +1,15 @@
 import { Button } from "../ui/button";
 // import { icon, iconOne, iconThree, iconTwo, pixelCartImg } from "@assets/index";
-import { Link } from "react-router-dom";
-import rightArmIcon from "@/assets/image/right-arm.svg";
-import leftArmIcon from "@/assets/image/left-arm.svg";
-import rightLeg from "@/assets/image/right-leg.svg";
-import leftLeg from "@/assets/image/left-leg.svg";
-import thigh from "@/assets/image/thigh.svg";
 import butt from "@/assets/image/butt.svg";
 import cardBg from "@/assets/image/image.svg";
+import leftArmIcon from "@/assets/image/left-arm.svg";
+import leftLeg from "@/assets/image/left-leg.svg";
 import chest from "@/assets/image/man-chest.svg";
 import manWaist from "@/assets/image/man-waist.svg";
+import rightArmIcon from "@/assets/image/right-arm.svg";
+import rightLeg from "@/assets/image/right-leg.svg";
 import womanWaist from "@/assets/image/women-hips.svg";
+import { Link } from "react-router-dom";
 
 const LeftCard = ({ data }) => {
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
@@ -22,7 +21,6 @@ const LeftCard = ({ data }) => {
   const rightThigh = Number(data?.thighr) || 0;
   const totalThigh = leftThigh + rightThigh;
   const avgThigh = Math.floor(totalThigh / 2);
-  console.log("data:", data);
   return (
     <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#EEEEEE]">
       <div className="absolute top-0 right-0">
