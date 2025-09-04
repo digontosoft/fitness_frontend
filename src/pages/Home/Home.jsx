@@ -1,25 +1,44 @@
 import { base_url } from "@/api/baseUrl";
+import Loading from "@/components/common/Loading";
 import ArrowGroup from "@/components/home/ArrowGroup";
 import LeftCard from "@/components/home/LeftCard";
+import RecurringCard from "@/components/home/RecurringCard";
 import RightCard from "@/components/home/RightCard";
 import { WelcomeModal } from "@/components/home/WelcomeModal";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { TaskModal } from "./TaskModal";
-import Loading from "@/components/common/Loading";
 
 const Home = () => {
   const [userSteps, setUserSteps] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [recurringTaskModalOpen, setIsRecurringTaskModalOpen] = useState(false);
   const [userTasks, setUserTasks] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [selectedTask, setSelectedTask] = useState(null);
   const [loading, setLoading] = useState(false);
+    const [recurringTasks, setRecurringTasks] = useState([]);
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const Id = user._id;
 
   const [getMesurement, setMesurement] = useState([]);
+
+  
+  const fetchUserRecurringTasks = async () => {
+      try {
+        const response = await axios.get(`${base_url}/get-user-recurring-tasks/${user._id}`);
+        console.log("recurringTasks:", response.data.data);
+        setRecurringTasks(response.data.data);
+      } catch (error) {
+        console.error("Error fetching email:", error);
+        throw error;
+      }
+    };
+
+
+
+
   useEffect(() => {
     const fetchMeasurement = async () => {
       try {
@@ -84,6 +103,7 @@ const Home = () => {
 
     fetchUserSteps();
     fetchUserTask();
+    fetchUserRecurringTasks();
   }, [user?._id]);
 
   const handleSubmit = async () => {
@@ -159,6 +179,17 @@ const Home = () => {
               />
             ))
           )}
+        </div>
+        <div className="flex flex-wrap justify-center items-center gap-10 max-w-3xl w-full">
+
+        {
+          recurringTasks.length > 0 && (
+          recurringTasks?.map((task) => (
+            <RecurringCard key={task?._id} recurringTasks={task} setRecurringTasks={setRecurringTasks} />
+          ))
+            
+          )
+        }
         </div>
       </div>
 

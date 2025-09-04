@@ -13,10 +13,14 @@ const Dashboard = () => {
   const [traineeUsers, setTraineeUsers] = useState([]);
   const [adminTraineeLists, setAdminTraineeLists] = useState([]);
   const [recipeUsers, setRecipeUsers] = useState([]);
+
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const adminId = user?._id;
   console.log('adminId',adminId)
+  
+  
+
   useEffect(() => {
       const fetchAdminTraineeLists = async () => {
     try {

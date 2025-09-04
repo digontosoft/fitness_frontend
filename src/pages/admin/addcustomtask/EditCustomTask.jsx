@@ -1,39 +1,44 @@
-"use client";
-
 import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
 import { Loader } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const TaskModal = ({ open, setOpen, userId, fetchData }) => {
+const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
   const [isLoading, setIsLoading] = useState(false);
+  console.log('task', task);
   const {
     register,
     handleSubmit,
     control,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+      name: "",
+      frequency: "",
+    },
+  });
+
+  useEffect(() => {
+    if (task) {
+      reset({
+        title: task.title || "",
+        description: task.description || "",
+        name: task.name || "",
+        frequency: task.frequency || "",
+      });
+    }
+  }, [task, reset]);
 
   const onSubmit = async (data) => {
     const payload = {
@@ -44,31 +49,25 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
       frequency: data.type,
     };
     setIsLoading(true);
-    try{
-      const response = await axios.post(`${base_url}/create-task-template`, payload);
-      if(response.status === 201){
-        toast.success("Task added successfully!");
-         setIsLoading(false);
-         setOpen(false);
-         reset(); 
-         fetchData();
+    try {
+      const response = await axios.put(`${base_url}/update-task-template/${task._id}`, payload);
+      if (response.status === 200) {
+        toast.success("Task updated successfully!");
+        setIsLoading(false);
+        setOpen(false);
+        reset();
+        fetchData();
       }
-    }catch(error){
+    } catch (error) {
       console.log(error);
+      setIsLoading(false);
+      toast.error("Something went wrong!");
     }
-    console.log("Form Submitted:", payload);
-   
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="w-[95%] max-w-lg sm:max-w-xl md:max-w-2xl rounded-2xl p-6">
-        <DialogHeader>
-          <DialogTitle className="text-lg font-semibold sm:text-xl">
-            Add New Task
-          </DialogTitle>
-        </DialogHeader>
-
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
           {/* Title */}
           <div className="space-y-2">
@@ -113,12 +112,12 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
           <div className="space-y-2">
             <Label htmlFor="type">Task Type</Label>
             <Controller
-              name="type"
+              name="frequency"
               control={control}
               rules={{ required: "Task type is required" }}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger id="type" className="w-full">
+                  <SelectTrigger id="frequency" className="w-full">
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -152,7 +151,13 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
               Cancel
             </Button>
             <Button type="submit" className="w-full sm:w-auto bg-customBg" disabled={isLoading}>
-              {isLoading ? <><Loader className="mr-2 animate-spin" />Saving</> : "Save"}
+              {isLoading ? (
+                <>
+                  <Loader className="mr-2 animate-spin" />Saving
+                </>
+              ) : (
+                "Save"
+              )}
             </Button>
           </DialogFooter>
         </form>
@@ -161,4 +166,4 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
   );
 };
 
-export default TaskModal;
+export default EditCustomTask;
