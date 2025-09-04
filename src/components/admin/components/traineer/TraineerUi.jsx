@@ -180,6 +180,10 @@ const TraineerUi = ({ userId }) => {
           title="תשובות מתאמן"
           link={`/dashboard/answers-list/${userId}`}
         />
+        <AdminArrowCardWithoutImage
+          title="נהל משימות מותאמות אישית"
+          link={`/dashboard/add-custom-task?userId=${userId}`}
+        />
 </>
         }
       

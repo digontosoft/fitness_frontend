@@ -65,7 +65,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
       <DialogContent className="w-[95%] max-w-lg sm:max-w-xl md:max-w-2xl rounded-2xl p-6">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold sm:text-xl">
-            Add New Task
+            שייך משימה מותאמת אישית
           </DialogTitle>
         </DialogHeader>
 
@@ -152,7 +152,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
               Cancel
             </Button>
             <Button type="submit" className="w-full sm:w-auto bg-customBg" disabled={isLoading}>
-              {isLoading ? <><Loader className="mr-2 animate-spin" />Saving</> : "Save"}
+              {isLoading ? <><Loader className="mr-2 animate-spin" />שייך משימה מותאמת אישית</> : "שייך משימה מותאמת אישית"}
             </Button>
           </DialogFooter>
         </form>

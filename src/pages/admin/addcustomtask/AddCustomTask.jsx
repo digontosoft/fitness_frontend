@@ -1,16 +1,18 @@
 import Title from "@/components/measurements/Tilte";
 import Container from "@/shared/Container";
-import { useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import AssignCustomTask from "./AssignCustomTask";
 
 const AddCustomTask = () => {
- const { state: userId } = useLocation();    
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("userId");
+
   return (
-     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
-      <Title title="Add Custom Task" />
+    <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
+      <Title title="הוסף משימה מותאמת אישית" />
       <AssignCustomTask userId={userId} />
     </Container>
-  )
-}
+  );
+};
 
-export default AddCustomTask
+export default AddCustomTask;

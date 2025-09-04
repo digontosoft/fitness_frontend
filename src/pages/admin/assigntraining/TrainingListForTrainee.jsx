@@ -222,11 +222,6 @@ export function TrainingListForTrainee({ userId }) {
           </Button>
         </Link>
        }
-       <Link to={`/dashboard/add-custom-task`} state={userId}>
-          <Button className="bg-customBg uppercase font-medium" size="sm">
-           Assign Custom Task
-          </Button>
-        </Link>
       </div>
       </div>
       <div className="rounded-md border">
