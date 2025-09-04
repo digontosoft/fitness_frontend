@@ -70,25 +70,25 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
       <DialogContent className="w-[95%] max-w-lg sm:max-w-xl md:max-w-2xl rounded-2xl p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
           {/* Title */}
-          <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
+          <div className="space-y-2" dir="rtl">
+            <Label htmlFor="title">כותרת המשימה</Label>
             <Input
               id="title"
-              placeholder="Enter task title"
-              {...register("title", { required: "Title is required" })}
+              placeholder="כותרת המשימה"
+              {...register("title", { required: "כותרת המשימה " })}
             />
             {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
           </div>
 
           {/* Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+          <div className="space-y-2" dir="rtl">
+            <Label htmlFor="description">תוכן המשימה </Label>
             <Textarea
               id="description"
               rows={4}
-              placeholder="Enter task description"
+              placeholder="תוכן המשימה "
               {...register("description", {
-                required: "Description is required",
+                required: "תוכן המשימה ",
                 minLength: { value: 10, message: "Minimum 10 characters required" },
               })}
             />
@@ -98,27 +98,27 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
           </div>
 
           {/* Name */}
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
+          <div className="space-y-2" dir="rtl">
+            <Label htmlFor="name">שם המשימה </Label>
             <Input
               id="name"
-              placeholder="Enter task name"
-              {...register("name", { required: "Name is required" })}
+              placeholder="שם המשימה "
+              {...register("name", { required: "שם המשימה " })}
             />
             {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
           </div>
 
           {/* Task Type */}
-          <div className="space-y-2">
-            <Label htmlFor="type">Task Type</Label>
+          <div className="space-y-2" dir="rtl">
+            <Label htmlFor="type">אינטרוול משימה</Label>
             <Controller
               name="frequency"
               control={control}
-              rules={{ required: "Task type is required" }}
+              rules={{ required: "אינטרוול משימה" }}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger id="frequency" className="w-full">
-                    <SelectValue placeholder="Select a type" />
+                  <SelectTrigger id="frequency" className="w-full" dir="rtl">
+                    <SelectValue placeholder=" בחר אינטרוול" />
                   </SelectTrigger>
                   <SelectContent>
                     {[
@@ -129,7 +129,7 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
                       { value: "2weeks", label: "Two Weeks" },
                       { value: "1month", label: "One Month" },
                     ].map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
+                      <SelectItem key={item.value} value={item.value} dir="rtl">
                         {item.label}
                       </SelectItem>
                     ))}
@@ -148,7 +148,7 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
               onClick={() => setOpen(false)}
               className="w-full sm:w-auto"
             >
-              Cancel
+              בטל
             </Button>
             <Button type="submit" className="w-full sm:w-auto bg-customBg" disabled={isLoading}>
               {isLoading ? (
