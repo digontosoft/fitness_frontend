@@ -130,12 +130,12 @@
 // export default AddNutritionForm;
 
 import { base_url } from "@/api/baseUrl";
-import { Button } from "@/components/ui/button";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
+import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const AddNutritionForm = () => {
   const navigate = useNavigate();
@@ -146,6 +146,8 @@ const AddNutritionForm = () => {
     reset,
     formState: { errors },
   } = useForm();
+
+  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
 
   const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -181,7 +183,7 @@ const AddNutritionForm = () => {
       if (response.status === 201) {
         toast.success("Nutrition Guide saved successfully!");
         reset();
-        navigate("/dashboard/nutrition-lists");
+         userDetails.userType === "admin" ? navigate(`/admin-dashboard/nutrition-lists`) :navigate(`/dashboard/nutrition-lists`);
       }
     } catch (error) {
       console.error("Error submitting nutrition guide:", error);
