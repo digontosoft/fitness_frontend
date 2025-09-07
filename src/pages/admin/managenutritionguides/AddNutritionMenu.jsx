@@ -2,13 +2,15 @@ import { base_url } from "@/api/baseUrl";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { Loader } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const AddNutritionMenu = ({ userId }) => {
   const navigate = useNavigate();
-
+const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -27,6 +29,7 @@ const AddNutritionMenu = ({ userId }) => {
   };
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
       let base64File = "";
       if (data.file && data.file[0]) {
@@ -49,6 +52,7 @@ const AddNutritionMenu = ({ userId }) => {
 
       if (response.status === 201) {
         toast.success("Nutrition menu saved successfully!");
+        setIsLoading(false);
         reset();
         userDetails.userType === "admin" ? navigate(`/admin-dashboard/nutrition-lists/${userId}`) :navigate(`/dashboard/nutrition-lists/${userId}`);
       }
@@ -118,8 +122,9 @@ const AddNutritionMenu = ({ userId }) => {
           <Button
             type="submit"
             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            disabled={isLoading}
           >
-            {"הוסף תפריט תזונה אישי"}
+            { isLoading ? <Loader className="animate-spin" /> : "הוסף תפריט תזונה אישי"}
           </Button>
         </div>
       </form>
