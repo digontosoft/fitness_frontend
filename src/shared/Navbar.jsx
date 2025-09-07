@@ -86,28 +86,28 @@ const Navbar = () => {
         ) : userType === "trainee" ? (
           <div className="hidden md:flex justify-between items-center space-x-9">
             {traineeLink.map(({ _id, title, link, icon: Icon }) => {
-              const isTrainingLink =
-                link === "/trainings" || link === "/exercise-library";
-              if (isTrainingLink && !hasWorkoutTask) {
-                return (
-                  <a
-                    key={_id}
-                    href="https://wa.link/gmt4t4"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center text-gray-400 font-bold gap-x-4 cursor-not-allowed"
-                    onClick={(e) => e.stopPropagation()}
-                    dir="rtl"
-                  >
-                    <img
-                      src={Icon}
-                      alt={`${title} icon`}
-                      className="w-5 h-5 opacity-50"
-                    />
-                    <span>{title}</span>
-                  </a>
-                );
-              }
+              // const isTrainingLink =
+              //   link === "/trainings" || link === "/exercise-library";
+              // if (isTrainingLink && !hasWorkoutTask) {
+              //   return (
+              //     <a
+              //       key={_id}
+              //       href="https://wa.link/gmt4t4"
+              //       target="_blank"
+              //       rel="noopener noreferrer"
+              //       className="flex items-center text-gray-400 font-bold gap-x-4 cursor-not-allowed"
+              //       onClick={(e) => e.stopPropagation()}
+              //       dir="rtl"
+              //     >
+              //       <img
+              //         src={Icon}
+              //         alt={`${title} icon`}
+              //         className="w-5 h-5 opacity-50"
+              //       />
+              //       <span>{title}</span>
+              //     </a>
+              //   );
+              // }
 
               return (
                 <NavLink
@@ -346,28 +346,28 @@ const Navbar = () => {
             .slice()
             .reverse()
             .map(({ _id, title, link, icon: Icon }) => {
-              const isTrainingLink =
-                link === "/trainings" || link === "/exercise-library";
+              // const isTrainingLink =
+              //   link === "/trainings" || link === "/exercise-library";
 
-              if (isTrainingLink && !hasWorkoutTask) {
-                return (
-                  <a
-                    key={_id}
-                    href="https://wa.link/gmt4t4"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center text-gray-400 font-semibold gap-x-4 cursor-not-allowed"
-                    dir="rtl"
-                  >
-                    <img
-                      src={Icon}
-                      alt={`${title} icon`}
-                      className="w-5 h-5 opacity-50"
-                    />
-                    <span>{title}</span>
-                  </a>
-                );
-              }
+              // if (isTrainingLink && !hasWorkoutTask) {
+              //   return (
+              //     <a
+              //       key={_id}
+              //       href="https://wa.link/gmt4t4"
+              //       target="_blank"
+              //       rel="noopener noreferrer"
+              //       className="flex items-center text-gray-400 font-semibold gap-x-4 cursor-not-allowed"
+              //       dir="rtl"
+              //     >
+              //       <img
+              //         src={Icon}
+              //         alt={`${title} icon`}
+              //         className="w-5 h-5 opacity-50"
+              //       />
+              //       <span>{title}</span>
+              //     </a>
+              //   );
+              // }
 
               return (
                 <NavLink
