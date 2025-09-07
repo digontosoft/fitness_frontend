@@ -1,10 +1,10 @@
 import { base_url } from "@/api/baseUrl";
-import { Button } from "@/components/ui/button";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
+import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const AddNutritionMenu = ({ userId }) => {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ const AddNutritionMenu = ({ userId }) => {
     formState: { errors },
   } = useForm();
 
+  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -49,7 +50,7 @@ const AddNutritionMenu = ({ userId }) => {
       if (response.status === 201) {
         toast.success("Nutrition menu saved successfully!");
         reset();
-        navigate(`/dashboard/nutrition-lists/${userId}`);
+        userDetails.userType === "admin" ? navigate(`/admin-dashboard/nutrition-lists/${userId}`) :navigate(`/dashboard/nutrition-lists/${userId}`);
       }
     } catch (error) {
       console.error("Error submitting nutrition menu:", error);

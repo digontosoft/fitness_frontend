@@ -1,3 +1,4 @@
+import Loading from "@/components/common/Loading";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import * as pdfjs from "pdfjs-dist/build/pdf";
@@ -9,8 +10,22 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 const ParsonalPdf = ({ data }) => {
   // const pdfUrl = `${base_url}/${data?.pdf_link}`;
-  console.log("pdfUrl", data);
+  // console.log("pdfUrl", data);
   const pdfUrl = data?.pdf_link;
+
+  if (!data) {
+    // Data not loaded yet
+    return (
+      <Loading />
+    );
+  }
+
+  if (!pdfUrl) {
+    // PDF link missing
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
