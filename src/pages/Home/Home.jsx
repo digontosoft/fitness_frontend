@@ -18,7 +18,7 @@ const Home = () => {
   const [userInfo, setUserInfo] = useState({});
   const [selectedTask, setSelectedTask] = useState(null);
   const [loading, setLoading] = useState(false);
-    const [recurringTasks, setRecurringTasks] = useState([]);
+  const [recurringTasks, setRecurringTasks] = useState([]);
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const Id = user._id;
 

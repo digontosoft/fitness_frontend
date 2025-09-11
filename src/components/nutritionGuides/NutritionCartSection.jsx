@@ -1,9 +1,8 @@
-import React from "react";
 import { NutritionCart } from "./NutritionCart";
 
 const NutritionCartSection = () => {
   return (
-    <div>
+    <div className="py-10">
       <p className="text-[#0A2533] font-bold text-2xl text-center ">
         מדריכי תזונה
       </p>

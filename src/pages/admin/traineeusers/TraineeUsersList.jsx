@@ -148,14 +148,37 @@ export function TraineeUsersLists() {
             </Button> */}
             <Button
               className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
-              size="sm"
+              size="sm"             
             >
               {row.original.userType === "trainee"
                 ? "משתמש מתאמן"
                 : row.original.userType === "recipe"
                 ? "משתמש ספר מתכונים"
-                : "Admin"}
+                :"Admin"}
             </Button>
+
+            {/* {
+              userData?.userType === "supperadmin" &&(
+            <Button
+              className="bg-customBg font-bold"
+              size="sm"
+              onClick={() =>
+                updateStatus(
+                  row.original.userType === "admin" ? "trainee" : "admin",
+                  userId
+                )
+              }
+              disabled={row.original.userType === "supperadmin"}
+            >
+             {
+  row.original.userType === "trainee" || row.original.userType === "recipe"
+    ? "הפוך למתאמן"
+    : "הפוך למאמן"
+}
+
+            </Button>
+              )
+            } */}
           </div>
         );
       },

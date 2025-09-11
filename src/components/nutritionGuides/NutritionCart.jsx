@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { GoSearch } from "react-icons/go";
-import { NutrationData } from "@/constants/NutrationData";
-import SingleCart from "./SingleCart";
-import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+import { NutrationData } from "@/constants/NutrationData";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { GoSearch } from "react-icons/go";
 import Loading from "../common/Loading";
+import SingleCart from "./SingleCart";
 export const NutritionCart = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [nutrationData, setNutrationData] = useState([]);
@@ -35,10 +35,10 @@ export const NutritionCart = () => {
   );
   console.log(filterData);
   return (
-    <div className="sm:my-20 mb-5">
+    <div className="my-10">
       <div className="flex justify-center">
         <div
-          className="flex justify-between items-center py-10 relative w-56 "
+          className="flex justify-between items-center relative w-56 "
           dir="rtl"
         >
           <input
