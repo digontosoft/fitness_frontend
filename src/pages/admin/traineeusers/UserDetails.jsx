@@ -1,3 +1,4 @@
+import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,10 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import axios from "axios";
 import { Eye } from "lucide-react";
 import { useEffect, useState } from "react";
-import { base_url } from "@/api/baseUrl";
-import axios from "axios";
 
 export default function UserDetails({ userId }) {
   const [userData, setUserData] = useState({});
@@ -22,6 +22,7 @@ export default function UserDetails({ userId }) {
       }
     });
   }, [userId]);
+  console.log('user data:', userData);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -75,6 +76,14 @@ export default function UserDetails({ userId }) {
               </span>
             </div>
           </div>
+           <span className="font-medium text-blue-600">
+      תוקף עד:{" "}
+      {new Date(userData?.expiry_date).toLocaleDateString("he-IL", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })}
+    </span>
         </div>
 
         <DialogFooter>

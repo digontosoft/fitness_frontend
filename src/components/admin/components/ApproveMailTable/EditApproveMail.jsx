@@ -12,9 +12,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
 import { Edit } from "lucide-react";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import moment from "moment";
 
 function EditApproveMail({ id, updateDate }) {
   const [loading, setLoading] = useState(false);
@@ -64,7 +64,7 @@ function EditApproveMail({ id, updateDate }) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
             <div className="grid items-center gap-4">
-              <Label htmlFor="email" dir="rtl">
+              {/* <Label htmlFor="email" dir="rtl">
                 דואר אלקטרוני
               </Label>
               <Input
@@ -86,7 +86,7 @@ function EditApproveMail({ id, updateDate }) {
                 <p className="text-red-500 text-sm mt-1" dir="rtl">
                   {errors.email.message}
                 </p>
-              )}
+              )} */}
               <Label htmlFor="expiry_date" dir="rtl">
                 תאריך סיום
               </Label>

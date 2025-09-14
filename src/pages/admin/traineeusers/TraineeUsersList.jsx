@@ -21,6 +21,7 @@ import { ArrowUpDown, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import ExerciseDetails from "./ExerciseDetails";
+import EditApproveMail from "@/components/admin/components/ApproveMailTable/EditApproveMail";
 import Loading from "@/components/common/Loading";
 import PaginationComp from "@/components/pagination";
 import {
@@ -157,6 +158,8 @@ export function TraineeUsersLists() {
                 :"Admin"}
             </Button>
 
+            <EditApproveMail id={userId} updateDate={updateDate} />
+
             {/* {
               userData?.userType === "supperadmin" &&(
             <Button
@@ -215,6 +218,27 @@ export function TraineeUsersLists() {
     }
   };
 
+   const updateDate = async (data) => {
+    try {
+      const response = await axios.patch(
+        `${base_url}/update-approved-mail`,
+        data
+      );
+      if (response.status === 200) {
+        toast.success("Date updated successfully.");
+        // setEmails((prevEmails) =>
+        //   prevEmails.map((email) =>
+        //     email._id === data._id
+        //       ? { ...email, expiry_date: data.expiry_date }
+        //       : email
+        //   )
+        // );
+      }
+    } catch (error) {
+      toast.error("Failed to update date.");
+    }
+  };
+
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -264,6 +288,7 @@ export function TraineeUsersLists() {
   };
 
   const table = useReactTable({
+    // data: adminUsers,
     data: userData.userType === "admin" ? adminUsers : users,
     columns,
     onSortingChange: setSorting,
