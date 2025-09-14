@@ -9,7 +9,7 @@ import {
 } from "@/constants/NavLink";
 import axios from "axios";
 import { LogOut } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CiMenuFries } from "react-icons/ci";
 import { MdOutlineClose } from "react-icons/md";
 import { Link, NavLink } from "react-router-dom";
@@ -18,6 +18,7 @@ const Navbar = () => {
   const [userTasks, setUserTasks] = useState([]);
   const userData = JSON.parse(localStorage.getItem("userInfo"));
   const userType = userData?.userType;
+  const menuRef = useRef(null);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -49,6 +50,28 @@ const Navbar = () => {
       (task?.task_type === "workout" && task?.task_status !== "Disabled") ||
       task?.task_status !== "Completed"
   );
+
+  // 🔹 Close menu if user clicks outside of it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
     <nav className="bg-transparent md:bg-white shadow-md ">
@@ -316,7 +339,7 @@ const Navbar = () => {
 
 {/* Mobile Menu */}
 {isOpen && (
-  <div className="md:hidden bg-white p-4 shadow-md">
+  <div ref={menuRef} className="md:hidden bg-white p-4 shadow-md">
     <div className="space-y-2">
       {userType === "admin" ? (
         <div className="flex flex-col space-y-2">
