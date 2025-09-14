@@ -123,12 +123,13 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
                   </SelectTrigger>
                   <SelectContent>
                     {[
-                      { value: "1day", label: "One Day" },
-                      { value: "2days", label: "Two Days" },
-                      { value: "3days", label: "Three Days" },
-                      { value: "1week", label: "One Week" },
-                      { value: "2weeks", label: "Two Weeks" },
-                      { value: "1month", label: "One Month" },
+                      { value: "oncetime", label: "חד פעמי" },
+                      { value: "1day", label: "כל יום" },
+                      { value: "2days", label: "כל יומיים" },
+                      { value: "3days", label: "כל שלושה ימים" },
+                      { value: "1week", label: "כל שבוע" },
+                      { value: "2weeks", label: "כל שבועיים" },
+                      { value: "1month", label: "כל חודש" },
                     ].map((item) => (
                       <SelectItem key={item.value} value={item.value} dir="rtl">
                         {item.label}

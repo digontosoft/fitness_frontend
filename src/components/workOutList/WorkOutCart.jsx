@@ -234,7 +234,7 @@ const WorkOutCart = () => {
       </div>
 
       {/* Trainings Section */}
-      <div className="flex flex-wrap items-center justify-center gap-6">
+      <div className="flex flex-wrap items-center justify-center gap-6 my-10">
   {(!selectedItem || selectedItem.type === "training") &&
     (selectedItem
       ? 

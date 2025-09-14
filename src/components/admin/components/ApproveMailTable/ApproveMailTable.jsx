@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -7,11 +6,14 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Edit, Trash } from "lucide-react";
+import { ArrowUpDown, Trash } from "lucide-react";
 import moment from "moment";
+import * as React from "react";
 
+import { base_url } from "@/api/baseUrl";
+import { deleteEmail } from "@/api/deleteData";
+import PaginationComp from "@/components/pagination";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -20,16 +22,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import AddMail from "./AddMail";
 import axios from "axios";
-import { toast } from "sonner";
-import { deleteEmail } from "@/api/deleteData";
-import { base_url } from "@/api/baseUrl";
-import { Link } from "react-router-dom";
-import EditApproveMail from "@/components/admin/components/ApproveMailTable/EditApproveMail";
-import PaginationComp from "@/components/pagination";
 import { useEffect } from "react";
 import { GoSearch } from "react-icons/go";
+import { toast } from "sonner";
+import AddMail from "./AddMail";
 
 export function ApproveMailTable() {
   const [sorting, setSorting] = React.useState([]);
@@ -84,7 +81,7 @@ export function ApproveMailTable() {
         const id = row.original._id;
         return (
           <div className="flex space-x-2">
-            <EditApproveMail id={id} updateDate={updateDate} />
+            {/* <EditApproveMail id={id} updateDate={updateDate} /> */}
 
             <Button
               className="bg-customBg"
