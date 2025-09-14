@@ -133,7 +133,6 @@ export const routes = createBrowserRouter([
             path: "/exercise-library",
             element: <CourseList />,
           },
-
           {
             path: "/startTraining",
             element: <StartTraining />,
