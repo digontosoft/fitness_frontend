@@ -63,7 +63,7 @@ export function TraineeUsersLists() {
   };
   useEffect(() => {
     fetchAdminUser();
-  }, [userData?._id, page, totalPages, search]);
+  }, [userData?._id]);
 
   const columns = [
     {
@@ -331,7 +331,11 @@ export function TraineeUsersLists() {
                 name=""
                 id=""
                 placeholder="סנן לפי שם..."
-                onChange={(e) => setSearch(e.target.value)}
+                // onChange={(e) => setSearch(e.target.value)}
+                value={(table.getColumn("email")?.getFilterValue()) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("email")?.setFilterValue(event.target.value)
+                }
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
               />
               <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">

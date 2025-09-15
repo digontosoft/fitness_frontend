@@ -50,12 +50,12 @@ export const traineeLink = [
     link: "/measurements-tracking",
     icon: measurement,
   },
-  // {
-  //   _id: 8,
-  //   title: "דף הבית",
-  //   link: "/",
-  //   icon: nutrationGuide,
-  // },
+  {
+    _id: 8,
+    title: "תמונות מדידה",
+    link: "/measurements-pictures",
+    icon: nutrationGuide,
+  },
 ];
 export const supperAdminLink = [
   {
