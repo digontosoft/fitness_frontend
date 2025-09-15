@@ -28,7 +28,7 @@ const Home = () => {
   const fetchUserRecurringTasks = async () => {
       try {
         const response = await axios.get(`${base_url}/get-user-recurring-tasks/${user._id}`);
-        console.log("recurringTasks:", response.data.data);
+        // console.log("recurringTasks:", response.data.data);
         setRecurringTasks(response.data.data);
       } catch (error) {
         console.error("Error fetching email:", error);
@@ -45,7 +45,7 @@ const Home = () => {
         const response = await axios.get(`${base_url}/measurement/${Id}`);
         const user_response = await axios.get(`${base_url}/getUser/${Id}`);
         if (response.status === 200) {
-          setMesurement(response.data.data);
+          setMesurement(response.data.data[0]);
           setUserInfo(user_response.data.data);
         }
       } catch (error) {

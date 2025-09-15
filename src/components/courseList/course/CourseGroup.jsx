@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import CourseCart from "./CourseCart";
-import axios from "axios";
 import { base_url } from "@/api/baseUrl";
 import Loading from "@/components/common/Loading";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import { FaLock } from "react-icons/fa6";
 // import cartFor from "../../../assets/image/course/cartFour.png";
@@ -28,7 +27,6 @@ const CourseGroup = () => {
     };
     fetchCourses();
   }, []);
-  console.log("courses:", courses);
 
   return (
     <div className="max-w-6xl mx-auto">

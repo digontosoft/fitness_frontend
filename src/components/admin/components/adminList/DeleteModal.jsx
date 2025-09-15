@@ -1,4 +1,3 @@
-import React from "react";
 const DeleteModal = ({ isOpen, onClose, onConfirm, adminName }) => {
   if (!isOpen) return null;
 

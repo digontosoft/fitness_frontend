@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
-import CourseCart from "./CourseCart";
-import axios from "axios";
-import Select from "react-dropdown-select";
 import { base_url } from "@/api/baseUrl";
-import { Button } from "@/components/ui/button";
-import { set } from "react-hook-form";
-import ExerciseDetails from "@/components/admin/components/ExerciseTable/ExerciseDetails";
-import CourseDetails from "./course/CourseDetails";
 import PaginationComp from "@/components/pagination";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Select from "react-dropdown-select";
 import { GoSearch } from "react-icons/go";
 import Loading from "../common/Loading";
+import CourseDetails from "./course/CourseDetails";
+import CourseCart from "./CourseCart";
 
 // const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
 //   const pageNumbers = [];
@@ -220,7 +217,6 @@ export const CourseListGroup = () => {
     fetchExercise();
   }, [user?._id]);
 
-  console.log("training:", trainings);
 
   const [open, setOpen] = useState(false);
   const [id, setId] = useState("");
@@ -230,7 +226,6 @@ export const CourseListGroup = () => {
     setOpen(true);
   };
 
-  console.log("first", trainings);
 
   const getFilteredExercises = trainings.flatMap((training) =>
     training.workouts.flatMap((workout) =>

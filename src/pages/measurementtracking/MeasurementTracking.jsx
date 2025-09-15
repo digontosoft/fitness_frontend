@@ -1,26 +1,26 @@
 import { base_url } from "@/api/baseUrl";
+import butt from "@/assets/image/butt.svg";
+import leftArm from "@/assets/image/left-arm.svg";
+import rightArm from "@/assets/image/right-arm.svg";
+import Loading from "@/components/common/Loading";
 import Title from "@/components/measurements/Tilte";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Loading from "@/components/common/Loading";
-import rightArm from "@/assets/image/right-arm.svg";
-import leftArm from "@/assets/image/left-arm.svg";
-import butt from "@/assets/image/butt.svg";
 // import menHips from "@/assets/image/men-hips.svg";
 import chest from "@/assets/image/chest.svg";
-import maleChest from "@/assets/image/male-chest.svg";
-import womenHips from "@/assets/image/women-hips.svg";
 import leftLeg from "@/assets/image/left-leg.svg";
-import rightLeg from "@/assets/image/right-thigh.svg";
+import maleChest from "@/assets/image/male-chest.svg";
 import manWaist from "@/assets/image/man-waist.svg";
-import MeasurementSmallCart from "./MeasurementSmallCart";
+import rightLeg from "@/assets/image/right-thigh.svg";
+import womenHips from "@/assets/image/women-hips.svg";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import MeasurementSmallCart from "./MeasurementSmallCart";
 
 const MeasurementTracking = () => {
   const [data, setData] = useState([]);
@@ -61,6 +61,7 @@ const MeasurementTracking = () => {
   }, [userId?._id]);
 
   useEffect(() => {
+   if (!id) return;
     const fetchData = async () => {
       try {
         const response = await axios.get(

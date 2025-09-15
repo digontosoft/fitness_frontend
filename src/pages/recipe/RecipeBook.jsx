@@ -11,7 +11,7 @@ const RecipeBook = () => {
         await axios.get(`${base_url}/recipeBook`).then((response) => {
           if (response.status === 200) {
             setRecipeBook(response.data.data);
-            console.log("pdf:", response?.data?.data);
+            // console.log("pdf:", response?.data?.data);
           }
         });
       } catch (error) {

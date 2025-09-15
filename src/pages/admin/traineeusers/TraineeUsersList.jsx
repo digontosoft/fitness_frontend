@@ -17,8 +17,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import axios from "axios";
-import { ArrowUpDown, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowUpDown, Eye, Trash } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import ExerciseDetails from "./ExerciseDetails";
 import EditApproveMail from "@/components/admin/components/ApproveMailTable/EditApproveMail";
@@ -46,24 +46,24 @@ export function TraineeUsersLists() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [viewUserModalOpen, setViewUserModalOpen] = useState(false);
+  const [viewUser, setViewUser] = useState(null);
   const userData = JSON.parse(localStorage.getItem("userInfo"));
    const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const fetchAdminUser = async () => {
+  const fetchAdminUser = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${base_url}/traineelistforadmin?adminId=${userData?._id}`);
-      // setPage(response.data.pagination.currentPage);
-      // setTotalPages(response.data.pagination.totalPages);
       setAdminUsers(response.data.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
-  };
+  },[userData?._id]);
   useEffect(() => {
     fetchAdminUser();
-  }, [userData?._id]);
+  }, [fetchAdminUser]);
 
   const columns = [
     {
@@ -103,7 +103,10 @@ export function TraineeUsersLists() {
         const userId = row.original._id;
         return (
           <div className="flex space-x-2">
-            <UserDetails userId={userId} />
+             <Button className="bg-customBg hover:bg-customBg-dark" size="sm" onClick={() => {setViewUser(userId), setViewUserModalOpen(true)}}>
+          <Eye className="w-4 h-4" />
+        </Button>
+           
             <EditApproveMail id={userId} updateDate={updateDate} />
             <Button
               className="bg-customBg"
@@ -274,35 +277,8 @@ export function TraineeUsersLists() {
     }
   };
 
-  // const [page, setPage] = useState(1);
-  // const [totalPages, setTotalPages] = useState(1);
-
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const response = await axios.get(
-  //         `${base_url}/getUsers?page=${page}&&limit=10&&search=${search}`
-  //       );
-  //       if (response.status === 200) {
-  //         setPage(response.data.pagination.currentPage);
-  //         setTotalPages(response.data.pagination.totalPages);
-  //         setUsers(response.data.data);
-  //         setLoading(false);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching email:", error);
-  //       throw error;
-  //     }
-  //   };
-  //   fetchUsers();
-  // }, [page, totalPages, search]);
-
-
-
   const table = useReactTable({
     data: adminUsers,
-    // data: userData.userType === "admin" ? adminUsers : users,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -331,7 +307,6 @@ export function TraineeUsersLists() {
                 name=""
                 id=""
                 placeholder="סנן לפי שם..."
-                // onChange={(e) => setSearch(e.target.value)}
                 value={(table.getColumn("email")?.getFilterValue()) ?? ""}
                 onChange={(event) =>
                   table.getColumn("email")?.setFilterValue(event.target.value)
@@ -419,6 +394,11 @@ export function TraineeUsersLists() {
           onPageChange={setPage}
         />
       </div>
+      {
+        viewUserModalOpen && (
+          <UserDetails userId={viewUser} isOpen={viewUserModalOpen} onClose={() => setViewUserModalOpen(false)} />
+        )
+      }
     </div>
   );
 }

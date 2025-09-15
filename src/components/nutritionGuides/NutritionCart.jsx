@@ -33,7 +33,7 @@ export const NutritionCart = () => {
   const filterData = nutrationData.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  console.log(filterData);
+  // console.log(filterData);
   return (
     <div className="my-10">
       <div className="flex justify-center">
