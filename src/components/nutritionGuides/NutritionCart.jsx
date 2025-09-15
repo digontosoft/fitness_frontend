@@ -59,7 +59,7 @@ export const NutritionCart = () => {
         <Loading />
       ) : (
         <div
-          className={`max-w-6xl mx-auto grid  gap-6 justify-items-center items-center px-2 ${
+          className={`max-w-6xl mx-auto grid  gap-6 justify-items-center items-center px-2 py-10 sm:py-0 md:py-5 ${
             filterData.length === 1
               ? "grid-cols-1"
               : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"

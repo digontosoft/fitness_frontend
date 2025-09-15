@@ -182,12 +182,51 @@ export default function AdminTable() {
             >
               <Trash />
             </Button>
+             <Button
+              className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
+              size="sm"             
+            >
+            Admin
+            </Button>
+
+            <Button
+              className="bg-customBg font-bold"
+              size="sm"
+              onClick={() =>
+                updateStatus(
+                
+                  id
+                )
+              }
+             
+            >
+            
+              הפוך למתאמן
+            
+            </Button>
             <AssignTraineeToAdmin adminId={id} />
           </div>
         );
       },
     },
   ];
+
+     const updateStatus = async ( userId) => {
+    try {
+      const response = await axios.post(`${base_url}/updateUserInfo`, {
+        user_id: userId,
+        userType:"trainee",
+      });
+
+      if (response.status === 200) {
+        toast.success("User Type Updated Successfully");
+        fetchUsers();
+      }
+    } catch (error) {
+      toast.error("Failed to update user type");
+      console.log("error:", error);
+    }
+  };
 
   const table = useReactTable({
     data: admins,

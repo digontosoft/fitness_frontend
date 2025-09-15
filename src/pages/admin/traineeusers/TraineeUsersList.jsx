@@ -47,20 +47,23 @@ export function TraineeUsersLists() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userInfo"));
-
+   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const fetchAdminUser = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${base_url}/traineelistforadmin?adminId=${userData?._id}`);
+      // setPage(response.data.pagination.currentPage);
+      // setTotalPages(response.data.pagination.totalPages);
+      setAdminUsers(response.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
   useEffect(() => {
-    const fetchAdminUser = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${base_url}/traineelistforadmin?adminId=${userData?._id}`);
-        setAdminUsers(response.data.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
     fetchAdminUser();
-  }, [userData?._id]);
+  }, [userData?._id, page, totalPages, search]);
 
   const columns = [
     {
@@ -101,6 +104,7 @@ export function TraineeUsersLists() {
         return (
           <div className="flex space-x-2">
             <UserDetails userId={userId} />
+            <EditApproveMail id={userId} updateDate={updateDate} />
             <Button
               className="bg-customBg"
               size="sm"
@@ -158,7 +162,21 @@ export function TraineeUsersLists() {
                 :"Admin"}
             </Button>
 
-            <EditApproveMail id={userId} updateDate={updateDate} />
+            <Button
+              className="bg-customBg font-bold"
+              size="sm"
+              onClick={() =>
+                updateStatus(
+                
+                  userId
+                )
+              }
+             
+            >
+            
+               הפוך למאמן
+            
+            </Button>
 
             {/* {
               userData?.userType === "supperadmin" &&(
@@ -239,47 +257,16 @@ export function TraineeUsersLists() {
     }
   };
 
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${base_url}/getUsers?page=${page}&&limit=10&&search=${search}`
-        );
-        if (response.status === 200) {
-          setPage(response.data.pagination.currentPage);
-          setTotalPages(response.data.pagination.totalPages);
-          setUsers(response.data.data);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching email:", error);
-        throw error;
-      }
-    };
-    fetchUsers();
-  }, [page, totalPages, search]);
-
-  const updateStatus = async (userType, userId) => {
+    const updateStatus = async ( userId) => {
     try {
       const response = await axios.post(`${base_url}/updateUserInfo`, {
         user_id: userId,
-        userType,
+        userType:"admin",
       });
 
       if (response.status === 200) {
         toast.success("User Type Updated Successfully");
-        setUsers((prevUsers) =>
-          prevUsers.map((user) => {
-            if (user._id === userId) {
-              return { ...user, userType };
-            }
-            return user;
-          })
-        );
+        fetchAdminUser();
       }
     } catch (error) {
       toast.error("Failed to update user type");
@@ -287,9 +274,35 @@ export function TraineeUsersLists() {
     }
   };
 
+  // const [page, setPage] = useState(1);
+  // const [totalPages, setTotalPages] = useState(1);
+
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await axios.get(
+  //         `${base_url}/getUsers?page=${page}&&limit=10&&search=${search}`
+  //       );
+  //       if (response.status === 200) {
+  //         setPage(response.data.pagination.currentPage);
+  //         setTotalPages(response.data.pagination.totalPages);
+  //         setUsers(response.data.data);
+  //         setLoading(false);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching email:", error);
+  //       throw error;
+  //     }
+  //   };
+  //   fetchUsers();
+  // }, [page, totalPages, search]);
+
+
+
   const table = useReactTable({
-    // data: adminUsers,
-    data: userData.userType === "admin" ? adminUsers : users,
+    data: adminUsers,
+    // data: userData.userType === "admin" ? adminUsers : users,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
