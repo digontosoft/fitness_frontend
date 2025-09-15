@@ -13,7 +13,7 @@ import axios from "axios";
 import { Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function UserDetails({ userId }) {
+export default function UserDetails({ userId, isOpen, onClose }) {
   const [userData, setUserData] = useState({});
   useEffect(() => {
     axios.get(`${base_url}/getUser/${userId}`).then((response) => {
@@ -24,7 +24,7 @@ export default function UserDetails({ userId }) {
   }, [userId]);
   console.log('user data:', userData);
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogTrigger asChild>
         <Button className="bg-customBg hover:bg-customBg-dark" size="sm">
           <Eye className="w-4 h-4" />

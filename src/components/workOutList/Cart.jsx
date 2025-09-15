@@ -1,9 +1,8 @@
-import workoutCartBg from "../../assets/image/workoutList/Bg.png";
-import whiteLogo from "../../assets/image/whiteLogo.png";
 import { Link } from "react-router-dom";
+import whiteLogo from "../../assets/image/whiteLogo.png";
+import workoutCartBg from "../../assets/image/workoutList/Bg.png";
 const Cart = ({ workout, training }) => {
-  console.log("workout", workout);
-  console.log("training", training);
+ 
 
   return (
     <Link

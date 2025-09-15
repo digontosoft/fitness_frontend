@@ -49,30 +49,25 @@
 
 // export default CourseCart;
 
-import cartBg from "../../assets/image/workoutList/Bg.png";
-import whiteLogo from "../../assets/image/whiteLogo.png";
-import icon from "../../assets/image/right-arm.svg";
-import back from "../../assets/image/back.svg";
-import womenback from "../../assets/image/woman-back.svg";
-import lowerBack from "../../assets/image/lower-back.svg";
-import frontHand from "../../assets/image/front-hand.svg";
-import backHand from "../../assets/image/back-hand.svg";
-import shoulder from "../../assets/image/shoulder.svg";
-import chest from "../../assets/image/chest.svg";
-import butt from "../../assets/image/butt.svg";
-import trx from "../../assets/image/trx.svg";
-import machine from "../../assets/image/machine.svg";
-import weights from "../../assets/image/weights.svg";
-import pully from "../../assets/image/pully.svg";
-import bands from "../../assets/image/bands.svg";
-import dumbles from "../../assets/image/dumbles.svg";
-import HeroVideo from "../startTraining/HeroVideo";
-import ReactPlayer from "react-player";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import ReactPlayer from "react-player";
+import backHand from "../../assets/image/back-hand.svg";
+import back from "../../assets/image/back.svg";
+import bands from "../../assets/image/bands.svg";
+import butt from "../../assets/image/butt.svg";
+import chest from "../../assets/image/chest.svg";
+import dumbles from "../../assets/image/dumbles.svg";
+import frontHand from "../../assets/image/front-hand.svg";
+import lowerBack from "../../assets/image/lower-back.svg";
+import machine from "../../assets/image/machine.svg";
+import pully from "../../assets/image/pully.svg";
+import shoulder from "../../assets/image/shoulder.svg";
+import trx from "../../assets/image/trx.svg";
+import weights from "../../assets/image/weights.svg";
+import womenback from "../../assets/image/woman-back.svg";
 const CourseCart = ({ exerciseId, handleOpen }) => {
-  console.log("exerciseId:", exerciseId);
   const [exerciseData, setExerciseData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -85,14 +80,12 @@ const CourseCart = ({ exerciseId, handleOpen }) => {
       .then((response) => {
         if (response.status === 200) {
           setExerciseData(response.data.data);
-          console.log("first", response.data.data);
         }
       })
       .finally(() => setLoading(false));
   }, [exerciseId]);
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  console.log("user", user);
 
   let customIcon = null;
   if (exerciseData?.body_part === "גב") {
