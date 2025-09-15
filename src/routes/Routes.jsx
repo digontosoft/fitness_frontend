@@ -52,6 +52,7 @@ import TraineeUsers from "@/pages/admin/traineeusers/TraineeUsers";
 import WorkoutList from "@/pages/admin/workout-programme/WorkoutList";
 import FoodDairy from "@/pages/foodDairy/FoodDairy";
 import Complete from "@/pages/Home/mesurementForm/Complete";
+import MeasurementImage from "@/pages/Home/mesurementForm/MeasurementImage";
 import UpdateMesurement from "@/pages/Home/mesurementForm/UpdateMesurement";
 import MeasurementsWatch from "@/pages/measurements/MeasurementsWatch";
 import MeasurementTracking from "@/pages/measurementtracking/MeasurementTracking";
@@ -88,6 +89,10 @@ export const routes = createBrowserRouter([
           {
             path: "/measurements",
             element: <Measurements />,
+          },
+          {
+            path: "/measurements-pictures",
+            element: <MeasurementImage />,
           },
           {
             path: "/measurements-tracking",
