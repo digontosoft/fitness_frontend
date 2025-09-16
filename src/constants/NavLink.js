@@ -4,6 +4,7 @@ import {
   measurement,
   nutrationGuide,
   persomalNutration,
+  picture,
   recipe,
   training,
 } from "../assets/index";
@@ -52,9 +53,9 @@ export const traineeLink = [
   },
   {
     _id: 8,
-    title: "תמונות מדידה",
+    title: "תמונות תהליך",
     link: "/measurements-pictures",
-    icon: nutrationGuide,
+    icon: picture,
   },
 ];
 export const supperAdminLink = [

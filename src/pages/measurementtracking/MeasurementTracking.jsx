@@ -75,18 +75,36 @@ const MeasurementTracking = () => {
     fetchData();
   }, [id]);
 
-  const sortOrder = [
-    "מותן",
-    "חזה",
-    "ירך ימין",
-    "ירך שמאלה",
-    "זרוע ימין",
-    "זרוע שמאל",
-  ];
+  // const sortOrder = [
+  //   "מותן",
+  //   "חזה",
+  //   "ירך ימין",
+  //   "ירך שמאלה",
+  //   "זרוע ימין",
+  //   "זרוע שמאל",
+  // ];
 
-  const sortedData = [...data].sort(
-    (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
-  );
+  // const sortedData = [...data].sort(
+  //   (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
+  // );
+
+
+  const sortOrder = [
+  "מותן",
+  "חזה",
+  "ירך ימין",
+  "ירך שמאל",
+  "זרוע ימין",
+  "זרוע שמאל",
+];
+
+// sort the carts according to the order
+const sortedData = [...data].sort(
+  (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
+);
+
+
+  console.log('measurement data:', data);
 
   return (
     <div>
@@ -98,28 +116,28 @@ const MeasurementTracking = () => {
           className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-20 sm:pt-10 p-4"
           dir="rtl"
         >
-          {data.map((data) => {
+          {sortedData.map((cart) => {
             let customImage = null;
 
-            if (data.cartTitle === "זרוע ימין") {
+            if (cart.cartTitle === "זרוע ימין") {
               customImage = rightArm;
-            } else if (data.cartTitle === "זרוע שמאל") {
+            } else if (cart.cartTitle === "זרוע שמאל") {
               customImage = leftArm;
-            } else if (data.cartTitle === "ירך ימין") {
+            } else if (cart.cartTitle === "ירך ימין") {
               customImage = rightLeg;
-            } else if (data.cartTitle === "ישבן") {
+            } else if (cart.cartTitle === "ישבן") {
               customImage = butt;
-            } else if (data.cartTitle === "מותן") {
+            } else if (cart.cartTitle === "מותן") {
               customImage = userId.gender === "male" ? manWaist : womenHips;
-            } else if (data.cartTitle === "ירך שמאל") {
+            } else if (cart.cartTitle === "ירך שמאל") {
               customImage = leftLeg;
-            } else if (data.cartTitle === "חזה") {
+            } else if (cart.cartTitle === "חזה") {
               customImage = gender === "male" ? maleChest : chest;
             }
 
             return (
               <div
-                key={data._id}
+                key={cart._id}
                 dir="rtl"
                 className="border rounded-2xl p-4 flex flex-col space-y-4 bg-[#EEEEEE]"
               >
@@ -131,16 +149,16 @@ const MeasurementTracking = () => {
                       alt="custom-icon"
                       className="w-6 h-6"
                     />
-                  ) : data.icon ? (
-                    <img src={data.icon} alt="icon" className="w-6 h-6" />
+                  ) : cart.icon ? (
+                    <img src={cart.icon} alt="icon" className="w-6 h-6" />
                   ) : null}
-                  <h3 className="text-lg font-bold">{data.cartTitle}</h3>
+                  <h3 className="text-lg font-bold">{cart.cartTitle}</h3>
                 </div>
 
                 <div className="flex justify-center items-start"></div>
                 <div className="flex justify-center items-center">
                   <MeasurementSmallCart
-                    data={data}
+                     data={{ ...cart, item: [...cart.item].reverse() }}
                     setId={setId}
                     setOpen={setOpen}
                   />

@@ -1,5 +1,5 @@
-import moment from "moment";
 import bgCard from "@/assets/image/image.svg";
+import moment from "moment";
 const months = [
   "ינואר",
   "פברואר",
@@ -16,14 +16,14 @@ const months = [
 ];
 
 const MeasurementSmallCart = ({ data, setId, setOpen }) => {
+  // console.log('month data:', data);
   return (
     <div className="relative flex sm:flex-nowrap flex-wrap sm:justify-between justify-center items-center gap-4 px-2 md:px-10">
       <div className="absolute -top-[77px] -right-[145px] sm:-right-[95px]">
         <img src={bgCard} alt="" className="w-[180px] h-full" />
       </div>
-      {data.item.map(
+      {data?.item?.map(
         (item, index) => (
-          console.log("date:", item.date),
           (
             <div
               key={index}
