@@ -18,9 +18,9 @@ const RecurringCard = ({recurringTasks, setRecurringTasks}) => {
          <Button className="rounded-2xl">
            <FaArrowLeftLong />
          </Button>
-         <div className="flex items-center gap-4 w-full overflow-hidden">
+         <div className="flex items-center gap-4 w-full overflow-hidden" >
            {/* Text Section */}
-           <div className="flex flex-col justify-center w-full max-w-[calc(100%-104px)]">
+           <div className="flex flex-col justify-center w-full max-w-[calc(100%-104px)]" dir='rtl'>
              <h1 className="text-sm font-bold text-[#0A2533] truncate text-center">
                {recurringTasks?.title}
              </h1>

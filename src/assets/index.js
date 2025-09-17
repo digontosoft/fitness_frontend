@@ -61,6 +61,12 @@ import Calories from "./image/workoutList/Calories.png";
 import TimeCircle from "./image/workoutList/TimeCircle.png";
 import workoutBg from "./image/workoutList/workoutListBg.png";
 // import whiteBiceps from "./image/whiteBiceps.png";
+import foodDiaryTask from "@/assets/image/food-diary-task.svg";
+import kitchenCourse from "@/assets/image/kitchen-course.svg";
+import measurementTask from "@/assets/image/measurement-task.svg";
+import suppermarketCourse from "@/assets/image/suppermarket-course.svg";
+import trainingandexercisebanner from "@/assets/image/trainingandexercisebanner.svg";
+import workoutTask from "@/assets/image/workout-task.svg";
 import course from "./image/course.svg";
 import exercise from "./image/exercise.svg";
 import foodDairy from "./image/food-dairy.png";
@@ -85,12 +91,12 @@ export {
   bodyBuilder3, Calories, cartFive, cartFour, cartOne, cartSeven, cartSix, cartThree, cartTwo, course, Course, courseBg, courseFour, courseOne, courseThree, courseTwo, Ellipse, Ellipse88,
   Ellipse89, Ellipse92,
   Ellipse93, EllipseE8, excersizeBg, exercise, facebookIcon, female,
-  female2, foodDairy, Gentelmen, googleIcon, icon,
-  iconOne, iconThree, iconTwo, image, instaIcon, leftElips, LogOut, man, mcartBg, measurement, Measurement, measurementRope, men2, nutrationGuide, NutrationGuide, NutrationPdf, nutritionBg, persomalNutration, personalNutrationBg, picture, pixelCartImg, Ractanglebg, ReceipeUser, recipe, RecipeBookBg,
+  female2, foodDairy, foodDiaryTask, Gentelmen, googleIcon, icon,
+  iconOne, iconThree, iconTwo, image, instaIcon, kitchenCourse, leftElips, LogOut, man, mcartBg, measurement, Measurement, measurementRope, measurementTask, men2, nutrationGuide, NutrationGuide, NutrationPdf, nutritionBg, persomalNutration, personalNutrationBg, picture, pixelCartImg, Ractanglebg, ReceipeUser, recipe, RecipeBookBg,
   RecipeBookCart, redLogo, Running, sideNavBg, supermarket,
-  supermarketBg, tiktok, TimeCircle, training, Trainings, upload, Vector, vector2,
+  supermarketBg, suppermarketCourse, tiktok, TimeCircle, training, trainingandexercisebanner, Trainings, upload, Vector, vector2,
   vector3, whiteLogo, women1,
   women2, workoutBg,
-  workoutCartBg
+  workoutCartBg, workoutTask
 };
 

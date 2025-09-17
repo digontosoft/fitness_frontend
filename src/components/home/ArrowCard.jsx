@@ -1,17 +1,15 @@
+import manBody from "@/assets/image/body.png";
+import { foodDiaryTask, measurementTask, workoutTask } from "@/assets/index";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button } from "../ui/button";
-import burger from "@/assets/image/hamburger.png";
-import measurement from "@/assets/image/measuring-tape.png";
-import dumble from "@/assets/image/dumble.png";
-import manBody from "@/assets/image/body.png";
 const ArrowCard = ({ tilte, tilte1, taskType, onClick }) => {
   let taskImage = null;
   if (taskType === "workout") {
-    taskImage = dumble;
+    taskImage = workoutTask;
   } else if (taskType === "measurement") {
-    taskImage = measurement;
+    taskImage = measurementTask;
   } else if (taskType === "food_dairy") {
-    taskImage = burger;
+    taskImage = foodDiaryTask;
   } else {
     taskImage = manBody;
   }
@@ -25,7 +23,7 @@ const ArrowCard = ({ tilte, tilte1, taskType, onClick }) => {
       </Button>
       <div className="flex items-center gap-4 w-full overflow-hidden">
         {/* Text Section */}
-        <div className="flex flex-col justify-center w-full max-w-[calc(100%-104px)]">
+        <div className="flex flex-col justify-center w-full max-w-[calc(100%-104px)]" dir="rtl">
           <h1 className="text-sm font-bold text-[#0A2533] truncate text-center">
             {tilte}
           </h1>
