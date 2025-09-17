@@ -1,17 +1,17 @@
-import FInput from "@/components/admin/components/ui/FInput";
-import { Button } from "@/components/ui/button";
+import { base_url } from "@/api/baseUrl";
 import { Ellipse92, Ellipse93, EllipseE8 } from "@/assets/index";
 import FTForm from "@/components/admin/components/FTForm/FTForm";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { questionnaries } from "@/constants/ValidationSchema";
+import FInput from "@/components/admin/components/ui/FInput";
 import FRadioInput from "@/components/admin/components/ui/FRadioIntput";
-import { toast } from "sonner";
-import axios from "axios";
-import { base_url } from "@/api/baseUrl";
-import { verifyToken } from "@/constants/verifyToken";
-import { useEffect, useState } from "react";
 import Loading from "@/components/common/Loading";
+import { Button } from "@/components/ui/button";
+import { questionnaries } from "@/constants/ValidationSchema";
+import { verifyToken } from "@/constants/verifyToken";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 const MeasurementWomen = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -504,7 +504,7 @@ const MeasurementWomen = () => {
                     dir="rtl"
                   />
                   <FInput
-                    label="מהם המאכלים שלא תיגע בהם?*"
+                    label="מאכלים שלא תיגע בהם? (בין אם צמחוני/טבעוני/דברים שלא אוהב)"
                     placeholder="התשובה שלך"
                     name="disliked_foods"
                     dir="rtl"
@@ -756,7 +756,7 @@ const MeasurementWomen = () => {
                     dir="rtl"
                   />
                   <FInput
-                    label="מהם המאכלים שלא תיגעי בהם?*"
+                    label="מאכלים שלא תיגעי בהם? (בין אם צמחונית/טבעונית/דברים שלא אוהבת)"
                     placeholder="התשובה שלך"
                     name="disliked_foods"
                     dir="rtl"

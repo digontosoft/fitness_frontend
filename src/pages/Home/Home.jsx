@@ -36,27 +36,38 @@ const Home = () => {
       }
     };
 
+ 
+useEffect(() => {
+  const fetchMeasurement = async () => {
+    try {
+      const response = await axios.get(`${base_url}/measurement/${Id}`);
+      const user_response = await axios.get(`${base_url}/getUser/${Id}`);
 
+      if (response.status === 200) {
+        const allMeasurements = response.data.data;
 
+        // সর্বশেষ তারিখ বের করো
+        allMeasurements.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  useEffect(() => {
-    const fetchMeasurement = async () => {
-      try {
-        const response = await axios.get(`${base_url}/measurement/${Id}`);
-        const user_response = await axios.get(`${base_url}/getUser/${Id}`);
-        if (response.status === 200) {
-          setMesurement(response.data.data[0]);
-          setUserInfo(user_response.data.data);
-        }
-      } catch (error) {
-        console.error("Measurement data not found", error);
+        // সবচেয়ে নতুন ডাটা
+        const latestData = allMeasurements[0];
+
+        setMesurement(latestData);
+        setUserInfo(user_response.data.data);
       }
-    };
-
-    if (Id) {
-      fetchMeasurement();
+    } catch (error) {
+      console.error("Measurement data not found", error);
     }
-  }, [Id]);
+  };
+
+  if (Id) {
+    fetchMeasurement();
+  }
+}, [Id]);
+
+
+
+
 
   const handleOpenModal = (task = null) => {
     setSelectedTask(task);

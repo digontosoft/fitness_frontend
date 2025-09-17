@@ -439,39 +439,18 @@ const MeasurementUpdate = () => {
     },
   });
 
-  // useEffect(() => {
-  //   // if (getMesurement) {
-  //   //   const defaultValues = {
-  //   //     mode: "update",
-  //   //     date: getMesurement.date?.split('T')[0] || "",
-  //   //     thighl: getMesurement.thighl || "",
-  //   //     thighr: getMesurement.thighr || "",
-  //   //     armr: getMesurement.armr || "",
-  //   //     arml: getMesurement.arml || "",
-  //   //     chest: getMesurement.chest || "",
-  //   //     butt: getMesurement.butt || "",
-  //   //     waist: getMesurement.waist || "",
-  //   //     photo1: getMesurement.photo1 || "",
-  //   //     photo2: getMesurement.photo2 || "",
-  //   //     photo3: getMesurement.photo3 || "",
-  //   //     photo4: getMesurement.photo4 || "",
-  //   //   };
-  //   //   reset(defaultValues);
-  //   // }
-  // }, [getMesurement, reset]);
-
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
         `${base_url}/measurement`,
         data,
-      //   {
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "application/json",
-      //   },
-      // }
+        {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
       );
 
       if (response.status === 201) {
@@ -717,7 +696,7 @@ const MeasurementUpdate = () => {
             className=" text-white px-4 md:px-8 py-2 rounded-full mb-5 sm:mb-0"
             disabled={isLoading}
           >
-           {isLoading ? <Loader className="w-6 h-6 animate-spin text-white" /> : " שמירת מדדים"}
+           {isLoading ? <span className="flex gap-2"><Loader className="w-6 h-6 animate-spin text-white" />  שמירת מדדים</span> : " שמירת מדדים"}
           </Button>
         </div>
       </form>
