@@ -1,12 +1,13 @@
-import { female, man, bodyBuilder } from "../../assets/index";
-import { Button } from "@/components/ui/button";
-import { useContext, useState } from "react";
-import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+import Loading from "@/components/common/Loading";
+import { Button } from "@/components/ui/button";
+import { UserInfoContext } from "@/context";
+import axios from "axios";
+import { Loader } from "lucide-react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import Loading from "@/components/common/Loading";
-import { UserInfoContext } from "@/context";
+import { bodyBuilder, female, man } from "../../assets/index";
 
 const GenderSelection = () => {
   const [gender, setGender] = useState("");
@@ -99,7 +100,7 @@ const GenderSelection = () => {
               className=" bg-[#141414] hover:bg-gray-700 transition duration-300 rounded-full text-white px-6  flex justify-center items-center border-[2px] border-slate-50 md:border-none"
               onClick={handleNextStep}
             >
-              <p>המשך לשלב הבא</p>
+             {loading ? <><Loader className="animate-spin h-6 w-6 flex items-center gap-2" /> <p>המשך לשלב הבא</p></> :  <p>המשך לשלב הבא</p>}
             </Button>
           </div>
         </div>

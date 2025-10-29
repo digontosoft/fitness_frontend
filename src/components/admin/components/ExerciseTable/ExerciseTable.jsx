@@ -1,14 +1,15 @@
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, Edit, Trash } from "lucide-react";
+import { base_url } from "@/api/baseUrl";
+import { deleteExercise } from "@/api/deleteData";
+import Loading from "@/components/common/Loading";
+import PaginationComp from "@/components/pagination";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -17,23 +18,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import axios from "axios";
-import { base_url } from "@/api/baseUrl";
+import { ArrowUpDown, Edit, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
+import Select from "react-dropdown-select";
+import { GoSearch } from "react-icons/go";
 import { Link } from "react-router-dom";
 import ExerciseDetails from "./ExerciseDetails";
-import { deleteExercise } from "@/api/deleteData";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import Select from "react-dropdown-select";
-import PaginationComp from "@/components/pagination";
-import { GoSearch } from "react-icons/go";
-import Loading from "@/components/common/Loading";
 
 const bodyPartOptions = [
   { label: "כל חלקי הגוף", value: "" },
@@ -216,25 +215,41 @@ export function ExerciseTable() {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  useEffect(() => {
-    const fetchExercise = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${base_url}/exercise?search=${searchValue}&body_part=${body_part}&equipment=${equipment}&page=${page}&limit=10`
-        );
-        if (response.status === 200) {
-          setExercise(response.data.data);
-          setTotalPages(response.data.pagination.totalPages);
-          setPage(response.data.pagination.currentPage);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching exercises:", error);
+  const fetchExercise = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${base_url}/exercise?search=${searchValue}&body_part=${body_part}&equipment=${equipment}&page=${page}&limit=10`
+      );
+      if (response.status === 200) {
+        setExercise(response.data.data);
+        setTotalPages(response.data.pagination.totalPages);
+        setPage(response.data.pagination.currentPage);
+        setLoading(false);
       }
-    };
-    fetchExercise();
-  }, [searchValue, body_part, equipment, page, totalPages]);
+    } catch (error) {
+      console.error("Error fetching exercises:", error);
+    }
+  };
+  // Debounce effect
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      fetchExercise();
+    }, 500); // 0.5s delay after typing stops
+
+    return () => clearTimeout(handler);
+  }, [searchValue, body_part, equipment, page]); 
+
+
+
+//   useEffect(() => {
+//   const delayDebounce = setTimeout(() => {
+//     fetchExercise();
+//   }, 500); // 0.5s delay after typing stops
+
+//   return () => clearTimeout(delayDebounce);
+// }, [searchValue, body_part, equipment, page]);
+
 
   const table = useReactTable({
     data: exercise,
@@ -263,8 +278,7 @@ export function ExerciseTable() {
             >
               <input
                 type="search"
-                name=""
-                id=""
+                value={searchValue}
                 placeholder="סנן לפי שם"
                 onChange={(e) => setSearchValue(e.target.value)}
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-40 h-12"
