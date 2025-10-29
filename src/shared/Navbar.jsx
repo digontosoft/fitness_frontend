@@ -19,6 +19,7 @@ const Navbar = () => {
   const userData = JSON.parse(localStorage.getItem("userInfo"));
   const userType = userData?.userType;
   const menuRef = useRef(null);
+  const buttonRef = useRef(null);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -52,26 +53,54 @@ const Navbar = () => {
   );
 
   // 🔹 Close menu if user clicks outside of it
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (menuRef.current && !menuRef.current.contains(event.target)) {
+  //       setIsOpen(false);
+  //     }
+  //   };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      document.addEventListener("touchstart", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    }
+  //   if (isOpen) {
+  //     document.addEventListener("mousedown", handleClickOutside);
+  //     document.addEventListener("touchstart", handleClickOutside);
+  //   } else {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //     document.removeEventListener("touchstart", handleClickOutside);
+  //   }
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, [isOpen]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //     document.removeEventListener("touchstart", handleClickOutside);
+  //   };
+  // }, [isOpen]);
+
+useEffect(() => {
+    const handleClickOutside = (event) => {
+      // 👇 নতুন শর্ত যোগ করা হলো: যদি ক্লিক মেনুর বাইরে এবং বাটনে না হয়
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target) // টগল বাটনকে বাইরে ক্লিক থেকে বাদ দেওয়া হলো
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isOpen]);
+
 
   return (
     <nav className="bg-transparent md:bg-white shadow-md ">
@@ -210,6 +239,7 @@ const Navbar = () => {
         {/* Hamburger Menu Button */}
         <div className="md:hidden">
           <Button
+          ref={buttonRef}
             variant="ghost"
             size="icon"
             onClick={toggleMenu}

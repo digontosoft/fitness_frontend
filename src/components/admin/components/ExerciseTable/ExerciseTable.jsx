@@ -240,7 +240,7 @@ export function ExerciseTable() {
     return () => clearTimeout(handler);
   }, [searchValue, body_part, equipment, page]); 
 
-
+console.log('esercise:', exercise)
 
 //   useEffect(() => {
 //   const delayDebounce = setTimeout(() => {
