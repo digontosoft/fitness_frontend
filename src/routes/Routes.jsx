@@ -11,7 +11,6 @@ import ManageExercise from "@/pages/admin/users/manageexercise/ManageExercise";
 import Users from "@/pages/admin/users/Users";
 import WorkoutProgramme from "@/pages/admin/workout-programme/WorkoutProgramme";
 import Course from "@/pages/courseList/Course";
-import CourseList from "@/pages/courseList/CourseList";
 import GenderSelection from "@/pages/genderSelection/GenderSelection";
 import Home from "@/pages/Home/Home";
 import LoginPage from "@/pages/Login/LoginPage";
@@ -37,6 +36,7 @@ import CustomizeWorkout from "@/components/courseList/CustomizeWorkout";
 import EditExercise from "@/components/courseList/EditExercise";
 import MesurementPdf from "@/components/measurements/measurementWatch/MesurementPdf";
 import NotFound from "@/components/notFound/NotFound";
+import TraineeExerciseLibrary from "@/components/traineeexerciselibrary/TraineeExerciseLibrary";
 import AddCustomTask from "@/pages/admin/addcustomtask/AddCustomTask";
 import AssignTraining from "@/pages/admin/assigntraining/AssignTraining";
 import AssignTrainingList from "@/pages/admin/assigntraining/AssignTrainingList";
@@ -136,7 +136,7 @@ export const routes = createBrowserRouter([
           },
           {
             path: "/exercise-library",
-            element: <CourseList />,
+            element: <TraineeExerciseLibrary />,
           },
           {
             path: "/startTraining",

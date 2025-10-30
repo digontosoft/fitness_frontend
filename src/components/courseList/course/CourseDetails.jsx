@@ -1,4 +1,3 @@
-import React from "react";
 
 // const CourseDetails = () => {
 //   return (
@@ -7,6 +6,8 @@ import React from "react";
 // }
 
 // export default CourseDetails
+import { base_url } from "@/api/baseUrl";
+import HeroVideo from "@/components/startTraining/HeroVideo";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,29 +15,25 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle
 } from "@/components/ui/dialog";
-import { Eye } from "lucide-react";
-import { useEffect, useState } from "react";
 import axios from "axios";
-import HeroVideo from "@/components/startTraining/HeroVideo";
-import { base_url } from "@/api/baseUrl";
+import { useEffect, useState } from "react";
 
-import back from "@/assets/image/back.svg";
-import womenback from "@/assets/image/woman-back.svg";
-import lowerBack from "@/assets/image/lower-back.svg";
-import frontHand from "@/assets/image/front-hand.svg";
 import backHand from "@/assets/image/back-hand.svg";
-import shoulder from "@/assets/image/shoulder.svg";
-import chest from "@/assets/image/chest.svg";
-import butt from "@/assets/image/butt.svg";
-import trx from "@/assets/image/trx.svg";
-import machine from "@/assets/image/machine.svg";
-import weights from "@/assets/image/weights.svg";
-import pully from "@/assets/image/pully.svg";
+import back from "@/assets/image/back.svg";
 import bands from "@/assets/image/bands.svg";
+import butt from "@/assets/image/butt.svg";
+import chest from "@/assets/image/chest.svg";
 import dumbles from "@/assets/image/dumbles.svg";
+import frontHand from "@/assets/image/front-hand.svg";
+import lowerBack from "@/assets/image/lower-back.svg";
+import machine from "@/assets/image/machine.svg";
+import pully from "@/assets/image/pully.svg";
+import shoulder from "@/assets/image/shoulder.svg";
+import trx from "@/assets/image/trx.svg";
+import weights from "@/assets/image/weights.svg";
+import womenback from "@/assets/image/woman-back.svg";
 
 export default function CourseDetails({ open, setOpen, exerciseId }) {
   const [exerciseData, setExerciseData] = useState(null);
@@ -78,7 +75,7 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
   let customEquipment = null;
   if (exerciseData?.equipment === "TRX") {
     customEquipment = trx;
-  } else if (exerciseData?.equipment === "מכונות") {
+  } else if (exerciseData?.equipment === "מכונות" || exerciseData?.equipment === "מכונה") {
     customEquipment = machine;
   } else if (exerciseData?.equipment === "משקולות") {
     customEquipment = dumbles;

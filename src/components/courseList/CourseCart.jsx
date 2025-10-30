@@ -49,9 +49,6 @@
 
 // export default CourseCart;
 
-import { base_url } from "@/api/baseUrl";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import backHand from "../../assets/image/back-hand.svg";
 import back from "../../assets/image/back.svg";
@@ -67,66 +64,50 @@ import shoulder from "../../assets/image/shoulder.svg";
 import trx from "../../assets/image/trx.svg";
 import weights from "../../assets/image/weights.svg";
 import womenback from "../../assets/image/woman-back.svg";
-const CourseCart = ({ exerciseId, handleOpen }) => {
-  const [exerciseData, setExerciseData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!exerciseId) return;
-
-    setLoading(true);
-    axios
-      .get(`${base_url}/exercise/${exerciseId}`)
-      .then((response) => {
-        if (response.status === 200) {
-          setExerciseData(response.data.data);
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [exerciseId]);
+const CourseCart = ({ exercise, handleOpen }) => {
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
   let customIcon = null;
-  if (exerciseData?.body_part === "גב") {
+  if (exercise?.body_part === "גב") {
     customIcon = user?.gernder === "male" ? back : womenback;
-  } else if (exerciseData?.body_part === "יד קדמית") {
+  } else if (exercise?.body_part === "יד קדמית") {
     customIcon = frontHand;
-  } else if (exerciseData?.body_part === "יד אחורית") {
+  } else if (exercise?.body_part === "יד אחורית") {
     customIcon = backHand;
-  } else if (exerciseData?.body_part === "כתפיים") {
+  } else if (exercise?.body_part === "כתפיים") {
     customIcon = shoulder;
-  } else if (exerciseData?.body_part === "חזה") {
+  } else if (exercise?.body_part === "חזה") {
     customIcon = chest;
-  } else if (exerciseData?.body_part === "ישבן") {
+  } else if (exercise?.body_part === "ישבן") {
     customIcon = butt;
-  } else if (exerciseData?.body_part === "גב תחתון") {
+  } else if (exercise?.body_part === "גב תחתון") {
     customIcon = lowerBack;
   }
   let customEquipment = null;
-  if (exerciseData?.equipment === "TRX") {
+  if (exercise?.equipment === "TRX") {
     customEquipment = trx;
-  } else if (exerciseData?.equipment === "מכונות") {
+  } else if (exercise?.equipment === "מכונות" || exercise?.equipment === "מכונה") {
     customEquipment = machine;
-  } else if (exerciseData?.equipment === "משקולות") {
+  } else if (exercise?.equipment === "משקולות") {
     customEquipment = dumbles;
-  } else if (exerciseData?.equipment === "פולי") {
+  } else if (exercise?.equipment === "פולי") {
     customEquipment = pully;
-  } else if (exerciseData?.equipment === "גומיות") {
+  } else if (exercise?.equipment === "גומיות") {
     customEquipment = bands;
-  } else if (exerciseData?.equipment === "מוטות") {
+  } else if (exercise?.equipment === "מוטות") {
     customEquipment = weights;
   }
 
   return (
     <div
       className="w-[310px] sm:w-56 min-h-80 h-auto shadow-xl rounded-2xl p-3 mt-8 cursor-pointer"
-      onClick={() => handleOpen(exerciseData?._id)}
+      onClick={() => handleOpen(exercise?._id)}
     >
-      {exerciseData?.video_url && (
+      {exercise?.video_url && (
         <div className="overflow-hidden rounded-2xl">
           <ReactPlayer
-            url={exerciseData?.video_url}
+            url={exercise?.video_url}
             height="50%"
             width="100%"
             controls
@@ -135,15 +116,15 @@ const CourseCart = ({ exerciseId, handleOpen }) => {
       )}
       <div className="px-6 py-4 space-y-4">
         <p className="text-[#0A2533]  text-sm font-bold text-end">
-          {exerciseData?.name}
+          {exercise?.name}
         </p>
         <div className="flex gap-2 items-center flex-row-reverse">
           <img src={customIcon} alt="" className="w-6 h-6" />
-          <p>{exerciseData?.body_part}</p>
+          <p>{exercise?.body_part}</p>
         </div>
         <div className="flex gap-2  items-center flex-row-reverse">
           <img src={customEquipment} alt="" className="w-6 h-6" />
-          <p>{exerciseData?.equipment}</p>
+          <p>{exercise?.equipment}</p>
         </div>
       </div>
     </div>
