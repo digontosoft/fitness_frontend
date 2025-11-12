@@ -1,14 +1,5 @@
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, Edit, Trash } from "lucide-react";
+import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -17,12 +8,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import axios from "axios";
-import { base_url } from "@/api/baseUrl";
+import { ArrowUpDown, Edit, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 // import ExerciseDetails from "./ExerciseDetails";
 import { deleteTraining } from "@/api/deleteData";
+import Loading from "@/components/common/Loading";
+import PaginationComp from "@/components/pagination";
 import {
   Dialog,
   DialogContent,
@@ -30,10 +31,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import TrainingDetails from "./TrainingDetails";
-import PaginationComp from "@/components/pagination";
 import { GoSearch } from "react-icons/go";
-import Loading from "@/components/common/Loading";
+import TrainingDetails from "./TrainingDetails";
 
 export function TrainingList() {
   const [sorting, setSorting] = useState([]);
@@ -124,6 +123,7 @@ export function TrainingList() {
   ];
 
   const handleOpenDeleteModal = (trainingId) => {
+    console.log('training id:', trainingId)
     setSelectedTraining(trainingId);
     setDeleteModalOpen(true);
   };
