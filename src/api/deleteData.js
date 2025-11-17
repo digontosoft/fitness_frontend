@@ -58,6 +58,20 @@ export const deleteWorkout = async (workoutId) => {
   }
 };
 
+export const deleteUserTraining = async (trainingId) => {
+  try {
+    const response = await axios.delete(
+      `${base_url}/user-training/${trainingId}`
+    );
+    if (response.status === 200) {
+      toast.success("Training deleted successfully.");
+    }
+  } catch (error) {
+    console.error("Error updating status:", error);
+    toast.error("Failed to delete training.");
+    throw error;
+  }
+};
 export const deleteTraining = async (trainingId) => {
   try {
     const response = await axios.delete(
