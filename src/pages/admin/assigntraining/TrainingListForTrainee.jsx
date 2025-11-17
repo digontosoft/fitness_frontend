@@ -22,7 +22,7 @@ import { ArrowUpDown, Edit, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import ExerciseDetails from "./ExerciseDetails";
-import { deleteTraining } from "@/api/deleteData";
+import { deleteUserTraining } from "@/api/deleteData";
 import PaginationComp from "@/components/pagination";
 import {
   Dialog,
@@ -152,7 +152,7 @@ export function TrainingListForTrainee({ userId }) {
   const handleDelete = async () => {
     if (!selectedTraining) return;
     try {
-      await deleteTraining(selectedTraining);
+      await deleteUserTraining(selectedTraining);
       setTraining((prevTraining) =>
         prevTraining.filter((e) => e._id !== selectedTraining)
       );

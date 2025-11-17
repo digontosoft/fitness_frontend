@@ -1,7 +1,7 @@
+import Title from "@/components/measurements/Tilte";
 import Container from "@/shared/Container";
 import { useParams } from "react-router-dom";
 import { TrainingListForTrainee } from "./TrainingListForTrainee";
-import Title from "@/components/measurements/Tilte";
 
 const AssignTrainingList = () => {
   const { id } = useParams();
