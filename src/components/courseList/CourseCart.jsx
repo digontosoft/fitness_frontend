@@ -74,7 +74,7 @@ const CourseCart = ({ exercise, handleOpen }) => {
 
   let customIcon = null;
   if (exercise?.body_part === "גב") {
-    customIcon = user?.gernder === "male" ? back : womenback;
+    customIcon = user?.gender === "male" ? back : womenback;
   } else if (exercise?.body_part === "יד קדמית") {
     customIcon = frontHand;
   } else if (exercise?.body_part === "יד אחורית") {
@@ -90,7 +90,7 @@ const CourseCart = ({ exercise, handleOpen }) => {
   }else if (exercise?.body_part === "רגליים") {
     customIcon = leg;
   }else if (exercise?.body_part === "בטן") {
-    customIcon = user.gernder === "male" ? menbelly : womenbelly;
+    customIcon = user.gender === "male" ? menbelly : womenbelly;
   }
 
   let customEquipment = null;
