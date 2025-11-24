@@ -1,11 +1,4 @@
 
-// const CourseDetails = () => {
-//   return (
-//     <div>CourseDetails</div>
-//   )
-// }
-
-// export default CourseDetails
 import { base_url } from "@/api/baseUrl";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 import { Button } from "@/components/ui/button";
@@ -27,13 +20,17 @@ import butt from "@/assets/image/butt.svg";
 import chest from "@/assets/image/chest.svg";
 import dumbles from "@/assets/image/dumbles.svg";
 import frontHand from "@/assets/image/front-hand.svg";
+import leg from "@/assets/image/leg.svg";
 import lowerBack from "@/assets/image/lower-back.svg";
 import machine from "@/assets/image/machine.svg";
+import menbelly from "@/assets/image/man-belly.svg";
+import noequipment from "@/assets/image/no-equipment.svg";
 import pully from "@/assets/image/pully.svg";
 import shoulder from "@/assets/image/shoulder.svg";
 import trx from "@/assets/image/trx.svg";
 import weights from "@/assets/image/weights.svg";
 import womenback from "@/assets/image/woman-back.svg";
+import womenbelly from "@/assets/image/woman-belly.svg";
 
 export default function CourseDetails({ open, setOpen, exerciseId }) {
   const [exerciseData, setExerciseData] = useState(null);
@@ -58,7 +55,7 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
 
   let customIcon = null;
   if (exerciseData?.body_part === "גב") {
-    customIcon = user?.gernder === "male" ? back : womenback;
+    customIcon = user?.gender === "male" ? back : womenback;
   } else if (exerciseData?.body_part === "יד קדמית") {
     customIcon = frontHand;
   } else if (exerciseData?.body_part === "יד אחורית") {
@@ -71,7 +68,11 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
     customIcon = butt;
   } else if (exerciseData?.body_part === "גב תחתון") {
     customIcon = lowerBack;
-  }
+  } else if (exerciseData?.body_part === "רגליים") {
+      customIcon = leg;
+    }else if (exerciseData?.body_part === "בטן") {
+      customIcon = user.gender === "male" ? menbelly : womenbelly;
+    }
   let customEquipment = null;
   if (exerciseData?.equipment === "TRX") {
     customEquipment = trx;
@@ -85,7 +86,9 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
     customEquipment = bands;
   } else if (exerciseData?.equipment === "מוטות") {
     customEquipment = weights;
-  }
+  }else if (exerciseData?.equipment === "ללא ציוד") {
+      customEquipment = noequipment;
+    }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
