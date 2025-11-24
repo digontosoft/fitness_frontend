@@ -44,4 +44,5 @@ export const questionnaries = z.object({
   sleep_hours: z.string().optional(),
   daily_meds: z.string({ required_error: "Daily eating routine is required" }),
   additional_notes: z.string().optional(),
+  how_many_times_want_training_in_week: z.string().optional(),
 });

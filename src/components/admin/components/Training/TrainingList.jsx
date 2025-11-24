@@ -46,6 +46,27 @@ export function TrainingList() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${base_url}/training?page=${page}&limit=10&search=${search}`
+        );
+        if (response.status === 200) {
+          setTraining(response.data.data);
+          setTotalPages(response.data.pagination.pages);
+          setPage(response.data.pagination.page);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
+    fetchData();
+  }, [page, search]);
   const columns = [
     {
       accessorKey: "name",
@@ -142,30 +163,10 @@ export function TrainingList() {
     }
   };
 
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${base_url}/training?page=${page}&&limit=10&&search=${search}`
-        );
-        if (response.status === 200) {
-          setTraining(response.data.data);
-          setTotalPages(response.data.pagination.pages);
-          setPage(response.data.pagination.page);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching exercises:", error);
-      }
-    };
-    fetchData();
-  }, [page, search]);
+  
 
   const table = useReactTable({
-    data: training,
+    data: training || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
