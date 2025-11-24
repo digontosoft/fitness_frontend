@@ -57,13 +57,17 @@ import butt from "../../assets/image/butt.svg";
 import chest from "../../assets/image/chest.svg";
 import dumbles from "../../assets/image/dumbles.svg";
 import frontHand from "../../assets/image/front-hand.svg";
+import leg from "../../assets/image/leg.svg";
 import lowerBack from "../../assets/image/lower-back.svg";
 import machine from "../../assets/image/machine.svg";
+import menbelly from "../../assets/image/man-belly.svg";
+import noequipment from "../../assets/image/no-equipment.svg";
 import pully from "../../assets/image/pully.svg";
 import shoulder from "../../assets/image/shoulder.svg";
 import trx from "../../assets/image/trx.svg";
 import weights from "../../assets/image/weights.svg";
 import womenback from "../../assets/image/woman-back.svg";
+import womenbelly from "../../assets/image/woman-belly.svg";
 const CourseCart = ({ exercise, handleOpen }) => {
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -83,7 +87,12 @@ const CourseCart = ({ exercise, handleOpen }) => {
     customIcon = butt;
   } else if (exercise?.body_part === "גב תחתון") {
     customIcon = lowerBack;
+  }else if (exercise?.body_part === "רגליים") {
+    customIcon = leg;
+  }else if (exercise?.body_part === "בטן") {
+    customIcon = user.gernder === "male" ? menbelly : womenbelly;
   }
+
   let customEquipment = null;
   if (exercise?.equipment === "TRX") {
     customEquipment = trx;
@@ -97,6 +106,8 @@ const CourseCart = ({ exercise, handleOpen }) => {
     customEquipment = bands;
   } else if (exercise?.equipment === "מוטות") {
     customEquipment = weights;
+  }else if (exercise?.equipment === "ללא ציוד") {
+    customEquipment = noequipment;
   }
 
   return (
