@@ -967,11 +967,12 @@ const isFormValid = exercisesForm?.every(
               className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
               disabled={
                 disableUpdateButton ||
-                !isFormValid ||
+                !isFormValid 
+                ||
                 (exercisesForm.length === 0 && !newExerciseData) // Disable if no exercises at all
               }
             >
-              עדכן תוכנית אימון
+              עדכן תוכנית אימון                               
             </Button>
           </div>
         </form>
