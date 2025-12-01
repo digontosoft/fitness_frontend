@@ -1,26 +1,29 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-import rightArmIcon from "@/assets/image/right-arm.svg";
-import leftArmIcon from "@/assets/image/left-arm.svg";
-import rightLeg from "@/assets/image/right-leg.svg";
-import leftLeg from "@/assets/image/left-leg.svg";
-import thigh from "@/assets/image/thigh.svg";
 import butt from "@/assets/image/butt.svg";
 import cardBg from "@/assets/image/image.svg";
+import leftArmIcon from "@/assets/image/left-arm.svg";
+import leftLeg from "@/assets/image/left-leg.svg";
+import rightArmIcon from "@/assets/image/right-arm.svg";
+import rightLeg from "@/assets/image/right-leg.svg";
+import thigh from "@/assets/image/thigh.svg";
 const TraineeLeftCard = ({ userId }) => {
-  const [measurementData, setMesurementData] = useState({});
+  const [measurementData, setMesurementData] = useState([]);
   const [user, setUser] = useState({});
 
   useEffect(() => {
     if (!userId) return;
-
     const fetchMeasurement = async () => {
       try {
         const res = await axios.get(`${base_url}/measurement/${userId}`);
         if (res.status === 200) {
-          setMesurementData(res.data.data);
+          const allMeasurements = res.data.data;
+        allMeasurements.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const latestData = allMeasurements[0];
+          setMesurementData(latestData);
         }
       } catch (error) {
         console.error("measurement data not Fatched", error);
@@ -28,6 +31,8 @@ const TraineeLeftCard = ({ userId }) => {
     };
     fetchMeasurement();
   }, [userId]);
+
+  console.log('measurement data:', measurementData);
 
   useEffect(() => {
     if (!userId) return;

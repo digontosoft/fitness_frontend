@@ -46,10 +46,8 @@ useEffect(() => {
       if (response.status === 200) {
         const allMeasurements = response.data.data;
 
-        // সর্বশেষ তারিখ বের করো
         allMeasurements.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        // সবচেয়ে নতুন ডাটা
         const latestData = allMeasurements[0];
 
         setMesurement(latestData);
