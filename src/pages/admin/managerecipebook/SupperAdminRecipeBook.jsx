@@ -79,7 +79,7 @@ const SupperAdminRecipeBook = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {recipeBook?.map((book) => (
+          {recipeBook?.slice().reverse().map((book) => (
             <TableRow key={book._id}>
               <TableCell className="font-medium">{book.title}</TableCell>
               <TableCell className="max-w-xs truncate">
