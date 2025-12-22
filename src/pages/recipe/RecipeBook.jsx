@@ -24,26 +24,27 @@ const RecipeBook = () => {
   return (
     <div>
       {user?.userType === "recipe"
-        ? recipeBook
-            .filter((item) => item.type === "trainer")
-            .map((recipe) => (
-              <div
-                key={recipe?._id}
-                className="flex flex-col items-center justify-center w-full"
-              >
-                <ParsonalPdf data={recipe} isBaseUrl={true} />
-              </div>
-            ))
-        : recipeBook
-            .filter((item) => item.type === "normalUser")
-            .map((recipe) => (
-              <div
-                key={recipe?._id}
-                className="flex flex-col items-center justify-center max-w-5xl mx-auto"
-              >
-                <ParsonalPdf data={recipe} />
-              </div>
-            ))}
+  ? recipeBook
+      .filter((item) => item.type === "normalUser") // normalUser দেখানো
+      .map((recipe) => (
+        <div
+          key={recipe?._id}
+          className="flex flex-col items-center justify-center max-w-5xl mx-auto"
+        >
+          <ParsonalPdf data={recipe} />
+        </div>
+      ))
+  : recipeBook
+      .filter((item) => item.type === "trainer") // trainer দেখানো
+      .map((recipe) => (
+        <div
+          key={recipe?._id}
+          className="flex flex-col items-center justify-center w-full"
+        >
+          <ParsonalPdf data={recipe} isBaseUrl={true} />
+        </div>
+      ))}
+
     </div>
   );
 };

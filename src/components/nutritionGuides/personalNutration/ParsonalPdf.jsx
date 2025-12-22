@@ -10,7 +10,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 const ParsonalPdf = ({ data }) => {
   // const pdfUrl = `${base_url}/${data?.pdf_link}`;
-  // console.log("pdfUrl", data);
+  console.log("pdf data:", data);
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   const pdfUrl = data?.pdf_link;
 
   if (!data) {
