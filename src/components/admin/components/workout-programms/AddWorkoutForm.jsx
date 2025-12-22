@@ -20,7 +20,6 @@ const AddWorkoutForm = () => {
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [filteredExercisesForSelection, setFilteredExercisesForSelection] =
     useState([]);
-  const [newExerciseData, setNewExerciseData] = useState(null);
 
   const navigate = useNavigate();
   const {
@@ -71,6 +70,17 @@ const AddWorkoutForm = () => {
   const handleAddMoreExercise = (selected) => {
     if (selected && selected.length > 0) {
       const exercise = selected[0];
+
+      // ❌ Prevent adding the same exercise multiple times
+      const alreadyExists = workoutExercises.some(
+        (ex) => ex.exercise_id?._id === exercise._id
+      );
+
+      if (alreadyExists) {
+        toast.error("Cannot add the same exercise more than once to a workout.");
+        return;
+      }
+
       const newExercise = {
         exercise_id: exercise,
         sets: "",
@@ -79,7 +89,6 @@ const AddWorkoutForm = () => {
       };
 
       setWorkoutExercises((prev) => [...prev, newExercise]);
-      setNewExerciseData(null);
       setAddMoreExercise(false);
       setSelectedBodyPart(null);
       setSelectedEquipment(null);

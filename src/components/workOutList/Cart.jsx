@@ -3,6 +3,7 @@ import whiteLogo from "../../assets/image/whiteLogo.png";
 import workoutCartBg from "../../assets/image/workoutList/Bg.png";
 const Cart = ({ workout, training }) => {
  
+  console.log('training:', training);
 
   return (
     <Link
@@ -22,7 +23,7 @@ const Cart = ({ workout, training }) => {
         </div>
         <div className="px-6 py-4">
           <p className="text-[#0A2533]  text-sm font-bold text-end">
-            {workout?.workout?.name}
+            {training?.name}
           </p>
         </div>
       </div>
