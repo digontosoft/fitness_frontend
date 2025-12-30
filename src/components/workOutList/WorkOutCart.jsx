@@ -102,6 +102,7 @@ import PaginationComp from "@/components/pagination";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
+import Loading from "../common/Loading";
 import Cart from "./Cart";
 
 const WorkOutCart = () => {
@@ -113,6 +114,7 @@ const WorkOutCart = () => {
   const [search, setSearch] = useState("");
   const [totalPages, setTotalPages] = useState(1);
   const [exerciseReport, setExerciseReport] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchExerciseReport = async () => {
@@ -130,6 +132,7 @@ const WorkOutCart = () => {
 
   useEffect(() => {
     const fetchExercise = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `${base_url}/get-training-by-user-id/${user?._id}?page=${page}&search=${search}`
@@ -140,6 +143,8 @@ const WorkOutCart = () => {
         setTotalPages(response.data.pagination.pages);
       } catch (error) {
         console.error("Error fetching exercises:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchExercise();
@@ -149,6 +154,13 @@ const WorkOutCart = () => {
   const displayedTrainings = selectedTraining?.length
     ? selectedTraining
     : trainings;
+
+
+  if(loading) {
+    return (
+     <Loading />
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-2 pb-10">
