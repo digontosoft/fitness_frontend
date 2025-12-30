@@ -108,7 +108,7 @@ const sortedData = [...data].sort(
 
   return (
     <div>
-      <Title title={"מעקב מדדים"} />
+      <Title title={"תמונות מדידה"} />
       {loading ? (
         <Loading />
       ) : (
