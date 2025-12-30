@@ -616,15 +616,34 @@ const AddTrainingForm = () => {
     setSelectedTrainingExercises((prev) => {
       const updated = [...prev];
       const workout = updated[addMoreExercise];
+      const newExercises = [];
+
       selectedExercises.forEach((exercise) => {
-        workout.exercises.push({
-          exercise_id: exercise._id,
-          name: exercise.name,
-          sets: "",
-          reps: "",
-          manipulation: "",
+        // Check if exercise already exists in the workout
+        const exerciseExists = workout.exercises.some((ex) => {
+          // Check both exercise_id fields for comparison
+          const existingExerciseId = ex.exercise_id;
+          return existingExerciseId === exercise._id;
         });
+
+        if (exerciseExists) {
+          toast.error(`Exercise "${exercise.name}" is already added to this workout.`);
+        } else {
+          newExercises.push({
+            exercise_id: exercise._id,
+            name: exercise.name,
+            sets: "",
+            reps: "",
+            manipulation: "",
+          });
+        }
       });
+
+      // Only add exercises that don't already exist
+      if (newExercises.length > 0) {
+        workout.exercises.push(...newExercises);
+      }
+
       return updated;
     });
 

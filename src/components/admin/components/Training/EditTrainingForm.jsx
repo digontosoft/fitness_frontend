@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import Select from "react-dropdown-select";
-import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { base_url } from "@/api/baseUrl";
-import { Trash } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 import Loading from "@/components/common/Loading";
+import DynamicInputField from "@/components/measurements/DynamicInputField";
+import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+import axios from "axios";
+import { Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import Select from "react-dropdown-select";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const EditTrainingForm = () => {
   const { id } = useParams();
@@ -121,28 +121,47 @@ const EditTrainingForm = () => {
     if (!selected.length) return;
     const newExercise = selected[0];
 
-    setTraining((prev) => ({
-      ...prev,
-      workouts: prev.workouts.map((workout) =>
-        //change prev Line
+    // Check if the exercise already exists in the workout
+    setTraining((prev) => {
+      const workout = prev.workouts.find((w) => w._id === workoutId);
+      
+      if (workout) {
+        // Check if exercise already exists by comparing exercise_id
+        const exerciseExists = workout.exercises.some((ex) => {
+          const existingExerciseId = typeof ex.exercise_id === "object" 
+            ? ex.exercise_id._id 
+            : ex.exercise_id;
+          return existingExerciseId === newExercise._id;
+        });
 
-        workout._id === workoutId
-          ? {
-              ...workout,
-              exercises: [
-                ...workout.exercises,
-                {
-                  _id: newExercise._id,
-                  exercise_id: newExercise,
-                  sets: "",
-                  reps: "",
-                  manipulation: "",
-                },
-              ],
-            }
-          : workout
-      ),
-    }));
+        if (exerciseExists) {
+          toast.error("This exercise is already added to the workout.");
+          return prev; // Return previous state without changes
+        }
+      }
+
+      // If exercise doesn't exist, proceed with adding it
+      return {
+        ...prev,
+        workouts: prev.workouts.map((workout) =>
+          workout._id === workoutId
+            ? {
+                ...workout,
+                exercises: [
+                  ...workout.exercises,
+                  {
+                    _id: newExercise._id,
+                    exercise_id: newExercise,
+                    sets: "",
+                    reps: "",
+                    manipulation: "",
+                  },
+                ],
+              }
+            : workout
+        ),
+      };
+    });
 
     setExerciseSelectVisible((prev) => ({ ...prev, [workoutId]: false }));
   };

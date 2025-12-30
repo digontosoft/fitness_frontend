@@ -1,15 +1,15 @@
 import { base_url } from "@/api/baseUrl";
-import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { set, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import Select from "react-dropdown-select";
-import { useNavigate } from "react-router-dom";
-import { Trash } from "lucide-react";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
+import { Button } from "@/components/ui/button";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+import axios from "axios";
+import { Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import Select from "react-dropdown-select";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const AssignTrainingForm = ({ trainingId, user_id }) => {
   const [selectedTraining, setSelectedTraining] = useState(null);
@@ -239,18 +239,51 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     if (!trainingbyId) return;
     const updatedTraining = { ...trainingbyId };
     const currentWorkout = updatedTraining.workouts[workoutIndex];
+    
+    if (!currentWorkout || !currentWorkout.exercises) return;
+    
+    const newExercises = [];
+
     selectedExercises.forEach((exercise) => {
-      currentWorkout.exercises.push({
-        _id: exercise._id,
-        name: exercise.name,
-        exercise_id: exercise._id,
-        sets: "",
-        reps: "",
-        manipulation: "",
+      // Check if exercise already exists in the workout by comparing exercise_id
+      const exerciseExists = currentWorkout.exercises.some((ex) => {
+        // Compare exercise_id (which is the actual exercise identifier)
+        // ex._id is the workout exercise entry ID, not the exercise ID
+        // We need to compare ex.exercise_id with exercise._id
+        const existingExerciseId = ex.exercise_id;
+        const newExerciseId = exercise._id;
+        
+        // Handle case where exercise_id might be an object with _id property
+        const existingId = typeof existingExerciseId === 'object' && existingExerciseId !== null 
+          ? existingExerciseId._id || existingExerciseId 
+          : existingExerciseId;
+        
+        // Convert to string for comparison to handle any type mismatches
+        if (!existingId || !newExerciseId) return false;
+        return String(existingId) === String(newExerciseId);
       });
+
+      if (exerciseExists) {
+        toast.error(`Exercise "${exercise.name || exercise.label || 'Unknown'}" is already added to this workout.`);
+      } else {
+        newExercises.push({
+          _id: exercise._id,
+          name: exercise.name,
+          exercise_id: exercise._id,
+          sets: "",
+          reps: "",
+          manipulation: "",
+        });
+      }
     });
-    setIsSupersetIncomplete(false);
-    setTrainingById(updatedTraining);
+
+    // Only add exercises that don't already exist
+    if (newExercises.length > 0) {
+      currentWorkout.exercises.push(...newExercises);
+      setIsSupersetIncomplete(false);
+      setTrainingById(updatedTraining);
+    }
+
     setAddMoreExerciseIndex(null);
   };
 
