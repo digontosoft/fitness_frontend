@@ -1,7 +1,10 @@
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import VideoCourseCart from "./common/VideoCourseCart";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import ReactPlayer from "react-player";
+import HeroVideo from "./startTraining/HeroVideo";
+import { Button } from "./ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,25 +14,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Button } from "./ui/button";
-import HeroVideo from "./startTraining/HeroVideo";
-import ReactPlayer from "react-player";
-import { FaArrowLeftLong } from "react-icons/fa6";
 
-import back from "@/assets/image/back.svg";
-import womenback from "@/assets/image/woman-back.svg";
-import lowerBack from "@/assets/image/lower-back.svg";
-import frontHand from "@/assets/image/front-hand.svg";
 import backHand from "@/assets/image/back-hand.svg";
-import shoulder from "@/assets/image/shoulder.svg";
-import chest from "@/assets/image/chest.svg";
-import butt from "@/assets/image/butt.svg";
-import trx from "@/assets/image/trx.svg";
-import machine from "@/assets/image/machine.svg";
-import weights from "@/assets/image/weights.svg";
-import pully from "@/assets/image/pully.svg";
+import back from "@/assets/image/back.svg";
 import bands from "@/assets/image/bands.svg";
+import butt from "@/assets/image/butt.svg";
+import chest from "@/assets/image/chest.svg";
 import dumbles from "@/assets/image/dumbles.svg";
+import frontHand from "@/assets/image/front-hand.svg";
+import lowerBack from "@/assets/image/lower-back.svg";
+import machine from "@/assets/image/machine.svg";
+import pully from "@/assets/image/pully.svg";
+import shoulder from "@/assets/image/shoulder.svg";
+import trx from "@/assets/image/trx.svg";
+import weights from "@/assets/image/weights.svg";
+import womenback from "@/assets/image/woman-back.svg";
 
 const PersonalExercise = ({ exercise }) => {
   console.log("exerciseP:", exercise.exercise_id);
@@ -81,11 +80,11 @@ const PersonalExercise = ({ exercise }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="w-full cursor-pointer md:w-96 flex gap-2 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300">
+        <div className="w-full cursor-pointer md:w-96 flex gap-4 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300">
           <Button className="rounded-2xl">
             <FaArrowLeftLong />
           </Button>
-          <div className="w-full flex items-center justify-center">
+          <div className="w-full flex items-center" dir="rtl">
             <h1 className="text-sm font-bold text-[#0A2533]">
               {exerciseData?.name}
             </h1>
