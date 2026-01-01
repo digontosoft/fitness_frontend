@@ -81,27 +81,55 @@ const MeasurementTracking = () => {
     
     if (downloadingReport) return; // Prevent multiple clicks
     
-    // If report is already available, use it directly
-    if (measurementReport) {
-      setDownloadingReport(true);
+    setDownloadingReport(true);
+    
+    const downloadFile = async (reportUrl) => {
       try {
+        // Fetch the file as a blob to handle CORS and cross-domain issues
+        const fileResponse = await axios.get(reportUrl, {
+          responseType: 'blob',
+          headers: {
+            'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/octet-stream, */*'
+          }
+        });
+        
+        // Create a blob URL from the response
+        const blob = new Blob([fileResponse.data], {
+          type: fileResponse.headers['content-type'] || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const blobUrl = window.URL.createObjectURL(blob);
+        
+        // Extract filename from URL or use a default name
+        const urlParts = reportUrl.split('/');
+        const filename = urlParts[urlParts.length - 1] || 'measurement_report.xlsx';
+        
+        // Create a temporary anchor element and trigger download
         const link = document.createElement('a');
-        link.href = measurementReport;
-        link.download = ''; // Let browser determine filename
-        link.target = '_blank'; // Open in new tab as fallback
+        link.href = blobUrl;
+        link.download = filename;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        
+        // Clean up the blob URL after a short delay
+        setTimeout(() => {
+          window.URL.revokeObjectURL(blobUrl);
+        }, 100);
       } catch (error) {
         console.error("Error downloading report:", error);
-      } finally {
-        setDownloadingReport(false);
+        // Fallback: try opening in new window if blob download fails
+        window.open(reportUrl, '_blank');
       }
+    };
+    
+    // If report is already available, use it directly
+    if (measurementReport) {
+      await downloadFile(measurementReport);
+      setDownloadingReport(false);
       return;
     }
     
     // If report is not available, fetch it first
-    setDownloadingReport(true);
     try {
       const measurementResponse = await axios.get(
         `${base_url}/report/measurement/${userId._id}`
@@ -112,13 +140,7 @@ const MeasurementTracking = () => {
         setMeasurementReport(reportUrl);
         
         if (reportUrl) {
-          const link = document.createElement('a');
-          link.href = reportUrl;
-          link.download = ''; // Let browser determine filename
-          link.target = '_blank'; // Open in new tab as fallback
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          await downloadFile(reportUrl);
         }
       }
     } catch (error) {

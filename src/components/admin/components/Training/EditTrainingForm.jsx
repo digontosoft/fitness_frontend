@@ -121,26 +121,7 @@ const EditTrainingForm = () => {
     if (!selected.length) return;
     const newExercise = selected[0];
 
-    // Check if the exercise already exists in the workout
     setTraining((prev) => {
-      const workout = prev.workouts.find((w) => w._id === workoutId);
-      
-      if (workout) {
-        // Check if exercise already exists by comparing exercise_id
-        const exerciseExists = workout.exercises.some((ex) => {
-          const existingExerciseId = typeof ex.exercise_id === "object" 
-            ? ex.exercise_id._id 
-            : ex.exercise_id;
-          return existingExerciseId === newExercise._id;
-        });
-
-        if (exerciseExists) {
-          toast.error("This exercise is already added to the workout.");
-          return prev; // Return previous state without changes
-        }
-      }
-
-      // If exercise doesn't exist, proceed with adding it
       return {
         ...prev,
         workouts: prev.workouts.map((workout) =>
