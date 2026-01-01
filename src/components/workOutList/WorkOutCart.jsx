@@ -1,102 +1,3 @@
-// import { base_url } from "@/api/baseUrl";
-// import PaginationComp from "@/components/pagination";
-// import axios from "axios";
-// import { useEffect, useState } from "react";
-// import Select from "react-dropdown-select";
-// import Cart from "./Cart";
-
-// const WorkOutCart = () => {
-//   const [trainings, setTrainings] = useState({});
-//   const [selectedTraining, setSelectedTraining] = useState(null);
-
-//   const user = JSON.parse(localStorage.getItem("userInfo"));
-//   const [page, setPage] = useState(1);
-//   const [search, setSearch] = useState("");
-//   const [totalPages, setTotalPages] = useState(1);
-//   const [exerciseReport, setExerciseReport] = useState(null);
-
-//   useEffect(() => {
-//     const fetchExerciseReport = async () => {
-//       try {
-//         const response = await axios.get(
-//           `${base_url}/report/excercise/${user?._id}`
-//         );
-//         setExerciseReport(response.data.data.report_link);
-//       } catch (error) {
-//         console.error("Error fetching exercises:", error);
-//       }
-//     };
-//     fetchExerciseReport();
-//   }, [user?._id]);
-
-//   useEffect(() => {
-//     const fetchExercise = async () => {
-//       try {
-//         const response = await axios.get(
-//           `${base_url}/get-training-by-user-id/${user?._id}`
-//         );
-
-//         setTrainings(response.data.data);
-//         setPage(response.data.pagination.page);
-//         setTotalPages(response.data.pagination.pages);
-//         console.log(response);
-//       } catch (error) {
-//         console.error("Error fetching exercises:", error);
-//       }
-//     };
-//     fetchExercise();
-//   }, [user?._id, page, search]);
-
-  
-
-//   return (
-//     <div className="max-w-6xl mx-auto px-2 pb-10">
-//       <a
-//         href={exerciseReport}
-//         download
-//         className="text-lg font-semibold flex items-center justify-center underline cursor-pointer"
-//       >
-//         הצגת ביצועים קודמים
-//       </a>
-//       <div className="flex items-center justify-center my-5" dir="rtl">
-//         <Select
-//           // className="max-w-lg"
-//           style={{ width: "380px", height: "50px" }}
-//           direction="rtl"
-//           options={trainings}
-//           valueField="_id"
-//           labelField="name"
-//           onChange={(value) => setSelectedTraining(value)}
-//           placeholder="חפש תוכנית אימון"
-//           searchBy="name"
-//         />
-//       </div>
-//       {trainings.length > 0 && (
-//         <>
-//           <div className="flex flex-wrap items-center justify-center gap-6">
-//             {selectedTraining?.map((training) =>
-//               training.workouts.map((workout) => (
-//                 <Cart key={workout._id} workout={workout} training={training} />
-//               ))
-//             )}
-//           </div>
-//           {totalPages > 1 && (
-//             <PaginationComp
-//               setPage={setPage}
-//               totalPages={totalPages}
-//               currentPage={page}
-//             />
-//           )}
-//         </>
-//       ) }
-//     </div>
-//   );
-// };
-
-// export default WorkOutCart;
-
-
-
 import { base_url } from "@/api/baseUrl";
 import PaginationComp from "@/components/pagination";
 import axios from "axios";
@@ -115,21 +16,7 @@ const WorkOutCart = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [exerciseReport, setExerciseReport] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   const fetchExerciseReport = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${base_url}/report/excercise/${user?._id}`
-  //       );
-  //       setExerciseReport(response.data.data.report_link);
-  //     } catch (error) {
-  //       console.error("Error fetching exercises:", error);
-  //     }
-  //   };
-  //   fetchExerciseReport();
-  // }, [user?._id]);
-
+  const [downloadingReport, setDownloadingReport] = useState(false);
   useEffect(() => {
     const fetchExercise = async () => {
       setLoading(true);
@@ -155,19 +42,35 @@ const WorkOutCart = () => {
     ? selectedTraining
     : trainings;
 
-  const handleDownloadReport = async () => {
-    const fetchExerciseReport = async () => {
-      try {
-        const response = await axios.get(
-          `${base_url}/report/excercise/${user?._id}`
-        );
-        setExerciseReport(response.data.data.report_link);
-      } catch (error) {
-        console.error("Error fetching exercises:", error);
+  const handleDownloadReport = async (e) => {
+    e.preventDefault();
+    
+    if (downloadingReport) return; // Prevent multiple clicks
+    
+    setDownloadingReport(true);
+    try {
+      const response = await axios.get(
+        `${base_url}/report/excercise/${user?._id}`
+      );
+      const reportUrl = response.data.data.report_link;
+      
+      if (reportUrl) {
+        // Create a temporary anchor element and trigger download
+        const link = document.createElement('a');
+        link.href = reportUrl;
+        link.download = ''; // Let browser determine filename
+        link.target = '_blank'; // Open in new tab as fallback
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        setExerciseReport(reportUrl);
       }
-    };
-    await fetchExerciseReport();
-    // window.open(exerciseReport, "_blank");
+    } catch (error) {
+      console.error("Error fetching exercises:", error);
+    } finally {
+      setDownloadingReport(false);
+    }
   };
 
 
@@ -181,11 +84,12 @@ const WorkOutCart = () => {
     <div className="max-w-6xl mx-auto px-2 pb-10">
       <a
         onClick={handleDownloadReport}
-        href={exerciseReport}
-        download
-        className="text-lg font-semibold flex items-center justify-center underline cursor-pointer"
+        href={exerciseReport || '#'}
+        className={`text-lg font-semibold flex items-center justify-center underline ${
+          downloadingReport ? 'cursor-wait opacity-50' : 'cursor-pointer'
+        }`}
       >
-        הצגת ביצועים קודמים
+        {downloadingReport ? 'טוען...' : 'הצגת ביצועים קודמים'}
       </a>
 
       <div className="flex items-center justify-center my-5" dir="rtl">
