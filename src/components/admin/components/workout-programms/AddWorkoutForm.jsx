@@ -72,14 +72,14 @@ const AddWorkoutForm = () => {
       const exercise = selected[0];
 
       // ❌ Prevent adding the same exercise multiple times
-      const alreadyExists = workoutExercises.some(
-        (ex) => ex.exercise_id?._id === exercise._id
-      );
+      // const alreadyExists = workoutExercises.some(
+      //   (ex) => ex.exercise_id?._id === exercise._id
+      // );
 
-      if (alreadyExists) {
-        toast.error("Cannot add the same exercise more than once to a workout.");
-        return;
-      }
+      // if (alreadyExists) {
+      //   toast.error("Cannot add the same exercise more than once to a workout.");
+      //   return;
+      // }
 
       const newExercise = {
         exercise_id: exercise,

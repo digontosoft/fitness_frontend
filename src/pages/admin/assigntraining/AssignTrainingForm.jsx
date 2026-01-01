@@ -245,44 +245,19 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     const newExercises = [];
 
     selectedExercises.forEach((exercise) => {
-      // Check if exercise already exists in the workout by comparing exercise_id
-      const exerciseExists = currentWorkout.exercises.some((ex) => {
-        // Compare exercise_id (which is the actual exercise identifier)
-        // ex._id is the workout exercise entry ID, not the exercise ID
-        // We need to compare ex.exercise_id with exercise._id
-        const existingExerciseId = ex.exercise_id;
-        const newExerciseId = exercise._id;
-        
-        // Handle case where exercise_id might be an object with _id property
-        const existingId = typeof existingExerciseId === 'object' && existingExerciseId !== null 
-          ? existingExerciseId._id || existingExerciseId 
-          : existingExerciseId;
-        
-        // Convert to string for comparison to handle any type mismatches
-        if (!existingId || !newExerciseId) return false;
-        return String(existingId) === String(newExerciseId);
+      newExercises.push({
+        _id: exercise._id,
+        name: exercise.name,
+        exercise_id: exercise._id,
+        sets: "",
+        reps: "",
+        manipulation: "",
       });
-
-      if (exerciseExists) {
-        toast.error(`Exercise "${exercise.name || exercise.label || 'Unknown'}" is already added to this workout.`);
-      } else {
-        newExercises.push({
-          _id: exercise._id,
-          name: exercise.name,
-          exercise_id: exercise._id,
-          sets: "",
-          reps: "",
-          manipulation: "",
-        });
-      }
     });
 
-    // Only add exercises that don't already exist
-    if (newExercises.length > 0) {
-      currentWorkout.exercises.push(...newExercises);
-      setIsSupersetIncomplete(false);
-      setTrainingById(updatedTraining);
-    }
+    currentWorkout.exercises.push(...newExercises);
+    setIsSupersetIncomplete(false);
+    setTrainingById(updatedTraining);
 
     setAddMoreExerciseIndex(null);
   };

@@ -591,14 +591,14 @@ const handleAddMoreExercise = (selected) => {
     const currentExercises = getValues("exercises") || [];
 
     // ❌ Prevent adding the same exercise multiple times
-    const alreadyExists = currentExercises.some(
-      (ex) => ex.exercise_id?._id === exercise._id
-    );
+    // const alreadyExists = currentExercises.some(
+    //   (ex) => ex.exercise_id?._id === exercise._id
+    // );
 
-    if (alreadyExists) {
-      toast.error("Cannot add the same exercise more than once to a workout.");
-      return;
-    }
+    // if (alreadyExists) {
+    //   toast.error("Cannot add the same exercise more than once to a workout.");
+    //   return;
+    // }
 
     const newExercise = {
       exercise_id: exercise,

@@ -55,19 +55,45 @@ const WorkOutCart = () => {
       const reportUrl = response.data.data.report_link;
       
       if (reportUrl) {
+        setExerciseReport(reportUrl);
+        
+        // Fetch the file as a blob to handle CORS and cross-domain issues
+        const fileResponse = await axios.get(reportUrl, {
+          responseType: 'blob',
+          headers: {
+            'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/octet-stream, */*'
+          }
+        });
+        
+        // Create a blob URL from the response
+        const blob = new Blob([fileResponse.data], {
+          type: fileResponse.headers['content-type'] || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const blobUrl = window.URL.createObjectURL(blob);
+        
+        // Extract filename from URL or use a default name
+        const urlParts = reportUrl.split('/');
+        const filename = urlParts[urlParts.length - 1] || 'exercise_report.xlsx';
+        
         // Create a temporary anchor element and trigger download
         const link = document.createElement('a');
-        link.href = reportUrl;
-        link.download = ''; // Let browser determine filename
-        link.target = '_blank'; // Open in new tab as fallback
+        link.href = blobUrl;
+        link.download = filename;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         
-        setExerciseReport(reportUrl);
+        // Clean up the blob URL after a short delay
+        setTimeout(() => {
+          window.URL.revokeObjectURL(blobUrl);
+        }, 100);
       }
     } catch (error) {
-      console.error("Error fetching exercises:", error);
+      console.error("Error downloading report:", error);
+      // Fallback: try opening in new window if blob download fails
+      if (exerciseReport) {
+        window.open(exerciseReport, '_blank');
+      }
     } finally {
       setDownloadingReport(false);
     }
