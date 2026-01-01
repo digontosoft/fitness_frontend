@@ -29,6 +29,7 @@ const MeasurementTracking = () => {
   const [measurements, setMeasurements] = useState([]);
   const [open, setOpen] = useState(false);
   const [measurementReport, setMeasurementReport] = useState(null);
+  const [downloadingReport, setDownloadingReport] = useState(false);
   const userId = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userId?.gender;
 
@@ -74,6 +75,58 @@ const MeasurementTracking = () => {
     };
     fetchData();
   }, [id]);
+
+  const handleDownloadReport = async (e) => {
+    e.preventDefault();
+    
+    if (downloadingReport) return; // Prevent multiple clicks
+    
+    // If report is already available, use it directly
+    if (measurementReport) {
+      setDownloadingReport(true);
+      try {
+        const link = document.createElement('a');
+        link.href = measurementReport;
+        link.download = ''; // Let browser determine filename
+        link.target = '_blank'; // Open in new tab as fallback
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error("Error downloading report:", error);
+      } finally {
+        setDownloadingReport(false);
+      }
+      return;
+    }
+    
+    // If report is not available, fetch it first
+    setDownloadingReport(true);
+    try {
+      const measurementResponse = await axios.get(
+        `${base_url}/report/measurement/${userId._id}`
+      );
+
+      if (measurementResponse.status === 200) {
+        const reportUrl = measurementResponse?.data.data.report_link;
+        setMeasurementReport(reportUrl);
+        
+        if (reportUrl) {
+          const link = document.createElement('a');
+          link.href = reportUrl;
+          link.download = ''; // Let browser determine filename
+          link.target = '_blank'; // Open in new tab as fallback
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching measurement report:", error);
+    } finally {
+      setDownloadingReport(false);
+    }
+  };
 
   // const sortOrder = [
   //   "מותן",
@@ -164,11 +217,13 @@ const sortedData = [...data].sort(
                   />
                 </div>
                 <a
-                  href={measurementReport}
-                  download
-                  className="text-lg font-semibold text-center underline cursor-pointer"
+                  onClick={handleDownloadReport}
+                  href={measurementReport || '#'}
+                  className={`text-lg font-semibold text-center underline ${
+                    downloadingReport ? 'cursor-wait opacity-50' : 'cursor-pointer'
+                  }`}
                 >
-                  הצגת מדדים קודמים
+                  {downloadingReport ? 'טוען...' : 'הצגת מדדים קודמים'}
                 </a>
               </div>
             );
