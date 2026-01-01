@@ -116,19 +116,19 @@ const WorkOutCart = () => {
   const [exerciseReport, setExerciseReport] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchExerciseReport = async () => {
-      try {
-        const response = await axios.get(
-          `${base_url}/report/excercise/${user?._id}`
-        );
-        setExerciseReport(response.data.data.report_link);
-      } catch (error) {
-        console.error("Error fetching exercises:", error);
-      }
-    };
-    fetchExerciseReport();
-  }, [user?._id]);
+  // useEffect(() => {
+  //   const fetchExerciseReport = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${base_url}/report/excercise/${user?._id}`
+  //       );
+  //       setExerciseReport(response.data.data.report_link);
+  //     } catch (error) {
+  //       console.error("Error fetching exercises:", error);
+  //     }
+  //   };
+  //   fetchExerciseReport();
+  // }, [user?._id]);
 
   useEffect(() => {
     const fetchExercise = async () => {
@@ -155,6 +155,21 @@ const WorkOutCart = () => {
     ? selectedTraining
     : trainings;
 
+  const handleDownloadReport = async () => {
+    const fetchExerciseReport = async () => {
+      try {
+        const response = await axios.get(
+          `${base_url}/report/excercise/${user?._id}`
+        );
+        setExerciseReport(response.data.data.report_link);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
+    await fetchExerciseReport();
+    // window.open(exerciseReport, "_blank");
+  };
+
 
   if(loading) {
     return (
@@ -165,6 +180,7 @@ const WorkOutCart = () => {
   return (
     <div className="max-w-6xl mx-auto px-2 pb-10">
       <a
+        onClick={handleDownloadReport}
         href={exerciseReport}
         download
         className="text-lg font-semibold flex items-center justify-center underline cursor-pointer"
