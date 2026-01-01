@@ -84,41 +84,64 @@ const MeasurementTracking = () => {
     setDownloadingReport(true);
     
     const downloadFile = async (reportUrl) => {
+      // Extract filename from URL
+      const urlParts = reportUrl.split('/');
+      const filename = urlParts[urlParts.length - 1] || 'measurement_report.xlsx';
+      
+      // Method 1: Try using fetch with proper error handling
       try {
-        // Fetch the file as a blob to handle CORS and cross-domain issues
-        const fileResponse = await axios.get(reportUrl, {
-          responseType: 'blob',
-          headers: {
-            'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/octet-stream, */*'
-          }
+        const token = localStorage.getItem("authToken");
+        const fetchResponse = await fetch(reportUrl, {
+          method: 'GET',
+          headers: token ? {
+            'Authorization': `Bearer ${token}`,
+          } : {},
+          credentials: 'include',
         });
         
-        // Create a blob URL from the response
-        const blob = new Blob([fileResponse.data], {
-          type: fileResponse.headers['content-type'] || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        });
-        const blobUrl = window.URL.createObjectURL(blob);
+        if (fetchResponse.ok) {
+          const blob = await fetchResponse.blob();
+          const blobUrl = window.URL.createObjectURL(blob);
+          
+          // Create download link
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = filename;
+          link.style.display = 'none';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
+          // Clean up
+          setTimeout(() => {
+            window.URL.revokeObjectURL(blobUrl);
+          }, 100);
+        } else {
+          // If fetch fails, try direct download link
+          throw new Error('Fetch failed');
+        }
+      } catch (fetchError) {
+        console.log("Fetch method failed, using direct download:", fetchError);
         
-        // Extract filename from URL or use a default name
-        const urlParts = reportUrl.split('/');
-        const filename = urlParts[urlParts.length - 1] || 'measurement_report.xlsx';
+        // Method 2: Create a form and submit it (works better for cross-origin)
+        const form = document.createElement('form');
+        form.method = 'GET';
+        form.action = reportUrl;
+        form.target = '_blank';
+        form.style.display = 'none';
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
         
-        // Create a temporary anchor element and trigger download
+        // Also try creating a direct download link as backup
         const link = document.createElement('a');
-        link.href = blobUrl;
+        link.href = reportUrl;
         link.download = filename;
+        link.target = '_blank';
+        link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        
-        // Clean up the blob URL after a short delay
-        setTimeout(() => {
-          window.URL.revokeObjectURL(blobUrl);
-        }, 100);
-      } catch (error) {
-        console.error("Error downloading report:", error);
-        // Fallback: try opening in new window if blob download fails
-        window.open(reportUrl, '_blank');
       }
     };
     
