@@ -31,7 +31,7 @@ export default function TrainingForTraineeDetails({ trainingId }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-customBg" size="sm">
+        <Button className="bg-[#7994CB]" size="sm">
           <Eye />
         </Button>
       </DialogTrigger>
@@ -114,7 +114,7 @@ export default function TrainingForTraineeDetails({ trainingId }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg uppercase ">סגור</Button>
+            <Button className="w-full bg-[#7994CB] uppercase ">סגור</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

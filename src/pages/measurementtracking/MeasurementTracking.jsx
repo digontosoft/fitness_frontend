@@ -291,7 +291,7 @@ const sortedData = [...data].sort(
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button className="w-full bg-customBg hover:bg-customBg-dark transition-all duration-200">
+              <Button className="w-full bg-[#7994CB] hover:bg-[#7994CB]-dark transition-all duration-200">
                 סגור
               </Button>
             </DialogClose>

@@ -26,7 +26,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogTrigger asChild>
-        <Button className="bg-customBg hover:bg-customBg-dark" size="sm">
+        <Button className="bg-[#7994CB] hover:bg-[#7994CB]-dark" size="sm">
           <Eye className="w-4 h-4" />
         </Button>
       </DialogTrigger>
@@ -88,7 +88,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg hover:bg-customBg-dark transition-all duration-200">
+            <Button className="w-full bg-[#7994CB] hover:bg-[#7994CB]-dark transition-all duration-200">
               סגור
             </Button>
           </DialogClose>

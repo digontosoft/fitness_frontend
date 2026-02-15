@@ -84,7 +84,7 @@ export function ApproveMailTable() {
             {/* <EditApproveMail id={id} updateDate={updateDate} /> */}
 
             <Button
-              className="bg-customBg"
+              className="bg-[#7994CB]"
               size="sm"
               onClick={() => handleDelete(row.original)}
             >
@@ -97,7 +97,7 @@ export function ApproveMailTable() {
               onClick={() => handleStatus(row.original)}
             >
               {row.original.isActive === true ? (
-                <span className="text-red-500">בטל מנוי</span>
+                <span className="text-[#7994CB]">בטל מנוי</span>
               ) : (
                 <span className="text-green-500">Activate</span>
               )}

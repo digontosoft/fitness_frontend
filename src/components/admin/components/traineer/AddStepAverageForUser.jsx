@@ -49,7 +49,7 @@ const AddStepAverageForUser = ({ user, setUser }) => {
   return (
     <Dialog dir="rtl" open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogTrigger asChild>
-        <Button className="absolute top-40 left-1 bg-customBg cursor-pointer">
+        <Button className="absolute top-40 left-1 bg-[#7994CB] cursor-pointer">
           עריכת ממוצע צעדים
         </Button>
       </DialogTrigger>

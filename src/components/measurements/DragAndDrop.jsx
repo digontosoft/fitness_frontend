@@ -99,7 +99,7 @@ const DragAndDrop = ({ register, setValue, errors }) => {
             style={{ display: "none" }}
           />
           {errors.uploadedFile && (
-            <p className="text-red-500 text-sm">
+            <p className="text-[#7994CB] text-sm">
               {errors.uploadedFile.message}
             </p>
           )}

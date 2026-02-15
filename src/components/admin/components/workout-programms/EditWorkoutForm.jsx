@@ -443,7 +443,7 @@
 //               {" "}
 //               <Button
 //                 type="button"
-//                 className="mt-2 bg-customBg flex mx-auto"
+//                 className="mt-2 bg-[#7994CB] flex mx-auto"
 //                 onClick={() => setAddMoreExercise(!addMoreExercise)}
 //               >
 //                 הוסף עוד פעילות גופנית
@@ -454,7 +454,7 @@
 //           <div className="flex justify-center">
 //             <Button
 //               type="submit"
-//               className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+//               className="text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
 //               disabled={
 //                 disableUpdateButton ||
 //                 !isFormValid ||
@@ -963,7 +963,7 @@ const isFormValid = exercisesForm?.every(
             <div>
               <Button
                 type="button"
-                className="mt-2 bg-customBg flex mx-auto"
+                className="mt-2 bg-[#7994CB] flex mx-auto"
                 onClick={() => setAddMoreExercise(!addMoreExercise)}
               >
                 הוסף עוד פעילות גופנית
@@ -974,7 +974,7 @@ const isFormValid = exercisesForm?.every(
           <div className="flex justify-center">
             <Button
               type="submit"
-              className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+              className="text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
               disabled={
                 disableUpdateButton ||
                 !isFormValid 

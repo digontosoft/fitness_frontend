@@ -88,7 +88,7 @@
 //       <DialogTrigger asChild>
 //         <Button
 //           variant="outline"
-//           className="bg-customBg text-white hover:text-white"
+//           className="bg-[#7994CB] text-white hover:text-white"
 //         >
 //           Assign Trainee
 //         </Button>
@@ -258,7 +258,7 @@
 //       <DialogTrigger asChild>
 //         <Button
 //           variant="outline"
-//           className="bg-customBg text-white hover:text-white"
+//           className="bg-[#7994CB] text-white hover:text-white"
 //         >
 //           שייך מתאמנים
 //         </Button>
@@ -334,7 +334,7 @@
 //             <Button variant="outline">בטל</Button>
 //           </DialogClose>
 //           <Button
-//           className="mb-2 sm:mt-0 bg-customBg text-white hover:text-white"
+//           className="mb-2 sm:mt-0 bg-[#7994CB] text-white hover:text-white"
 //             type="button"
 //             onClick={handleAssign}
 //             disabled={selectedUsers.length === 0 || isLoading}
@@ -515,7 +515,7 @@ const AssignTraineeToAdmin = ({ adminId, isOpen, onClose }) => {
             בטל
           </Button>
           <Button
-            className="mb-2 sm:mt-0 bg-customBg text-white hover:text-white"
+            className="mb-2 sm:mt-0 bg-[#7994CB] text-white hover:text-white"
             type="button"
             onClick={handleAssign}
             disabled={selectedUsers.length === 0 || isLoading}

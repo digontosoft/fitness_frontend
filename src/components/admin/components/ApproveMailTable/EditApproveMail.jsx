@@ -50,7 +50,7 @@ function EditApproveMail({ id, updateDate }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-customBg hover:bg-customBg-dark" size="sm">
+        <Button className="bg-[#7994CB] hover:bg-[#7994CB]-dark" size="sm">
           <Edit />
         </Button>
       </DialogTrigger>
@@ -83,7 +83,7 @@ function EditApproveMail({ id, updateDate }) {
                 className={`${errors.email ? "border-red-500" : ""} `}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1" dir="rtl">
+                <p className="text-[#7994CB] text-sm mt-1" dir="rtl">
                   {errors.email.message}
                 </p>
               )} */}
@@ -105,14 +105,14 @@ function EditApproveMail({ id, updateDate }) {
                 } flex items-center justify-end`}
               />
               {errors.expiry_date && (
-                <p className="text-red-500 text-sm mt-1" dir="rtl">
+                <p className="text-[#7994CB] text-sm mt-1" dir="rtl">
                   {errors.expiry_date.message}
                 </p>
               )}
             </div>
           </div>
           <div className="flex items-center justify-end">
-            <BasicButton type="submit" title="עדכן" className="bg-customBg" />
+            <BasicButton type="submit" title="עדכן" className="bg-[#7994CB]" />
           </div>
         </form>
       </DialogContent>

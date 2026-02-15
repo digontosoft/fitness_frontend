@@ -101,7 +101,7 @@ const VideoCourseCart = ({ exercise }) => {
     //     </div>
     //     <DialogFooter>
     //       <DialogClose asChild>
-    //         <Button variant="default" className="bg-customBg">
+    //         <Button variant="default" className="bg-[#7994CB]">
     //           Close
     //         </Button>
     //       </DialogClose>
@@ -165,7 +165,7 @@ const VideoCourseCart = ({ exercise }) => {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg">סגור</Button>
+            <Button className="w-full bg-[#7994CB]">סגור</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

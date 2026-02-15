@@ -38,7 +38,7 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
       <div className="bg-white rounded-lg shadow-lg w-96 p-6 relative">
         {/* Close Button */}
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
+          className="absolute top-2 right-2 text-gray-500 hover:text-[#7994CB]"
           onClick={onClose}
         >
           ✖

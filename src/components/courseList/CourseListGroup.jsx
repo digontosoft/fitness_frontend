@@ -32,7 +32,7 @@ import CourseCart from "./CourseCart";
 //           size="sm"
 //           key={number}
 //           onClick={() => onPageChange(number)}
-//           className={`${currentPage === number ? "bg-customBg" : ""}`}
+//           className={`${currentPage === number ? "bg-[#7994CB]" : ""}`}
 //         >
 //           {number}
 //         </Button>

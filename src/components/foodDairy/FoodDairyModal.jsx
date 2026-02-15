@@ -105,7 +105,7 @@ export function FoodDairyModal({ userId, onClose }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" className="w-full justify-center bg-customBg">
+            <Button type="button" className="w-full justify-center bg-[#7994CB]">
               סגור
             </Button>
           </DialogClose>

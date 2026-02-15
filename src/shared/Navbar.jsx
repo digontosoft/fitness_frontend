@@ -125,8 +125,8 @@ useEffect(() => {
                 to={link}
                 end={link === "/admin-dashboard"}
                 className={({ isActive }) =>
-                  `flex items-center text-black font-bold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black"
+                  `flex items-center font-bold gap-x-4 ${
+                    isActive ? "text-[#7994CB]" : "text-black"
                   }`
                 }
                 dir="rtl"
@@ -167,7 +167,7 @@ useEffect(() => {
                   to={link}
                   className={({ isActive }) =>
                     `flex items-center text-black font-bold gap-x-4 ${
-                      isActive ? "text-red-500" : "text-black"
+                      isActive ? "text-[#7994CB]" : "text-black"
                     }`
                   }
                   dir="rtl"
@@ -187,7 +187,7 @@ useEffect(() => {
                 className={({ isActive }) =>
                   `flex items-center text-gray-600 hover:text-gray-900 font-bold gap-x-4 ${
                     isActive
-                      ? "text-red-500"
+                      ? "text-[#7994CB]"
                       : "text-gray-600 hover:text-gray-900"
                   }`
                 }
@@ -207,7 +207,7 @@ useEffect(() => {
                 end={link === "/dashboard"}
                 className={({ isActive }) =>
                   `flex items-center text-black font-bold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black"
+                    isActive ? "text-[#7994CB]" : "text-black"
                   }`
                 }
                 dir="rtl"
@@ -265,7 +265,7 @@ useEffect(() => {
                       to={link}
                       className={({ isActive }) =>
                         `flex items-center text-black font-semibold gap-x-4 ${
-                          isActive ? "text-red-500" : "text-black"
+                          isActive ? "text-[#7994CB]" : "text-black"
                         }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -311,7 +311,7 @@ useEffect(() => {
                         className={({ isActive }) =>
                           `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
                             isActive
-                              ? "text-red-500"
+                              ? "text-[#7994CB]"
                               : "text-gray-600 hover:text-gray-900"
                           }`
                         }
@@ -339,7 +339,7 @@ useEffect(() => {
                       to={link}
                       className={({ isActive }) =>
                         `flex items-center text-black font-semibold gap-x-4 ${
-                          isActive ? "text-red-500" : "text-black"
+                          isActive ? "text-[#7994CB]" : "text-black"
                         }`
                       }
                       onClick={() => setIsOpen(false)}
@@ -383,7 +383,7 @@ useEffect(() => {
                 end="/admin-dashboard"
                 className={({ isActive }) =>
                   `flex items-center text-black font-semibold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black"
+                    isActive ? "text-[#7994CB]" : "text-black"
                   }`
                 }
                 onClick={() => setIsOpen(false)}
@@ -429,7 +429,7 @@ useEffect(() => {
                   className={({ isActive }) =>
                     `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
                       isActive
-                        ? "text-red-500"
+                        ? "text-[#7994CB]"
                         : "text-gray-600 hover:text-gray-900"
                     }`
                   }
@@ -453,7 +453,7 @@ useEffect(() => {
                 to={link}
                 className={({ isActive }) =>
                   `flex items-center text-black font-semibold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black"
+                    isActive ? "text-[#7994CB]" : "text-black"
                   }`
                 }
                 onClick={() => setIsOpen(false)}
@@ -476,7 +476,7 @@ useEffect(() => {
                 end="/dashboard"
                 className={({ isActive }) =>
                   `flex items-center text-black font-semibold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black"
+                    isActive ? "text-[#7994CB]" : "text-black"
                   }`
                 }
                 onClick={() => setIsOpen(false)}

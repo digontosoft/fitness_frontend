@@ -567,7 +567,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
               <Button
                 type="button"
                 onClick={(e) => handleMoreExercise(workoutIndex, e)}
-                className="mt-2 bg-customBg flex mx-auto"
+                className="mt-2 bg-[#7994CB] flex mx-auto"
               >
                 הוסף תרגיל לאימון
               </Button>
@@ -581,7 +581,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
             className={
               isButtonDisabled || isSupersetIncomplete
                 ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
-                : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+                : "text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
             }
             disabled={isButtonDisabled || isSupersetIncomplete}
           >
@@ -590,7 +590,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           <Button
             onClick={() => setShowWorkoutSelect(true)}
             type="button"
-            className="bg-customBg"
+            className="bg-[#7994CB]"
           >
             הוסף תוכנית אימון
           </Button>

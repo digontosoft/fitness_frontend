@@ -24,7 +24,7 @@ const ViewAdmin = ({ admin, onClose }) => {
   <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[80vh] overflow-y-auto p-6 relative animate-fadeIn">
     {/* Close Button */}
     <button
-      className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors"
+      className="absolute top-3 right-3 text-gray-400 hover:text-[#7994CB] transition-colors"
       onClick={onClose}
     >
       ✖

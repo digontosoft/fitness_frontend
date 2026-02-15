@@ -55,7 +55,7 @@ export function WelcomeModal({
         <DialogFooter>
           <DialogClose asChild>
             <button
-              className="w-full bg-customBg uppercase text-white"
+              className="w-full bg-[#7994CB] uppercase text-white"
               onClick={() => handleSubmit()}
             >
               הבנתי

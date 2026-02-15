@@ -49,7 +49,7 @@ const DynamicTextAreaField = ({
         </span>
       </div>
       {errors[id] && (
-        <p className="text-red-500 text-sm mt-1">{errors[id].message}</p>
+        <p className="text-[#7994CB] text-sm mt-1">{errors[id].message}</p>
       )}
     </div>
   );

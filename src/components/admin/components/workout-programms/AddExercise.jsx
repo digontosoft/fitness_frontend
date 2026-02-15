@@ -64,7 +64,7 @@ const AddExercise = ({
         onClick={() => handleRemoveExercise(exercise?._id, false)} // Pass false for existing exercise
       />
       <div className=" flex flex-col items-center justify-center space-y-4 ">
-        <div className="flex items-center justify-center bg-customBg py-1 w-auto h-auto rounded-md text-white px-2">
+        <div className="flex items-center justify-center bg-[#7994CB] py-1 w-auto h-auto rounded-md text-white px-2">
           <p className="text-center">{exercise?.name}</p>
         </div>
         <div className="flex sm:flex-row flex-col gap-4 sm:w-[400px]">

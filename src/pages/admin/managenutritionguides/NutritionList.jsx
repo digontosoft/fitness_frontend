@@ -93,7 +93,7 @@ export function NutritionList() {
           <div className="flex space-x-2">
             <Link to={`/dashboard/nutrition-details/${nutritionId}`}>
               {" "}
-              <Button className="bg-customBg" size="sm">
+              <Button className="bg-[#7994CB]" size="sm">
                 <Eye />
               </Button>
             </Link>
@@ -103,7 +103,7 @@ export function NutritionList() {
               </Button>
             </Link>
             <Button
-              className="bg-customBg"
+              className="bg-[#7994CB]"
               size="sm"
               onClick={() => handleOpenDeleteModal(nutritionId)}
             >
@@ -205,7 +205,7 @@ export function NutritionList() {
                     : `/dashboard/add-nutrition-guide`
                 }
               >
-                <Button className="bg-customBg uppercase font-medium" size="sm">
+                <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
                   {user_id ? "הוסף תפריט תזונה" : " הוסף מדריך תזונה"}
                 </Button>
               </Link>
@@ -295,7 +295,7 @@ export function NutritionList() {
               key={index}
               className={`${
                 table.getState().pagination.pageIndex === index
-                  ? "bg-customBg"
+                  ? "bg-[#7994CB]"
                   : "bg-white text-black border hover:text-white"
               }`}
               size="sm"

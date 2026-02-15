@@ -29,7 +29,7 @@
 //   return (
 //     <Dialog>
 //       <DialogTrigger asChild>
-//         <Button className="bg-customBg" size="sm">
+//         <Button className="bg-[#7994CB]" size="sm">
 //           <Eye />
 //         </Button>
 //       </DialogTrigger>
@@ -85,7 +85,7 @@
 //         )}
 //         <DialogFooter>
 //           <DialogClose asChild>
-//             <Button className="w-full bg-customBg uppercase ">Close</Button>
+//             <Button className="w-full bg-[#7994CB] uppercase ">Close</Button>
 //           </DialogClose>
 //         </DialogFooter>
 //       </DialogContent>
@@ -124,7 +124,7 @@ export default function WorkoutDetails({ workoutId }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-customBg p-2 sm:p-3" size="sm">
+        <Button className="bg-[#7994CB] p-2 sm:p-3" size="sm">
           <Eye />
         </Button>
       </DialogTrigger>
@@ -184,7 +184,7 @@ export default function WorkoutDetails({ workoutId }) {
         )}
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg uppercase">סגור</Button>
+            <Button className="w-full bg-[#7994CB] uppercase">סגור</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

@@ -180,7 +180,7 @@ export function ExerciseTable() {
               </Button>
             </Link>
             <Button
-              className="bg-customBg"
+              className="bg-[#7994CB]"
               size="sm"
               onClick={() => handleOpenDeleteModal(row.original)}
             >
@@ -293,7 +293,7 @@ export function ExerciseTable() {
               onChange={(e) => setEquipment(e[0].value)}
             />
             <Link to="/dashboard/exercise-library">
-              <Button className="bg-customBg uppercase font-medium" size="sm">
+              <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
                 הוסף תרגיל חדש
               </Button>
             </Link>

@@ -94,7 +94,7 @@ export default function WorkoutLists() {
               </Button>
             </Link>
             <Button
-              className="bg-customBg"
+              className="bg-[#7994CB]"
               size="sm"
               onClick={() => handleOpenDeleteModal(workoutId)}
             >
@@ -192,7 +192,7 @@ export default function WorkoutLists() {
               </div>
             </div>
             <Link to="/dashboard/workout-programme">
-              <Button className="bg-customBg uppercase font-medium" size="sm">
+              <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
                 הוסף אימון חדש
               </Button>
             </Link>

@@ -113,7 +113,7 @@ const [isLoading, setIsLoading] = useState(false);
               className="border border-gray-300 p-2 rounded w-full"
             />
             {errors.file && (
-              <p className="text-red-500 text-xs mt-1">{errors.file.message}</p>
+              <p className="text-[#7994CB] text-xs mt-1">{errors.file.message}</p>
             )}
           </div>
         </div>
@@ -121,7 +121,7 @@ const [isLoading, setIsLoading] = useState(false);
         <div className="flex justify-center">
           <Button
             type="submit"
-            className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            className="text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
             disabled={isLoading}
           >
             { isLoading ? <Loader className="animate-spin" /> : "הוסף תפריט תזונה אישי"}

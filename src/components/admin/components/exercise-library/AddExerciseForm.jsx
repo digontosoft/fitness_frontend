@@ -165,7 +165,7 @@ const AddExerciseForm = ({ exerciseId }) => {
                 ))}
               </select>
               {errors.body_part && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-[#7994CB] text-sm mt-1">
                   {errors.body_part.message}
                 </p>
               )}
@@ -196,7 +196,7 @@ const AddExerciseForm = ({ exerciseId }) => {
                 ))}
               </select>
               {errors.body_part && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-[#7994CB] text-sm mt-1">
                   {errors.equipment.message}
                 </p>
               )}

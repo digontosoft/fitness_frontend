@@ -117,7 +117,7 @@ export function TrainingList() {
               </Button>
             </Link>
             <Button
-              className="bg-customBg"
+              className="bg-[#7994CB]"
               size="sm"
               onClick={() => handleOpenDeleteModal(trainingId)}
             >
@@ -127,7 +127,7 @@ export function TrainingList() {
               <Link
                 to={`/dashboard/assign-training/${row.original._id}/${userId}`}
               >
-                <Button className="bg-customBg" size="sm">
+                <Button className="bg-[#7994CB]" size="sm">
                   {/* שייך תוכנית אימון */}
                   שייך אימון למתאמן
                 </Button>
@@ -204,7 +204,7 @@ export function TrainingList() {
             </div>
             {user.userType === "supperadmin" && (
               <Link to="/dashboard/add-training-program">
-                <Button className="bg-customBg uppercase font-medium" size="sm">
+                <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
                   צור תוכנית אימון{" "}
                 </Button>
               </Link>
