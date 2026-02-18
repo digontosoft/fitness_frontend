@@ -38,7 +38,7 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
       <div className="bg-white rounded-lg shadow-lg w-96 p-6 relative">
         {/* Close Button */}
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
+          className="absolute top-2 right-2 text-gray-500 hover:text-[#7994CB]"
           onClick={onClose}
         >
           ✖
@@ -135,7 +135,7 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-red-500 text-white rounded"
+              className="px-4 py-2 bg-[#7994CB] text-white rounded"
             >
               Save
             </button>

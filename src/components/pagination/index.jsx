@@ -33,7 +33,7 @@
 //             onClick={() => onPageChange(number)}
 //             className={`${
 //               currentPage === number
-//                 ? "bg-customBg text-white"
+//                 ? "bg-[#7994CB] text-white"
 //                 : "bg-white text-black border hover:text-white"
 //             }`}
 //           >
@@ -124,7 +124,7 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
               onClick={() => onPageChange(number)}
               className={`${
                 currentPage === number
-                  ? "bg-customBg text-white"
+                  ? "bg-[#7994CB] text-white"
                   : "bg-white text-black border hover:text-white"
               }`}
             >

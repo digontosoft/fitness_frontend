@@ -30,7 +30,7 @@ const PdfNutration = () => {
     return <Loading />;
   }
   if (error) {
-    return <p className="text-red-500">{error}</p>;
+    return <p className="text-[#7994CB]">{error}</p>;
   }
   return (
     <div className="w-full">

@@ -109,7 +109,7 @@
 //               className="border border-gray-300 p-2 rounded w-full"
 //             />
 //             {errors.file && (
-//               <p className="text-red-500 text-xs mt-1">{errors.file.message}</p>
+//               <p className="text-[#7994CB] text-xs mt-1">{errors.file.message}</p>
 //             )}
 //           </div>
 //         </div>
@@ -117,7 +117,7 @@
 //         <div className="flex justify-center">
 //           <Button
 //             type="submit"
-//             className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+//             className="text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
 //           >
 //             {"Add Nutrition Guide"}
 //           </Button>
@@ -246,7 +246,7 @@ const AddNutritionForm = () => {
               className="border border-gray-300 p-2 rounded w-full"
             />
             {errors.file && (
-              <p className="text-red-500 text-xs mt-1">{errors.file.message}</p>
+              <p className="text-[#7994CB] text-xs mt-1">{errors.file.message}</p>
             )}
           </div>
         </div>
@@ -254,7 +254,7 @@ const AddNutritionForm = () => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+            className="text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
             disabled={isLoading}
           >
             { isLoading ? <Loader className="animate-spin" /> : "הוסף מדריך תזונה"}

@@ -61,7 +61,7 @@ const ThankYou = () => {
               }`}
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-[#7994CB] text-sm mt-1">
                 {errors.email.message}
               </p>
             )}
@@ -69,7 +69,7 @@ const ThankYou = () => {
           <BasicButton
             type="submit"
             title="שלח"
-            className="w-full bg-customBg text-white py-3 rounded-md hover:bg-red-800 transition-all"
+            className="w-full bg-[#7994CB] text-white py-3 rounded-md hover:bg-red-800 transition-all"
           />
         </form>
       </div>

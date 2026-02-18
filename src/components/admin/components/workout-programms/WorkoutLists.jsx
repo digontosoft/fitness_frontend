@@ -94,7 +94,7 @@ export default function WorkoutLists() {
               </Button>
             </Link>
             <Button
-              className="bg-customBg"
+              className="bg-[#7994CB]"
               size="sm"
               onClick={() => handleOpenDeleteModal(workoutId)}
             >
@@ -187,12 +187,12 @@ export default function WorkoutLists() {
                 }
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
               />
-              <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+              <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
                 <GoSearch className="text-white" />
               </div>
             </div>
             <Link to="/dashboard/workout-programme">
-              <Button className="bg-customBg uppercase font-medium" size="sm">
+              <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
                 הוסף אימון חדש
               </Button>
             </Link>

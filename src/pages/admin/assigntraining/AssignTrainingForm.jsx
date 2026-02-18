@@ -449,7 +449,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                   <h3 className="font-bold">{workout.name}</h3>
                   <Button
                     type="button"
-                    className="text-white bg-customBg"
+                    className="text-white bg-[#7994CB]"
                     onClick={() => handleRemoveWorkout(workoutIndex)}
                   >
                     <Trash className=" text-white cursor-pointer" />
@@ -462,7 +462,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                     </div>
                     <div className="flex items-center justify-center gap-4">
                       <Trash
-                        className="text-red-500 cursor-pointer sm:size-9 size-16"
+                        className="text-[#7994CB] cursor-pointer sm:size-9 size-16"
                         onClick={() =>
                           handleRemoveExercise(workoutIndex, exerciseIndex)
                         }
@@ -583,7 +583,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                   )}
                   <Button
                     type="button"
-                    className="my-4 bg-customBg"
+                    className="my-4 bg-[#7994CB]"
                     onClick={(e) => handleMoreExercise(workoutIndex, e)}
                   >
                     הוסף תרגילים לאימון
@@ -607,7 +607,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               )}
               <Button
                 type="button"
-                className="my-4 bg-customBg"
+                className="my-4 bg-[#7994CB]"
                 onClick={() => setShowWorkoutDropdown(!showWorkoutDropdown)}
               >
                 {showWorkoutDropdown
@@ -624,7 +624,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
             className={
               isButtonDisabled || isSupersetIncomplete
                 ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
-                : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+                : "text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
             }
             disabled={isButtonDisabled || isSupersetIncomplete}
           >

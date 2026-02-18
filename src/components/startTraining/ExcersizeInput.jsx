@@ -65,7 +65,7 @@ const ExcersizeInput = ({
                 })}
               />
               {errors.sets_done && (
-                <p className="text-xs text-red-600 mt-1">
+                <p className="text-xs text-[#7994CB]-600 mt-1">
                   {errors.sets_done.message}
                 </p>
               )}
@@ -95,7 +95,7 @@ const ExcersizeInput = ({
                 })}
               />
               {errors.reps_done && (
-                <p className="text-xs text-red-600 mt-1">
+                <p className="text-xs text-[#7994CB]-600 mt-1">
                   {errors.reps_done.message}
                 </p>
               )}
@@ -124,7 +124,7 @@ const ExcersizeInput = ({
                 })}
               />
               {errors.lastSet && (
-                <p className="text-xs text-red-600 mt-1">
+                <p className="text-xs text-[#7994CB]-600 mt-1">
                   {errors.lastSet.message}
                 </p>
               )}

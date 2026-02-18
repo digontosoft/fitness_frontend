@@ -133,7 +133,7 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg">סגור</Button>
+            <Button className="w-full bg-[#7994CB]">סגור</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

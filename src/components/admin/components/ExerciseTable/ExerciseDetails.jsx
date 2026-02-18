@@ -28,7 +28,7 @@ export default function ExerciseDetails({ exerciseId }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-customBg" size="sm">
+        <Button className="bg-[#7994CB]" size="sm">
           <Eye />
         </Button>
       </DialogTrigger>
@@ -55,7 +55,7 @@ export default function ExerciseDetails({ exerciseId }) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg ">סגור </Button>
+            <Button className="w-full bg-[#7994CB] ">סגור </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

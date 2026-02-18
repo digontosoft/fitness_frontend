@@ -85,7 +85,7 @@ const DragAndDrop = ({ register, setValue, errors }) => {
           {/* Upload Button */}
           <button
             onClick={handleButtonClick}
-            className="bg-[#BF2033] hover:bg-red-500 text-white px-4 rounded-full"
+            className="bg-[#BF2033] hover:bg-[#7994CB] text-white px-4 rounded-full"
           >
             העלאה
           </button>
@@ -99,7 +99,7 @@ const DragAndDrop = ({ register, setValue, errors }) => {
             style={{ display: "none" }}
           />
           {errors.uploadedFile && (
-            <p className="text-red-500 text-sm">
+            <p className="text-[#7994CB] text-sm">
               {errors.uploadedFile.message}
             </p>
           )}

@@ -78,7 +78,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
               placeholder="כותרת המשימה"
               {...register("title", { required: "Title is required" })}
             />
-            {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
+            {errors.title && <p className="text-[#7994CB] text-sm">{errors.title.message}</p>}
           </div>
 
           {/* Description */}
@@ -94,7 +94,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
               })}
             />
             {errors.description && (
-              <p className="text-red-500 text-sm">{errors.description.message}</p>
+              <p className="text-[#7994CB] text-sm">{errors.description.message}</p>
             )}
           </div>
 
@@ -106,7 +106,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
               placeholder="שם המשימה"
               {...register("name", { required: "Name is required" })}
             />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+            {errors.name && <p className="text-[#7994CB] text-sm">{errors.name.message}</p>}
           </div>
 
           {/* Task Type */}
@@ -139,7 +139,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
                 </Select>
               )}
             />
-            {errors.type && <p className="text-red-500 text-sm">{errors.type.message}</p>}
+            {errors.type && <p className="text-[#7994CB] text-sm">{errors.type.message}</p>}
           </div>
 
           {/* Footer */}
@@ -158,7 +158,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
   </Button>
   <Button 
     type="submit" 
-    className="w-full sm:w-auto bg-customBg" 
+    className="w-full sm:w-auto bg-[#7994CB]" 
     disabled={isLoading}
     dir="rtl"
   >

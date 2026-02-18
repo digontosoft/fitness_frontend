@@ -8,7 +8,7 @@ const Progressbar = ({ label, percentage }) => {
       </p>
       <div className="w-full h-3 bg-gray-100 rounded-md mt-2 relative border-[1px] border-gray-400">
         <div
-          className="h-full bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753] rounded-md"
+          className="h-full bg-[#7994CB] rounded-md"
           style={{ width: `${percentage}%` }}
         ></div>
         <div

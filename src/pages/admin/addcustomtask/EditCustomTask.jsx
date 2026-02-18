@@ -77,7 +77,7 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
               placeholder="כותרת המשימה"
               {...register("title", { required: "כותרת המשימה " })}
             />
-            {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
+            {errors.title && <p className="text-[#7994CB] text-sm">{errors.title.message}</p>}
           </div>
 
           {/* Description */}
@@ -93,7 +93,7 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
               })}
             />
             {errors.description && (
-              <p className="text-red-500 text-sm">{errors.description.message}</p>
+              <p className="text-[#7994CB] text-sm">{errors.description.message}</p>
             )}
           </div>
 
@@ -105,7 +105,7 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
               placeholder="שם המשימה "
               {...register("name", { required: "שם המשימה " })}
             />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+            {errors.name && <p className="text-[#7994CB] text-sm">{errors.name.message}</p>}
           </div>
 
           {/* Task Type */}
@@ -137,7 +137,7 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
                 </Select>
               )}
             />
-            {errors.type && <p className="text-red-500 text-sm">{errors.type.message}</p>}
+            {errors.type && <p className="text-[#7994CB] text-sm">{errors.type.message}</p>}
           </div>
 
           {/* Footer */}
@@ -150,7 +150,7 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
             >
               בטל
             </Button>
-            <Button type="submit" className="w-full sm:w-auto bg-customBg" disabled={isLoading}>
+            <Button type="submit" className="w-full sm:w-auto bg-[#7994CB]" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader className="mr-2 animate-spin" />Saving

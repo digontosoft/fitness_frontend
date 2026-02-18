@@ -477,7 +477,7 @@ const CustomizeWorkoutForm = () => {
                     </div>
                   </div>
                   <Trash
-                    className="cursor-pointer text-red-600"
+                    className="cursor-pointer text-[#7994CB]-600"
                     onClick={() => handleRemoveExercise(workout._id, ex._id)}
                   />
                 </div>
@@ -559,7 +559,7 @@ const CustomizeWorkoutForm = () => {
               <Button
                 type="button"
                 onClick={(e) => handleMoreExercise(workoutIndex, e)}
-                className="mt-2 bg-customBg flex mx-auto"
+                className="mt-2 bg-[#7994CB] flex mx-auto"
               >
                 הוסף תרגיל לאימון
               </Button>
@@ -573,7 +573,7 @@ const CustomizeWorkoutForm = () => {
             className={
               isButtonDisabled || isSupersetIncomplete
                 ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
-                : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+                : "text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
             }
             disabled={isButtonDisabled || isSupersetIncomplete}
           >

@@ -69,7 +69,7 @@ export function TaskModal({
         <DialogFooter className="w-full">
           <Button
             onClick={handleSubmit}
-            className="bg-red-600 hover:bg-red-500 w-full"
+            className="bg-red-600 hover:bg-[#7994CB] w-full"
           >
             {selectedTask ? "עדכן מעקב" : "Create Task"}
           </Button>

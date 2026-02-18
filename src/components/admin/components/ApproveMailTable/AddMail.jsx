@@ -38,7 +38,7 @@
 //   return (
 //     <Dialog>
 //       <DialogTrigger asChild>
-//         <Button className="bg-customBg">הוסף כתובת מייל</Button>
+//         <Button className="bg-[#7994CB]">הוסף כתובת מייל</Button>
 //       </DialogTrigger>
 //       <DialogContent className="sm:max-w-[425px]">
 //         <DialogHeader>
@@ -64,7 +64,7 @@
 //                 dir="rtl"
 //               />
 //               {errors.email && (
-//                 <p className="text-red-500 text-sm mt-1">
+//                 <p className="text-[#7994CB] text-sm mt-1">
 //                   {errors.email.message}
 //                 </p>
 //               )}
@@ -84,14 +84,14 @@
 //                 />
 //               </div>
 //               {errors.expiry_date && (
-//                 <p className="text-red-500 text-sm mt-1">
+//                 <p className="text-[#7994CB] text-sm mt-1">
 //                   {errors.expiry_date.message}
 //                 </p>
 //               )}
 //             </div>
 //           </div>
 //           <div className="flex items-center justify-end">
-//             <BasicButton type="submit" title="הוסף" className="bg-customBg" />
+//             <BasicButton type="submit" title="הוסף" className="bg-[#7994CB]" />
 //           </div>
 //         </form>
 //         <DialogFooter></DialogFooter>
@@ -156,7 +156,7 @@ export default function AddMail({ setEmails }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-customBg">הוסף כתובת מייל</Button>
+        <Button className="bg-[#7994CB]">הוסף כתובת מייל</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -184,7 +184,7 @@ export default function AddMail({ setEmails }) {
                 dir="rtl"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-[#7994CB] text-sm mt-1">
                   {errors.email.message}
                 </p>
               )}
@@ -255,7 +255,7 @@ export default function AddMail({ setEmails }) {
                 )}
               />
               {errors.role && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-[#7994CB] text-sm mt-1">
                   {errors.role.message}
                 </p>
               )}
@@ -277,7 +277,7 @@ export default function AddMail({ setEmails }) {
                 />
               </div>
               {errors.expiry_date && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="text-[#7994CB] text-sm mt-1">
                   {errors.expiry_date.message}
                 </p>
               )}
@@ -288,7 +288,7 @@ export default function AddMail({ setEmails }) {
             <BasicButton
               type="submit"
               title={loading ? "שולח..." : "הוסף"}
-              className="bg-customBg"
+              className="bg-[#7994CB]"
               disabled={loading}
             />
           </div>

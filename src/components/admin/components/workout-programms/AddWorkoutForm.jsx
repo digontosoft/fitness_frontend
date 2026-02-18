@@ -188,7 +188,7 @@ const AddWorkoutForm = () => {
               className="border p-4 flex items-center justify-center gap-4 rounded-md"
             >
               <Trash
-                className="cursor-pointer text-red-600 size-10"
+                className="cursor-pointer text-[#7994CB]-600 size-10"
                 onClick={() => handleRemoveExercise(index)}
               />
               <div className="space-y-4">
@@ -284,14 +284,14 @@ const AddWorkoutForm = () => {
           <div>
             <Button
               type="button"
-              className="mt-2 bg-customBg flex mx-auto"
+              className="mt-2 bg-[#7994CB] flex mx-auto"
               onClick={() => setAddMoreExercise(!addMoreExercise)}
             >
               הוסף עוד פעילות גופנית
             </Button>
             {/* <Button
               type="button"
-              className="mt-2 bg-customBg flex mx-auto"
+              className="mt-2 bg-[#7994CB] flex mx-auto"
               onClick={() => {
                 setSelectedBodyPart(null);
                 setSelectedEquipment(null);
@@ -307,7 +307,7 @@ const AddWorkoutForm = () => {
         <div className="flex justify-center mt-8">
           <Button
             type="submit"
-            className="text-white px-4 md:px-8 py-3 text-base rounded-full bg-customBg hover:bg-customBg/90 focus:ring-2 focus:ring-customBg focus:ring-opacity-50"
+            className="text-white px-4 md:px-8 py-3 text-base rounded-full bg-[#7994CB] hover:bg-[#7994CB]/90 focus:ring-2 focus:ring-customBg focus:ring-opacity-50"
             disabled={workoutExercises.length === 0 || !isFormValid}
           >
             לשמור תוכנית אימון חדשה

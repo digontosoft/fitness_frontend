@@ -406,7 +406,7 @@ const EditTrainingForm = () => {
                 <h1 className="font-semibold text-center">{workout?.name}</h1>
                 <div className="flex items-center gap-x-2" dir="rtl">
                   <Trash
-                    className="cursor-pointer text-red-600"
+                    className="cursor-pointer text-[#7994CB]-600"
                     onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
                   />
                 </div>
@@ -468,7 +468,7 @@ const EditTrainingForm = () => {
                       </div>
                     </div>
                     <Trash
-                      className="cursor-pointer text-red-600 size-9"
+                      className="cursor-pointer text-[#7994CB]-600 size-9"
                       onClick={() => handleRemoveExercise(workout._id, ex._id)}
                     />
                   </div>
@@ -543,7 +543,7 @@ const EditTrainingForm = () => {
                       [workout._id]: true,
                     }))
                   }
-                  className="mt-2 bg-customBg flex mx-auto"
+                  className="mt-2 bg-[#7994CB] flex mx-auto"
                 >
                   הוסף תרגילים לאימון
                 </Button>
@@ -557,7 +557,7 @@ const EditTrainingForm = () => {
               className={
                 isButtonDisabled || isSupersetIncomplete
                   ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200 sm:order-first order-last"
-                  : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg sm:order-first order-last"
+                  : "text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB] sm:order-first order-last"
               }
               disabled={isButtonDisabled || isSupersetIncomplete}
             >
@@ -565,7 +565,7 @@ const EditTrainingForm = () => {
             </Button>
             <Button
               type="button"
-              className=" bg-customBg"
+              className=" bg-[#7994CB]"
               onClick={() => setShowWorkoutSelect(true)}
             >
               הוסף אימון לתוכנית

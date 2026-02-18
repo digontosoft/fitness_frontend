@@ -65,7 +65,7 @@ export function RecurringTasksCard({
         <DialogFooter className="w-full">
           <Button
             onClick={handleSubmit}
-            className="w-full bg-red-600 hover:bg-red-500 transition-colors duration-200"
+            className="w-full bg-red-600 hover:bg-[#7994CB] transition-colors duration-200"
             disabled={loading}
           >
             {loading ? (

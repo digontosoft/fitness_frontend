@@ -169,7 +169,7 @@
 //         return (
 //           <div className="flex gap-2">
 //             <Button
-//               className="bg-red-500 text-white"
+//               className="bg-[#7994CB] text-white"
 //               size="sm"
 //               onClick={() => handleView(row.original)}
 //             >
@@ -190,7 +190,7 @@
 //             </Button>
 
 //             <Button
-//               className="bg-customBg font-bold"
+//               className="bg-[#7994CB] font-bold"
 //               size="sm"
 //               onClick={() =>
 //                 updateStatus(
@@ -501,7 +501,7 @@ export default function AdminTable() {
         return (
           <div className="flex gap-2">
             <Button
-              className="bg-red-500 text-white"
+              className="bg-[#7994CB] text-white"
               size="sm"
               onClick={() => handleView(row.original)}
             >
@@ -521,7 +521,7 @@ export default function AdminTable() {
               Admin
             </Button>
             <Button
-              className="bg-customBg font-bold"
+              className="bg-[#7994CB] font-bold"
               size="sm"
               onClick={() => updateStatus(id)}
             >
@@ -530,7 +530,7 @@ export default function AdminTable() {
             {/* The new button to open the modal */}
             <Button
                 variant="outline"
-                className="bg-customBg text-white hover:text-white"
+                className="bg-[#7994CB] text-white hover:text-white"
                 onClick={() => {
                     setSelectedAdminId(id);
                     setIsAssignModalOpen(true);

@@ -22,7 +22,7 @@ const SearchBox = ({
         className={`border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm w-full md:w-56 ${inputClass}`}
       />
       <div
-        className={`absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2 ${iconClass}`}
+        className={`absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2 ${iconClass}`}
       >
         <GoSearch className="text-white" />
       </div>

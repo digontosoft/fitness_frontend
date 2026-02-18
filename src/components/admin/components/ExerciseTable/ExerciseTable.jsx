@@ -180,7 +180,7 @@ export function ExerciseTable() {
               </Button>
             </Link>
             <Button
-              className="bg-customBg"
+              className="bg-[#7994CB]"
               size="sm"
               onClick={() => handleOpenDeleteModal(row.original)}
             >
@@ -273,7 +273,7 @@ export function ExerciseTable() {
                 onChange={(e) => setSearchValue(e.target.value)}
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-40 h-12"
               />
-              <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+              <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
                 <GoSearch className="text-white" />
               </div>
             </div>
@@ -293,7 +293,7 @@ export function ExerciseTable() {
               onChange={(e) => setEquipment(e[0].value)}
             />
             <Link to="/dashboard/exercise-library">
-              <Button className="bg-customBg uppercase font-medium" size="sm">
+              <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
                 הוסף תרגיל חדש
               </Button>
             </Link>

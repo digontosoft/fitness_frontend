@@ -79,7 +79,7 @@ const ManageRecipeBook = () => {
     <Loading />
   }
   return (
-    <div className="bg-customBg relative flex items-center justify-center min-h-screen mb-2">
+    <div className="bg-[#7994CB] relative flex items-center justify-center min-h-screen mb-2">
       <div className="bg-white shadow-lg rounded-[60px] p-6 w-5/6 min-h-[80vh] h-auto flex flex-col items-center justify-center my-4">
         <div className="grid gap-4 items-center justify-items-center">
           <FormTitle title={"ערוך ספר מתכונים"} />
@@ -118,7 +118,7 @@ const ManageRecipeBook = () => {
                       className="sm:min-w-[350px] border border-gray-300 rounded-md p-2 min-h-[120px] resize-y"
                     />
                     {errors.description && (
-                      <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>
+                      <p className="text-[#7994CB] text-xs mt-1">{errors.description.message}</p>
                     )}
                   </div>
 
@@ -143,7 +143,7 @@ const ManageRecipeBook = () => {
                       </SelectContent>
                     </Select>
                     {errors.type && (
-                      <p className="text-red-500 text-xs mt-1">{errors.type.message}</p>
+                      <p className="text-[#7994CB] text-xs mt-1">{errors.type.message}</p>
                     )}
                   </div>
 
@@ -171,7 +171,7 @@ const ManageRecipeBook = () => {
                       className="border border-gray-300 p-2 rounded w-full"
                     />
                     {errors.file && (
-                      <p className="text-red-500 text-xs mt-1">{errors.file.message}</p>
+                      <p className="text-[#7994CB] text-xs mt-1">{errors.file.message}</p>
                     )}
                   </div>
 
@@ -194,7 +194,7 @@ const ManageRecipeBook = () => {
                 <div className="flex justify-center">
                   <Button
                     type="submit"
-                    className="text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+                    className="text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
                     disabled={loading}
                   >
                     {

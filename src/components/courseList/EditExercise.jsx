@@ -227,7 +227,7 @@ const EditExercise = () => {
   return (
     <div
       dir="rtl"
-      className="w-full bg-gradient-to-t from-[rgb(148,0,25)] to-[#FD4753] min-h-screen border-b-8 border-white sm:py-12 py-6"
+      className="w-full bg-[#7994CB] min-h-screen border-b-8 border-white sm:py-12 py-6"
     >
       <div className="flex flex-col justify-center items-center max-w-6xl mx-auto bg-white rounded-3xl p-2 md:p-10">
         <h1 className="text-2xl font-semibold">{workData?.task_name}</h1>
@@ -239,7 +239,7 @@ const EditExercise = () => {
           >
             <Trash
               onClick={() => handleRemoveExercise(item._id)}
-              className="text-red-600 cursor-pointer"
+              className="text-[#7994CB]-600 cursor-pointer"
             />
             <div>
               <h2 className="text-lg text-center font-semibold text-gray-800">
@@ -292,7 +292,7 @@ const EditExercise = () => {
           <div className="flex items-center justify-end gap-4 mt-4">
             <Button
               onClick={handleAddMoreExerciseClick}
-              className="bg-customBg rounded-lg text-white px-6 py-2"
+              className="bg-[#7994CB] rounded-lg text-white px-6 py-2"
             >
               הוסף תרגיל נוסף
             </Button>
@@ -433,7 +433,7 @@ const EditExercise = () => {
             <div className="flex justify-center mt-4">
               <Button
                 onClick={handleAddNewExercise}
-                className="bg-customBg rounded-lg text-white px-6 py-2 hover:bg-red-400 mt-4"
+                className="bg-[#7994CB] rounded-lg text-white px-6 py-2 hover:bg-red-400 mt-4"
               >
                 הוסף תרגיל
               </Button>
@@ -443,7 +443,7 @@ const EditExercise = () => {
 
         <Button
           onClick={handleSubmit}
-          className="bg-customBg rounded-lg text-white px-6 py-2 hover:bg-red-400 mt-4"
+          className="bg-[#7994CB] rounded-lg text-white px-6 py-2 hover:bg-red-400 mt-4"
         >
           שמור שינויים
         </Button>

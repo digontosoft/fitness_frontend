@@ -125,9 +125,7 @@ useEffect(() => {
                 to={link}
                 end={link === "/admin-dashboard"}
                 className={({ isActive }) =>
-                  `flex items-center text-black font-bold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black"
-                  }`
+                  `flex items-center font-bold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
                 }
                 dir="rtl"
               >
@@ -137,46 +135,19 @@ useEffect(() => {
           </div>
         ) : userType === "trainee" ? (
           <div className="hidden md:flex justify-between items-center space-x-9">
-            {traineeLink.map(({ _id, title, link, icon: Icon }) => {
-              // const isTrainingLink =
-              //   link === "/trainings" || link === "/exercise-library";
-              // if (isTrainingLink && !hasWorkoutTask) {
-              //   return (
-              //     <a
-              //       key={_id}
-              //       href="https://wa.link/gmt4t4"
-              //       target="_blank"
-              //       rel="noopener noreferrer"
-              //       className="flex items-center text-gray-400 font-bold gap-x-4 cursor-not-allowed"
-              //       onClick={(e) => e.stopPropagation()}
-              //       dir="rtl"
-              //     >
-              //       <img
-              //         src={Icon}
-              //         alt={`${title} icon`}
-              //         className="w-5 h-5 opacity-50"
-              //       />
-              //       <span>{title}</span>
-              //     </a>
-              //   );
-              // }
-
-              return (
-                <NavLink
-                  key={_id}
-                  to={link}
-                  className={({ isActive }) =>
-                    `flex items-center text-black font-bold gap-x-4 ${
-                      isActive ? "text-red-500" : "text-black"
-                    }`
-                  }
-                  dir="rtl"
-                >
-                  <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-                  <span>{title}</span>
-                </NavLink>
-              );
-            })}
+            {traineeLink.map(({ _id, title, link, icon: Icon }) => (
+              <NavLink
+                key={_id}
+                to={link}
+                className={({ isActive }) =>
+                  `flex items-center font-bold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
+                }
+                dir="rtl"
+              >
+                <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
+                <span>{title}</span>
+              </NavLink>
+            ))}
           </div>
         ) : userType === "recipe" ? (
           <div className="hidden md:flex justify-between items-center space-x-9">
@@ -185,11 +156,8 @@ useEffect(() => {
                 key={_id}
                 to={link}
                 className={({ isActive }) =>
-                  `flex items-center text-gray-600 hover:text-gray-900 font-bold gap-x-4 ${
-                    isActive
-                      ? "text-red-500"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`
+                  // Always "#7994CB" for active, otherwise black
+                  `flex items-center font-bold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
                 }
                 dir="rtl"
               >
@@ -206,9 +174,7 @@ useEffect(() => {
                 to={link}
                 end={link === "/dashboard"}
                 className={({ isActive }) =>
-                  `flex items-center text-black font-bold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black"
-                  }`
+                  `flex items-center font-bold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
                 }
                 dir="rtl"
               >
@@ -239,7 +205,7 @@ useEffect(() => {
         {/* Hamburger Menu Button */}
         <div className="md:hidden">
           <Button
-          ref={buttonRef}
+            ref={buttonRef}
             variant="ghost"
             size="icon"
             onClick={toggleMenu}
@@ -251,8 +217,8 @@ useEffect(() => {
       </div>
 
       {/* Mobile Menu */}
-      {/* {isOpen && (
-        <div className="md:hidden bg-white p-4 shadow-md">
+      {isOpen && (
+        <div ref={menuRef} className="md:hidden bg-white p-4 shadow-md">
           <div className="space-y-2">
             {userType === "admin" ? (
               <div className="flex flex-col space-y-2">
@@ -263,10 +229,9 @@ useEffect(() => {
                     <NavLink
                       key={_id}
                       to={link}
+                      end="/admin-dashboard"
                       className={({ isActive }) =>
-                        `flex items-center text-black font-semibold gap-x-4 ${
-                          isActive ? "text-red-500" : "text-black"
-                        }`
+                        `flex items-center font-semibold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
                       }
                       onClick={() => setIsOpen(false)}
                       dir="rtl"
@@ -280,53 +245,20 @@ useEffect(() => {
                 {traineeLink
                   .slice()
                   .reverse()
-                  .map(({ _id, title, link, icon: Icon }) => {
-                    const isTrainingLink =
-                      link === "/trainings" || link === "/exercise-library";
-
-                    if (isTrainingLink && !hasWorkoutTask) {
-                      return (
-                        <a
-                          key={_id}
-                          href="https://wa.link/gmt4t4"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center text-gray-400 font-semibold gap-x-4 cursor-not-allowed"
-                          dir="rtl"
-                        >
-                          <img
-                            src={Icon}
-                            alt={`${title} icon`}
-                            className="w-5 h-5 opacity-50"
-                          />
-                          <span>{title}</span>
-                        </a>
-                      );
-                    }
-
-                    return (
-                      <NavLink
-                        key={_id}
-                        to={link}
-                        className={({ isActive }) =>
-                          `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
-                            isActive
-                              ? "text-red-500"
-                              : "text-gray-600 hover:text-gray-900"
-                          }`
-                        }
-                        onClick={() => setIsOpen(false)}
-                        dir="rtl"
-                      >
-                        <img
-                          src={Icon}
-                          alt={`${title} icon`}
-                          className="w-5 h-5"
-                        />
-                        <span>{title}</span>
-                      </NavLink>
-                    );
-                  })}
+                  .map(({ _id, title, link, icon: Icon }) => (
+                    <NavLink
+                      key={_id}
+                      to={link}
+                      className={({ isActive }) =>
+                        `flex items-center font-semibold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
+                      }
+                      onClick={() => setIsOpen(false)}
+                      dir="rtl"
+                    >
+                      <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
+                      <span>{title}</span>
+                    </NavLink>
+                  ))}
               </div>
             ) : userType === "recipe" ? (
               <div className="flex flex-col space-y-2">
@@ -338,18 +270,32 @@ useEffect(() => {
                       key={_id}
                       to={link}
                       className={({ isActive }) =>
-                        `flex items-center text-black font-semibold gap-x-4 ${
-                          isActive ? "text-red-500" : "text-black"
-                        }`
+                        `flex items-center font-semibold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
                       }
                       onClick={() => setIsOpen(false)}
                       dir="rtl"
                     >
-                      <img
-                        src={Icon}
-                        alt={`${title} icon`}
-                        className="w-5 h-5"
-                      />
+                      <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
+                      <span dir="rtl">{title}</span>
+                    </NavLink>
+                  ))}
+              </div>
+            ) : userType === "supperadmin" ? (
+              <div className="flex flex-col space-y-2">
+                {supperAdminLink
+                  .slice()
+                  .reverse()
+                  .map(({ _id, title, link, icon: Icon }) => (
+                    <NavLink
+                      key={_id}
+                      to={link}
+                      end="/dashboard"
+                      className={({ isActive }) =>
+                        `flex items-center font-semibold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
+                      }
+                      onClick={() => setIsOpen(false)}
+                      dir="rtl"
+                    >
                       <span dir="rtl">{title}</span>
                     </NavLink>
                   ))}
@@ -365,142 +311,7 @@ useEffect(() => {
             <LogOut className="w-5 h-5" />
           </a>
         </div>
-      )} */}
-
-{/* Mobile Menu */}
-{isOpen && (
-  <div ref={menuRef} className="md:hidden bg-white p-4 shadow-md">
-    <div className="space-y-2">
-      {userType === "admin" ? (
-        <div className="flex flex-col space-y-2">
-          {adminLink
-            .slice()
-            .reverse()
-            .map(({ _id, title, link, icon: Icon }) => (
-              <NavLink
-                key={_id}
-                to={link}
-                end="/admin-dashboard"
-                className={({ isActive }) =>
-                  `flex items-center text-black font-semibold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black"
-                  }`
-                }
-                onClick={() => setIsOpen(false)}
-                dir="rtl"
-              >
-                <span dir="rtl">{title}</span>
-              </NavLink>
-            ))}
-        </div>
-      ) : userType === "trainee" ? (
-        <div className="flex flex-col space-y-2">
-          {traineeLink
-            .slice()
-            .reverse()
-            .map(({ _id, title, link, icon: Icon }) => {
-              // const isTrainingLink =
-              //   link === "/trainings" || link === "/exercise-library";
-
-              // if (isTrainingLink && !hasWorkoutTask) {
-              //   return (
-              //     <a
-              //       key={_id}
-              //       href="https://wa.link/gmt4t4"
-              //       target="_blank"
-              //       rel="noopener noreferrer"
-              //       className="flex items-center text-gray-400 font-semibold gap-x-4 cursor-not-allowed"
-              //       dir="rtl"
-              //     >
-              //       <img
-              //         src={Icon}
-              //         alt={`${title} icon`}
-              //         className="w-5 h-5 opacity-50"
-              //       />
-              //       <span>{title}</span>
-              //     </a>
-              //   );
-              // }
-
-              return (
-                <NavLink
-                  key={_id}
-                  to={link}
-                  className={({ isActive }) =>
-                    `flex items-center text-gray-600 hover:text-gray-900 font-semibold gap-x-4 ${
-                      isActive
-                        ? "text-red-500"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`
-                  }
-                  onClick={() => setIsOpen(false)}
-                  dir="rtl"
-                >
-                  <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-                  <span>{title}</span>
-                </NavLink>
-              );
-            })}
-        </div>
-      ) : userType === "recipe" ? (
-        <div className="flex flex-col space-y-2">
-          {recipeLink
-            .slice()
-            .reverse()
-            .map(({ _id, title, link, icon: Icon }) => (
-              <NavLink
-                key={_id}
-                to={link}
-                className={({ isActive }) =>
-                  `flex items-center text-black font-semibold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black"
-                  }`
-                }
-                onClick={() => setIsOpen(false)}
-                dir="rtl"
-              >
-                <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
-                <span dir="rtl">{title}</span>
-              </NavLink>
-            ))}
-        </div>
-      ) : userType === "supperadmin" ? (
-        <div className="flex flex-col space-y-2">
-          {supperAdminLink
-            .slice()
-            .reverse()
-            .map(({ _id, title, link, icon: Icon }) => (
-              <NavLink
-                key={_id}
-                to={link}
-                end="/dashboard"
-                className={({ isActive }) =>
-                  `flex items-center text-black font-semibold gap-x-4 ${
-                    isActive ? "text-red-500" : "text-black"
-                  }`
-                }
-                onClick={() => setIsOpen(false)}
-                dir="rtl"
-              >
-                <span dir="rtl">{title}</span>
-              </NavLink>
-            ))}
-        </div>
-      ) : (
-        <div>No valid user type or token found.</div>
       )}
-    </div>
-    <a href="" className="flex items-center space-x-2" onClick={logout}>
-      <span className="font-semibold text-black" dir="rtl">
-        התנתק
-      </span>
-      <LogOut className="w-5 h-5" />
-    </a>
-  </div>
-)}
-
-
-
     </nav>
   );
 };

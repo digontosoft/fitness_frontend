@@ -78,7 +78,7 @@ const FoodDairyForm = () => {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full mt-6 text-white p-2 rounded-md bg-customBg hover:bg-red-800"
+        className="w-full mt-6 text-white p-2 rounded-md bg-[#7994CB] hover:bg-red-800"
       >
         שמירת יומן אכילה
       </button>

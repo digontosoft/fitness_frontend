@@ -158,7 +158,7 @@ const response = await axios.delete(`${base_url}/delete-task-template/${taskToDe
     // Page/UI RTL
     <div className="w-full p-6 space-y-4" dir="ltr">
       <div dir="rtl">
-         <Button onClick={() => setOpen(true)} className="bg-customBg hover:bg-customBg-dark">שייך משימה מותאמת אישית</Button>
+         <Button onClick={() => setOpen(true)} className="bg-[#7994CB] hover:bg-[#7994CB]-dark">שייך משימה מותאמת אישית</Button>
       </div>
       {/* 🔧 Table itself LTR so columns render in the array order */}
       <div className="rounded-md border">
@@ -224,7 +224,7 @@ const response = await axios.delete(`${base_url}/delete-task-template/${taskToDe
  </AlertDialogHeader>
  <AlertDialogFooter>
   <AlertDialogCancel>Cancel</AlertDialogCancel>
-  <AlertDialogAction onClick={handleDeleteTask} className="bg-customBg hover:bg-customBg-dark">{deleteLoading ? <><Loader className="mr-2 h-4 w-4 animate-spin" />Deleting</> : "Continue"}</AlertDialogAction>
+  <AlertDialogAction onClick={handleDeleteTask} className="bg-[#7994CB] hover:bg-[#7994CB]-dark">{deleteLoading ? <><Loader className="mr-2 h-4 w-4 animate-spin" />Deleting</> : "Continue"}</AlertDialogAction>
  </AlertDialogFooter>
  </AlertDialogContent>
  </AlertDialog>

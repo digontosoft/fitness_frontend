@@ -32,7 +32,7 @@ import CourseCart from "./CourseCart";
 //           size="sm"
 //           key={number}
 //           onClick={() => onPageChange(number)}
-//           className={`${currentPage === number ? "bg-customBg" : ""}`}
+//           className={`${currentPage === number ? "bg-[#7994CB]" : ""}`}
 //         >
 //           {number}
 //         </Button>
@@ -135,7 +135,7 @@ const equipmentOptions = [
 //             onChange={(e) => setSearchValue(e.target.value)}
 //             className="border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
 //           />
-//           <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+//           <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
 //             <GoSearch className="text-white" />
 //           </div>
 //         </div>
@@ -260,7 +260,7 @@ export const CourseListGroup = () => {
             onChange={(e) => setSearchValue(e.target.value)}
             className="border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
           />
-          <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+          <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
             <GoSearch className="text-white" />
           </div>
         </div>

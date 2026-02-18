@@ -60,11 +60,11 @@ const AddExercise = ({
   return (
     <div className="border p-4 rounded-md flex items-center justify-center gap-5">
       <Trash
-        className="cursor-pointer text-red-600 size-5"
+        className="cursor-pointer text-[#7994CB]-600 size-5"
         onClick={() => handleRemoveExercise(exercise?._id, false)} // Pass false for existing exercise
       />
       <div className=" flex flex-col items-center justify-center space-y-4 ">
-        <div className="flex items-center justify-center bg-customBg py-1 w-auto h-auto rounded-md text-white px-2">
+        <div className="flex items-center justify-center bg-[#7994CB] py-1 w-auto h-auto rounded-md text-white px-2">
           <p className="text-center">{exercise?.name}</p>
         </div>
         <div className="flex sm:flex-row flex-col gap-4 sm:w-[400px]">

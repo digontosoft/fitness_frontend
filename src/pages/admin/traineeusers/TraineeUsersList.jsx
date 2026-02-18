@@ -103,13 +103,13 @@ export function TraineeUsersLists() {
         const userId = row.original._id;
         return (
           <div className="flex space-x-2">
-             <Button className="bg-customBg hover:bg-customBg-dark" size="sm" onClick={() => {setViewUser(userId), setViewUserModalOpen(true)}}>
+             <Button className="bg-[#7994CB] hover:bg-[#7994CB]-dark" size="sm" onClick={() => {setViewUser(userId), setViewUserModalOpen(true)}}>
           <Eye className="w-4 h-4" />
         </Button>
            
             <EditApproveMail id={userId} updateDate={updateDate} />
             <Button
-              className="bg-customBg"
+              className="bg-[#7994CB]"
               size="sm"
               onClick={() => handleOpenDeleteModal(userId)}
             >
@@ -120,7 +120,7 @@ export function TraineeUsersLists() {
 
               <Link to={`/admin-dashboard/traineer/${userId}`}>
                 <Button
-                  className="bg-customBg"
+                  className="bg-[#7994CB]"
                   size="sm"
                   onClick={() => handleOpenDeleteModal(row.original)}
                 >
@@ -131,7 +131,7 @@ export function TraineeUsersLists() {
               (
             <Link to={`/dashboard/traineer/${userId}`}>
               <Button
-                className="bg-customBg"
+                className="bg-[#7994CB]"
                 size="sm"
                 onClick={() => handleOpenDeleteModal(row.original)}
               >
@@ -141,7 +141,7 @@ export function TraineeUsersLists() {
               )
             }
             {/* <Button
-              className="bg-customBg"
+              className="bg-[#7994CB]"
               size="sm"
               onClick={() =>
                 updateStatus(
@@ -166,7 +166,7 @@ export function TraineeUsersLists() {
             </Button>
 
             <Button
-              className="bg-customBg font-bold"
+              className="bg-[#7994CB] font-bold"
               size="sm"
               onClick={() =>
                 updateStatus(
@@ -184,7 +184,7 @@ export function TraineeUsersLists() {
             {/* {
               userData?.userType === "supperadmin" &&(
             <Button
-              className="bg-customBg font-bold"
+              className="bg-[#7994CB] font-bold"
               size="sm"
               onClick={() =>
                 updateStatus(
@@ -313,7 +313,7 @@ export function TraineeUsersLists() {
                 }
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
               />
-              <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+              <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
                 <GoSearch className="text-white" />
               </div>
             </div>

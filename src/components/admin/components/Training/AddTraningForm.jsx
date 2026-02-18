@@ -348,7 +348,7 @@
 //                     <h4 className="font-medium">{exercise.name}</h4>
 //                     <div className="flex items-center justify-center gap-2 mt-2">
 //                       <Trash
-//                         className="text-red-500 cursor-pointer size-9"
+//                         className="text-[#7994CB] cursor-pointer size-9"
 //                         onClick={() =>
 //                           handleRemoveExercise(workoutIndex, exerciseIndex)
 //                         }
@@ -468,7 +468,7 @@
 
 //               <Button
 //                 type="button"
-//                 className="mt-5 bg-customBg"
+//                 className="mt-5 bg-[#7994CB]"
 //                 onClick={() => handleAddMoreExercise(workoutIndex)}
 //               >
 //                 הוסף עוד תרגיל לאימון
@@ -483,7 +483,7 @@
 //             className={
 //               isButtonDisabled || isSupersetIncomplete
 //                 ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
-//                 : "text-white px-4 md:px-8 py-2 rounded-full bg-customBg"
+//                 : "text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
 //             }
 //             disabled={isButtonDisabled || isSupersetIncomplete}
 //           >
@@ -781,7 +781,7 @@ const AddTrainingForm = () => {
                     <h4 className="font-medium">{exercise.name}</h4>
                     <div className="flex items-center justify-center gap-2 mt-2">
                       <Trash
-                        className="text-red-500 cursor-pointer size-9"
+                        className="text-[#7994CB] cursor-pointer size-9"
                         onClick={() =>
                           handleRemoveExercise(workoutIndex, exerciseIndex)
                         }
@@ -879,7 +879,7 @@ const AddTrainingForm = () => {
 
               <Button
                 type="button"
-                className="mt-5 bg-customBg"
+                className="mt-5 bg-[#7994CB]"
                 onClick={() => handleAddMoreExercise(workoutIndex)}
               >
                 הוסף עוד תרגיל לאימון
@@ -895,7 +895,7 @@ const AddTrainingForm = () => {
               type="button"
               variant="outline"
               onClick={handleAddMoreWorkout}
-              className="bg-customBg text-white"
+              className="bg-[#7994CB] text-white"
             >
               ➕ הוסף עוד אימון
             </Button>
@@ -910,7 +910,7 @@ const AddTrainingForm = () => {
             className={`px-8 py-2 rounded-full ${
               isButtonDisabled || isSupersetIncomplete
                 ? "bg-gray-200 text-black"
-                : "bg-customBg text-white"
+                : "bg-[#7994CB] text-white"
             }`}
           >
             שמור תכנית אימון חדשה

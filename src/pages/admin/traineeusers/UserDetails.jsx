@@ -26,7 +26,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogTrigger asChild>
-        <Button className="bg-customBg hover:bg-customBg-dark" size="sm">
+        <Button className="bg-[#7994CB] hover:bg-[#7994CB]-dark" size="sm">
           <Eye className="w-4 h-4" />
         </Button>
       </DialogTrigger>
@@ -57,7 +57,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
           {/* Additional Info */}
           <div className="w-full flex flex-wrap justify-center gap-4 text-sm text-gray-700">
             <div className="px-4 py-2 bg-red-200 rounded-lg shadow-sm">
-              <span className="font-medium text-red-600 uppercase">
+              <span className="font-medium text-[#7994CB]-600 uppercase">
                 {userData?.gender === "male" ? "זכר" : "נקבה"}
               </span>
             </div>
@@ -88,7 +88,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="w-full bg-customBg hover:bg-customBg-dark transition-all duration-200">
+            <Button className="w-full bg-[#7994CB] hover:bg-[#7994CB]-dark transition-all duration-200">
               סגור
             </Button>
           </DialogClose>
