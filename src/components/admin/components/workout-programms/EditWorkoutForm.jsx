@@ -278,7 +278,7 @@
 //                 <p className="text-center">{exercise.exercise_id?.name}</p>
 //                 <div className="flex items-center gap-8 sm:w-[327px]">
 //                   <Trash
-//                     className="cursor-pointer text-red-600 size-20"
+//                     className="cursor-pointer text-[#7994CB]-600 size-20"
 //                     onClick={() => handleRemoveExercise(index)}
 //                   />
 //                   <div className="flex flex-col space-y-2">
@@ -388,7 +388,7 @@
 //                   </p>
 //                   <div className="flex gap-4">
 //                     <Trash
-//                       className="cursor-pointer text-red-600 sm:size-10 size-20"
+//                       className="cursor-pointer text-[#7994CB]-600 sm:size-10 size-20"
 //                       onClick={() =>
 //                         handleRemoveExercise(newExerciseData.index)
 //                       }
@@ -775,7 +775,7 @@ const isFormValid = exercisesForm?.every(
                 className="border p-4 flex items-center justify-center gap-4 rounded-md"
               >
                 <Trash
-                  className="cursor-pointer text-red-600 size-10"
+                  className="cursor-pointer text-[#7994CB]-600 size-10"
                   onClick={() => handleRemoveExercise(index, false)} // Pass false for existing exercise
                 />
                 <div className="space-y-4">
@@ -911,7 +911,7 @@ const isFormValid = exercisesForm?.every(
                 </p>
                 <div className="flex gap-4">
                   <Trash
-                    className="cursor-pointer text-red-600 sm:size-10 size-20"
+                    className="cursor-pointer text-[#7994CB]-600 sm:size-10 size-20"
                     onClick={() => handleRemoveExercise(null, true)} // Pass true for new exercise
                   />
                   <div className="flex flex-col space-y-2">

@@ -57,7 +57,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
           {/* Additional Info */}
           <div className="w-full flex flex-wrap justify-center gap-4 text-sm text-gray-700">
             <div className="px-4 py-2 bg-red-200 rounded-lg shadow-sm">
-              <span className="font-medium text-red-600 uppercase">
+              <span className="font-medium text-[#7994CB]-600 uppercase">
                 {userData?.gender === "male" ? "זכר" : "נקבה"}
               </span>
             </div>

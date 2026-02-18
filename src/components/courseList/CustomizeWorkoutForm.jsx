@@ -477,7 +477,7 @@ const CustomizeWorkoutForm = () => {
                     </div>
                   </div>
                   <Trash
-                    className="cursor-pointer text-red-600"
+                    className="cursor-pointer text-[#7994CB]-600"
                     onClick={() => handleRemoveExercise(workout._id, ex._id)}
                   />
                 </div>

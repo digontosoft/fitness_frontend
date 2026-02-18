@@ -239,7 +239,7 @@ const EditExercise = () => {
           >
             <Trash
               onClick={() => handleRemoveExercise(item._id)}
-              className="text-red-600 cursor-pointer"
+              className="text-[#7994CB]-600 cursor-pointer"
             />
             <div>
               <h2 className="text-lg text-center font-semibold text-gray-800">

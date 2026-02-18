@@ -135,7 +135,7 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-red-500 text-white rounded"
+              className="px-4 py-2 bg-[#7994CB] text-white rounded"
             >
               Save
             </button>

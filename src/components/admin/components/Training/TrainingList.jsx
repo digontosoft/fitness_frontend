@@ -198,7 +198,7 @@ export function TrainingList() {
                 onChange={(e) => setSearch(e.target.value)}
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
               />
-              <div className="absolute bg-red-700 w-8 h-8 rounded-full flex justify-center items-center left-2">
+              <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
                 <GoSearch className="text-white" />
               </div>
             </div>

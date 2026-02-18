@@ -1,7 +1,8 @@
 import { whiteLogo } from "../assets/index";
 // import insta from "@/assets/image/instagram.png";
-import tiktok from "@/assets/image/tik-tok-1.svg";
-import insta from "../assets/image/instagram-1.svg";
+
+import { FaTiktok } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
 const Footer = () => {
   return (
     <div className="bg-[#7994CB] min-h-[100px] max-h-full ">
@@ -15,7 +16,7 @@ const Footer = () => {
                 target="_blank"
               >
                 <div className="h-8 w-8 bg-white rounded-full flex justify-center items-center">
-                  <img src={insta} alt="instagram" className="h-4 w-4" />
+                  <FaInstagram className="h-4 w-4 text-[#7994CB]" />
                 </div>
               </a>
               <a
@@ -24,7 +25,7 @@ const Footer = () => {
               >
                 {" "}
                 <div className="h-8 w-8 bg-white rounded-full flex justify-center items-center">
-                  <img src={tiktok} alt="tiktok" className="h-4 w-4" />
+                  <FaTiktok className="h-4 w-4 text-[#7994CB]" />
                 </div>
               </a>
             </div>

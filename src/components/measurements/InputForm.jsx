@@ -226,7 +226,7 @@ const InputForm = () => {
               {/* Upload Button */}
               <button
                 onClick={handleButtonClick}
-                className="bg-[#BF2033] hover:bg-red-500 text-white px-4 rounded-full mt-4"
+                className="bg-[#BF2033] hover:bg-[#7994CB] text-white px-4 rounded-full mt-4"
                 type="button"
               >
                 העלאה

@@ -188,7 +188,7 @@ const AddWorkoutForm = () => {
               className="border p-4 flex items-center justify-center gap-4 rounded-md"
             >
               <Trash
-                className="cursor-pointer text-red-600 size-10"
+                className="cursor-pointer text-[#7994CB]-600 size-10"
                 onClick={() => handleRemoveExercise(index)}
               />
               <div className="space-y-4">

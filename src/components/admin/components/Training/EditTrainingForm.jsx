@@ -406,7 +406,7 @@ const EditTrainingForm = () => {
                 <h1 className="font-semibold text-center">{workout?.name}</h1>
                 <div className="flex items-center gap-x-2" dir="rtl">
                   <Trash
-                    className="cursor-pointer text-red-600"
+                    className="cursor-pointer text-[#7994CB]-600"
                     onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
                   />
                 </div>
@@ -468,7 +468,7 @@ const EditTrainingForm = () => {
                       </div>
                     </div>
                     <Trash
-                      className="cursor-pointer text-red-600 size-9"
+                      className="cursor-pointer text-[#7994CB]-600 size-9"
                       onClick={() => handleRemoveExercise(workout._id, ex._id)}
                     />
                   </div>
