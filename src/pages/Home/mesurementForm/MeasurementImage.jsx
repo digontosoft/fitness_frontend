@@ -38,7 +38,7 @@
 
 //   return (
 //     <div className="min-h-screen w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-20 my-20">
-//       <h2 className="text-2xl font-bold mb-4 text-center">תמונות מדידה</h2>
+//       <h2 className="text-2xl font-bold mb-4 text-center">דוח מדדים אישי</h2>
 
 //       {measurements.map((measurement, idx) => {
 //         const formattedDate = measurement.date
@@ -140,7 +140,7 @@ const MeasurementImage = () => {
 
   return (
     <div className="min-h-screen w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-20 my-20">
-      <h2 className="text-2xl font-bold mb-4 text-center">תמונות מדידה</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center">דוח מדדים אישי</h2>
 
       {measurements.map((measurement, idx) => {
         const formattedDate = formatDate(measurement.date);

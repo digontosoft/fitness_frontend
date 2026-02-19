@@ -54,7 +54,7 @@ const LoginPage = () => {
         <LoginButton
           role="recipe"
           text="התחברות ללקוחות ספר המתכונים"
-          className="w-full bg-gradient-to-tr from-[#FD4753] to-[#940019] hover:opacity-80 transition duration-300 px-4"
+          className="w-full bg-[#7994CB] hover:opacity-80 transition duration-300 px-4"
         />
       </div>
     </div>

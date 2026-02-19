@@ -258,7 +258,7 @@ export default function WorkoutLists() {
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
               בטל
             </Button>
-            <Button className="bg-red-600 text-white" onClick={handleDelete}>
+            <Button className="bg-[#7994CB] text-white" onClick={handleDelete}>
               מחק
             </Button>
           </DialogFooter>
