@@ -284,7 +284,7 @@ export function TrainingListForTrainee({ userId }) {
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
               Cancel
             </Button>
-            <Button className="bg-red-600 text-white" onClick={handleDelete}>
+            <Button className="bg-[#7994CB] text-white" onClick={handleDelete}>
               Delete
             </Button>
           </DialogFooter>

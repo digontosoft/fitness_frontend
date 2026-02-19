@@ -508,6 +508,7 @@ export default function AdminTable() {
               <Eye />
             </Button>
             <Button
+              className="bg-[#7994CB] text-white hover:text-white hover:bg-black"
               variant="destructive"
               size="sm"
               onClick={() => handleDeleteClick(row.original)}
@@ -530,7 +531,7 @@ export default function AdminTable() {
             {/* The new button to open the modal */}
             <Button
                 variant="outline"
-                className="bg-[#7994CB] text-white hover:text-white"
+                className="bg-[#7994CB] text-white hover:text-white hover:bg-black"
                 onClick={() => {
                     setSelectedAdminId(id);
                     setIsAssignModalOpen(true);

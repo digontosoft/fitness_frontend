@@ -71,7 +71,7 @@ const GenderSelection = () => {
                 variant="ai"
                 size="lg"
                 className={`bg-gray-400 hover:bg-gray-500 transition duration-300 rounded-full h-8 text-white font-semibold flex justify-center items-center w-full ${
-                  gender === "female" ? "bg-red-600" : ""
+                  gender === "female" ? "bg-[#7994CB]" : ""
                 }`}
                 onClick={() => handleGenderSelection("female")}
               >
@@ -84,7 +84,7 @@ const GenderSelection = () => {
                 variant="ai"
                 size="lg"
                 className={`bg-gray-400 hover:bg-gray-500 transition duration-300 rounded-full h-8 text-white font-semibold flex justify-center items-center w-full ${
-                  gender === "male" ? "bg-red-600" : ""
+                  gender === "male" ? "bg-[#7994CB]" : ""
                 }`}
                 onClick={() => handleGenderSelection("male")}
               >

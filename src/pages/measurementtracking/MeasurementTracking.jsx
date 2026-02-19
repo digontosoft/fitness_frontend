@@ -206,7 +206,7 @@ const sortedData = [...data].sort(
 
   return (
     <div>
-      <Title title={"תמונות מדידה"} />
+      <Title title={"דוח מדדים אישי"} />
       {loading ? (
         <Loading />
       ) : (

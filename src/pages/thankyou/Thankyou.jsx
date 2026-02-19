@@ -69,7 +69,7 @@ const ThankYou = () => {
           <BasicButton
             type="submit"
             title="שלח"
-            className="w-full bg-[#7994CB] text-white py-3 rounded-md hover:bg-red-800 transition-all"
+            className="w-full bg-[#7994CB] text-white py-3 rounded-md hover:bg-[#7994CB] transition-all"
           />
         </form>
       </div>

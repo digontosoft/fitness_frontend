@@ -21,7 +21,7 @@ const ProgressCourseCart = () => {
 
         <div className="flex flex-col md:flex-row-reverse gap-4">
           <Link to={"/startTraining"} state={{ data: workout }}>
-            <Button className="text-sm font-bold text-white  bg-gradient-to-tr from-[rgb(148,0,25)] to-[#FD4753] px-8 py-4 rounded-full sm:my-10 my-0 w-52 md:w-40 h-12">
+            <Button className="text-sm font-bold text-white  bg-[#7994CB] px-8 py-4 rounded-full sm:my-10 my-0 w-52 md:w-40 h-12">
               התחלת אימון
             </Button>
           </Link>

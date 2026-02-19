@@ -433,7 +433,7 @@ const EditExercise = () => {
             <div className="flex justify-center mt-4">
               <Button
                 onClick={handleAddNewExercise}
-                className="bg-[#7994CB] rounded-lg text-white px-6 py-2 hover:bg-red-400 mt-4"
+                className="bg-[#7994CB] rounded-lg text-white px-6 py-2 hover:bg-[#7994CB] mt-4"
               >
                 הוסף תרגיל
               </Button>
@@ -443,7 +443,7 @@ const EditExercise = () => {
 
         <Button
           onClick={handleSubmit}
-          className="bg-[#7994CB] rounded-lg text-white px-6 py-2 hover:bg-red-400 mt-4"
+          className="bg-[#7994CB] rounded-lg text-white px-6 py-2 hover:bg-[#7994CB] mt-4"
         >
           שמור שינויים
         </Button>

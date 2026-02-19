@@ -39,7 +39,7 @@ const ActionCourseCart = () => {
           </Button>
           <Button
             onClick={handleCourse}
-            className="text-sm font-bold text-white  bg-gradient-to-tr from-[rgb(148,0,25)] to-[#FD4753] px-8 py-4 rounded-full sm:mt-10 mt-0 w-48 md:w-40 h-12"
+            className="text-sm font-bold text-white  bg-[#7994CB] px-8 py-4 rounded-full sm:mt-10 mt-0 w-48 md:w-40 h-12"
           >
             התחלת אימון
           </Button>

@@ -39,7 +39,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
 
         <div className="flex flex-col items-center gap-y-4">
           {/* User Avatar */}
-          <div className="w-24 h-24 rounded-full bg-red-200 flex items-center justify-center shadow-md">
+          <div className="w-24 h-24 rounded-full bg-[#7994CB] flex items-center justify-center shadow-md">
             <span className="text-3xl font-semibold text-gray-500">
               {userData?.firstName?.charAt(0)}
               {userData?.lastName?.charAt(0)}
@@ -56,7 +56,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
 
           {/* Additional Info */}
           <div className="w-full flex flex-wrap justify-center gap-4 text-sm text-gray-700">
-            <div className="px-4 py-2 bg-red-200 rounded-lg shadow-sm">
+            <div className="px-4 py-2 bg-[#7994CB] rounded-lg shadow-sm">
               <span className="font-medium text-[#7994CB]-600 uppercase">
                 {userData?.gender === "male" ? "זכר" : "נקבה"}
               </span>

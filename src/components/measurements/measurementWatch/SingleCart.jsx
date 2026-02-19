@@ -12,7 +12,7 @@
 //     } else if (data.blck) {
 //       return "bg-gray-800 hover:bg-gray-600 text-white text-xs font-bold";
 //     } else if (data.red) {
-//       return "bg-red-800 hover:bg-red-600 text-white text-xs font-bold";
+//       return "bg-[#7994CB] hover:bg-[#7994CB] text-white text-xs font-bold";
 //     }
 //     return "bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold";
 //   };
@@ -95,7 +95,7 @@ const SingleCart = ({ userId, setOpen, setId }) => {
     } else if (data.blck) {
       return "bg-gray-800 hover:bg-gray-600 text-white text-xs font-bold";
     } else if (data.red) {
-      return "bg-red-800 hover:bg-red-600 text-white text-xs font-bold";
+      return "bg-[#7994CB] hover:bg-[#7994CB] text-white text-xs font-bold";
     }
     return "bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold";
   };
