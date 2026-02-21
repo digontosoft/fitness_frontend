@@ -22,7 +22,7 @@ const LeftCard = ({ data }) => {
   const totalThigh = leftThigh + rightThigh;
   const avgThigh = Math.floor(totalThigh / 2);
   return (
-    <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#EEEEEE]">
+    <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#F1F0EB]">
       <div className="absolute top-0 right-0">
         <img src={cardBg} alt="" className="w-[250px] h-full" />
       </div>
