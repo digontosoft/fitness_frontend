@@ -21,7 +21,7 @@ const TraineeRightCard = ({
   const offset = circumference - (percentage / 100) * circumference;
 
   return (
-    <div className="relative sm:w-[500px] w-full h-[245px] rounded-2xl bg-[#EEEEEE] p-4">
+    <div className="relative sm:w-[500px] w-full h-[245px] rounded-2xl bg-[#F1F0EB] p-4">
       <div className="absolute top-0 right-0">
         <img src={bgCard} alt="" className="w-[250px] h-full" />
       </div>

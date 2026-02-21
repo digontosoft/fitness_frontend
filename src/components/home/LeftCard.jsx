@@ -22,13 +22,13 @@ const LeftCard = ({ data }) => {
   const totalThigh = leftThigh + rightThigh;
   const avgThigh = Math.floor(totalThigh / 2);
   return (
-    <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#EEEEEE]">
+    <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#F1F0EB]">
       <div className="absolute top-0 right-0">
         <img src={cardBg} alt="" className="w-[250px] h-full" />
       </div>
       <div className="flex items-center justify-between p-4 relative">
         <Link to="/mesurement-update">
-          <Button className="bg-black text-white  text-xs border border-white rounded-full px-3 py-1 font-bold">
+          <Button className="bg-[#7994CB] text-white  text-xs border border-white rounded-full px-3 py-1 font-bold">
             להזנת המדדים
           </Button>
         </Link>

@@ -33,7 +33,7 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-col justify-between items-center gap-2">
-          <img className="hidden md:block w-15 h-14" src={whiteLogo} alt="" />
+          <img className="hidden md:block w-20 h-20" src={whiteLogo} alt="" />
           <p className="text-xs font-medium text-white">
             כל הזכויות שמורות לטל מועלם Fital 2024
           </p>

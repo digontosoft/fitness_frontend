@@ -53,7 +53,7 @@ const LoginPage = () => {
         />
         <LoginButton
           role="recipe"
-          text="התחברות ללקוחות ספר המתכונים"
+          text="התחברות לקהילת פיטל"
           className="w-full bg-[#7994CB] hover:opacity-80 transition duration-300 px-4"
         />
       </div>

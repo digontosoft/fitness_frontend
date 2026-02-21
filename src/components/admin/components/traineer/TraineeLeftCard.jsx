@@ -59,7 +59,7 @@ const TraineeLeftCard = ({ userId }) => {
   const avgThigh = Math.floor(totalThigh / 2);
 
   return (
-    <div className="relative sm:w-[500px] w-full h-[245px] rounded-2xl bg-[#EEEEEE]">
+    <div className="relative sm:w-[500px] w-full h-[245px] rounded-2xl bg-[#F1F0EB]">
       <div className="absolute top-0 right-0">
         <img src={cardBg} alt="" className="sm:w-[250px] h-full" />
       </div>

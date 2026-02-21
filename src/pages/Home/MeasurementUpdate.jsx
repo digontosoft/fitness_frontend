@@ -641,14 +641,21 @@ const MeasurementUpdate = () => {
               onDrop={handleDrop}
             >
               <div>
-                <img src={upload} alt="Upload Icon" />
+                <img
+                  src={upload}
+                  alt="Upload Icon"
+                  style={{
+                    filter:
+                      "brightness(0) saturate(100%) invert(63%) sepia(10%) saturate(2556%) hue-rotate(186deg) brightness(94%) contrast(86%)",
+                  }}
+                />
               </div>
               <p className="mb-2">בחר או גרור קובץ תמונה</p>
 
               <button
                 type="button"
                 onClick={handleButtonClick}
-                className="bg-[#BF2033] hover:bg-[#7994CB] text-white px-4 rounded-full mt-4"
+                className="bg-[#7994CB] hover:bg-black text-white px-4 rounded-full mt-4"
               >
                 העלאה
               </button>
@@ -693,7 +700,7 @@ const MeasurementUpdate = () => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            className=" text-white px-4 md:px-8 py-2 rounded-full mb-5 sm:mb-0"
+            className=" text-white px-4 md:px-8 py-2 rounded-full mb-5 sm:mb-0 bg-[#7994CB] hover:bg-black"
             disabled={isLoading}
           >
            {isLoading ? <span className="flex gap-2"><Loader className="w-6 h-6 animate-spin text-white" />  שמירת מדדים</span> : " שמירת מדדים"}

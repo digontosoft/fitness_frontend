@@ -15,7 +15,7 @@ const RightCard = ({ userSteps }) => {
   const gender = userDetails?.gender;
 
   return (
-    <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#EEEEEE] p-4">
+    <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#F1F0EB] p-4">
       <div className="absolute top-0 right-0">
         <img src={bgCard} alt="" className="w-[250px] h-full" />
       </div>
