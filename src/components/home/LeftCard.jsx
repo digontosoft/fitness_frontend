@@ -28,7 +28,7 @@ const LeftCard = ({ data }) => {
       </div>
       <div className="flex items-center justify-between p-4 relative">
         <Link to="/mesurement-update">
-          <Button className="bg-black text-white  text-xs border border-white rounded-full px-3 py-1 font-bold">
+          <Button className="bg-[#7994CB] text-white  text-xs border border-white rounded-full px-3 py-1 font-bold">
             להזנת המדדים
           </Button>
         </Link>

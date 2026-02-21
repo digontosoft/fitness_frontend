@@ -48,7 +48,7 @@ export const NutritionCart = () => {
             placeholder="חיפוש מדריך"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm w-56 "
+            className="border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm w-56 " dir="rtl"
           />
           <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
             <GoSearch className="text-white" />
