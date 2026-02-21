@@ -55,7 +55,7 @@ import supermarketBg from "./image/supermarket/superBgTwo.png";
 import supermarket from "./image/supermarket/supermarketBgone.png";
 import vector2 from "./image/Vector 2.png";
 import vector3 from "./image/Vector 3.png";
-import whiteLogo from "./image/WhiteLogo.svg";
+import whiteLogo from "./image/whiteLogo.svg";
 import workoutCartBg from "./image/workoutList/Bg.png";
 import Calories from "./image/workoutList/Calories.png";
 import TimeCircle from "./image/workoutList/TimeCircle.png";
