@@ -285,7 +285,11 @@ const TaskCompleteForm = ({ data }) => {
               onDrop={handleDrop}
             >
               <div>
-                <img src={upload} alt="Upload Icon"  className="bg-[#7994CB]"/>
+                <img src={upload} alt="Upload Icon" 
+                style={{
+                    filter:
+                      "brightness(0) saturate(100%) invert(63%) sepia(10%) saturate(2556%) hue-rotate(186deg) brightness(94%) contrast(86%)",
+                  }}/>
               </div>
               <p className="mb-2">בחר או גרור קובץ תמונה</p>
 
