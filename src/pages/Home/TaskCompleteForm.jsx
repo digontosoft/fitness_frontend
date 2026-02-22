@@ -188,27 +188,7 @@ const TaskCompleteForm = ({ data }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-full justify-center flex flex-col md:flex-row-reverse gap-4">
           <div className="w-full">
-            <DynamicInputField
-              id="waist"
-              type="text"
-              label="היקף מותניים"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
-
-            <DynamicInputField
-              id="arml"
-              type="number"
-              label="זרוע שמאל"
-              placeholder="הזן נתונים כאן..."
-              register={register}
-              validation={{ required: "שדה זה חובה" }}
-              errors={errors}
-              watch={watch}
-            />
+          
             <DynamicInputField
               id="thighl"
               type="number"
@@ -219,16 +199,38 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
-            <DynamicInputField
-              id={Gender === "male" ? "chest" : "butt"}
+              <DynamicInputField
+              id="thighr"
               type="number"
-              label={Gender === "male" ? "חָזֶה" : "קַת"}
+              label="ירך ימין"
               placeholder="הזן נתונים כאן..."
               register={register}
-              validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
+              validation={{ required: "שדה זה חובה" }}
               errors={errors}
               watch={watch}
             />
+            <DynamicInputField
+              id="arml"
+              type="number"
+              label="זרוע שמאל"
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{ required: "שדה זה חובה" }}
+              errors={errors}
+              watch={watch}
+            />
+           
+               <DynamicInputField
+              id="armr"
+              type="number"
+              label="זרוע ימין"
+              placeholder="הזן נתונים כאן..."
+              register={register}
+              validation={{ required: "שדה זה חובה" }}
+              errors={errors}
+              watch={watch}
+            />
+          
           </div>
           <div className="w-full">
             <DynamicInputField
@@ -241,20 +243,20 @@ const TaskCompleteForm = ({ data }) => {
               errors={errors}
               watch={watch}
             />
-            <DynamicInputField
-              id="armr"
+              <DynamicInputField
+              id={Gender === "male" ? "chest" : "butt"}
               type="number"
-              label="זרוע ימין"
+              label={Gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
               register={register}
-              validation={{ required: "שדה זה חובה" }}
+              validation={{ required: Gender === "male" ? "חָזֶה" : "קַת" }}
               errors={errors}
               watch={watch}
             />
-            <DynamicInputField
-              id="thighr"
-              type="number"
-              label="ירך ימין"
+              <DynamicInputField
+              id="waist"
+              type="text"
+              label="היקף מותניים"
               placeholder="הזן נתונים כאן..."
               register={register}
               validation={{ required: "שדה זה חובה" }}
@@ -264,7 +266,7 @@ const TaskCompleteForm = ({ data }) => {
           </div>
         </div>
         <Link to="/mesurement-pdf">
-          <button className="underline text-black text-xl font-bold hover:text-blue-600">
+          <button className="underline text-base font-bold text-[#7994CB] hover:text-blue-400">
             לצפייה במדריך המדדים
           </button>
         </Link>
@@ -283,7 +285,7 @@ const TaskCompleteForm = ({ data }) => {
               onDrop={handleDrop}
             >
               <div>
-                <img src={upload} alt="Upload Icon" />
+                <img src={upload} alt="Upload Icon"  className="bg-[#7994CB]"/>
               </div>
               <p className="mb-2">בחר או גרור קובץ תמונה</p>
 
@@ -301,7 +303,7 @@ const TaskCompleteForm = ({ data }) => {
               <button
                 type="button"
                 onClick={handleButtonClick}
-                className="bg-[#BF2033] hover:bg-[#7994CB] text-white px-4 rounded-full mt-4"
+                className="bg-[#7994CB] hover:bg-blue-400 text-white px-4 rounded-full mt-4"
               >
                 העלאה
               </button>
@@ -349,7 +351,7 @@ const TaskCompleteForm = ({ data }) => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            className=" text-white px-4 md:px-8 py-2 rounded-full"
+            className=" text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB] hover:bg-blue-400"
           >
             שמירת מדדים
           </Button>
