@@ -557,6 +557,36 @@ const MeasurementUpdate = () => {
             errors={errors}
             watch={watch}
           />
+            <DynamicInputField
+            id="thighr"
+            type="number"
+            label="ירך ימין"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
+            <DynamicInputField
+            id={Gender === "male" ? "chest" : "butt"}
+            type="number"
+            label={Gender === "male" ? "חָזֶה" : "ישבן"}
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
+            <DynamicInputField
+            id="arml"
+            type="number"
+            label="זרוע שמאל"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
           <DynamicInputField
             id="waist"
             type="number"
@@ -567,26 +597,18 @@ const MeasurementUpdate = () => {
             errors={errors}
             watch={watch}
           />
-          <DynamicInputField
-            id={Gender === "male" ? "chest" : "butt"}
+     
+           <DynamicInputField
+            id="armr"
             type="number"
-            label={Gender === "male" ? "חָזֶה" : "ישבן"}
+            label="זרוע ימין"
             placeholder="הזן נתונים כאן..."
             register={register}
             validation={{ required: "שדה זה חובה" }}
             errors={errors}
             watch={watch}
           />
-          <DynamicInputField
-            id="thighr"
-            type="number"
-            label="ירך ימין"
-            placeholder="הזן נתונים כאן..."
-            register={register}
-            validation={{ required: "שדה זה חובה" }}
-            errors={errors}
-            watch={watch}
-          />
+     
           <DynamicInputField
             id="thighl"
             type="number"
@@ -597,32 +619,14 @@ const MeasurementUpdate = () => {
             errors={errors}
             watch={watch}
           />
-          <DynamicInputField
-            id="armr"
-            type="number"
-            label="זרוע ימין"
-            placeholder="הזן נתונים כאן..."
-            register={register}
-            validation={{ required: "שדה זה חובה" }}
-            errors={errors}
-            watch={watch}
-          />
-          <DynamicInputField
-            id="arml"
-            type="number"
-            label="זרוע שמאל"
-            placeholder="הזן נתונים כאן..."
-            register={register}
-            validation={{ required: "שדה זה חובה" }}
-            errors={errors}
-            watch={watch}
-          />
+        
+        
         </div>
 
         <Link to="/mesurement-pdf">
           <button
             type="button"
-            className="underline text-black text-base font-bold hover:text-blue-600"
+            className="underline text-base font-bold text-[#7994CB] hover:text-blue-400"
           >
             לצפייה במדריך צילום תמונות
           </button>

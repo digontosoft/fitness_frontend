@@ -237,7 +237,7 @@ const sortedData = [...data].sort(
               <div
                 key={cart._id}
                 dir="rtl"
-                className="border rounded-2xl p-4 flex flex-col space-y-4 bg-[#EEEEEE]"
+                className="border rounded-2xl p-4 flex flex-col space-y-4 bg-[#F1F0EB]"
               >
                 {/* Title and Icon */}
                 <div className="relative z-50 flex gap-2 items-center space-x-2">

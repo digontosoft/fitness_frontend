@@ -605,7 +605,7 @@ const MeasurementWomen = () => {
             <div className="flex items-center justify-center my-10">
               <Button
                 type="submit"
-                className="w-56 h-14 p-4 text-base font-bold text-slate-200 bg-black rounded-full"
+                className="w-56 h-14 p-4 text-base font-bold text-slate-200 bg-[#7994CB]  rounded-full"
                 dir="rtl"
               >
                 שליחת הטופס
