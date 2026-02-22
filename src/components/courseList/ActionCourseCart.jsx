@@ -26,7 +26,7 @@ const ActionCourseCart = () => {
   return (
     // <div className="bg-gradient-to-br from-[rgb(148,0,25)] to-[#FD4753] min-h-screen h-auto py-12">
     // </div>
-    <div className="bg-custom-radial relative flex items-center justify-center min-h-screen sm:mb-2">
+    <div className="bg-[#7994CB] relative flex items-center justify-center min-h-screen sm:mb-2">
       <div className="flex flex-col items-center max-w-6xl mx-auto sm:min-h-full min-h-screen h-auto bg-[#FDFDFD] sm:rounded-3xl rounded-b-none rounded-t-3xl p-2 md:p-10 relative sm:mt-0 mt-10">
         <Title title={workoutData?.task_name} />
         <RecipeParagraph trainingDesc={workoutData?.task_description} />

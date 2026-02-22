@@ -92,7 +92,7 @@ const Container = () => {
           בהצלחה לנו! <br />
           מאמין בך, פיטל
         </p>
-        <div className="flex w-40 justify-center items-center bg-gradient-to-tr  from-red-800 to-red-600 transition duration-300   py-1 rounded-full">
+        <div className="flex w-40 justify-center items-center bg-[#7994CB] transition duration-300   py-1 rounded-full">
           <button
             type="submit"
             className="text-white cursor-pointer relative z-50 hover:opacity-80 "
