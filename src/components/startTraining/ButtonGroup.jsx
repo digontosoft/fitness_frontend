@@ -13,7 +13,7 @@ const ButtonGroup = ({
         <Button
           onClick={onNext}
           disabled={disabled}
-          className="bg-gradient-to-tr from-red-800 to-red-600 uppercase text-white font-bold text-xs px-8 md:px-10 rounded-full"
+          className="bg-[#7994CB] hover:bg-blue-400 uppercase text-white font-bold text-xs px-8 md:px-10 rounded-full"
         >
           {isFinished ? "סיום" : "הבא"}
         </Button>

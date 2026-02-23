@@ -208,7 +208,7 @@ const AddExerciseForm = ({ exerciseId }) => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            className=" text-white px-4 md:px-8 py-2 rounded-full bg-custom-radial"
+            className=" text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
           >
             {exerciseId ? " עדכון תרגיל" : " הוסף תרגיל למאגר"}
           </Button>

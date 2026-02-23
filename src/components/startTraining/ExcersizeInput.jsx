@@ -37,8 +37,8 @@ const ExcersizeInput = ({
   return (
     <div className="sm:w-96 w-full sm:py-20 py-6" dir="rtl">
       <div className="flex flex-row-reverse text-[#0A2533] text-xl font-bold justify-between items-center">
-        <p className="sm:ml-[84px] ml-[100px]">סט אחרון:</p>
-        <p>יעד:</p>
+        <p className="sm:ml-[84px] ml-[100px] pr-10 ">סט אחרון</p>
+        <p className="pr-10 ">יעד</p>
       </div>
       <div className="sm:w-96 w-full bg-white shadow-md rounded-2xl p-2 md:p-6 flex justify-between border-[1px] border-gray-100 mt-4">
         <form className="flex flex-col gap-6">

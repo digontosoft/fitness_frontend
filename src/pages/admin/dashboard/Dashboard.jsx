@@ -79,7 +79,7 @@
 //       <div className="flex flex-col items-center justify-center space-y-6 px-4">
 //         <div className="sm:flex sm:flex-row flex-col items-center justify-center gap-5 sm:space-y-0 space-y-4">
 //           <div className="flex  items-center gap-3">
-//             <div className="flex items-center justify-center w-10 h-10 bg-custom-radial rounded-full">
+//             <div className="flex items-center justify-center w-10 h-10 bg-[#7994CB] rounded-full">
 //               <span className="text-sm font-bold text-white">
 //                 {traineeUsersLength}
 //               </span>
@@ -88,7 +88,7 @@
 //           </div>
 
 //           <div className="flex items-center gap-3">
-//             <div className="flex items-center justify-center w-10 h-10 bg-custom-radial rounded-full">
+//             <div className="flex items-center justify-center w-10 h-10 bg-[#7994CB] rounded-full">
 //               <span className="text-sm font-bold text-white">
 //                 {recipeUsersLength}
 //               </span>

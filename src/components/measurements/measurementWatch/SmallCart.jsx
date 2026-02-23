@@ -37,7 +37,7 @@ const SmallCart = ({ data, setOpen, setId }) => {
                 {months[moment(item?.date).month()]}
               </span>
 
-              <span className="text-[#BF2033] text-xl font-extrabold">
+              <span className="text-[#7994CB] text-xl font-extrabold">
                 {item.data}
               </span>
 
