@@ -186,7 +186,7 @@ const SingleCart = ({ userId, setOpen, setId }) => {
           <div
             key={data._id}
             dir="rtl"
-            className="rounded-2xl p-4 flex flex-col space-y-4 bg-[#EEEEEE]"
+            className="rounded-2xl p-4 flex flex-col space-y-4 bg-[#F1F0EB]"
           >
             {/* Title and Icon */}
             <div className="relative z-50 flex gap-2 items-center space-x-2 text-black">
