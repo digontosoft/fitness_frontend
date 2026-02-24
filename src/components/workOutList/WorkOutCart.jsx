@@ -6,10 +6,19 @@ import Select from "react-dropdown-select";
 import Loading from "../common/Loading";
 import Cart from "./Cart";
 
-const WorkOutCart = () => {
-  const [trainings, setTrainings] = useState([]); // ✅ keep as array
-  const [selectedTraining, setSelectedTraining] = useState(null);
+// Helper: Sort active trainings first, then deactive
+function sortTrainingsByStatus(trainings = []) {
+  return [...trainings].sort((a, b) => {
+    if (a.status === "active" && b.status !== "active") return -1;
+    if (b.status === "active" && a.status !== "active") return 1;
+    return 0;
+  });
+}
 
+const WorkOutCart = () => {
+  const [trainings, setTrainings] = useState([]);
+  // For select, default is all *active* trainings, not all trainings
+  const [selectedTraining, setSelectedTraining] = useState([]);
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -17,6 +26,10 @@ const WorkOutCart = () => {
   const [exerciseReport, setExerciseReport] = useState(null);
   const [loading, setLoading] = useState(false);
   const [downloadingReport, setDownloadingReport] = useState(false);
+
+  // Store sorted trainings so we can reuse
+  const [sortedTrainings, setSortedTrainings] = useState([]);
+
   useEffect(() => {
     const fetchExercise = async () => {
       setLoading(true);
@@ -24,8 +37,17 @@ const WorkOutCart = () => {
         const response = await axios.get(
           `${base_url}/get-training-by-user-id/${user?._id}?page=${page}&search=${search}`
         );
+        // Always sort so active is at top
+        const sorted = sortTrainingsByStatus(response.data.data || []);
 
-        setTrainings(response.data.data || []);
+        setSortedTrainings(sorted);
+        setTrainings(sorted);
+
+        // Default value for select and displayed list: all active trainings
+        if (!selectedTraining.length) {
+          const activeTrainings = sorted.filter((t) => t.status === "active");
+          setSelectedTraining(activeTrainings);
+        }
         setPage(response.data.pagination.page);
         setTotalPages(response.data.pagination.pages);
       } catch (error) {
@@ -35,83 +57,72 @@ const WorkOutCart = () => {
       }
     };
     fetchExercise();
+    // eslint-disable-next-line
   }, [user?._id, page, search]);
 
-  // ✅ if no training is selected, show all
-  const displayedTrainings = selectedTraining?.length
-    ? selectedTraining
-    : trainings;
+  // rendered cards: if user selects (including manual clear), show what is selected,
+  // else (on initial mount), it's all active
+  const displayedTrainings =
+    selectedTraining && selectedTraining.length > 0
+      ? selectedTraining
+      : sortedTrainings.filter((t) => t.status === "active");
 
   const handleDownloadReport = async (e) => {
     e.preventDefault();
-    
-    if (downloadingReport) return; // Prevent multiple clicks
-    
+
+    if (downloadingReport) return;
     setDownloadingReport(true);
     try {
       const response = await axios.get(
         `${base_url}/report/excercise/${user?._id}`
       );
       const reportUrl = response.data.data.report_link;
-      
       if (reportUrl) {
         setExerciseReport(reportUrl);
-        
-        // Extract filename from URL
         const urlParts = reportUrl.split('/');
         const filename = urlParts[urlParts.length - 1] || 'exercise_report.xlsx';
-        
-        // Method 1: Try using fetch with proper error handling
         try {
           const token = localStorage.getItem("authToken");
           const fetchResponse = await fetch(reportUrl, {
-            method: 'GET',
-            headers: token ? {
-              'Authorization': `Bearer ${token}`,
-            } : {},
-            credentials: 'include',
+            method: "GET",
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+            credentials: "include",
           });
-          
           if (fetchResponse.ok) {
             const blob = await fetchResponse.blob();
             const blobUrl = window.URL.createObjectURL(blob);
-            
-            // Create download link
-            const link = document.createElement('a');
+
+            const link = document.createElement("a");
             link.href = blobUrl;
             link.download = filename;
-            link.style.display = 'none';
+            link.style.display = "none";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
-            // Clean up
+
             setTimeout(() => {
               window.URL.revokeObjectURL(blobUrl);
             }, 100);
           } else {
-            // If fetch fails, try direct download link
-            throw new Error('Fetch failed');
+            throw new Error("Fetch failed");
           }
         } catch (fetchError) {
           console.log("Fetch method failed, using direct download:", fetchError);
-          
-          // Method 2: Create a form and submit it (works better for cross-origin)
-          const form = document.createElement('form');
-          form.method = 'GET';
+
+          const form = document.createElement("form");
+          form.method = "GET";
           form.action = reportUrl;
-          form.target = '_blank';
-          form.style.display = 'none';
+          form.target = "_blank";
+          form.style.display = "none";
           document.body.appendChild(form);
           form.submit();
           document.body.removeChild(form);
-          
-          // Also try creating a direct download link as backup
-          const link = document.createElement('a');
+
+          const link = document.createElement("a");
           link.href = reportUrl;
           link.download = filename;
-          link.target = '_blank';
-          link.style.display = 'none';
+          link.target = "_blank";
+          link.style.display = "none";
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -119,44 +130,45 @@ const WorkOutCart = () => {
       }
     } catch (error) {
       console.error("Error downloading report:", error);
-      // Final fallback: open in new window
       if (exerciseReport) {
-        window.open(exerciseReport, '_blank');
+        window.open(exerciseReport, "_blank");
       }
     } finally {
       setDownloadingReport(false);
     }
   };
 
-
-  if(loading) {
-    return (
-     <Loading />
-    );
+  if (loading) {
+    return <Loading />;
   }
 
   return (
     <div className="max-w-6xl mx-auto px-2 pb-10">
       <a
         onClick={handleDownloadReport}
-        href={exerciseReport || '#'}
+        href={exerciseReport || "#"}
         className={`text-lg font-semibold flex items-center justify-center underline ${
-          downloadingReport ? 'cursor-wait opacity-50' : 'cursor-pointer'
+          downloadingReport ? "cursor-wait opacity-50" : "cursor-pointer"
         }`}
       >
-        {downloadingReport ? 'טוען...' : 'הצגת ביצועים קודמים'}
+        {downloadingReport ? "טוען..." : "הצגת ביצועים קודמים"}
       </a>
 
       <div className="flex items-center justify-center my-5" dir="rtl">
         <Select
           style={{ width: "380px", height: "50px" }}
           direction="rtl"
-          options={trainings}
+          options={sortedTrainings}
           valueField="_id"
           labelField="name"
           onChange={(value) => setSelectedTraining(value)}
           placeholder="חפש תוכנית אימון"
           searchBy="name"
+          values={
+            selectedTraining && selectedTraining.length > 0
+              ? selectedTraining
+              : sortedTrainings.filter((t) => t.status === "active")
+          }
         />
       </div>
 
@@ -164,9 +176,18 @@ const WorkOutCart = () => {
         <>
           <div className="flex flex-wrap items-center justify-center gap-6">
             {displayedTrainings.map((training) =>
-              training.workouts.map((workout) => (
-                <Cart key={workout._id} workout={workout} training={training} />
-              ))
+              (Array.isArray(training.workouts) ? training.workouts : []).map(
+                (w, idx) => {
+                  const workout = w.workout ? w.workout : w;
+                  return (
+                    <Cart
+                      key={workout._id || idx}
+                      workout={workout}
+                      training={training}
+                    />
+                  );
+                }
+              )
             )}
           </div>
 

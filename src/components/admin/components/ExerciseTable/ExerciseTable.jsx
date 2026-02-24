@@ -75,7 +75,6 @@ export function ExerciseTable() {
   const [body_part, setBodyPart] = useState("");
   const [equipment, setEquipment] = useState("");
   const [loading, setLoading] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
 
   const columns = [
     {
@@ -215,30 +214,29 @@ export function ExerciseTable() {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const fetchExercise = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `${base_url}/exercise?search=${searchValue}&body_part=${body_part}&equipment=${equipment}&page=${page}&limit=10`
-      );
-      if (response.status === 200) {
-        setExercise(response.data.data);
-        setTotalPages(response.data.pagination.totalPages);
-        setPage(response.data.pagination.currentPage);
+
+  // Fetch data only when page changes (filters are applied client-side for smooth UX)
+  useEffect(() => {
+    const fetchExercise = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${base_url}/exercise?page=${page}&limit=10`
+        );
+        if (response.status === 200) {
+          setExercise(response.data.data);
+          setTotalPages(response.data.pagination.totalPages);
+          setPage(response.data.pagination.currentPage);
+        }
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      } finally {
         setLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching exercises:", error);
-    }
-  };
-  // Debounce effect
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      fetchExercise();
-    }, 500); // 0.5s delay after typing stops
+    };
 
-    return () => clearTimeout(handler);
-  }, [searchValue, body_part, equipment, page]); 
+    fetchExercise();
+  }, [page]);
 
 
   const table = useReactTable({
@@ -268,9 +266,11 @@ export function ExerciseTable() {
             >
               <input
                 type="search"
-                value={searchValue}
                 placeholder="סנן לפי שם"
-                onChange={(e) => setSearchValue(e.target.value)}
+                value={table.getColumn("name")?.getFilterValue() || ""}
+                onChange={(event) =>
+                  table.getColumn("name")?.setFilterValue(event.target.value)
+                }
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-40 h-12"
               />
               <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
@@ -283,7 +283,18 @@ export function ExerciseTable() {
               className="min-w-40 h-12 border-2 p-2"
               placeholder="סנן לפי חלק בגוף"
               options={bodyPartOptions}
-              onChange={(e) => setBodyPart(e[0].value)}
+              values={
+                body_part
+                  ? bodyPartOptions.filter((opt) => opt.value === body_part)
+                  : []
+              }
+              onChange={(selected) => {
+                const value = selected[0]?.value || "";
+                setBodyPart(value);
+                table.getColumn("body_part")?.setFilterValue(value);
+                // optional: reset to first page for consistency
+                setPage(1);
+              }}
             />
             <Select
               direction="rtl"

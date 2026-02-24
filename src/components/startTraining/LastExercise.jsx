@@ -3,7 +3,7 @@ import React from "react";
 const LastExercise = ({ currentExercise }) => {
   return (
     <div className="sm:w-96 w-full">
-      <p className="text-[#0A2533] text-xl font-bold text-start mb-10 pr-10 sm:pr-4" dir="rtl">
+      <p className="text-[#0A2533] text-xl font-bold text-center mb-10 md:pr-10 pr-4" dir="rtl">
         מה עשית פעם שעברה
       </p>
       <div
