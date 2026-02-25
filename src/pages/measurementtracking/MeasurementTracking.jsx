@@ -60,6 +60,7 @@ const MeasurementTracking = () => {
 
     fetchData();
   }, [userId?._id]);
+  console.log('measurement report:', measurementReport);
 
   useEffect(() => {
    if (!id) return;

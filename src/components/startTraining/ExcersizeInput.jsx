@@ -57,7 +57,7 @@ const ExcersizeInput = ({
               <input
                 id="sets_done"
                 type="number"
-                className="border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#FD4753] focus:border-[#FD4753]"
+                className={`border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.sets_done ? "border-[#7994CB]" : ""}`}
                 {...register("sets_done", {
                   required: "Exercise name is required",
                   onChange: (e) =>
@@ -65,7 +65,7 @@ const ExcersizeInput = ({
                 })}
               />
               {errors.sets_done && (
-                <p className="text-xs text-[#7994CB]-600 mt-1">
+                <p className="text-xs text-[#7994CB] mt-1">
                   {errors.sets_done.message}
                 </p>
               )}
@@ -87,7 +87,7 @@ const ExcersizeInput = ({
               <input
                 id="reps_done"
                 type="number"
-                className="border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#FD4753] focus:border-[#FD4753]"
+                className={`border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.reps_done ? "border-[#7994CB]" : ""}`}
                 {...register("reps_done", {
                   required: "reps_done reps are required",
                   onChange: (e) =>
@@ -95,7 +95,7 @@ const ExcersizeInput = ({
                 })}
               />
               {errors.reps_done && (
-                <p className="text-xs text-[#7994CB]-600 mt-1">
+                <p className="text-xs text-[#7994CB] mt-1">
                   {errors.reps_done.message}
                 </p>
               )}
@@ -117,14 +117,14 @@ const ExcersizeInput = ({
               <input
                 id="lastSet"
                 type="text"
-                className="border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#FD4753] focus:border-[#FD4753]"
+                className={`border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.lastSet ? "border-[#7994CB]" : ""}`}
                 {...register("lastSet", {
                   required: "Last set value is required",
                   onChange: (e) => handleInputChange("lastSet", e.target.value),
                 })}
               />
               {errors.lastSet && (
-                <p className="text-xs text-[#7994CB]-600 mt-1">
+                <p className="text-xs text-[#7994CB] mt-1">
                   {errors.lastSet.message}
                 </p>
               )}
