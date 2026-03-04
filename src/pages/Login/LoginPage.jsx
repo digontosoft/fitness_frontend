@@ -49,12 +49,12 @@ const LoginPage = () => {
         <LoginButton
           role="trainee"
           text="התחברות למתאמני משפחת פיטל"
-          className="bg-[#151515] hover:bg-gray-700 transition duration-300 w-full px-4"
+          className=" bg-[#7994CB] hover:bg-gray-700 transition duration-300 w-full px-4"
         />
         <LoginButton
           role="recipe"
           text="התחברות לקהילת פיטל"
-          className="w-full bg-[#7994CB] hover:opacity-80 transition duration-300 px-4"
+          className="w-full bg-[#151515]  hover:opacity-80 transition duration-300 px-4"
         />
       </div>
     </div>

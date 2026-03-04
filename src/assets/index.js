@@ -85,7 +85,10 @@ import recipe from "./image/recipe.svg";
 import training from "./image/training.svg";
 import women1 from "./image/workout-women-1.png";
 import women2 from "./image/workout-women-2.png";
+import termfile from "./image/ntf.jpeg";
+
 export {
+  termfile,
   ArrowBurger,
   ArrowDumbel, Biceps, blackLogo, bodyBuilder,
   bodyBuilder3, Calories, cartFive, cartFour, cartOne, cartSeven, cartSix, cartThree, cartTwo, course, Course, courseBg, courseFour, courseOne, courseThree, courseTwo, Ellipse, Ellipse88,
