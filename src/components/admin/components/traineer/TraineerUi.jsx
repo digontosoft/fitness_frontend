@@ -131,7 +131,7 @@ const TraineerUi = ({ userId }) => {
           />
         </div>
         <AdminArrowCardWithoutImage
-          title="לדוח מדדים אישי"
+          title="ללוח מדדים אישי"
           link={`/admin-dashboard/mesurements-watch?userId=${userId}`}
         />
 
@@ -162,7 +162,7 @@ const TraineerUi = ({ userId }) => {
           />
         </div>
         <AdminArrowCardWithoutImage
-          title="לדוח מדדים אישי"
+          title="ללוח מדדים אישי"
           link={`/dashboard/mesurements-watch?userId=${userId}`}
         />
 

@@ -28,11 +28,11 @@ const Regulation = () => {
       ></div>
       <div>
         <Title title={"אישור תקנון"} />
-        <Paragraph
+        {/* <Paragraph
           text={
             "ברוכים הבאים לפיטל VIP, על מנת שנוכל להתחיל יש לקרוא את התקנון ולאשר אותו ע׳׳י לחיצה על הכפתור בתחתית העמוד."
           }
-        />
+        /> */}
         <Container />
       </div>
     </div>
