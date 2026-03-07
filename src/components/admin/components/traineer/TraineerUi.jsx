@@ -1,7 +1,7 @@
 import { base_url } from "@/api/baseUrl";
 import { ArrowBurger, ArrowDumbel } from "@/assets";
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
-import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
+// import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -214,12 +214,12 @@ const TraineerUi = ({ userId }) => {
           </div>
         </div>
       </div>
-      {openModal && (
+      {/* {openModal && (
         <>
           <p>Modal is Open</p>
           <FoodDairyModal userId={userId} onClose={() => setOpenModal(false)} />
         </>
-      )}
+      )} */}
       {openAnswer && (
         <ShowAnswerModal userId={userId} onclose={() => setOpenAnswer(false)} />
       )}

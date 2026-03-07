@@ -18,7 +18,7 @@ const GlobalLoading = () => {
     } else if (id?.userType === "supperadmin") {
       navigate("/dashboard");
     } else if (id?.userType === "trainee") {
-      id?.isNewUser ? navigate("/gender") : navigate("/");
+      id?.isNewUser || id?.is_question_answered==false? navigate("/gender") : navigate("/");
     } else {
       navigate("/recipe");
     }

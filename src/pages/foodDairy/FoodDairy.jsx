@@ -1,5 +1,5 @@
 import { foodDairy } from "@/assets";
-import FoodDairyForm from "@/components/foodDairy/FoodDairyForm";
+// import FoodDairyForm from "@/components/foodDairy/FoodDairyForm";
 import Title from "@/components/measurements/Tilte";
 import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
 import { useEffect } from "react";
@@ -13,7 +13,7 @@ const FoodDairy = () => {
       <WorkOutListBaground bgImg={foodDairy} />
       <Title title={"יומן אכילה"} />
       <div className="max-w-6xl mx-auto sm:-mt-0 -mt-8">
-        <FoodDairyForm />
+        {/* <FoodDairyForm /> */}
       </div>
     </div>
   );

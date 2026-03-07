@@ -25,6 +25,7 @@ import WorkOutList from "@/pages/workoutList/WorkOutList";
 import WorkOutListVideo from "@/pages/workoutList/WorkOutListVideo";
 
 import AdminTable from "@/components/admin/components/adminList/AdminList";
+import RecipeBookUserList from "@/components/admin/components/recipeBook/RecipeBookUserList";
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 import EditTraineUser from "@/components/admin/components/Training/EditTraineUser";
 import EditTraining from "@/components/admin/components/Training/EditTraining";
@@ -172,10 +173,10 @@ export const routes = createBrowserRouter([
             path: "/regulation",
             element: <Regulation />,
           },
-          {
-            path: "/food-dairy",
-            element: <FoodDairy />,
-          },
+          // {
+          //   path: "/food-dairy",
+          //   element: <FoodDairy />,
+          // },
           {
             path: "/edit-exercise",
             element: <EditExercise />,
@@ -282,6 +283,10 @@ export const routes = createBrowserRouter([
           {
             path: "/dashboard/admin-list",
             element: <AdminTable />,
+          },
+          {
+            path: "/dashboard/recipe-book-users",
+            element: <RecipeBookUserList />,
           },
           // {
           //   path: "/dashboard/workout-programme/:id",
