@@ -154,8 +154,8 @@ const AddExerciseForm = ({ exerciseId }) => {
                 defaultValue={exerciseId ? exerciseData?.body_part : ""}
                 placeholder="בחר אזור בגוף"
                 className={`w-full border ${
-                  errors.body_part ? "border-red-500" : "border-gray-300"
-                } rounded-lg p-3 text-right focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                  errors.body_part ? "border-[#7994CB]" : "border-gray-300"
+                } rounded-lg p-3 text-right focus:outline-none focus:ring-2 focus:ring-[#7994CB]`}
               >
                 {!exerciseId && <option value=""> לבחור איבר בגוף</option>}
                 {bodyPartOptions.map((option, index) => (
@@ -185,8 +185,8 @@ const AddExerciseForm = ({ exerciseId }) => {
                 defaultValue={exerciseId ? exerciseData?.equipment : ""}
                 placeholder="לבחור ציוד"
                 className={`w-full border ${
-                  errors.equipment ? "border-red-500" : "border-gray-300"
-                } rounded-lg p-3 text-right focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                  errors.equipment ? "border-[#7994CB]" : "border-gray-300"
+                } rounded-lg p-3 text-right focus:outline-none focus:ring-2 focus:ring-[#7994CB]`}
               >
                 {!exerciseId && <option value="">לבחור ציוד</option>}
                 {equipmentOptions.map((option, index) => (

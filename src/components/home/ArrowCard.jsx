@@ -24,7 +24,7 @@ const ArrowCard = ({ tilte, tilte1, taskType, onClick }) => {
       <div className="flex items-center gap-4 w-full overflow-hidden">
         {/* Text Section */}
         <div className="flex flex-col justify-center w-full max-w-[calc(100%-104px)]" dir="rtl">
-          <h1 className="text-sm font-bold text-[#0A2533] truncate text-center">
+          <h1 className="text-sm font-bold text-gray-500 truncate text-center">
             {tilte}
           </h1>
           <h1 className="text-xs font-normal text-[#97A2B0] truncate">

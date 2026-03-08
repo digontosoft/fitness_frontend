@@ -65,7 +65,7 @@ export const NutritionCart = () => {
       {loading ? (
         <Loading />
       ) : error ? (
-        <div className="text-red-500 text-center mt-6">{error}</div>
+        <div className="text-[#7994CB] text-center mt-6">{error}</div>
       ) : (
         <div
           className={`max-w-6xl mx-auto grid  gap-6 justify-items-center items-center px-2 py-10 sm:py-0 md:py-5 ${

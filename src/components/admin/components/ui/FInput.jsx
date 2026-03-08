@@ -19,8 +19,8 @@ const FInput = ({ label, name, placeholder, type = "text" }) => {
               type={type}
               id={name}
               className={`w-full h-[56px] p-4 gap-4 rounded-[16px] border-[2px] ${
-                error ? "border-red-500" : "border-opacity-0"
-              } focus:outline-none focus:ring-2 focus:ring-gray-400`}
+                error ? "border-[#7994CB]" : "border-opacity-0"
+              } focus:outline-none focus:ring-2 focus:ring-[#7994CB]`}
               placeholder={placeholder}
             />
             {error && (

@@ -80,7 +80,7 @@ function EditApproveMail({ id, updateDate }) {
                     message: "Enter a valid email address",
                   },
                 })}
-                className={`${errors.email ? "border-red-500" : ""} `}
+                className={`${errors.email ? "border-[#7994CB]" : ""} `}
               />
               {errors.email && (
                 <p className="text-[#7994CB] text-sm mt-1" dir="rtl">
@@ -101,7 +101,7 @@ function EditApproveMail({ id, updateDate }) {
                   required: "Expiry Date is required",
                 })}
                 className={`${
-                  errors.expiry_date ? "border-red-500" : ""
+                  errors.expiry_date ? "border-[#7994CB]" : ""
                 } flex items-center justify-end`}
               />
               {errors.expiry_date && (

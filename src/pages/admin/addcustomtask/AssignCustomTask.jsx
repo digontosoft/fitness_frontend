@@ -115,7 +115,7 @@ export default function AssignCustomTask({userId}) {
           <Button size="sm" variant="outline" onClick={() => {setSelectedTask(row.original); setEditTaskModal(true);}}>
             <Edit className="h-4 w-4" />
           </Button>
-        <Button size="sm" variant="destructive" onClick={() => { setTaskToDeleteId(row.original._id); setShowDeleteAlert(true); }}>
+        <Button size="sm" className="bg-[#7994CB] text-white hover:bg-[#6a84b8]" onClick={() => { setTaskToDeleteId(row.original._id); setShowDeleteAlert(true); }}>
  <Trash className="h-4 w-4" />
  </Button>
         </div>
