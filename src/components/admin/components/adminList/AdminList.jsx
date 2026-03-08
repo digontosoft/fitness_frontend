@@ -508,8 +508,7 @@ export default function AdminTable() {
               <Eye />
             </Button>
             <Button
-              className="bg-[#7994CB] text-white hover:text-white hover:bg-black"
-              variant="destructive"
+              className="bg-[#7994CB] text-white hover:text-white hover:bg-[#6a84b8]"
               size="sm"
               onClick={() => handleDeleteClick(row.original)}
             >

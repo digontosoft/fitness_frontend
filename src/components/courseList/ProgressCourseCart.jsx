@@ -3,17 +3,38 @@ import RecipeParagraph from "../recipe/RecipeParagraph";
 import VideoCourseCart from "../common/VideoCourseCart";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
-import PersonalExercise from "../PersonalExercise";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+
 const ProgressCourseCart = () => {
   const location = useLocation();
-  const workout = location.state?.workout || { exercises: [] };
+  const workout = location.state?.workout || {};
   const training = location.state?.training || {};
 
-  console.log(training, "training from workout list");
-  console.log(workout, "workout from workout list");
+  // Find the matching workout from training.workouts array
+  const selectedWorkout = useMemo(() => {
+    if (!training?.workouts || !Array.isArray(training.workouts)) {
+      return null;
+    }
+    
+    // Try to find workout by matching workout._id
+    const found = training.workouts.find(
+      (w) => w.workout?._id === workout?._id || w._id === workout?._id
+    );
+    
+    // If not found, use first workout as fallback
+    return found || training.workouts[0] || null;
+  }, [training, workout]);
+
+  // Get exercises from training.workouts[].exercises
+  const exercises = useMemo(() => {
+    return selectedWorkout?.exercises || [];
+  }, [selectedWorkout]);
+
+  console.log("selectedWorkout:", selectedWorkout);
+  console.log("exercises from training.workouts:", exercises);
 
   useEffect(() => {}, [workout, training]);
+
   return (
     <div className=" bg-[#7994CB] min-h-screen border-b-8 border-white py-12  ">
       <div className="flex flex-col justify-center items-center max-w-6xl mx-auto bg-white rounded-3xl p-2 md:p-10">
@@ -21,13 +42,26 @@ const ProgressCourseCart = () => {
         <RecipeParagraph trainingDesc={training?.training_id?.description} />
 
         <div className="flex flex-col md:flex-row-reverse gap-4">
-          {/* startTraining এ এখন workout + training দুইটাই state এ যাবে */}
-          <Link to={"/startTraining"} state={{ data: workout, training }}>
+          <Link 
+            to={"/startTraining"} 
+            state={{ 
+              workout: selectedWorkout || workout,
+              training: training,
+              // Also pass as data for compatibility with task-based flow
+              data: {
+                exercises: exercises,
+                name: selectedWorkout?.workout?.name || workout?.name || training?.training_id?.name,
+                workout_id: selectedWorkout?.workout?._id || workout?._id,
+                task_id: selectedWorkout?.task_id || workout?.task_id || null,
+                user_training_workout_id: selectedWorkout?.user_training_workout_id || workout?.user_training_workout_id || null,
+              }
+            }}
+          >
             <Button className="text-sm font-bold text-white  bg-[#7994CB] px-8 py-4 rounded-full sm:my-10 my-0 w-52 md:w-40 h-12">
               התחלת אימון
             </Button>
           </Link>
-          <Link to="/customize-workout" state={{ workout, training }}>
+          <Link to="/customize-workout" state={{ workout: selectedWorkout || workout, training }}>
             <Button className="text-sm font-bold text-black hover:text-white bg-gray-100  border border-gray-400 px-10 py-4 rounded-full sm:my-10 my-0 w-52 md:w-44 h-12">
               התאם אישית את האימון
             </Button>
@@ -42,8 +76,8 @@ const ProgressCourseCart = () => {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
-          {(workout?.exercises || []).map((exercise) => (
-            <PersonalExercise key={exercise?._id} exercise={exercise} />
+          {exercises.map((exercise, index) => (
+            <VideoCourseCart key={exercise?._id || index} exercise={exercise} index={index} />
           ))}
         </div>
       </div>

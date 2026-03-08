@@ -12,7 +12,7 @@ const Progressbar = ({ label, percentage }) => {
           style={{ width: `${percentage}%` }}
         ></div>
         <div
-          className="absolute -top-3 border-[1px] border-red-700  left-[calc(100%_*_0.8)] transform -translate-x-1/2 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center"
+          className="absolute -top-3 border-[1px] border-[#7994CB]  left-[calc(100%_*_0.8)] transform -translate-x-1/2 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center"
           style={{ left: `${percentage}%` }}
         >
           <img src={Vector} alt="Progress Indicator" className="w-4 h-4" />

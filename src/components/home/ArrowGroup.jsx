@@ -31,7 +31,7 @@ const ArrowGroup = ({ task, onclick }) => {
       console.log("Navigating to /measurements with data:", task);
       navigate("/mesurement-complete", { state: task });
     } else if (task.task_type === "food_dairy") {
-      navigate("/food-dairy", { state: task });
+      // navigate("/food-dairy", { state: task });
     } else {
       onclick(task);
     }
