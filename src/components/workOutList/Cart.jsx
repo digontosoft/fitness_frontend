@@ -10,7 +10,7 @@ const Cart = ({ workout, training }) => {
       to={`/personal-workout`}
       state={{ workout, training, from: location.pathname }}
     >
-      <div className="md:w-56 w-48 shadow-xl rounded-2xl p-3">
+      <div className="md:w-56 w-48 shadow-xl rounded-2xl p-3" dir="rtl">
         <div
           className="w-full h-40 rounded-2xl flex justify-center items-center"
           style={{
@@ -22,8 +22,11 @@ const Cart = ({ workout, training }) => {
           <img className="w-20 h-20" src={whiteLogo} alt="" />
         </div>
         <div className="px-6 py-4">
-          <p className="text-[#0A2533]  text-sm font-bold text-end">
-            {training?.name}
+          <p className="text-[#0A2533] text-sm font-bold text-right">
+            {workout?.name || training?.name}
+          </p>
+          <p className="text-gray-500 text-xs text-right mt-1">
+            {training?.name || training?.training_id?.name || ""}
           </p>
         </div>
       </div>
