@@ -110,7 +110,7 @@ export const supperAdminLink = [
   },
   {
     _id: 9,
-    title: "רשימת חברי קהילה",
+    title: "ניהול חברי קהילה",
     link: "/dashboard/recipe-book-users",
     icon: nutrationGuide,
   },
