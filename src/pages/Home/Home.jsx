@@ -136,7 +136,7 @@ useEffect(() => {
   return (
     <div
       className="min-h-screen px-4 sm:px-6 md:px-10 lg:px-20 overflow-hidden mb-5"
-      // onClick={() => handleSubmit()}
+      dir="rtl"
     >
       {/* Welcome Modal */}
       {user?.is_video_popup === true && (

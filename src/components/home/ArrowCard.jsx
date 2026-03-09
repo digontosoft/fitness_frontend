@@ -21,13 +21,13 @@ const ArrowCard = ({ tilte, tilte1, taskType, onClick }) => {
       <Button className="rounded-2xl">
         <FaArrowLeftLong />
       </Button>
-      <div className="flex items-center gap-4 w-full overflow-hidden">
+      <div className="flex items-center gap-4 w-full overflow-hidden" dir="rtl">
         {/* Text Section */}
-        <div className="flex flex-col justify-center w-full max-w-[calc(100%-104px)]" dir="rtl">
-          <h1 className="text-sm font-bold text-gray-500 truncate text-center">
+        <div className="flex flex-col justify-center w-full max-w-[calc(100%-104px)]">
+          <h1 className="text-sm font-bold text-gray-500 truncate text-right">
             {tilte}
           </h1>
-          <h1 className="text-xs font-normal text-[#97A2B0] truncate">
+          <h1 className="text-xs font-normal text-[#97A2B0] truncate text-right">
             {tilte1}
           </h1>
         </div>
