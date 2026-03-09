@@ -294,7 +294,7 @@ const StartTraining = () => {
         <>
           {/* Progress Indicator */}
           {totalExercises > 0 && (
-            <div className="mb-4" dir="rtl">
+            <div className="mb-4 mt-10" dir="rtl">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm font-semibold text-[#0A2533]">
                   התקדמות: {completedExercisesCount} מתוך {totalExercises} תרגילים

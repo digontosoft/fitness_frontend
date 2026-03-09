@@ -29,11 +29,13 @@ const AddWorkoutForm = () => {
     formState: { errors },
   } = useForm();
 
-  // ✅ Fetch all exercises on mount
+  // ✅ Fetch all exercises on mount (use high limit so "all exercises" সত্যি সবই আসে)
   useEffect(() => {
     const fetchAllExercises = async () => {
       try {
-        const response = await axios.get(`${base_url}/exercise`);
+        const response = await axios.get(
+          `${base_url}/exercise?page=1&limit=1000`
+        );
         setAllExercises(response.data.data);
         setFilteredExercisesForSelection(response.data.data);
       } catch (error) {
@@ -47,7 +49,8 @@ const AddWorkoutForm = () => {
   useEffect(() => {
     const fetchFilteredExercises = async () => {
       if (selectedBodyPart || selectedEquipment) {
-        let url = `${base_url}/exercise?`;
+        // high limit here as well, যেন filter করলে ও সব matching exercises আসে
+        let url = `${base_url}/exercise?page=1&limit=1000&`;
         if (selectedBodyPart) url += `body_part=${selectedBodyPart}&`;
         if (selectedEquipment) url += `equipment=${selectedEquipment}&`;
         url = url.slice(0, -1);
