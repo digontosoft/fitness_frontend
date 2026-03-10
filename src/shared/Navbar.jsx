@@ -191,14 +191,22 @@ useEffect(() => {
             to="/"
             className="flex items-center md:justify-center  pr-[35%] md:pr-0"
           >
-            <img src={logo} alt="logo" className="w-15 h-14 object-cover" />
+            <img
+              src={logo}
+              alt="logo"
+              className="w-20 h-20 md:w-16 md:h-16 object-cover"
+            />
           </Link>
         ) : (
           <Link
             to="/dashboard"
             className="flex items-center md:justify-center  pr-[35%] md:pr-0"
           >
-            <img src={logo} alt="logo" className="w-15 h-14 object-cover" />
+            <img
+              src={logo}
+              alt="logo"
+              className="w-20 h-20 md:w-16 md:h-16 object-cover"
+            />
           </Link>
         )}
 

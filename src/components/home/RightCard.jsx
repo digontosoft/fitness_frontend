@@ -15,7 +15,7 @@ const RightCard = ({ userSteps }) => {
   const gender = userDetails?.gender;
 
   return (
-    <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#F1F0EB] p-4">
+    <div className="relative sm:w-[500px] w-full h-[245px] rounded-3xl bg-[#F1F0EB] p-4" >
       <div className="absolute top-0 right-0">
         <img src={bgCard} alt="" className="w-[250px] h-full" />
       </div>
@@ -57,15 +57,20 @@ const RightCard = ({ userSteps }) => {
           </div>
         </div>
       </div>
-      <div className="absolute top-0 right-0">
-        <img src={circle} alt="" className="w-[200px] h-[180px]" />
-      </div>
-      <div className="absolute top-6 -right-[300px] sm:-right-[400px] w-full h-full">
+      {/* circle + runner image together so position stays same on all devices */}
+      <div className="absolute top-4 right-4 sm:top-2 sm:right-8 w-[150px] sm:w-[190px] md:w-[210px] aspect-square">
         <img
-          src={gender === "male" ? men : women}
-          alt="female"
-          className="h-[130px] w-12"
+          src={circle}
+          alt=""
+          className="absolute inset-0 w-full h-full object-contain"
         />
+        <div className="relative w-full h-full flex items-center justify-center">
+          <img
+            src={gender === "male" ? men : women}
+            alt="runner"
+            className="h-[70%] w-auto object-contain"
+          />
+        </div>
       </div>
       <div className="flex flex-col items-end justify-end pr-4 absolute bottom-5 right-0">
         <div>
