@@ -148,11 +148,11 @@ useEffect(() => {
           user={user}
         />
       )}
-      <div className="flex items-center sm:justify-center justify-center gap-2 mt-10">
+      <div className="flex items-center sm:justify-center justify-end gap-2 mt-10" dir="ltr">
         <h1 className="sm:text-4xl text-2xl font-bold">
           {userInfo?.full_name}
         </h1>
-        <h1 className="sm:text-4xl text-2xl font-bold">היי</h1>
+        <h1 className="sm:text-4xl text-2xl font-bold" dir="">היי</h1>
       </div>
       <div className="flex flex-col items-center justify-center gap-5">
         {/* Cards Section */}

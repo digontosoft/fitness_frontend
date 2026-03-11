@@ -194,7 +194,7 @@ useEffect(() => {
             <img
               src={logo}
               alt="logo"
-              className="w-20 h-20 md:w-16 md:h-16 object-cover"
+              className="w-24 h-24 md:w-24 md:h-24 object-cover"
             />
           </Link>
         ) : (
@@ -205,7 +205,7 @@ useEffect(() => {
             <img
               src={logo}
               alt="logo"
-              className="w-20 h-20 md:w-16 md:h-16 object-cover"
+              className="w-24 h-24 md:w-24 md:h-24 object-cover"
             />
           </Link>
         )}

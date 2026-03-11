@@ -23,10 +23,10 @@ const Cart = ({ workout, training }) => {
         </div>
         <div className="px-6 py-4">
           <p className="text-[#0A2533] text-sm font-bold text-right">
-            {workout?.name || training?.name}
+            {workout?.name || ""}
           </p>
           <p className="text-gray-500 text-xs text-right mt-1">
-            {training?.name || training?.training_id?.name || ""}
+            {workout?.description || ""}
           </p>
         </div>
       </div>

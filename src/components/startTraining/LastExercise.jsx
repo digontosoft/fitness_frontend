@@ -12,11 +12,8 @@ const LastExercise = ({ currentExercise }) => {
 
   return (
     <div className="sm:w-96 w-full">
-      <p
-        className="text-[#0A2533] text-xl font-bold text-center mb-10 md:pr-10 pr-4"
-        dir="rtl"
-      >
-        מה עשית פעם שעברה
+      <p className="text-[#0A2533] text-xl font-bold text-start mb-4" dir="rtl">
+        מה עשית פעם שעברה:
       </p>
       <div
         className="sm:w-96 w-full flex flex-col gap-4 items-start bg-white shadow-md rounded-xl p-2 md:p-6"
