@@ -2,6 +2,7 @@ import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { FaPlay } from "react-icons/fa";
 import ReactPlayer from "react-player";
 import HeroVideo from "./startTraining/HeroVideo";
 import { Button } from "./ui/button";
@@ -34,6 +35,7 @@ const PersonalExercise = ({ exercise }) => {
   console.log("exerciseP:", exercise.exercise_id);
   const exerciseId = exercise?.exercise_id?._id;
   const [exerciseData, setExerciseData] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   useEffect(() => {
     if (!exerciseId) return;
 
@@ -77,29 +79,77 @@ const PersonalExercise = ({ exercise }) => {
   } else if (exerciseData?.equipment === "מוטות") {
     customEquipment = weights;
   }
+
+  const videoUrl = exerciseData?.video_url || "";
+
+  const getYoutubeId = (url) => {
+    if (!url) return null;
+    try {
+      const regExp =
+        /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/;
+      const match = url.match(regExp);
+      return match && match[1] ? match[1] : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const youtubeId = getYoutubeId(videoUrl);
+  const thumbnail = youtubeId
+    ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+    : null;
+
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <div className="w-full cursor-pointer md:w-96 flex gap-4 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300">
-          <Button className="rounded-2xl">
+      <div className="w-full md:w-96 flex gap-2 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300">
+        <DialogTrigger asChild>
+          <Button className="rounded-2xl cursor-pointer">
             <FaArrowLeftLong />
           </Button>
-          <div className="w-full flex items-center" dir="rtl">
-            <h1 className="text-sm font-bold text-[#0A2533]">
-              {exerciseData?.name}
-            </h1>
-          </div>
-          <div className="w-full max-w-xs mx-auto">
+        </DialogTrigger>
+        <div className="w-full flex items-center" dir="rtl">
+          <h1 className="text-sm font-bold text-[#0A2533]">
+            {exerciseData?.name}
+          </h1>
+        </div>
+        <div className="relative w-full max-w-xs mx-auto">
+          {/* Thumbnail with custom play button, like VideoCourseCart */}
+          {!isPlaying && thumbnail && (
+            <button
+              type="button"
+              className="w-full h-[80px] rounded-lg overflow-hidden border border-gray-200 shadow-sm relative"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPlaying(true);
+              }}
+            >
+              <img
+                src={thumbnail}
+                alt={exerciseData?.name || "exercise-video"}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-500 shadow-lg">
+                  <FaPlay className="text-white ml-0.5" size={18} />
+                </div>
+              </div>
+            </button>
+          )}
+
+          {/* Actual player, starts after click or if no thumbnail */}
+          {(isPlaying || !thumbnail) && (
             <ReactPlayer
-              url={exerciseData?.video_url}
+              url={videoUrl}
               width="100%"
               height="80px"
+              playing={isPlaying}
               controls
+              muted
               className="rounded-lg border border-gray-200 shadow-sm"
             />
-          </div>
+          )}
         </div>
-      </DialogTrigger>
+      </div>
       <DialogContent className="sm:max-w-4xl p-6 rounded-lg">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-center">

@@ -4,6 +4,7 @@ import VideoCourseCart from "../common/VideoCourseCart";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useEffect, useMemo } from "react";
+import PersonalExercise from "../PersonalExercise";
 
 const ProgressCourseCart = () => {
   const location = useLocation();
@@ -75,9 +76,14 @@ const ProgressCourseCart = () => {
           תרגילים:
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
           {exercises.map((exercise, index) => (
             <VideoCourseCart key={exercise?._id || index} exercise={exercise} index={index} />
+          ))}
+        </div> */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
+          {exercises.map((exercise) => (
+            <PersonalExercise key={exercise._id} exercise={exercise} />
           ))}
         </div>
       </div>
