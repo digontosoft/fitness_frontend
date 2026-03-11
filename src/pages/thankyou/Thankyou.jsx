@@ -31,14 +31,15 @@ const ThankYou = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <div
         className="bg-white shadow-lg rounded-lg p-8 w-full max-w-xl text-center"
-        dir="rtl"
+        dir="rtl"  
+       
       >
         <h1 className="sm:text-4xl text-xl font-bold text-black mb-4" dir="rtl">
-          תודה שרכשת את הספר מתכונים לחטובים של פיטל🍫
+        איזה כיף שאתם חלק מהקהילה שלנו
+משפחת פיטל🍫
         </h1>
-        <p className="text-sm text-gray-600 mb-6" dir="rtl">
-          מהיום החיטוב שלך יהיה הרבה יותר מהנה וטעים! תכתבי את המייל שלך כאן
-          לכניסה לספר😊
+        <p className="text-md text-gray-600 mb-6" dir="rtl">
+        אדאג לכם פה לתכנים בלעדיים כדי שהחיטוב שלכם הפעם יהיה האחרון שתעשו!
         </p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="text-right" dir="rtl">
