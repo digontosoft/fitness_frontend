@@ -625,6 +625,8 @@ import { Ellipse92, Ellipse93, EllipseE8 } from "@/assets/index";
 import FTForm from "@/components/admin/components/FTForm/FTForm";
 import FInput from "@/components/admin/components/ui/FInput";
 import FRadioInput from "@/components/admin/components/ui/FRadioIntput";
+import FSelectInput from "@/components/admin/components/ui/FSelectInput";
+import FTextarea from "@/components/admin/components/ui/FTextarea";
 import Loading from "@/components/common/Loading";
 import { Button } from "@/components/ui/button";
 import { questionnaries } from "@/constants/ValidationSchema";
@@ -851,13 +853,13 @@ const MeasurementWomen = () => {
                     name="injuries_description"
                     dir="rtl"
                   />
-                  <FInput
+                  {/* <FInput
                     label="כמה פעמים בשבוע נתאמן?״/״"
                     placeholder="התשובה שלך"
                     name="how_many_times_want_training_in_week"
                     type="number"
                     dir="rtl"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -1072,7 +1074,19 @@ const MeasurementWomen = () => {
                     dir="rtl"
                     type="radio"
                   />
-                  <FInput
+                  <FSelectInput
+                    label="כמה פעמים בשבוע ? 1-5"
+                    name="training_times_per_week"
+                    placeholder="בחרי מספר"
+                    options={[
+                      { value: "1", label: "1" },
+                      { value: "2", label: "2" },
+                      { value: "3", label: "3" },
+                      { value: "4", label: "4" },
+                      { value: "5", label: "5" },
+                    ]}
+                  />
+                  <FTextarea
                     label="תארי את אימוני הכח שלך כרגע (איזה תרגילים, טווחי חזרות, תדירות וכו׳): אם לא עושה לרשום ׳לא עושה׳"
                     placeholder="התשובה שלך"
                     name="strength_training_description"
@@ -1140,20 +1154,20 @@ const MeasurementWomen = () => {
                     name="disliked_foods"
                     dir="rtl"
                   />
-                  <FInput
+                  <FTextarea
                     label="תארי סדר יום מלא של התזונה שלך, איך נראה יום רגיל* מה אוכלת כשקמה, בצהריים, בערב, נשנושים לפרט:)"
                     placeholder="התשובה שלך"
                     name="daily_meds"
                     dir="rtl"
                   />
-                  <FInput
+                  <FTextarea
                     label="ועכשיו איך נראה סופש* אם יש ארוחה מיוחדת בשישי ושבת ומה הן מכילות לרוב"
                     placeholder="התשובה שלך"
                     name="descripe_weekend"
                   />
                 </div>
                 <div className="space-y-5">
-                  <FInput
+                  <FTextarea
                     label="יש לך מתכונים שאת אוהבת להכין באופן תדיר (כאחת לשבוע)? אם כן, כתבי את המצרכים שלהם, כמויות וכמה יחידות יוצא. למשל מתכון לממולאים וכמה יחידות יוצא מתוך כל התכולה (אפשר לרשום כמה מתכונים)"
                     placeholder="התשובה שלך"
                     name="favorite_recipes"
@@ -1205,10 +1219,22 @@ const MeasurementWomen = () => {
                   />
                 </div>
                 <div className="space-y-5">
-                  <FInput
+                  <FSelectInput
                     label="מהי רמת המוטיבציה שלך להגיע למטרה?* (צייני מספר מ 1-10)"
-                    placeholder="התשובה שלך"
                     name="motivation_level"
+                    placeholder="בחרי מספר"
+                    options={[
+                      { value: "1", label: "1" },
+                      { value: "2", label: "2" },
+                      { value: "3", label: "3" },
+                      { value: "4", label: "4" },
+                      { value: "5", label: "5" },
+                      { value: "6", label: "6" },
+                      { value: "7", label: "7" },
+                      { value: "8", label: "8" },
+                      { value: "9", label: "9" },
+                      { value: "10", label: "10" },
+                    ]}
                   />
                   <FInput
                     label="מהן המטרות שלך לטווח הארוך ולמה?*"
