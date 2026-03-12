@@ -34,7 +34,7 @@ const PdfNutration = () => {
   }
   return (
     <div className="w-full">
-      <WorkOutListBaground bgImg={personalNutrationBg} />
+      {/* <WorkOutListBaground bgImg={personalNutrationBg} /> */}
       <div className="flex items-center justify-center">
         <ParsonalPdf data={singleData} />
       </div>
