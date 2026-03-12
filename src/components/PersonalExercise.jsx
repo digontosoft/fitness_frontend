@@ -24,12 +24,16 @@ import chest from "@/assets/image/chest.svg";
 import dumbles from "@/assets/image/dumbles.svg";
 import frontHand from "@/assets/image/front-hand.svg";
 import lowerBack from "@/assets/image/lower-back.svg";
+import stomache from "@/assets/image/man-belly.svg";
 import machine from "@/assets/image/machine.svg";
 import pully from "@/assets/image/pully.svg";
 import shoulder from "@/assets/image/shoulder.svg";
 import trx from "@/assets/image/trx.svg";
 import weights from "@/assets/image/weights.svg";
 import womenback from "@/assets/image/woman-back.svg";
+import womenstomache from "@/assets/image/woman-belly.svg";
+import noEquipment from "@/assets/image/noequipment.jpeg";
+
 
 const PersonalExercise = ({ exercise }) => {
   console.log("exerciseP:", exercise.exercise_id);
@@ -64,6 +68,8 @@ const PersonalExercise = ({ exercise }) => {
     customIcon = butt;
   } else if (exerciseData?.body_part === "גב תחתון") {
     customIcon = lowerBack;
+  } else if (exerciseData?.body_part === "בטן") {
+    customIcon = user?.gernder === "male" ? stomache : womenstomache;
   }
   let customEquipment = null;
   if (exerciseData?.equipment === "TRX") {
@@ -78,6 +84,8 @@ const PersonalExercise = ({ exercise }) => {
     customEquipment = bands;
   } else if (exerciseData?.equipment === "מוטות") {
     customEquipment = weights;
+  } else if (exerciseData?.equipment === "ללא ציוד") {
+    customEquipment = noEquipment;
   }
 
   const videoUrl = exerciseData?.video_url || "";
@@ -169,13 +177,17 @@ const PersonalExercise = ({ exercise }) => {
             {exerciseData?.description}
           </p>
           <div className="flex gap-2 items-center flex-row-reverse" dir="rtl">
-            <img src={customIcon} alt="" className="w-6 h-6" />
+            {customIcon && (
+              <img src={customIcon} alt="" className="w-6 h-6" />
+            )}
             <p className="flex flex-row-reverse gap-2">
               <span>{exerciseData?.body_part}</span> : <span>איזור בגוף</span>
             </p>
           </div>
           <div className="flex gap-2  items-center flex-row-reverse" dir="rtl">
-            <img src={customEquipment} alt="" className="w-6 h-6" />
+            {customEquipment && (
+              <img src={customEquipment} alt="" className="w-6 h-6" />
+            )}
             <p className="flex flex-row-reverse gap-2">
               <span>{exerciseData?.equipment}</span> : <span>ציוד</span>
             </p>
