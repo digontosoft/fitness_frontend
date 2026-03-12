@@ -189,7 +189,7 @@ useEffect(() => {
         {userType === "trainee" ? (
           <Link
             to="/"
-            className="flex items-center md:justify-center  pr-[35%] md:pr-0"
+            className="flex items-center justify-center md:justify-center   pr-[20%] md:pr-0"
           >
             <img
               src={logo}
@@ -200,7 +200,7 @@ useEffect(() => {
         ) : (
           <Link
             to="/dashboard"
-            className="flex items-center md:justify-center  pr-[35%] md:pr-0"
+            className="flex items-center justify-center md:justify-center   pr-[20%] md:pr-0"
           >
             <img
               src={logo}
