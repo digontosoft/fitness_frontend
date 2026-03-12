@@ -195,6 +195,7 @@ export function TrainingList() {
                 name=""
                 id=""
                 placeholder="שם מסנן...."
+                value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
               />
