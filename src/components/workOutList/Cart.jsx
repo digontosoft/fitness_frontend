@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import whiteLogo from "../../assets/image/whiteLogo.png";
+import whiteLogo from "../../assets/image/blueLogo.svg";
 import workoutCartBg from "../../assets/image/workoutList/Bg.png";
 const Cart = ({ workout, training }) => {
  
@@ -14,12 +14,12 @@ const Cart = ({ workout, training }) => {
         <div
           className="w-full h-40 rounded-2xl flex justify-center items-center"
           style={{
-            backgroundImage: `url(${workoutCartBg})`,
+            // backgroundImage: `url(${workoutCartBg})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         >
-          <img className="w-20 h-20" src={whiteLogo} alt="" />
+          <img className="w-40 h-40" src={whiteLogo} alt="" />
         </div>
         <div className="px-6 py-4">
           <p className="text-[#0A2533] text-sm font-bold text-right">

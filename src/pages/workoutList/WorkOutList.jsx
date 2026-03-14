@@ -5,7 +5,7 @@ import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
 
 const WorkOutList = () => {
   return (
-    <div className="min-h-[75vh]">
+    <div className="min-h-[75vh] w-full overflow-x-hidden">
       <WorkOutListBaground bgImg={trainingandexercisebanner} />
       <CartTitle title={"אימונים"} />
       <WorkOutCart />

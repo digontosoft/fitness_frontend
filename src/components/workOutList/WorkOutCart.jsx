@@ -144,20 +144,20 @@ const WorkOutCart = () => {
   console.log('displayedTrainings', trainings);
 
   return (
-    <div className="max-w-6xl mx-auto px-2 pb-10">
+    <div className="max-w-6xl mx-auto px-2 sm:px-4 pb-6 sm:pb-10 w-full">
       <a
         onClick={handleDownloadReport}
         href={exerciseReport || "#"}
-        className={`text-lg font-semibold flex items-center justify-center underline ${
+        className={`text-base sm:text-lg font-semibold flex items-center justify-center underline px-2 ${
           downloadingReport ? "cursor-wait opacity-50" : "cursor-pointer"
         }`}
       >
         {downloadingReport ? "טוען..." : "הצגת ביצועים קודמים"}
       </a>
 
-      <div className="flex items-center justify-center my-5" dir="rtl">
+      <div className="flex items-center justify-center my-4 sm:my-5 px-2" dir="rtl">
         <Select
-          style={{ width: "380px", height: "50px" }}
+          style={{ width: "100%", maxWidth: "380px", height: "50px" }}
           direction="rtl"
           options={sortedTrainings}
           valueField="_id"
@@ -175,7 +175,7 @@ const WorkOutCart = () => {
 
       {displayedTrainings.length > 0 && (
         <>
-          <div className="flex flex-wrap items-center justify-center gap-6" dir="rtl">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 px-2" dir="rtl">
             {displayedTrainings.map((training) =>
               (Array.isArray(training.workouts) ? training.workouts : []).map(
                 (w, idx) => {
@@ -193,11 +193,13 @@ const WorkOutCart = () => {
           </div>
 
           {totalPages > 1 && (
-            <PaginationComp
-              setPage={setPage}
-              totalPages={totalPages}
-              currentPage={page}
-            />
+            <div className="w-full overflow-x-auto px-2 mt-4">
+              <PaginationComp
+                setPage={setPage}
+                totalPages={totalPages}
+                currentPage={page}
+              />
+            </div>
           )}
         </>
       )}
