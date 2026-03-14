@@ -251,6 +251,11 @@ const Dashboard = () => {
   const traineeUsersLength = JSON.parse(localStorage.getItem("traineeUsers"));
   const recipeUsersLength = JSON.parse(localStorage.getItem("recipeUsers"));
 
+
+  console.log("users", users);
+  console.log("adminTraineeLists", adminTraineeLists);
+  console.log("user", user);
+  console.log("adminId", adminId);
   return (
     <Container className="min-h-[72vh] sm:my-10 sm:px-0 px-4">
       <div className="flex flex-col items-center justify-center space-y-6 px-4">
