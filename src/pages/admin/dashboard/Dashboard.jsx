@@ -282,9 +282,9 @@ const Dashboard = () => {
             className="rounded-lg h-12 w-full min-w-[368px]"
             direction="rtl"
             valueField="_id"
-            labelField="firstName"
+            labelField="full_name"
             options={adminTraineeLists}
-            searchBy="firstName"
+            searchBy="full_name"
             placeholder="בחר מתאמן"
             onChange={handleSelectUser}
           />
@@ -293,9 +293,9 @@ const Dashboard = () => {
             className="rounded-lg h-12 w-full min-w-[368px]"
             direction="rtl"
             valueField="_id"
-            labelField="firstName"
+            labelField="full_name"
             options={users.filter((u) => u.userType === "trainee")}
-            searchBy="firstName"
+            searchBy="full_name"
             placeholder="בחר מתאמן"
             onChange={handleSelectUser}
           />
