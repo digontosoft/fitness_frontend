@@ -18,14 +18,14 @@ const ArrowCard = ({ tilte, tilte1, taskType, onClick }) => {
       onClick={onClick}
       className="sm:w-auto w-full h-24 flex gap-4 items-center justify-start px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
     >
-      <div className="w-[104px] h-[84px] flex-shrink-0">
+       <div className="w-[104px] h-[84px] flex-shrink-0">
           <img
             src={taskImage}
             alt=""
             className="w-full h-full object-cover rounded-[16px]"
           />
         </div>
-
+      
       <div className="flex items-center gap-4 flex-1 min-w-0" dir="rtl">
         {/* Text Section */}
         <div className="flex flex-col justify-center flex-1 min-w-0">
@@ -37,8 +37,8 @@ const ArrowCard = ({ tilte, tilte1, taskType, onClick }) => {
           </h1>
         </div>
         <Button className="rounded-2xl">
-          <FaArrowLeftLong />
-        </Button>
+        <FaArrowLeftLong />
+      </Button>
         {/* Image Section */}
       </div>
     </div>
