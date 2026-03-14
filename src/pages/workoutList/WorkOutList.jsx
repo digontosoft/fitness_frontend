@@ -1,12 +1,13 @@
-import { trainingandexercisebanner } from "@/assets/index";
+// import { trainingandexercisebanner } from "@/assets/index";
+import { exerciseLibrary } from "@/assets/index";
 import CartTitle from "@/components/workOutList/CartTitle";
 import WorkOutCart from "@/components/workOutList/WorkOutCart";
 import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
 
 const WorkOutList = () => {
   return (
-    <div className="min-h-[75vh]">
-      <WorkOutListBaground bgImg={trainingandexercisebanner} />
+    <div className="min-h-[75vh] w-full overflow-x-hidden">
+      <WorkOutListBaground bgImg={exerciseLibrary} />
       <CartTitle title={"אימונים"} />
       <WorkOutCart />
     </div>

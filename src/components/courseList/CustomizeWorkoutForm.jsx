@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Select from "react-dropdown-select";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { base_url } from "@/api/baseUrl";
-import { Trash } from "lucide-react";
+import { Trash, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -27,6 +27,9 @@ const CustomizeWorkoutForm = () => {
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingExercises, setIsLoadingExercises] = useState(false);
+  const [isAddingExercise, setIsAddingExercise] = useState({});
   const [userTraining, setUserTraining] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,6 +60,7 @@ const CustomizeWorkoutForm = () => {
       }
     } catch (error) {
       console.error("Error fetching training:", error);
+      toast.error("שגיאה בטעינת הנתונים. נסה שוב מאוחר יותר.");
     }
   };
 
@@ -84,6 +88,7 @@ const CustomizeWorkoutForm = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoadingExercises(true);
       try {
         const [exerciseRes] = await Promise.all([
           axios.get(`${base_url}/exercise`),
@@ -91,11 +96,17 @@ const CustomizeWorkoutForm = () => {
           //   axios.get(`${base_url}/get-training-by-id/${trainingId}`),
         ]);
 
-        if (exerciseRes.status === 200) setAllExercises(exerciseRes.data.data);
+        if (exerciseRes.status === 200) {
+          setAllExercises(exerciseRes.data.data);
+          setSelectedExercise(exerciseRes.data.data || []);
+        }
         // if (workoutRes.status === 200) setWorkouts(workoutRes.data.data);
         // if (trainingRes.status === 200) setTraining(trainingRes.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+        toast.error("שגיאה בטעינת התרגילים. נסה שוב מאוחר יותר.");
+      } finally {
+        setIsLoadingExercises(false);
       }
     };
 
@@ -105,6 +116,7 @@ const CustomizeWorkoutForm = () => {
   useEffect(() => {
     const fetchFilteredExercises = async () => {
       if (selectedBodyPart || selectedEquipment) {
+        setIsLoadingExercises(true);
         let url = `${base_url}/exercise?`;
         if (selectedBodyPart) {
           url += `body_part=${selectedBodyPart}&`;
@@ -121,6 +133,9 @@ const CustomizeWorkoutForm = () => {
         } catch (error) {
           console.error("Error fetching filtered exercises:", error);
           setSelectedExercise([]);
+          toast.error("שגיאה בסינון התרגילים. נסה שוב.");
+        } finally {
+          setIsLoadingExercises(false);
         }
       } else {
         // If no filters are selected, show all exercises again
@@ -136,24 +151,37 @@ const CustomizeWorkoutForm = () => {
     setAddMoreExerciseIndex(workoutIndex);
   };
 
-  const handleNewExerciseSelection = (selectedExercises, workoutIndex) => {
-    if (!training) return;
-    const updatedTraining = { ...training };
-    const currentWorkout = updatedTraining.workouts[workoutIndex];
+  const handleNewExerciseSelection = async (selectedExercises, workoutIndex) => {
+    if (!training || !selectedExercises.length) return;
+    
+    setIsAddingExercise((prev) => ({ ...prev, [workoutIndex]: true }));
+    
+    try {
+      const updatedTraining = { ...training };
+      const currentWorkout = updatedTraining.workouts[workoutIndex];
 
-    selectedExercises.forEach((exercise) => {
-      currentWorkout.exercises.push({
-        _id: exercise._id,
-        name: exercise.name,
-        sets: 0,
-        reps: 0,
-        manipulation: "",
+      selectedExercises.forEach((exercise) => {
+        currentWorkout.exercises.push({
+          _id: exercise._id,
+          name: exercise.name,
+          sets: 0,
+          reps: 0,
+          manipulation: "",
+        });
       });
-    });
 
-    setIsSupersetIncomplete(false);
-    setTraining(updatedTraining);
-    setAddMoreExerciseIndex(null);
+      setIsSupersetIncomplete(false);
+      setTraining(updatedTraining);
+      setAddMoreExerciseIndex(null);
+      setSelectedBodyPart(null);
+      setSelectedEquipment(null);
+      toast.success("תרגיל נוסף בהצלחה!");
+    } catch (error) {
+      console.error("Error adding exercise:", error);
+      toast.error("שגיאה בהוספת התרגיל. נסה שוב.");
+    } finally {
+      setIsAddingExercise((prev) => ({ ...prev, [workoutIndex]: false }));
+    }
   };
 
   // Add selected workout with exercises
@@ -336,6 +364,9 @@ const CustomizeWorkoutForm = () => {
   };
 
   const onSubmit = async () => {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
     // console.log("payload", training);
     const payload = {
       user_id: user_Id,
@@ -361,12 +392,17 @@ const CustomizeWorkoutForm = () => {
         payload
       );
       if (response.status === 200) {
-        toast.success("Workout customized successfully!");
-        fetchTrainingByUserId();
-        navigate(-1);
+        toast.success("תוכנית האימון עודכנה בהצלחה!");
+        await fetchTrainingByUserId();
+        setTimeout(() => {
+          navigate(-1);
+        }, 500);
       }
     } catch (error) {
       console.log(error);
+      toast.error("שגיאה בשמירת תוכנית האימון. נסה שוב מאוחר יותר.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
   //console.log("training-Data", training);
@@ -477,7 +513,7 @@ const CustomizeWorkoutForm = () => {
                     </div>
                   </div>
                   <Trash
-                    className="cursor-pointer text-[#7994CB]-600"
+                    className="cursor-pointer text-[#7994CB]-600 hover:text-red-500 transition-colors duration-200"
                     onClick={() => handleRemoveExercise(workout._id, ex._id)}
                   />
                 </div>
@@ -540,18 +576,26 @@ const CustomizeWorkoutForm = () => {
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       סנן לפי שם תרגיל
                     </label>
-                    <Select
-                      className="rounded-lg h-12 w-auto"
-                      direction="rtl"
-                      options={selectedExercise}
-                      valueField="_id"
-                      labelField="name"
-                      placeholder="בחר"
-                      onChange={(selected) =>
-                        handleNewExerciseSelection(selected, workoutIndex)
-                      }
-                      searchBy="name"
-                    />
+                    <div className="relative">
+                      {isLoadingExercises && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-lg z-10">
+                          <Loader2 className="w-5 h-5 animate-spin text-[#7994CB]" />
+                        </div>
+                      )}
+                      <Select
+                        className="rounded-lg h-12 w-auto"
+                        direction="rtl"
+                        options={selectedExercise}
+                        valueField="_id"
+                        labelField="name"
+                        placeholder={isLoadingExercises ? "טוען..." : "בחר"}
+                        onChange={(selected) =>
+                          handleNewExerciseSelection(selected, workoutIndex)
+                        }
+                        searchBy="name"
+                        disabled={isLoadingExercises}
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -559,9 +603,18 @@ const CustomizeWorkoutForm = () => {
               <Button
                 type="button"
                 onClick={(e) => handleMoreExercise(workoutIndex, e)}
-                className="mt-2 bg-[#7994CB] flex mx-auto"
+                className="mt-2 bg-[#7994CB] hover:bg-[#6a84b8] flex mx-auto transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isSubmitting || isAddingExercise[workoutIndex]}
+                dir="rtl"
               >
-                הוסף תרגיל לאימון
+                {isAddingExercise[workoutIndex] ? (
+                  <>
+                    <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                    מוסיף...
+                  </>
+                ) : (
+                  "הוסף תרגיל לאימון"
+                )}
               </Button>
             </div>
           ))}
@@ -571,13 +624,21 @@ const CustomizeWorkoutForm = () => {
           <Button
             type="submit"
             className={
-              isButtonDisabled || isSupersetIncomplete
-                ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
-                : "text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
+              isButtonDisabled || isSupersetIncomplete || isSubmitting
+                ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200 cursor-not-allowed transition-all duration-200"
+                : "text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB] hover:bg-[#6a84b8] transition-all duration-200 shadow-md hover:shadow-lg"
             }
-            disabled={isButtonDisabled || isSupersetIncomplete}
+            disabled={isButtonDisabled || isSupersetIncomplete || isSubmitting}
+            dir="rtl"
           >
-            שמיר תוכנית אימון
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                שומר...
+              </>
+            ) : (
+              "שמור תוכנית אימון "
+            )}
           </Button>
         </div>
       </form>

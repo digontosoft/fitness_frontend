@@ -41,10 +41,10 @@ export const NutritionCart = () => {
   );
 
   return (
-    <div className="my-10">
-      <div className="flex justify-center">
+    <div className="my-6 sm:my-8 md:my-10">
+      <div className="flex justify-center px-2">
         <div
-          className="flex justify-between items-center relative w-56 "
+          className="flex justify-between items-center relative w-full max-w-[224px] sm:w-56"
           dir="rtl"
         >
           <input
@@ -54,7 +54,7 @@ export const NutritionCart = () => {
             placeholder="חיפוש מדריך"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm w-56 "
+            className="border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm w-full"
             dir="rtl"
           />
           <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
@@ -65,13 +65,13 @@ export const NutritionCart = () => {
       {loading ? (
         <Loading />
       ) : error ? (
-        <div className="text-[#7994CB] text-center mt-6">{error}</div>
+        <div className="text-[#7994CB] text-center mt-6 px-2">{error}</div>
       ) : (
         <div
-          className={`max-w-6xl mx-auto grid  gap-6 justify-items-center items-center px-2 py-10 sm:py-0 md:py-5 ${
+          className={`max-w-6xl mx-auto grid gap-4 sm:gap-6 justify-items-center items-center px-2 sm:px-4 py-6 sm:py-8 md:py-10 ${
             filterData.length === 1
               ? "grid-cols-1"
-              : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
           }`}
         >
           {filterData.length > 0 ? (
@@ -89,7 +89,7 @@ export const NutritionCart = () => {
               ) : null
             )
           ) : (
-            <p className="text-center col-span-full">No results found.</p>
+            <p className="text-center col-span-full px-2">No results found.</p>
           )}
         </div>
       )}

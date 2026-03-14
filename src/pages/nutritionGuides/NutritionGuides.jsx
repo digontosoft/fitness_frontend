@@ -2,7 +2,7 @@ import NutritionCartSection from "@/components/nutritionGuides/NutritionCartSect
 
 const NutritionGuides = () => {
   return (
-    <div>
+    <div className="w-full overflow-x-hidden">
       {/* <NutritionHero /> */}
       <NutritionCartSection />
     </div>
