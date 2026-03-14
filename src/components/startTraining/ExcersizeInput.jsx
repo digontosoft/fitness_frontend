@@ -35,16 +35,16 @@ const ExcersizeInput = ({
     window.scrollTo(0, 0);
   }, []);
   return (
-    <div className="sm:w-96 w-full sm:py-20 py-6" dir="rtl">
-      <div className="flex flex-row-reverse text-[#0A2533] text-xl font-bold justify-between items-center text-center px-4">
-        <p className=" ">סט אחרון</p>
-        <p className="pr-20">יעד</p>
+    <div className="sm:w-96 w-full sm:py-20 py-6 ml-auto" dir="rtl">
+      <div className="flex flex-row-reverse text-[#0A2533] text-xl font-bold justify-between items-center">
+        <p className="sm:ml-[48px] ml-[10px]">סט אחרון</p>
+        <p className="sm:mr-[28px] mr-[10px]">יעד</p>
       </div>
-      <div className="sm:w-96 w-full bg-white shadow-md rounded-2xl p-2 md:p-6 flex justify-between border-[1px] border-gray-100 mt-4">
-        <form className="flex flex-col gap-6">
+      <div className="sm:w-96 w-full bg-white shadow-md rounded-2xl p-2 md:p-6 flex border-[1px] border-gray-100 mt-4 ml-auto">
+        <form className="flex flex-col gap-4 w-full">
           {/* Input 1 */}
-          <div className="flex justify-between  w-80">
-            <p className="text-base font-bold text-[#000000] flex">
+          <div className="flex items-center justify-between w-full gap-2">
+            <p className="text-base font-bold text-[#000000] flex-1 text-right">
               סטים: {exerciseData?.sets}
             </p>
             <div className="flex flex-col relative">
@@ -57,7 +57,7 @@ const ExcersizeInput = ({
               <input
                 id="sets_done"
                 type="number"
-                className={`border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.sets_done ? "border-[#7994CB]" : ""}`}
+                className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.sets_done ? "border-[#7994CB]" : ""}`}
                 {...register("sets_done", {
                   required: "Exercise name is required",
                   onChange: (e) =>
@@ -73,8 +73,8 @@ const ExcersizeInput = ({
           </div>
 
           {/* Input 2 */}
-          <div className="flex justify-between  w-80">
-            <p className="text-base font-bold text-[#000000] flex">
+          <div className="flex items-center justify-between w-full gap-2">
+            <p className="text-base font-bold text-[#000000] flex-1 text-right">
               חזרות: {exerciseData?.reps}
             </p>
             <div className="flex flex-col relative">
@@ -87,7 +87,7 @@ const ExcersizeInput = ({
               <input
                 id="reps_done"
                 type="number"
-                className={`border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.reps_done ? "border-[#7994CB]" : ""}`}
+                className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.reps_done ? "border-[#7994CB]": ""}`}
                 {...register("reps_done", {
                   required: "reps_done reps are required",
                   onChange: (e) =>
@@ -103,8 +103,8 @@ const ExcersizeInput = ({
           </div>
 
           {/* Input 3 */}
-          <div className="flex justify-between  w-80">
-            <p className="text-base font-bold text-[#000000] flex">
+          <div className="flex items-center justify-between w-full gap-2">
+            <p className="text-base font-bold text-[#000000] flex-1 text-right">
               מניפולציה: {exerciseData?.manipulation}
             </p>
             <div className="flex flex-col relative">
@@ -117,7 +117,7 @@ const ExcersizeInput = ({
               <input
                 id="lastSet"
                 type="text"
-                className={`border w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.lastSet ? "border-[#7994CB]" : ""}`}
+                className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.lastSet ? "border-[#7994CB]" : ""}`}
                 {...register("lastSet", {
                   required: "Last set value is required",
                   onChange: (e) => handleInputChange("lastSet", e.target.value),

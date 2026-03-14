@@ -34,9 +34,9 @@ const DynamicTextAreaField = ({
           {...register(id, validation)}
           placeholder={placeholder}
           className={twMerge`w-full border ${
-            errors[id] ? "border-red-500" : "border-gray-300"
+            errors[id] ? "border-[#7994CB]" : "border-gray-300"
           } rounded-lg p-3 text-right focus:outline-none focus:ring-2 ${
-            errors[id] ? "focus:ring-red-500" : "focus:ring-blue-500"
+            errors[id] ? "focus:ring-[#7994CB]" : "focus:ring-[#7994CB]"
           } ${className}`}
           disabled={disabled}
         />

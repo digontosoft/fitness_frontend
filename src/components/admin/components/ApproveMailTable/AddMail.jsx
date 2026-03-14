@@ -180,7 +180,7 @@ export default function AddMail({ setEmails }) {
                     message: "Enter a valid email address",
                   },
                 })}
-                className={`${errors.email ? "border-red-500" : ""}`}
+                className={`${errors.email ? "border-[#7994CB]" : ""}`}
                 dir="rtl"
               />
               {errors.email && (
@@ -201,7 +201,7 @@ export default function AddMail({ setEmails }) {
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger
                       className={`w-full ${
-                        errors.role ? "border-red-500" : ""
+                        errors.role ? "border-[#7994CB]" : ""
                       }`}
                     >
                       <SelectValue placeholder="Select role" />
@@ -272,7 +272,7 @@ export default function AddMail({ setEmails }) {
                     required: "Expiry Date is required",
                   })}
                   className={`w-full border border-gray-300 rounded-lg p-3 text-right ${
-                    errors.expiry_date ? "border-red-500" : ""
+                    errors.expiry_date ? "border-[#7994CB]" : ""
                   }`}
                 />
               </div>

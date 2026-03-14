@@ -99,27 +99,27 @@ export const TraineeExerciseLibraryCard = () => {
       })
    
   return (
-    <div className="max-w-6xl mx-auto pb-10 px-2">
-      <div className="flex items-center justify-center gap-10 md:flex-row flex-col-reverse">
+    <div className="max-w-6xl mx-auto pb-10 px-2 sm:px-4">
+      <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-10 md:flex-row flex-col-reverse w-full">
         <div
-          className="flex justify-between items-center relative min-w-[310px] h-12"
+          className="flex justify-between items-center relative w-full sm:w-auto sm:min-w-[310px] h-12"
           dir="rtl"
         >
           <input
             type="search"
             placeholder="סנן לפי שם"
             onChange={(e) => setSearchValue(e.target.value)}
-            className="border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
+            className="border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm w-full sm:min-w-[310px] h-12"
           />
           <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
             <GoSearch className="text-white" />
           </div>
         </div>
 
-        <div className="flex sm:gap-16 gap-4 w-full items-center justify-center">
+        <div className="flex flex-col sm:flex-row sm:gap-4 md:gap-16 gap-4 w-full sm:w-auto items-center justify-center">
           <Select
             direction="rtl"
-            className="sm:min-w-[310px] rounded-lg h-12 border-2 p-2"
+            className="w-full sm:min-w-[310px] rounded-lg h-12 border-2 p-2"
             placeholder="סנן לפי חלק בגוף"
             options={bodyPartOptions}
             onChange={(e) => setBodyPart(e[0]?.value || "")}
@@ -128,7 +128,7 @@ export const TraineeExerciseLibraryCard = () => {
           <Select
             direction="rtl"
             options={equipmentOptions}
-            className="sm:min-w-[310px] rounded-lg h-12 border-2 p-2"
+            className="w-full sm:min-w-[310px] rounded-lg h-12 border-2 p-2"
             placeholder="סנן לפי ציוד"
             onChange={(e) => setEquipment(e[0]?.value || "")}
             isMulti={false}
@@ -139,7 +139,7 @@ export const TraineeExerciseLibraryCard = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="flex flex-wrap items-center justify-center gap-6 mt-6">
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-6">
           {getFilteredExercises.length > 0 ? (
             getFilteredExercises.map((exercise) => (
               <CourseCart
@@ -159,12 +159,13 @@ export const TraineeExerciseLibraryCard = () => {
 
       {open && <CourseDetails open={open} setOpen={setOpen} exerciseId={id} />}
       {totalPages > 1 && (
-        <PaginationComp
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-         
-        />
+        <div className="w-full overflow-x-auto px-2">
+          <PaginationComp
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
       )}
     </div>
   );

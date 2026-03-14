@@ -5,9 +5,9 @@ const WorkOutListBaground = ({ bgImg }) => {
     ? ` ${base_url}/${bgImg}`
     : bgImg;
   return (
-    <div>
+    <div className="w-full overflow-hidden">
       <img
-        className="w-full sm:h-auto object-cover object-center"
+        className="w-full h-auto sm:h-[400px] md:h-[500px] lg:h-[600px] object-cover object-center"
         src={coverImage}
         alt=""
       />

@@ -1,7 +1,6 @@
-import { Input } from "@/components/ui/input";
 import { Controller, useFormContext } from "react-hook-form";
 
-const FInput = ({ label, name, placeholder, type = "text" }) => {
+const FTextarea = ({ label, name, placeholder, rows = 4 }) => {
   const { control } = useFormContext();
 
   return (
@@ -14,11 +13,11 @@ const FInput = ({ label, name, placeholder, type = "text" }) => {
         name={name}
         render={({ field, fieldState: { error } }) => (
           <div dir="rtl">
-            <Input
+            <textarea
               {...field}
-              type={type}
               id={name}
-              className={`w-full h-[56px] p-4 gap-4 rounded-[16px] border-[2px] ${
+              rows={rows}
+              className={`w-full p-4 rounded-[16px] border-[2px] resize-none ${
                 error ? "border-[#7994CB]" : "border-opacity-0"
               } focus:outline-none focus:ring-2 focus:ring-[#7994CB]`}
               placeholder={placeholder}
@@ -35,4 +34,6 @@ const FInput = ({ label, name, placeholder, type = "text" }) => {
   );
 };
 
-export default FInput;
+export default FTextarea;
+
+

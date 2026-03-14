@@ -73,7 +73,7 @@ const AddExercise = ({
             <input
               id={`sets-${exercise?.name}`}
               type="number"
-              className="w-full border border-red-200 h-10 px-2 rounded-md"
+              className="w-full border border-[#7994CB]/30 h-10 px-2 rounded-md"
               value={sets}
               onChange={(e) => setSets(e.target.value)}
               onBlur={handleInputChange}
@@ -85,7 +85,7 @@ const AddExercise = ({
             <input
               id={`reps-${exercise?.name}`}
               type="number"
-              className="w-full border border-red-200 h-10 px-2 rounded-md"
+              className="w-full border border-[#7994CB]/30 h-10 px-2 rounded-md"
               value={reps}
               onChange={(e) => setReps(e.target.value)}
               onBlur={handleInputChange}
@@ -97,7 +97,7 @@ const AddExercise = ({
             <input
               id={`manipulation-${exercise?.name}`}
               type="text"
-              className="w-full border border-red-200 h-10 px-2 rounded-md"
+              className="w-full border border-[#7994CB]/30 h-10 px-2 rounded-md"
               value={manipulation}
               onChange={handleManipulationChange}
               onBlur={handleInputChange}

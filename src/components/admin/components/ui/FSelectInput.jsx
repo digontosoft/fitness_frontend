@@ -1,7 +1,10 @@
-import { Input } from "@/components/ui/input";
 import { Controller, useFormContext } from "react-hook-form";
 
-const FInput = ({ label, name, placeholder, type = "text" }) => {
+/**
+ * React-hook-form controlled select input (matches FInput / FRadioInput patterns).
+ * options: [{ value: string | number, label: string }]
+ */
+const FSelectInput = ({ label, name, placeholder = "בחרי", options = [] }) => {
   const { control } = useFormContext();
 
   return (
@@ -14,15 +17,22 @@ const FInput = ({ label, name, placeholder, type = "text" }) => {
         name={name}
         render={({ field, fieldState: { error } }) => (
           <div dir="rtl">
-            <Input
-              {...field}
-              type={type}
+            <select
               id={name}
-              className={`w-full h-[56px] p-4 gap-4 rounded-[16px] border-[2px] ${
+              {...field}
+              className={`w-full h-[56px] px-4 rounded-[16px] border-[2px] bg-white ${
                 error ? "border-[#7994CB]" : "border-opacity-0"
               } focus:outline-none focus:ring-2 focus:ring-[#7994CB]`}
-              placeholder={placeholder}
-            />
+            >
+              <option value="" disabled>
+                {placeholder}
+              </option>
+              {options.map((opt) => (
+                <option key={String(opt.value)} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
             {error && (
               <p className="mt-1 text-sm text-[#7994CB]" dir="rtl">
                 {error?.message}
@@ -35,4 +45,6 @@ const FInput = ({ label, name, placeholder, type = "text" }) => {
   );
 };
 
-export default FInput;
+export default FSelectInput;
+
+

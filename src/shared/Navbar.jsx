@@ -104,7 +104,7 @@ useEffect(() => {
 
   return (
     <nav className="bg-transparent md:bg-white shadow-md ">
-      <div className="container mx-auto flex items-center sm:justify-between justify-end p-4">
+      <div className="container mx-auto relative flex items-center sm:justify-between justify-between p-4">
         {/* Logo */}
         <a
           href=""
@@ -189,16 +189,24 @@ useEffect(() => {
         {userType === "trainee" ? (
           <Link
             to="/"
-            className="flex items-center md:justify-center  pr-[35%] md:pr-0"
+            className="flex items-center justify-center mx-auto sm:mx-0"
           >
-            <img src={logo} alt="logo" className="w-15 h-14 object-cover" />
+            <img
+              src={logo}
+              alt="logo"
+              className="w-40 h-40 md:w-24 md:h-24 object-cover"
+            />
           </Link>
         ) : (
           <Link
             to="/dashboard"
-            className="flex items-center md:justify-center  pr-[35%] md:pr-0"
+            className="flex items-center justify-center mx-auto sm:mx-0"
           >
-            <img src={logo} alt="logo" className="w-15 h-14 object-cover" />
+            <img
+              src={logo}
+              alt="logo"
+              className="w-40 h-40 md:w-24 md:h-24 object-cover"
+            />
           </Link>
         )}
 

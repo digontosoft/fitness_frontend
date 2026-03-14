@@ -136,7 +136,7 @@ useEffect(() => {
   return (
     <div
       className="min-h-screen px-4 sm:px-6 md:px-10 lg:px-20 overflow-hidden mb-5"
-      // onClick={() => handleSubmit()}
+      dir="rtl"
     >
       {/* Welcome Modal */}
       {user?.is_video_popup === true && (
@@ -148,15 +148,15 @@ useEffect(() => {
           user={user}
         />
       )}
-      <div className="flex items-center sm:justify-center justify-end gap-2 mt-10">
+      <div className="flex items-center sm:justify-center justify-end gap-2 mt-10" dir="ltr">
         <h1 className="sm:text-4xl text-2xl font-bold">
           {userInfo?.full_name}
         </h1>
-        <h1 className="sm:text-4xl text-2xl font-bold">היי</h1>
+        {/* <h1 className="sm:text-4xl text-2xl font-bold" dir="">היי</h1> */}
       </div>
       <div className="flex flex-col items-center justify-center gap-5">
         {/* Cards Section */}
-        <div className="pt-5 sm:pt-16 flex flex-col-reverse md:flex-row items-center justify-center gap-5 md:gap-10 w-full">
+        <div className="pt-5 sm:pt-16 flex flex-col-reverse md:flex-row items-center justify-center gap-5 md:gap-10 w-full" dir="ltr">
           <LeftCard data={getMesurement} className="w-full md:w-1/2" />
           <RightCard
             user={user}

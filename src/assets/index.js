@@ -86,8 +86,12 @@ import training from "./image/training.svg";
 import women1 from "./image/workout-women-1.png";
 import women2 from "./image/workout-women-2.png";
 import termfile from "./image/ntf.jpeg";
+import stomache from "./image/man-belly.svg";
+import exerciseLibrary from "./image/userimage/exerciseLibrary.svg";
 
 export {
+  stomache,
+  exerciseLibrary,
   termfile,
   ArrowBurger,
   ArrowDumbel, Biceps, blackLogo, bodyBuilder,

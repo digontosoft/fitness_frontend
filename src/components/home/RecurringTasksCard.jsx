@@ -38,7 +38,7 @@ export function RecurringTasksCard({
     <Dialog open={isRecurringModalOpen} onOpenChange={setIsRecurringModalOpen} dir="rtl">
       <DialogContent className="border-none p-6">
         <DialogHeader className="text-center space-y-2">
-          <DialogTitle className="text-3xl font-bold">{selectedTask?.name}</DialogTitle>
+          <DialogTitle className="text-3xl font-bold ">{selectedTask?.name}</DialogTitle>
           <p className="text-gray-600 dark:text-gray-400 text-sm">{selectedTask?.title}</p>
         </DialogHeader>
 

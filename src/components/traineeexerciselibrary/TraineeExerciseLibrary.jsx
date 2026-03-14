@@ -1,4 +1,5 @@
 import { trainingandexercisebanner } from "@/assets/index";
+// import exerciseLibrary from "@/assets/index";
 import Title from "@/components/measurements/Tilte";
 import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
 import { TraineeExerciseLibraryCard } from "./TraineeExerciseLibraryCard";

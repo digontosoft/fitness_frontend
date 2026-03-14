@@ -1,4 +1,5 @@
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { FaPlay } from "react-icons/fa";
 import { Button } from "../ui/button";
 import ReactPlayer from "react-player";
 import {
@@ -28,6 +29,7 @@ import bands from "@/assets/image/bands.svg";
 import dumbles from "@/assets/image/dumbles.svg";
 const VideoCourseCart = ({ exercise }) => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  const [isPlaying, setIsPlaying] = useState(false);
 
   let customIcon = null;
   if (exercise.exercise_id?.body_part === "גב") {
@@ -59,77 +61,81 @@ const VideoCourseCart = ({ exercise }) => {
   } else if (exercise.exercise_id?.equipment === "מוטות") {
     customEquipment = weights;
   }
+
+  const videoUrl = exercise?.exercise_id?.video_url || "";
+
+  const getYoutubeId = (url) => {
+    if (!url) return null;
+    try {
+      const regExp =
+        /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/;
+      const match = url.match(regExp);
+      return match && match[1] ? match[1] : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const youtubeId = getYoutubeId(videoUrl);
+  const thumbnail = youtubeId
+    ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+    : null;
+
   console.log("exercise:", exercise);
   return (
-    // <Dialog>
-    //   <DialogTrigger asChild>
-    //     <div className="w-full cursor-pointer md:w-96 flex gap-2 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300">
-    //       <Button className="rounded-2xl">
-    //         <FaArrowLeftLong />
-    //       </Button>
-    //       <div className="w-full flex items-center justify-center">
-    //         <h1 className="text-sm font-bold text-[#0A2533]">
-    //           {exercise?.exercise_id?.name}
-    //         </h1>
-    //       </div>
-    //       <div className="w-full max-w-xs mx-auto">
-    //         <ReactPlayer
-    //           url={exercise?.exercise_id?.video_url}
-    //           width="100%"
-    //           height="80px"
-    //           controls
-    //           className="rounded-lg border border-gray-200 shadow-sm"
-    //         />
-    //       </div>
-    //     </div>
-    //   </DialogTrigger>
-
-    //   <DialogContent className="sm:max-w-[720px]">
-    //     <DialogHeader>
-    //       <DialogTitle className="text-center">
-    //         {exercise?.exercise_id?.name}
-    //       </DialogTitle>
-    //     </DialogHeader>
-    //     <div className="w-full">
-    //       <ReactPlayer
-    //         url={exercise?.exercise_id?.video_url}
-    //         width="100%"
-    //         height="360px"
-    //         controls
-    //         className="rounded-lg border border-gray-200 shadow-sm"
-    //       />
-    //     </div>
-    //     <DialogFooter>
-    //       <DialogClose asChild>
-    //         <Button variant="default" className="bg-[#7994CB]">
-    //           Close
-    //         </Button>
-    //       </DialogClose>
-    //     </DialogFooter>
-    //   </DialogContent>
-    // </Dialog>
     <Dialog>
-      <DialogTrigger asChild>
-        <div className="w-full cursor-pointer md:w-96 flex gap-2 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300">
-          <Button className="rounded-2xl">
+      <div
+        className="w-full md:w-96 flex gap-2 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300"
+        dir="rtl"
+      >
+        <DialogTrigger asChild>
+          <Button className="rounded-2xl cursor-pointer">
             <FaArrowLeftLong />
           </Button>
-          <div className="w-full flex items-center justify-center">
-            <h1 className="text-sm font-bold text-[#0A2533]">
-              {exercise?.exercise_id?.name}
-            </h1>
-          </div>
-          <div className="w-full max-w-xs mx-auto">
+        </DialogTrigger>
+        <div className="w-full flex items-center justify-center">
+          <h1 className="text-sm font-bold text-[#0A2533] text-right">
+            {exercise?.exercise_id?.name}
+          </h1>
+        </div>
+        <div className="relative w-full max-w-xs mx-auto">
+          {/* Clean thumbnail with custom play button */}
+          {!isPlaying && thumbnail && (
+            <button
+              type="button"
+              className="w-full h-[80px] rounded-lg overflow-hidden border border-gray-200 shadow-sm relative"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPlaying(true);
+              }}
+            >
+              <img
+                src={thumbnail}
+                alt={exercise?.exercise_id?.name || "exercise-video"}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-500 shadow-lg">
+                  <FaPlay className="text-white ml-0.5" size={18} />
+                </div>
+              </div>
+            </button>
+          )}
+
+          {/* Actual player, starts only after click */}
+          {(isPlaying || !thumbnail) && (
             <ReactPlayer
-              url={exercise?.exercise_id?.video_url}
+              url={videoUrl}
               width="100%"
               height="80px"
+              playing={isPlaying}
               controls
+              muted
               className="rounded-lg border border-gray-200 shadow-sm"
             />
-          </div>
+          )}
         </div>
-      </DialogTrigger>
+      </div>
       <DialogContent className="sm:max-w-4xl p-6 rounded-lg">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-center">
