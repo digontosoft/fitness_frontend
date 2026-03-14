@@ -16,11 +16,11 @@ const StartTraining = () => {
   const training = location.state?.training || location.state?.trainings || {};
   const workout = location.state?.workout || {};
   
-  console.log("=== StartTraining Data ===");
-  console.log("workData:", workData);
-  console.log("training:", training);
-  console.log("workout:", workout);
-  console.log("training.workouts:", training?.workouts);
+  // console.log("=== StartTraining Data ===");
+  // console.log("workData:", workData);
+  // console.log("training:", training);
+  // console.log("workout:", workout);
+  // console.log("training.workouts:", training?.workouts);
   
   // Handle different data sources:
   // 1. Task-based flow (ActionCourseCart): workData has userTrainingExercise
@@ -69,11 +69,11 @@ const StartTraining = () => {
     taskName = workData.task_name || workData.name;
   }
   
-  console.log("Selected workout data:", selectedWorkoutData);
-  console.log("All exercises:", allExercises);
-  console.log("Task ID:", taskId);
-  console.log("User Training Workout ID:", userTrainingWorkoutId);
-  console.log("Task Name:", taskName);
+  // console.log("Selected workout data:", selectedWorkoutData);
+  // console.log("All exercises:", allExercises);
+  // console.log("Task ID:", taskId);
+  // console.log("User Training Workout ID:", userTrainingWorkoutId);
+  // console.log("Task Name:", taskName);
   // Convert exercises to userTrainingExercise format (preserve sets, reps, manipulation)
   const exercisesToUse = allExercises.length > 0 
     ? allExercises.map((ex) => {
@@ -211,75 +211,156 @@ const StartTraining = () => {
     }
   };
 
+  // const handleFinish = async () => {
+  //   // Validation: Check if required data exists for API call
+  //   if (!finalWorkData.task_id || !finalWorkData.user_training_workout_id) {
+  //     toast.error("Missing required task information. Cannot complete workout.");
+  //     console.error("Missing data:", { 
+  //       task_id: finalWorkData.task_id, 
+  //       user_training_workout_id: finalWorkData.user_training_workout_id 
+  //     });
+  //     return;
+  //   }
+
+  //   // Map exercise data with proper exercise_id from exercisesToUse
+  //   const exerciseDataArray = Object.entries(exerciseData)
+  //     .map(([key, value]) => {
+  //       // Find the actual exercise_id from exercisesToUse
+  //       const exercise = exercisesToUse.find(
+  //         (ex) => (ex.exercise_id?._id || ex._id) === key
+  //       ) || exercisesToUse.find(
+  //         (ex, idx) => `course-${idx}` === key
+  //       );
+        
+  //       const exerciseId = exercise?.exercise_id?._id || exercise?._id || key;
+        
+  //       return {
+  //         exercise_id: exerciseId,
+  //         sets_done: Number(value.sets_done) || 0,
+  //         reps_done: Number(value.reps_done) || 0,
+  //         last_set_weight: Number(value.last_set_weight) || 0 
+  //       };
+  //     })
+  //     .filter((item) => item.sets_done > 0 || item.reps_done > 0);
+
+  //   if (exerciseDataArray.length === 0) {
+  //     toast.error("Please complete at least one exercise");
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     task_id: finalWorkData.task_id,
+  //     user_training_workout_id: finalWorkData.user_training_workout_id,
+  //     excerciseData: exerciseDataArray,
+  //   };
+    
+  //   console.log("=== Final Workout Submission ===");
+  //   console.log("Total exercises:", totalExercises);
+  //   console.log("Completed exercises:", completedExercisesCount);
+  //   console.log("Progress:", `${progressPercentage}%`);
+  //   console.log("Final payload:", payload);
+  //   console.log("================================");
+    
+  //   setIsSubmitting(true);
+
+  //   try {
+  //     const response = await axios.post(
+  //       `${base_url}/complete-workout-task`,
+  //       payload
+  //     );
+  //     if (response.status === 200) {
+  //       toast.success("Workout completed successfully!");
+  //       navigate("/");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error completing workout:", error);
+  //     const errorMessage = error.response?.data?.message || error.message || "Failed to complete workout";
+  //     toast.error(errorMessage);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
   const handleFinish = async () => {
-    // Validation: Check if required data exists for API call
-    if (!finalWorkData.task_id || !finalWorkData.user_training_workout_id) {
-      toast.error("Missing required task information. Cannot complete workout.");
-      console.error("Missing data:", { 
-        task_id: finalWorkData.task_id, 
-        user_training_workout_id: finalWorkData.user_training_workout_id 
+    // Only user_training_workout_id is required, task_id is optional
+    if (!finalWorkData?.user_training_workout_id) {
+      toast.error("Missing required workout information. Cannot complete workout.");
+      console.error("Missing data:", {
+        task_id: finalWorkData?.task_id,
+        user_training_workout_id: finalWorkData?.user_training_workout_id,
       });
       return;
     }
-
-    // Map exercise data with proper exercise_id from exercisesToUse
+  
     const exerciseDataArray = Object.entries(exerciseData)
       .map(([key, value]) => {
-        // Find the actual exercise_id from exercisesToUse
+        // Try multiple matching strategies
         const exercise = exercisesToUse.find(
-          (ex) => (ex.exercise_id?._id || ex._id) === key
+          (ex) => ex.exercise_id?._id === key
+        ) || exercisesToUse.find(
+          (ex) => ex._id === key
         ) || exercisesToUse.find(
           (ex, idx) => `course-${idx}` === key
         );
-        
-        const exerciseId = exercise?.exercise_id?._id || exercise?._id || key;
-        
+  
+        if (!exercise) return null;
+  
+        // Extract exercise_id - prioritize exercise_id._id (actual exercise ID)
+        const exerciseId = exercise.exercise_id?._id || exercise._id || key;
+  
         return {
           exercise_id: exerciseId,
           sets_done: Number(value.sets_done) || 0,
           reps_done: Number(value.reps_done) || 0,
+          last_set_weight: Number(value.lastSet) || 0,
         };
       })
-      .filter((item) => item.sets_done > 0 || item.reps_done > 0);
-
-    if (exerciseDataArray.length === 0) {
+      .filter(
+        (item) =>
+          item &&
+          (item.sets_done > 0 || item.reps_done > 0 || item.last_set_weight > 0)
+      );
+  
+    if (!exerciseDataArray.length) {
       toast.error("Please complete at least one exercise");
       return;
     }
-
+  
+    // Build payload - task_id is optional
     const payload = {
-      task_id: finalWorkData.task_id,
+      ...(finalWorkData.task_id && { task_id: finalWorkData.task_id }),
       user_training_workout_id: finalWorkData.user_training_workout_id,
       excerciseData: exerciseDataArray,
     };
-    
-    console.log("=== Final Workout Submission ===");
-    console.log("Total exercises:", totalExercises);
-    console.log("Completed exercises:", completedExercisesCount);
-    console.log("Progress:", `${progressPercentage}%`);
-    console.log("Final payload:", payload);
-    console.log("================================");
-    
+  
+    // console.log("=== Final Workout Submission ===");
+    // console.log(payload);
+    // console.log("================================");
+  
     setIsSubmitting(true);
-
+  
     try {
       const response = await axios.post(
         `${base_url}/complete-workout-task`,
         payload
       );
+  
       if (response.status === 200) {
         toast.success("Workout completed successfully!");
         navigate("/");
       }
     } catch (error) {
       console.error("Error completing workout:", error);
-      const errorMessage = error.response?.data?.message || error.message || "Failed to complete workout";
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to complete workout";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
   };
-
+  
   const nextIndex = currentIndex + 1;
   const currentExercise = exercisesToUse[currentIndex] || {};
   const courseId =
