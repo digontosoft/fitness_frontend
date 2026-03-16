@@ -7,7 +7,7 @@ const WorkOutListBaground = ({ bgImg }) => {
   return (
     <div className="w-full overflow-hidden">
       <img
-        className="w-full h-auto sm:h-[400px] md:h-[500px] lg:h-[600px] object-cover object-center"
+        className="w-full max-h-[544px] object-cover object-center"
         src={coverImage}
         alt=""
       />

@@ -251,6 +251,11 @@ const Dashboard = () => {
   const traineeUsersLength = JSON.parse(localStorage.getItem("traineeUsers"));
   const recipeUsersLength = JSON.parse(localStorage.getItem("recipeUsers"));
 
+
+  console.log("users", users);
+  console.log("adminTraineeLists", adminTraineeLists);
+  console.log("user", user);
+  console.log("adminId", adminId);
   return (
     <Container className="min-h-[72vh] sm:my-10 sm:px-0 px-4">
       <div className="flex flex-col items-center justify-center space-y-6 px-4">
@@ -277,9 +282,9 @@ const Dashboard = () => {
             className="rounded-lg h-12 w-full min-w-[368px]"
             direction="rtl"
             valueField="_id"
-            labelField="firstName"
+            labelField="full_name"
             options={adminTraineeLists}
-            searchBy="firstName"
+            searchBy="full_name"
             placeholder="בחר מתאמן"
             onChange={handleSelectUser}
           />
@@ -288,9 +293,9 @@ const Dashboard = () => {
             className="rounded-lg h-12 w-full min-w-[368px]"
             direction="rtl"
             valueField="_id"
-            labelField="firstName"
+            labelField="full_name"
             options={users.filter((u) => u.userType === "trainee")}
-            searchBy="firstName"
+            searchBy="full_name"
             placeholder="בחר מתאמן"
             onChange={handleSelectUser}
           />
