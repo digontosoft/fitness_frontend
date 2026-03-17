@@ -203,6 +203,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
+import { aceptNewTrainee, adminList, admin, trainee, comunityManage, manageExercise ,manageNutration, manageTrainee, manageTraining, manageWorkout, worklist, recipebook} from "@/assets/index";
 
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
@@ -306,12 +307,12 @@ const Dashboard = () => {
         {user.userType === "admin" ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:w-2/3 w-full">
             <AdminArrowCard
-              image={women1}
+              image={aceptNewTrainee}
               title="אישור מתאמנים חדשים"
               link="/admin-dashboard/approve-email"
             />
             <AdminArrowCard
-              image={women2}
+              image={trainee}
               title="ניהול מתאמנים קיימים"
               link="/admin-dashboard/trainee-users-list"
             />
@@ -319,47 +320,47 @@ const Dashboard = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
             <AdminArrowCard
-              image={women1}
+              image={aceptNewTrainee}
               title="אישור מתאמנים חדשים"
               link="/dashboard/approve-email"
             />
             <AdminArrowCard
-              image={ArrowBurger}
+              image={manageNutration}
               title="ניהול מדריכי תזונה"
               link="/dashboard/nutrition-lists"
             />
             <AdminArrowCard
-              image={women2}
+              image={manageTrainee}
               title="ניהול מתאמנים קיימים"
               link="/dashboard/trainee-users-list"
             />
             <AdminArrowCard
-              image={ArrowDumbel}
+              image={worklist}
               title="נהל תרגילים"
               link="/dashboard/exercise-list"
             />
             <AdminArrowCard
-              image={ArrowDumbel}
+              image={worklist}
               title="נהל אימונים"
               link="/dashboard/workout-list"
             />
             <AdminArrowCard
-              image={ArrowDumbel}
+              image={worklist}
               title="נהל תוכניות אימון"
               link="/dashboard/training-list"
             />
             <AdminArrowCard
-              image={ArrowDumbel}
+              image={admin}
               title="רשימת מנהלים"
               link="/dashboard/admin-list"
             />
             <AdminArrowCard
-              image={ArrowDumbel}
+              image={recipebook}
               title="ניהול ספר מתכונים"
               link="/dashboard/manage-recipe-book"
             />
             <AdminArrowCard
-              image={ArrowDumbel}
+              image={recipebook}
               title="ניהול חברי קהילה"
               link="/dashboard/recipe-book-users"
             />

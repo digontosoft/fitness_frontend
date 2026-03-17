@@ -4,16 +4,21 @@ const SingleCart = ({ id, title, description, icon, type }) => {
   return (
     <div
       key={id}
-      className="bg-white shadow-xl w-44 md:w-64 min-h-72 h-auto flex flex-col gap-6 rounded-3xl sm:mt-10 px-2" dir="rtl"
+      className="bg-white shadow-md rounded-3xl w-full h-full flex flex-col items-center gap-3 px-3 py-4 sm:py-5"
+      dir="rtl"
     >
-      <img className="px-3" src={icon} alt="" />
-      <p className="text-center text-[#0A2533]" dir="rtl">{title}</p>
-      <p className="text-center text-[#0A2533]" dir="rtl">{description}</p>
+      <img className="w-full h-16 sm:w-full sm:h-full object-contain" src={icon} alt="" />
+      <p className="text-center text-sm sm:text-base font-semibold text-[#0A2533]" dir="rtl">
+        {title}
+      </p>
+      <p className="text-center text-xs sm:text-sm text-[#4B6475]" dir="rtl">
+        {description}
+      </p>
       <Link
-        className=" flex justify-center  items-center"
+        className="flex justify-center items-center mt-auto"
         to={`/nutration-pdf/${id}`}
       >
-        <button className="text-[#000000] font-bold text-sm  text-center underline pb-4 hover:text-blue-500" dir="rtl">
+        <button className="text-[#000000] font-bold text-xs sm:text-sm text-center underline pb-2 hover:text-blue-500" dir="rtl">
           {type === "guide" ? "לצפייה במדריך" : "  לצפיה בתפריט"}{" "}
         </button>
       </Link>

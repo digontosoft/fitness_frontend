@@ -15,7 +15,7 @@ const AddExercise = () => {
             <input
               type="text"
               placeholder="Name"
-              className="w-full px-4 py-2 rounded border-none focus:outline-none bg-[#FAEAEB]"
+              className="w-full px-4 py-2 rounded border-none focus:outline-none bg-[#E6F4FF]"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -23,7 +23,7 @@ const AddExercise = () => {
             <input
               type="text"
               placeholder="Area"
-              className="w-full px-4 py-2 rounded border-none focus:outline-none bg-[#FAEAEB]"
+              className="w-full px-4 py-2 rounded border-none focus:outline-none bg-[#E6F4FF]"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -31,7 +31,7 @@ const AddExercise = () => {
             <select
               name=""
               id=""
-              className="w-full px-4 py-2 rounded border-none focus:outline-none bg-[#FAEAEB]"
+              className="w-full px-4 py-2 rounded border-none focus:outline-none bg-[#E6F4FF]"
             >
               <option value="" disabled>
                 Select Equipment
@@ -48,13 +48,13 @@ const AddExercise = () => {
             <textarea
               type="text"
               placeholder="User Search"
-              className="w-full px-4 py-5 rounded border-none focus:outline-none bg-[#FAEAEB]"
+              className="w-full px-4 py-5 rounded border-none focus:outline-none bg-[#E6F4FF]"
             />
           </div>
           <div className="flex flex-col gap-2 my-2">
             <label
               htmlFor="image"
-              className="text-base bg-[#FAEAEB] text-black font-medium text-center cursor-pointer block h-full w-full py-16 rounded-md grid justify-items-center items-center gap-2"
+              className="text-base bg-[#E6F4FF] text-black font-medium text-center cursor-pointer block h-full w-full py-16 rounded-md grid justify-items-center items-center gap-2"
             >
               <span>
                 <Upload />
@@ -72,7 +72,7 @@ const AddExercise = () => {
           </div>
           <BasicButton
             title="Submit"
-            className="bg-[#FAEAEB] hover:bg-[#FAEAEB] text-black hover:text-black"
+            className="bg-[#E6F4FF] hover:bg-[#E6F4FF] text-black hover:text-black"
           ></BasicButton>
         </form>
         <BackDashBoardButton className="mt-10" />
