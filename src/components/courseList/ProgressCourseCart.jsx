@@ -43,6 +43,10 @@ const ProgressCourseCart = () => {
       }, 2000);
     }
   }, [workout, training, navigate]);
+  console.log(exercises);
+ 
+  console.log("workoutdata",workout);
+  console.log(training);
 
   // Show loading state if navigating or missing data
   if (isNavigating) {

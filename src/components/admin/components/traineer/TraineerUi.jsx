@@ -12,6 +12,7 @@ import AdminArrowCardWithoutImage from "../ui/AdminArrowCardWithoutImage";
 import FormTitle from "../ui/FormTitle";
 import TraineeLeftCard from "./TraineeLeftCard";
 import TraineeRightCard from "./TraineeRightCard";
+import {  manageTraining, manageNutration} from "@/assets/index";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
@@ -117,14 +118,14 @@ const TraineerUi = ({ userId }) => {
           
             <div className="w-[342px]">
           <AdminArrowCard
-            image={ArrowBurger}
+            image={manageNutration}
             title="ניהול תפריטי תזונה אישיים"
             link={`/admin-dashboard/nutrition-lists/${userId}`}
           />
         </div>
         <div className="w-[342px]">
           <AdminArrowCard
-            image={ArrowDumbel}
+            image={manageTraining}
             title="ניהול תוכנית אימון"
             link={`/admin-dashboard/assigned-training-list/${userId}`}
             className="w-[342px]"
@@ -148,14 +149,14 @@ const TraineerUi = ({ userId }) => {
 
   <div className="w-[342px]">
           <AdminArrowCard
-            image={ArrowBurger}
+            image={manageNutration}
             title="ניהול תפריטי תזונה אישיים"
             link={`/dashboard/nutrition-lists/${userId}`}
           />
         </div>
         <div className="w-[342px]">
           <AdminArrowCard
-            image={ArrowDumbel}
+            image={manageTraining}
             title="ניהול תוכנית אימון"
             link={`/dashboard/assigned-training-list/${userId}`}
             className="w-[342px]"
