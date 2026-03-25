@@ -72,7 +72,6 @@
 // export default SingleCart;
 
 // import { mwatchData } from "@/constants/mwatchData";
-import { pixelCartImg } from "@/assets";
 import SmallCart from "./SmallCart";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -80,26 +79,13 @@ import { base_url } from "@/api/baseUrl";
 import rightArm from "@/assets/image/right-arm.svg";
 import leftArm from "@/assets/image/left-arm.svg";
 import butt from "@/assets/image/butt.svg";
-import menHips from "@/assets/image/men-hips.svg";
 import chest from "@/assets/image/chest.svg";
 import womenHips from "@/assets/image/women-hips.svg";
-import womenWaist from "@/assets/image/thigh.svg";
 import leftLeg from "@/assets/image/left-leg.svg";
 import rightLeg from "@/assets/image/right-thigh.svg";
 import maleChest from "@/assets/image/male-chest.svg";
 import manWaist from "@/assets/image/man-waist.svg";
 const SingleCart = ({ userId, setOpen, setId }) => {
-  const getButtonClass = (data) => {
-    if (data.green) {
-      return "bg-green-400 hover:bg-green-500 text-white text-xs font-bold";
-    } else if (data.blck) {
-      return "bg-gray-800 hover:bg-gray-600 text-white text-xs font-bold";
-    } else if (data.red) {
-      return "bg-[#7994CB] hover:bg-[#7994CB] text-white text-xs font-bold";
-    }
-    return "bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold";
-  };
-
   const [data, setData] = useState([]);
   const [user, setUser] = useState({});
   const [measurementReport, setMeasurementReport] = useState(null);
@@ -163,8 +149,14 @@ const SingleCart = ({ userId, setOpen, setId }) => {
       className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:pt-10 sm:p-4 sm:px-0 px-4 sm:mb-0 mb-10"
       dir="rtl"
     >
-      {data.map((data) => {
+      {sortedData.map((data) => {
         let customImage = null;
+        const nonZeroItems = Array.isArray(data?.item)
+          ? data.item.filter((it) => it?.data !== 0 && it?.data !== "0")
+          : [];
+
+        // If every measurement value is 0, don't show this cart card.
+        if (nonZeroItems.length === 0) return null;
 
         if (data.cartTitle === "זרוע ימין") {
           customImage = rightArm;
@@ -201,7 +193,14 @@ const SingleCart = ({ userId, setOpen, setId }) => {
             <div className="flex justify-center items-start"></div>
 
             <div className="flex justify-center items-center">
-              <SmallCart data={data} setOpen={setOpen} setId={setId} />
+              <SmallCart
+                data={{
+                  ...data,
+                  item: [...nonZeroItems].reverse(),
+                }}
+                setOpen={setOpen}
+                setId={setId}
+              />
             </div>
             <a
               href={measurementReport}
