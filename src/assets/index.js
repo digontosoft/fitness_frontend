@@ -87,9 +87,35 @@ import women1 from "./image/workout-women-1.png";
 import women2 from "./image/workout-women-2.png";
 import termfile from "./image/ntf.jpeg";
 import stomache from "./image/man-belly.svg";
-import exerciseLibrary from "./image/userimage/exerciseLibrary.svg";
+import exerciseLibrary from "./image/userimage/resizeiamge.svg";
+import aceptNewTrainee from"./image/adminimage/acceptnewtrainee.svg";
+import adminList from"./image/adminimage/admin-list.svg";
+import comunityManage from"./image/adminimage/community-manage.svg";
+import manageExercise from"./image/adminimage/manage-exercise.svg";
+import manageNutration from"./image/adminimage/manage-nutration-guide.svg";
+import manageTrainee from"./image/adminimage/manage-trainee.svg";
+import manageTraining from"./image/adminimage/manage-training.svg";
+import manageWorkout from"./image/adminimage/manage-workout.svg";
+import smariKitchen from"./image/userimage/kitchen-smart-course.svg";
+import worklist from"./image/adminimage/manage-workout.png";
+import recipebook from"./image/adminimage/community-member.png";
+import admin from"./image/adminimage/admin-list.png";
+import trainee from"./image/adminimage/manage-trainee.png";
 
 export {
+  trainee,
+  admin,
+  recipebook,
+  worklist,
+  smariKitchen,
+  manageTraining,
+  manageWorkout,
+  manageTrainee,
+  manageNutration,
+  manageExercise,
+  aceptNewTrainee,
+  adminList,
+  comunityManage,
   stomache,
   exerciseLibrary,
   termfile,

@@ -155,22 +155,25 @@ const WorkOutCart = () => {
         {downloadingReport ? "טוען..." : "הצגת ביצועים קודמים"}
       </a>
 
-      <div className="flex items-center justify-center my-4 sm:my-5 px-2" dir="rtl">
-        <Select
-          style={{ width: "100%", maxWidth: "380px", height: "50px" }}
-          direction="rtl"
-          options={sortedTrainings}
-          valueField="_id"
-          labelField="name"
-          onChange={(value) => setSelectedTraining(value)}
-          placeholder="חפש תוכנית אימון"
-          searchBy="name"
-          values={
-            selectedTraining && selectedTraining.length > 0
-              ? selectedTraining
-              : sortedTrainings.filter((t) => t.status === "active")
-          }
-        />
+      <div className="w-full flex justify-center my-4 sm:my-5 px-4" dir="rtl">
+        <div className="w-11/12 sm:w-4/5 md:w-2/3 lg:w-1/2 max-w-[480px]">
+          <Select
+            style={{ width: "100%" }}
+            className="w-full h-12 text-base"
+            direction="rtl"
+            options={sortedTrainings}
+            valueField="_id"
+            labelField="name"
+            onChange={(value) => setSelectedTraining(value)}
+            placeholder="חפש תוכנית אימון"
+            searchBy="name"
+            values={
+              selectedTraining && selectedTraining.length > 0
+                ? selectedTraining
+                : sortedTrainings.filter((t) => t.status === "active")
+            }
+          />
+        </div>
       </div>
 
       {displayedTrainings.length > 0 && (

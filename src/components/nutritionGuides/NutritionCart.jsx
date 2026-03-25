@@ -71,7 +71,7 @@ export const NutritionCart = () => {
           className={`max-w-6xl mx-auto grid gap-4 sm:gap-6 justify-items-center items-center px-2 sm:px-4 py-6 sm:py-8 md:py-10 ${
             filterData.length === 1
               ? "grid-cols-1"
-              : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+              : "grid-cols-2  md:grid-cols-3 lg:grid-cols-4"
           }`}
         >
           {filterData.length > 0 ? (
