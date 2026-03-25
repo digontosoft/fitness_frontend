@@ -114,7 +114,7 @@ export const TraineeExerciseLibraryCard = () => {
   />
 
   <div className="absolute left-2 bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center">
-    <GoSearch className="text-white" />
+    <GoSearch className="text-white  " />
   </div>
 </div>
 
