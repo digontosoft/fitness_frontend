@@ -70,12 +70,14 @@ const MeasurementTracking = () => {
           `${base_url}/get-measurement-by-id/${id}`
         );
         setMeasurements(response?.data?.data);
+        console.log('measurements:', response?.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
   }, [id]);
+
 
   const handleDownloadReport = async (e) => {
     e.preventDefault();
@@ -215,8 +217,16 @@ const sortedData = [...data].sort(
           className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-20 sm:pt-10 p-4"
           dir="rtl"
         >
-          {sortedData.map((cart) => {
+          {sortedData.map((cart, index) => {
             let customImage = null;
+            const nonZeroItems = Array.isArray(cart?.item)
+              ? cart.item.filter(
+                  (it) => it?.data !== 0 && it?.data !== "0"
+                )
+              : [];
+
+            // If every measurement value is 0, hide the whole cart card.
+            if (nonZeroItems.length === 0) return null;
 
             if (cart.cartTitle === "זרוע ימין") {
               customImage = rightArm;
@@ -236,7 +246,7 @@ const sortedData = [...data].sort(
 
             return (
               <div
-                key={cart._id}
+                key={cart._id ?? `${cart.cartTitle}-${index}`}
                 dir="rtl"
                 className="border rounded-2xl p-4 flex flex-col space-y-4 bg-[#F1F0EB]"
               >
@@ -257,7 +267,10 @@ const sortedData = [...data].sort(
                 <div className="flex justify-center items-start"></div>
                 <div className="flex justify-center items-center">
                   <MeasurementSmallCart
-                     data={{ ...cart, item: [...cart.item].reverse() }}
+                    data={{
+                      ...cart,
+                      item: [...nonZeroItems].reverse(),
+                    }}
                     setId={setId}
                     setOpen={setOpen}
                   />

@@ -56,7 +56,8 @@ export const TraineeExerciseLibraryCard = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-        //   `${base_url}/get-training-by-user-id/${user?._id}`
+        //   `${base_url}/get-training-by-user-id/${user?._id}`  
+        //  https://fitness-backend-dev.onrender.com/api/v1/exercise?search=&page=1&limit=10&body_part=&equipment=
         `${base_url}/exercise?search=${searchValue}&page=${page}&limit=${limit}&body_part=${body_part}&equipment=${equipment}`
         );
         setExercises(response.data.data);
@@ -101,20 +102,21 @@ export const TraineeExerciseLibraryCard = () => {
   return (
     <div className="max-w-6xl mx-auto pb-10 px-2 sm:px-4">
       <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-10 md:flex-row flex-col-reverse w-full">
-        <div
-          className="flex justify-between items-center relative w-full sm:w-auto sm:min-w-[310px] h-12"
-          dir="rtl"
-        >
-          <input
-            type="search"
-            placeholder="סנן לפי שם"
-            onChange={(e) => setSearchValue(e.target.value)}
-            className="border-gray-200 bg-white shadow-xl py-3 px-2 rounded-xl text-sm w-full sm:min-w-[310px] h-12"
-          />
-          <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
-            <GoSearch className="text-white" />
-          </div>
-        </div>
+      <div
+  className="flex items-center relative w-3/4 sm:w-auto md:w-[310px] h-12"
+  dir="rtl"
+>
+  <input
+    type="search"
+    placeholder="סנן לפי שם"
+    onChange={(e) => setSearchValue(e.target.value)}
+    className="border-gray-200 bg-white shadow-xl py-3 pl-10 pr-3 rounded-xl text-sm w-full h-12"
+  />
+
+  <div className="absolute left-2 bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center">
+    <GoSearch className="text-white" />
+  </div>
+</div>
 
         <div className="flex flex-col sm:flex-row sm:gap-4 md:gap-16 gap-4 w-full sm:w-auto items-center justify-center">
           <Select
