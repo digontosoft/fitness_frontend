@@ -194,16 +194,13 @@
 
 
 import { base_url } from "@/api/baseUrl";
-import ArrowDumbel from "@/assets/image/arrowDumble.svg";
-import ArrowBurger from "@/assets/image/burger.svg";
-import { women1, women2 } from "@/assets/index";
+import { aceptNewTrainee, admin, manageNutration, manageTrainee, recipebook, trainee, worklist } from "@/assets/index";
 import AdminArrowCard from "@/components/admin/components/ui/AdminArrowCard";
 import Container from "@/shared/Container";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
-import { aceptNewTrainee, adminList, admin, trainee, comunityManage, manageExercise ,manageNutration, manageTrainee, manageTraining, manageWorkout, worklist, recipebook} from "@/assets/index";
 
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
@@ -226,8 +223,8 @@ const Dashboard = () => {
         setAdminTraineeLists(traineeListsResponse.data.data);
 
         // Filter and store user counts in localStorage
-        const traineeUsers = allUsers.filter((u) => u.userType === "trainee");
-        const recipeUsers = allUsers.filter((u) => u.userType === "recipe");
+        const traineeUsers = allUsers?.filter((u) => u.userType === "trainee");
+        const recipeUsers = allUsers?.filter((u) => u.userType === "recipe");
 
         localStorage.setItem("traineeUsers", JSON.stringify(traineeUsers.length));
         localStorage.setItem("recipeUsers", JSON.stringify(recipeUsers.length));
@@ -295,7 +292,7 @@ const Dashboard = () => {
             direction="rtl"
             valueField="_id"
             labelField="full_name"
-            options={users.filter((u) => u.userType === "trainee")}
+            options={users?.filter((u) => u.userType === "trainee")}
             searchBy="full_name"
             placeholder="בחר מתאמן"
             onChange={handleSelectUser}
