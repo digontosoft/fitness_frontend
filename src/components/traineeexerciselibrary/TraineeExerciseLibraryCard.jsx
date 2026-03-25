@@ -56,7 +56,8 @@ export const TraineeExerciseLibraryCard = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-        //   `${base_url}/get-training-by-user-id/${user?._id}`
+        //   `${base_url}/get-training-by-user-id/${user?._id}`  
+        //  https://fitness-backend-dev.onrender.com/api/v1/exercise?search=&page=1&limit=10&body_part=&equipment=
         `${base_url}/exercise?search=${searchValue}&page=${page}&limit=${limit}&body_part=${body_part}&equipment=${equipment}`
         );
         setExercises(response.data.data);
