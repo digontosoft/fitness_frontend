@@ -33,7 +33,7 @@ const MeasurementSmallCart = ({ data, setId, setOpen }) => {
               }}
               className="min-w-24 w-auto min-h-[90px] h-auto flex flex-col justify-center items-center bg-white p-2 rounded-lg cursor-pointer"
             >
-              <span className=" text-[#000000] text-base font-black text-center">
+              <span className=" text-[#000000] text-base font-black text-center" dir="rtl">
                 {months[moment(item?.date).month()]}
               </span>
 
