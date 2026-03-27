@@ -10,6 +10,7 @@ import whiteLogo from "@/assets/image/white-logo.svg";
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const handleLoginWithGoogle = (role) => {
+    console.log("base_url", base_url);
     setLoading(true);
     window.location.href = `${base_url}/auth/google?role=${role}`;
   };
