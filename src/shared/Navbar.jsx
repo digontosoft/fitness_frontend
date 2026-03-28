@@ -104,7 +104,7 @@ useEffect(() => {
 
   return (
     <nav className="bg-transparent md:bg-white shadow-md ">
-      <div className="container mx-auto relative flex items-center sm:justify-between justify-between p-4">
+      <div className="container mx-auto relative flex min-h-[11rem] items-center justify-between p-4 sm:justify-between md:min-h-0">
         {/* Logo */}
         <a
           href=""
@@ -189,29 +189,29 @@ useEffect(() => {
         {userType === "trainee" ? (
           <Link
             to="/"
-            className="flex items-center justify-center mx-auto sm:mx-0"
+            className="pointer-events-auto absolute left-1/2 top-1/2 z-[1] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:mx-0 md:static md:left-auto md:top-auto md:z-auto md:translate-x-0 md:translate-y-0"
           >
             <img
               src={logo}
               alt="logo"
-              className="w-40 h-40 md:w-24 md:h-24 object-cover"
+              className="h-40 w-40 object-cover md:h-24 md:w-24"
             />
           </Link>
         ) : (
           <Link
             to="/dashboard"
-            className="flex items-center justify-center mx-auto sm:mx-0"
+            className="pointer-events-auto absolute left-1/2 top-1/2 z-[1] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:mx-0 md:static md:left-auto md:top-auto md:z-auto md:translate-x-0 md:translate-y-0"
           >
             <img
               src={logo}
               alt="logo"
-              className="w-40 h-40 md:w-24 md:h-24 object-cover"
+              className="h-40 w-40 object-cover md:h-24 md:w-24"
             />
           </Link>
         )}
 
         {/* Hamburger Menu Button */}
-        <div className="md:hidden">
+        <div className="relative z-[2] ml-auto md:ml-0 md:hidden">
           <Button
             ref={buttonRef}
             variant="ghost"
