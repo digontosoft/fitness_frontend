@@ -39,20 +39,37 @@ export default function AssignCustomTask({userId}) {
  const [taskToDeleteId, setTaskToDeleteId] = useState(null);
  const [deleteLoading, setDeleteLoading] = useState(false);
 
+  // const fetchData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await axios.get(
+  //       `${base_url}/get-user-task-templates/${userId}?page=${page}&&limit=10&&search=${search}`
+  //     );
+  //     setTasks(res?.data?.data);
+  //     setTotalPages(res?.data?.pagination?.pages);
+  //     setPage(res?.data?.pagination?.page);
+  //     setLoading(false);
+  //   } catch (err) {
+  //     console.error("Error fetching tasks", err);
+  //   }
+  // };
+  
   const fetchData = async () => {
     setLoading(true);
     try {
       const res = await axios.get(
         `${base_url}/get-user-task-templates/${userId}?page=${page}&&limit=10&&search=${search}`
       );
-      setTasks(res?.data?.data);
-      setTotalPages(res?.data?.pagination?.pages);
-      setPage(res?.data?.pagination?.page);
+      setTasks(res?.data?.data || []);
+      setTotalPages(res?.data?.pagination?.pages || 1);  // ✅ fallback 1
+      setPage(res?.data?.pagination?.page || 1);          // ✅ fallback 1
       setLoading(false);
     } catch (err) {
       console.error("Error fetching tasks", err);
+      setLoading(false); // ✅ loading false on error too
     }
   };
+  
   useEffect(() => {
     fetchData();
   }, [page, search, userId]);

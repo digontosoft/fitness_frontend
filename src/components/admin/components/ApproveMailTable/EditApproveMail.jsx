@@ -13,12 +13,12 @@ import { Label } from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
 import { Edit } from "lucide-react";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 function EditApproveMail({ id, updateDate }) {
   const [loading, setLoading] = useState(false);
-  const [approvedEmail, setApprovedEmail] = useState({});
+  const [open, setOpen] = useState(false);
 
   const {
     register,
@@ -27,28 +27,35 @@ function EditApproveMail({ id, updateDate }) {
     formState: { errors },
   } = useForm();
 
-  useEffect(() => {
-    const getMail = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${base_url}/approved-mail/${id}`);
-        const data = response.data.approvedEmail;
-
-        setApprovedEmail(data);
-      } catch (error) {
-        console.error("Error fetching email:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getMail();
-  }, [id]);
+  const loadMail = async () => {
+    if (!id) return;
+    try {
+      setLoading(true);
+      const response = await axios.get(`${base_url}/approved-mail/${id}`);
+      const data = response.data.approvedEmail;
+      reset({
+        expiry_date: data?.expiry_date
+          ? moment(data.expiry_date).format("YYYY-MM-DD")
+          : "",
+      });
+    } catch (error) {
+      console.error("Error fetching email:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onSubmit = async (data) => {
     await updateDate(data);
   };
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        setOpen(nextOpen);
+        if (nextOpen) loadMail();
+      }}
+    >
       <DialogTrigger asChild>
         <Button className="bg-[#7994CB] hover:bg-[#7994CB]-dark" size="sm">
           <Edit />
@@ -62,6 +69,11 @@ function EditApproveMail({ id, updateDate }) {
         </DialogHeader>
         {/* Add form fields or other content here */}
         <form onSubmit={handleSubmit(onSubmit)}>
+          {loading && (
+            <p className="text-center text-sm text-muted-foreground py-2" dir="rtl">
+              טוען…
+            </p>
+          )}
           <div className="grid gap-4 py-4">
             <div className="grid items-center gap-4">
               {/* <Label htmlFor="email" dir="rtl">
@@ -94,9 +106,7 @@ function EditApproveMail({ id, updateDate }) {
                 dir="rtl"
                 id="expiry_date"
                 type="date"
-                defaultValue={moment(approvedEmail.expiry_date).format(
-                  "YYYY-MM-DD"
-                )}
+                disabled={loading}
                 {...register("expiry_date", {
                   required: "Expiry Date is required",
                 })}

@@ -60,40 +60,45 @@ export const traineeLink = [
 ];
 export const supperAdminLink = [
   {
+    _id: 10,
+    title: "דף הבית",
+    link: "/dashboard",
+    icon: nutrationGuide,
+  },
+  {
     _id: 1,
-    title: "נהל תרגילים",
-    link: "/dashboard/exercise-list",
-    icon: nutrationGuide,
-  },
-  {
-    _id: 2,
-    title: "נהל אימונים",
-    link: "/dashboard/workout-list",
-    icon: nutrationGuide,
-  },
-  {
-    _id: 3,
-    title: "נהל תוכניות אימון",
-    link: "dashboard/training-list",
-    icon: nutrationGuide,
-  },
-
-  {
-    _id: 4,
     title: "אישור מתאמנים חדשים",
     link: "/dashboard/approve-email",
     icon: nutrationGuide,
   },
   {
+    _id: 2,
+    title: "ניהול מתאמנים קיימים",
+    link: "/dashboard/trainee-users-list",
+    icon: nutrationGuide,
+  },
+  {
+    _id: 3,
+    title: "נהל תכניות אימון",
+    link: "/dashboard/training-list",
+    icon: nutrationGuide,
+  },
+  {
+    _id: 4,
+    title: "נהל אימונים",
+    link: "/dashboard/workout-list",
+    icon: nutrationGuide,
+  },
+  {
     _id: 5,
-    title: "ניהול מדריכי תזונה",
-    link: "dashboard/nutrition-lists",
+    title: "נהל תרגילים",
+    link: "/dashboard/exercise-list",
     icon: nutrationGuide,
   },
   {
     _id: 6,
-    title: "ניהול מתאמנים קיימים",
-    link: "dashboard/trainee-users-list",
+    title: "ניהול מדריכי תזונה",
+    link: "/dashboard/nutrition-lists",
     icon: nutrationGuide,
   },
   {
@@ -102,25 +107,18 @@ export const supperAdminLink = [
     link: "/dashboard/manage-recipe-book",
     icon: nutrationGuide,
   },
-   {
-     _id: 8,
-    title: "רשימת מנהלים",
-    link: "/dashboard/admin-list",
-    icon: nutrationGuide,
-  },
   {
-    _id: 9,
+    _id: 8,
     title: "ניהול חברי קהילה",
     link: "/dashboard/recipe-book-users",
     icon: nutrationGuide,
   },
   {
-    _id: 10,
-    title: "דף הבית",
-    link: "/dashboard",
+    _id: 9,
+    title: "רשימת מנהלים",
+    link: "/dashboard/admin-list",
     icon: nutrationGuide,
   },
- 
 ];
 export const adminLink = [
   // {

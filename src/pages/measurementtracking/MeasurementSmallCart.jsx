@@ -15,12 +15,9 @@ const months = [
   "דצמבר",
 ];
 
-const MeasurementSmallCart = ({ data, setId, setOpen }) => {
-  // console.log('month data:', data);
+const MeasurementSmallCart = ({ data, setOpen, setId }) => {
   const items = Array.isArray(data?.item) ? data.item : [];
-  const visibleItems = items.filter(
-    (it) => it?.data !== 0 && it?.data !== "0"
-  );
+  const visibleItems = items.filter((it) => it?.data !== 0 && it?.data !== "0");
 
   if (visibleItems.length === 0) return null;
 
@@ -34,7 +31,7 @@ const MeasurementSmallCart = ({ data, setId, setOpen }) => {
       </div>
       {visibleItems.map((item, index) => (
         <div
-          key={item.id ?? `${item.date}-${index}`}
+          key={item.id ?? `${item.date ?? "date"}-${index}`}
           onClick={() => {
             setOpen(true);
             setId(item.id);

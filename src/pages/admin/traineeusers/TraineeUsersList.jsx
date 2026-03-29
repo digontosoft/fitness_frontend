@@ -307,9 +307,9 @@ export function TraineeUsersLists() {
                 name=""
                 id=""
                 placeholder="סנן לפי שם..."
-                value={(table.getColumn("email")?.getFilterValue()) ?? ""}
+                value={(table.getColumn("full_name")?.getFilterValue()) ?? ""}
                 onChange={(event) =>
-                  table.getColumn("email")?.setFilterValue(event.target.value)
+                  table.getColumn("full_name")?.setFilterValue(event.target.value)
                 }
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
               />
