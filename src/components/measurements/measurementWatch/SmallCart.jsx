@@ -1,5 +1,5 @@
-import moment from "moment";
 import bgCard from "@/assets/image/image.svg";
+import moment from "moment";
 const months = [
   "ינואר",
   "פברואר",
@@ -57,21 +57,3 @@ const SmallCart = ({ data, setOpen, setId }) => {
 
 export default SmallCart;
 
-{
-  /* <div
-                key={index}
-                className="min-w-[70px] w-auto min-h-[70px] h-auto flex flex-col items-center justify-center   bg-white  shadow-md rounded-lg p-2  border-[#7994CB]/10 cursor-pointer"
-              >
-                <span className=" text-[#000000] text-xs font-bold text-center">
-                  {months[moment(item?.date).month()]}
-                </span>
-
-                <span className="text-[#BF2033] text-lg font-extrabold">
-                  {item.data}
-                </span>
-
-                <span className="text-[#8C8C8C] text-[10px] font-normal">
-                  {"CM"}
-                </span>
-              </div> */
-}

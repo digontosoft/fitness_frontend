@@ -250,10 +250,24 @@ const Dashboard = () => {
   const recipeUsersLength = JSON.parse(localStorage.getItem("recipeUsers"));
 
 
-  console.log("users", users);
-  console.log("adminTraineeLists", adminTraineeLists);
-  console.log("user", user);
-  console.log("adminId", adminId);
+  // Custom search function - work with space and full name
+const customSearchFn = ({ props, state }) => {
+  const searchTerm = state.search.toLowerCase().trim();
+  if (!searchTerm) return props.options;
+
+  return props.options.filter((option) => {
+    const fullName = option[props.labelField]?.toLowerCase() || "";
+    const searchWords = searchTerm.split(/\s+/);
+    return searchWords.every((word) => fullName.includes(word));
+  });
+};
+
+
+
+  // console.log("users:", users);
+  // console.log("adminTraineeLists", adminTraineeLists);
+  // console.log("user", user);
+  // console.log("adminId", adminId);
   return (
     <Container className="min-h-[72vh] sm:my-10 sm:px-0 px-4">
       <div className="flex flex-col items-center justify-center space-y-6 px-4">
@@ -283,6 +297,7 @@ const Dashboard = () => {
             labelField="full_name"
             options={adminTraineeLists}
             searchBy="full_name"
+            searchFn={customSearchFn}
             placeholder="בחר מתאמן"
             onChange={handleSelectUser}
           />
@@ -294,6 +309,7 @@ const Dashboard = () => {
             labelField="full_name"
             options={users?.filter((u) => u.userType === "trainee")}
             searchBy="full_name"
+            searchFn={customSearchFn}
             placeholder="בחר מתאמן"
             onChange={handleSelectUser}
           />

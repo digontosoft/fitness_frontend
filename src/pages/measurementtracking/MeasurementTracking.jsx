@@ -219,14 +219,7 @@ const sortedData = [...data].sort(
         >
           {sortedData.map((cart, index) => {
             let customImage = null;
-            const nonZeroItems = Array.isArray(cart?.item)
-              ? cart.item.filter(
-                  (it) => it?.data !== 0 && it?.data !== "0"
-                )
-              : [];
-
-            // If every measurement value is 0, hide the whole cart card.
-            if (nonZeroItems.length === 0) return null;
+            const items = Array.isArray(cart?.item) ? cart.item : [];
 
             if (cart.cartTitle === "זרוע ימין") {
               customImage = rightArm;
@@ -269,10 +262,10 @@ const sortedData = [...data].sort(
                   <MeasurementSmallCart
                     data={{
                       ...cart,
-                      item: [...nonZeroItems].reverse(),
+                      item: [...items].reverse(),
                     }}
-                    setId={setId}
                     setOpen={setOpen}
+                    setId={setId}
                   />
                 </div>
                 <a

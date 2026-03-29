@@ -72,6 +72,7 @@
 // export default SingleCart;
 
 // import { mwatchData } from "@/constants/mwatchData";
+
 import SmallCart from "./SmallCart";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -149,14 +150,9 @@ const SingleCart = ({ userId, setOpen, setId }) => {
       className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:pt-10 sm:p-4 sm:px-0 px-4 sm:mb-0 mb-10"
       dir="rtl"
     >
-      {sortedData.map((data) => {
+      {sortedData.map((data, index) => {
         let customImage = null;
-        const nonZeroItems = Array.isArray(data?.item)
-          ? data.item.filter((it) => it?.data !== 0 && it?.data !== "0")
-          : [];
-
-        // If every measurement value is 0, don't show this cart card.
-        if (nonZeroItems.length === 0) return null;
+        const items = Array.isArray(data?.item) ? data.item : [];
 
         if (data.cartTitle === "זרוע ימין") {
           customImage = rightArm;
@@ -176,7 +172,7 @@ const SingleCart = ({ userId, setOpen, setId }) => {
 
         return (
           <div
-            key={data._id}
+            key={data._id ?? `${data.cartTitle}-${index}`}
             dir="rtl"
             className="rounded-2xl p-4 flex flex-col space-y-4 bg-[#F1F0EB]"
           >
@@ -196,7 +192,7 @@ const SingleCart = ({ userId, setOpen, setId }) => {
               <SmallCart
                 data={{
                   ...data,
-                  item: [...nonZeroItems].reverse(),
+                  item: [...items].reverse(),
                 }}
                 setOpen={setOpen}
                 setId={setId}
