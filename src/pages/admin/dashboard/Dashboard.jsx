@@ -317,7 +317,7 @@ const customSearchFn = ({ props, state }) => {
         <span className="text-lg md:text-xl font-bold text-textColor">
           משימות
         </span>
-        {user.userType === "admin" ? (
+        {/* {user.userType === "admin" ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:w-2/3 w-full">
             <AdminArrowCard
               image={aceptNewTrainee}
@@ -378,7 +378,80 @@ const customSearchFn = ({ props, state }) => {
               link="/dashboard/recipe-book-users"
             />
           </div>
-        )}
+        )} */}
+
+{user.userType === "admin" ? (
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:w-2/3 w-full">
+    <AdminArrowCard
+      image={aceptNewTrainee}
+      title="אישור מתאמנים חדשים"
+      link="/admin-dashboard/approve-email"
+    />
+    <AdminArrowCard
+      image={trainee}
+      title="ניהול מתאמנים קיימים"
+      link="/admin-dashboard/trainee-users-list"
+    />
+  </div>
+) : (
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+    
+    <AdminArrowCard
+      image={aceptNewTrainee}
+      title="אישור מתאמנים חדשים"
+      link="/dashboard/approve-email"
+    />
+
+    <AdminArrowCard
+      image={manageTrainee}
+      title="ניהול מתאמנים קיימים"
+      link="/dashboard/trainee-users-list"
+    />
+
+    <AdminArrowCard
+      image={worklist}
+      title="נהל תוכניות אימון"
+      link="/dashboard/training-list"
+    />
+
+    <AdminArrowCard
+      image={worklist}
+      title="נהל אימונים"
+      link="/dashboard/workout-list"
+    />
+
+    <AdminArrowCard
+      image={worklist}
+      title="נהל תרגילים"
+      link="/dashboard/exercise-list"
+    />
+
+    <AdminArrowCard
+      image={manageNutration}
+      title="ניהול מדריכי תזונה"
+      link="/dashboard/nutrition-lists"
+    />
+
+    <AdminArrowCard
+      image={recipebook}
+      title="ניהול ספר מתכונים"
+      link="/dashboard/manage-recipe-book"
+    />
+
+    <AdminArrowCard
+      image={recipebook}
+      title="ניהול חברי קהילה"
+      link="/dashboard/recipe-book-users"
+    />
+
+    <AdminArrowCard
+      image={admin}
+      title="רשימת מנהלים"
+      link="/dashboard/admin-list"
+    />
+
+  </div>
+)}
       </div>
     </Container>
   );

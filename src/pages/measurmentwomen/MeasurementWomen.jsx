@@ -756,7 +756,7 @@ const MeasurementWomen = () => {
                   dir="rtl"
                 />
                 <FInput
-                  label="משקל נוכחי - (גם בערך זה טוב)"
+                  label="משקל נוכחי - אם לא יודע לרשום הערכה של 5 קילו פלוס מינוס (אין צורך להישקל)"
                   placeholder="התשובה שלך"
                   name="weight"
                   dir="rtl"
@@ -1031,7 +1031,7 @@ const MeasurementWomen = () => {
                   dir="rtl"
                 />
                 <FInput
-                  label="משקל נוכחי - (גם בערך זה טוב)"
+                  label="משקל נוכחי - אם לא יודעת לרשום הערכה של 5 קילו פלוס מינוס (אין צורך להישקל)"
                   placeholder="התשובה שלך"
                   name="weight"
                   dir="rtl"
