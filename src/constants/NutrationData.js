@@ -13,7 +13,7 @@ export const NutrationData=[
     },
     {
         _id:2,
-        icon:cartTwo,
+        icon:cartFour,
     },
     {
         _id:3,
@@ -21,7 +21,7 @@ export const NutrationData=[
     },
     {
         _id:4,
-        icon:cartFour,
+        icon:cartTwo,
     },
     {
         _id:5,
