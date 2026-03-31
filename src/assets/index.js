@@ -35,7 +35,7 @@ import man from "./image/man.png";
 import mcartBg from "./image/mcartBg.jpg";
 import measurementRope from "./image/measurementRope.png";
 import men2 from "./image/men-2.png";
-import cartFive from "./image/nutrationGuide/cartFive.png";
+// import cartFive from "./image/nutrationGuide/cartFive.png";
 import cartFour from "./image/nutrationGuide/cartFour.png";
 import cartOne from "./image/nutrationGuide/cartOne.png";
 import cartSeven from "./image/nutrationGuide/cartSeven.png";
@@ -101,6 +101,7 @@ import worklist from"./image/adminimage/manage-workout.png";
 import recipebook from"./image/adminimage/community-member.png";
 import admin from"./image/adminimage/admin-list.png";
 import trainee from"./image/adminimage/manage-trainee.png";
+import cartFive from"./image/nutrationGuide/cartFive.svg";
 
 export {
   trainee,

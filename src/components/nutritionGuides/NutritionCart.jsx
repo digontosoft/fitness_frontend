@@ -36,10 +36,12 @@ export const NutritionCart = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
   const filterData = nutrationData.filter(
     (item) => item?.title?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  console.log("filterData", filterData);
   return (
     <div className="my-6 sm:my-8 md:my-10">
       <div className="flex justify-center px-2">

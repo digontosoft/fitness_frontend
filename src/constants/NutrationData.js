@@ -1,4 +1,11 @@
-import { cartOne,cartTwo,cartThree,cartFour,cartFive,cartSix,cartSeven } from "../assets/index";
+import {cartSeven } from "../assets/index";
+import cartFive from "../assets/image/nutrationGuide/cartFive.svg";
+import cartSix from "../assets/image/nutrationGuide/homeRacipe.svg";
+import cartThree from "../assets/image/nutrationGuide/cartThree.svg";
+import cartOne from "../assets/image/nutrationGuide/cartOne.svg";
+import cartFour from "../assets/image/nutrationGuide/cartFour.svg";
+import cartTwo from "../assets/image/nutrationGuide/cartTwo.svg";
+
 export const NutrationData=[
     {
         _id:1,
