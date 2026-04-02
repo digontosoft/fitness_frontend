@@ -194,13 +194,15 @@
 
 
 import { base_url } from "@/api/baseUrl";
-import { aceptNewTrainee, admin, manageNutration, manageTrainee, recipebook, trainee, worklist } from "@/assets/index";
+import { aceptNewTrainee, admin, recipebook, trainee, worklist, masurmentTask, kitchenImage ,suppermarket} from "@/assets/index";
 import AdminArrowCard from "@/components/admin/components/ui/AdminArrowCard";
 import Container from "@/shared/Container";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
+
+
 
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
@@ -383,73 +385,74 @@ const customSearchFn = ({ props, state }) => {
 {user.userType === "admin" ? (
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:w-2/3 w-full">
     <AdminArrowCard
-      image={aceptNewTrainee}
-      title="אישור מתאמנים חדשים"
-      link="/admin-dashboard/approve-email"
-    />
-    <AdminArrowCard
       image={trainee}
       title="ניהול מתאמנים קיימים"
       link="/admin-dashboard/trainee-users-list"
+      imgClassName="object-contain w-full aspect-square max-h-32" // Ensures full image in card, same size all
+    />
+    <AdminArrowCard
+      image={masurmentTask}
+      title="אישור מתאמנים חדשים"
+      link="/admin-dashboard/approve-email"
+      imgClassName="object-contain w-full aspect-square max-h-32"
     />
   </div>
 ) : (
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
-    
     <AdminArrowCard
       image={aceptNewTrainee}
       title="אישור מתאמנים חדשים"
       link="/dashboard/approve-email"
+      imgClassName="object-contain w-full aspect-square max-h-32"
     />
-
     <AdminArrowCard
-      image={manageTrainee}
+      image={masurmentTask}
       title="ניהול מתאמנים קיימים"
       link="/dashboard/trainee-users-list"
+      imgClassName="object-contain w-full aspect-square max-h-32"
     />
-
     <AdminArrowCard
       image={worklist}
       title="נהל תוכניות אימון"
       link="/dashboard/training-list"
+      imgClassName="object-contain w-full aspect-square max-h-32"
     />
-
     <AdminArrowCard
       image={worklist}
       title="נהל אימונים"
       link="/dashboard/workout-list"
+      imgClassName="object-contain w-full aspect-square max-h-32"
     />
-
     <AdminArrowCard
       image={worklist}
       title="נהל תרגילים"
       link="/dashboard/exercise-list"
+      imgClassName="object-contain w-full aspect-square max-h-32"
     />
-
     <AdminArrowCard
-      image={manageNutration}
+      image={suppermarket}
       title="ניהול מדריכי תזונה"
       link="/dashboard/nutrition-lists"
+      imgClassName="object-contain w-full aspect-square max-h-32"
     />
-
     <AdminArrowCard
-      image={recipebook}
+      image={kitchenImage}
       title="ניהול ספר מתכונים"
       link="/dashboard/manage-recipe-book"
+      imgClassName="object-contain w-full aspect-square max-h-32"
     />
-
     <AdminArrowCard
       image={recipebook}
       title="ניהול חברי קהילה"
       link="/dashboard/recipe-book-users"
+      imgClassName="object-contain w-full aspect-square max-h-32"
     />
-
     <AdminArrowCard
       image={admin}
       title="רשימת מנהלים"
       link="/dashboard/admin-list"
+      imgClassName="object-contain w-full aspect-square max-h-32"
     />
-
   </div>
 )}
       </div>
