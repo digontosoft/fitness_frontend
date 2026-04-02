@@ -5,14 +5,19 @@ import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerMo
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import { toast } from "sonner";
 import AdminArrowCard from "../ui/AdminArrowCard";
-import AdminArrowCardWithoutImage from "../ui/AdminArrowCardWithoutImage";
 import FormTitle from "../ui/FormTitle";
 import TraineeLeftCard from "./TraineeLeftCard";
 import TraineeRightCard from "./TraineeRightCard";
-import {  manageTraining, manageNutration} from "@/assets/index";
+import {
+  manageTraining,
+  manageNutration,
+  ArrowBurger as NutritionImage,
+  ArrowDumbel as TrainingImage,
+  manageTrainee,
+} from "@/assets/index";
+import { cookImage, masurmentTask, fitalGuide } from "@/assets";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
@@ -36,20 +41,12 @@ const TraineerUi = ({ userId }) => {
         );
         if (exerciseResponse.status === 200) {
           setExerciseReport(exerciseResponse?.data.data.report_link);
-          console.log(
-            "exercise report",
-            exerciseResponse?.data.data.report_link
-          );
         }
         const measurementResponse = await axios.get(
           `${base_url}/report/measurement/${userId}`
         );
         if (measurementResponse.status === 200) {
           setMeasurementReport(measurementResponse?.data.data.report_link);
-          console.log(
-            "measurement report",
-            measurementResponse?.data.data.report_link
-          );
         }
       } catch (error) {
         console.log(error);
@@ -57,7 +54,6 @@ const TraineerUi = ({ userId }) => {
     };
     getUser();
   }, [userId]);
-
 
   const updateStatus = async (userType) => {
     try {
@@ -81,6 +77,17 @@ const TraineerUi = ({ userId }) => {
   const handleAnswer = () => {
     setOpenAnswer(true);
   };
+
+  // Select appropriate image for each card
+  const nutritionImage = manageNutration || NutritionImage;
+  const trainingImage = manageTraining || TrainingImage;
+  const answerImage = cookImage || NutritionImage;
+  // 2 - masurmentTask, 3 - fitalGuide, 4 and 6 - manageTrainee (same image for 4 and 6)
+  const mesurementImage = masurmentTask;
+  const fitalGuideImage = fitalGuide;
+  const manageTraineeImage = manageTrainee;
+  const customTaskImage = ArrowBurger;
+  const defaultImage = ArrowBurger;
 
   return (
     <div className="space-y-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -111,108 +118,98 @@ const TraineerUi = ({ userId }) => {
           משימות
         </span>
       </div>
+
       <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-4 md:gap-5 max-w-5xl mx-auto">
-        {
-          userData?.userType === "admin" ?
+        {userData?.userType === "admin" ? (
           <>
-          
             <div className="w-[342px]">
-          <AdminArrowCard
-            image={manageNutration}
-            title="ניהול תפריטי תזונה אישיים"
-            link={`/admin-dashboard/nutrition-lists/${userId}`}
-          />
-        </div>
-        <div className="w-[342px]">
-          <AdminArrowCard
-            image={manageTraining}
-            title="ניהול תוכנית אימון"
-            link={`/admin-dashboard/assigned-training-list/${userId}`}
-            className="w-[342px]"
-          />
-        </div>
-        <AdminArrowCardWithoutImage
-          title="ללוח מדדים אישי"
-          link={`/admin-dashboard/mesurements-watch?userId=${userId}`}
-        />
-
-        <AdminArrowCardWithoutImage title="יומן אכילה" onClick={handleModal} />
-
-        <AdminArrowCardWithoutImage
-          title="תשובות מתאמן"
-          link={`/admin-dashboard/answers-list/${userId}`}
-        />
+              <AdminArrowCard
+                image={nutritionImage}
+                title="ניהול תפריטי תזונה אישיים"
+                link={`/admin-dashboard/nutrition-lists/${userId}`}
+              />
+            </div>
+            <div className="w-[342px]">
+              <AdminArrowCard
+                image={mesurementImage}
+                title="ללוח מדדים אישי"
+                link={`/admin-dashboard/mesurements-watch?userId=${userId}`}
+              />
+            </div>
+            <div className="w-[342px]">
+              <AdminArrowCard
+                image={fitalGuideImage}
+                title="מסלול מדריך כושר אישי"
+                link={`/admin-dashboard/fital-guide/${userId}`}
+              />
+            </div>
+            <div className="w-[342px]">
+              <AdminArrowCard
+                image={manageTraineeImage}
+                title="ניהול מתאמנים"
+                link={`/admin-dashboard/manage-trainee/${userId}`}
+              />
+            </div>
+            <div className="w-[342px]">
+              <AdminArrowCard
+                image={mesurementImage}
+                title="הצגת מדדים קודמים"
+                link={measurementReport ? measurementReport : "#"}
+              />
+            </div>
+            <div className="w-[342px]">
+              <AdminArrowCard
+                image={manageTraineeImage}
+                title="מעקב מתאמנים"
+                link={`/admin-dashboard/trainee-tracking/${userId}`}
+              />
+            </div>
           </>
-
-          :
-<>
-
-  <div className="w-[342px]">
+        ) : (
+          <>
+            <div className="w-[342px]">
+              <AdminArrowCard
+                image={answerImage}
+                title="תשובות מתאמן"
+                link={`/dashboard/answers-list/${userId}`}
+              />
+            </div>
+            <div className="w-[342px]">
+              <AdminArrowCard
+                image={mesurementImage}
+                title="ללוח מדדים אישי"
+                link={`/dashboard/mesurements-watch?userId=${userId}`}
+              />
+            </div>
+            <div className="w-[342px]">
+              <AdminArrowCard
+                image={fitalGuideImage}
+                title="מסלול מדריך כושר אישי"
+                link={`/dashboard/fital-guide/${userId}`}
+              />
+            </div>
+            <div className="w-[342px]">
+              <AdminArrowCard
+                image={trainingImage}
+                title="מעקב מתאמן"
+                link={`/dashboard/trainee-tracking/${userId}`}
+              />
+            </div>
+          </>
+        )}
+        <div className="w-[342px]">
           <AdminArrowCard
-            image={manageNutration}
-            title="ניהול תפריטי תזונה אישיים"
-            link={`/dashboard/nutrition-lists/${userId}`}
+            image={mesurementImage}
+            title="נהל משימות מותאמות אישית"
+            link={`/dashboard/add-custom-task?userId=${userId}`}
           />
         </div>
         <div className="w-[342px]">
           <AdminArrowCard
-            image={manageTraining}
-            title="ניהול תוכנית אימון"
-            link={`/dashboard/assigned-training-list/${userId}`}
-            className="w-[342px]"
+            image={trainingImage}
+            title="לדוח ביצועי תרגילים"
+            link={exerciseReport ? exerciseReport : "#"}
           />
-        </div>
-        <AdminArrowCardWithoutImage
-          title="ללוח מדדים אישי"
-          link={`/dashboard/mesurements-watch?userId=${userId}`}
-        />
-
-        <AdminArrowCardWithoutImage title="יומן אכילה" onClick={handleModal} />
-
-        <AdminArrowCardWithoutImage
-          title="תשובות מתאמן"
-          link={`/dashboard/answers-list/${userId}`}
-        />
-        <AdminArrowCardWithoutImage
-          title="נהל משימות מותאמות אישית"
-          link={`/dashboard/add-custom-task?userId=${userId}`}
-        />
-</>
-        }
-      
-        <div
-          className="w-[342px] h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
-          dir="ltr"
-        >
-          <Button className="rounded-2xl w-[25px] h-6">
-            <FaArrowLeftLong />
-          </Button>
-          <div className="flex items-center">
-            <a
-              href={measurementReport}
-              download
-              className="text-base font-bold leading-5 text-[#0A2533]"
-            >
-              הצגת מדדים קודמים
-            </a>
-          </div>
-        </div>
-        <div
-          className="w-[342px] h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
-          dir="ltr"
-        >
-          <Button className="rounded-2xl w-[25px] h-6">
-            <FaArrowLeftLong />
-          </Button>
-          <div className="flex items-center">
-            <a
-              href={exerciseReport}
-              download
-              className="text-base font-bold leading-5 text-[#0A2533]"
-            >
-              לדוח ביצועי תרגילים
-            </a>
-          </div>
         </div>
       </div>
       {/* {openModal && (

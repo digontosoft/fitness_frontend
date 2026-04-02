@@ -96,14 +96,24 @@ import manageNutration from"./image/adminimage/manage-nutration-guide.svg";
 import manageTrainee from"./image/adminimage/manage-trainee.svg";
 import manageTraining from"./image/adminimage/manage-training.svg";
 import manageWorkout from"./image/adminimage/manage-workout.svg";
-import smariKitchen from"./image/userimage/kitchen-smart-course.svg";
+import smariKitchen from"./image/userimage/kitchenImage.svg";
 import worklist from"./image/adminimage/manage-workout.png";
 import recipebook from"./image/adminimage/community-member.png";
 import admin from"./image/adminimage/admin-list.png";
 import trainee from"./image/adminimage/manage-trainee.png";
 import cartFive from"./image/nutrationGuide/cartFive.svg";
+import masurmentTask from"./image/adminimage/masurmentTask.svg";
+import fitalGuide from"./image/nutrationGuide/cartOne.svg";
+import cookImage from"./image/nutrationGuide/cartTwo.svg";
+import kitchenImage from"./image/userimage/kitchenImage.svg";
+import suppermarket from"./image/nutrationGuide/cartThree.svg";
 
 export {
+  suppermarket,
+  kitchenImage,
+  cookImage,
+  fitalGuide,
+  masurmentTask,
   trainee,
   admin,
   recipebook,
