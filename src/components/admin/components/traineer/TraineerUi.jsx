@@ -185,14 +185,14 @@ const TraineerUi = ({ userId }) => {
               <AdminArrowCard
                 image={fitalGuideImage}
                 title="מסלול מדריך כושר אישי"
-                link={`/dashboard/fital-guide/${userId}`}
+                link={`/dashboard/nutrition-lists/${userId}`}
               />
             </div>
             <div className="w-[342px]">
               <AdminArrowCard
                 image={trainingImage}
                 title="מעקב מתאמן"
-                link={`/dashboard/trainee-tracking/${userId}`}
+                link={`/dashboard/assigned-training-list/${userId}`}
               />
             </div>
           </>
