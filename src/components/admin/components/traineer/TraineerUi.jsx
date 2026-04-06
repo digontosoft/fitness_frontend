@@ -191,7 +191,7 @@ const TraineerUi = ({ userId }) => {
             <div className="w-[342px]">
               <AdminArrowCard
                 image={trainingImage}
-                title="מעקב מתאמן"
+                title="תוכניות אימון"
                 link={`/dashboard/assigned-training-list/${userId}`}
               />
             </div>
@@ -207,7 +207,7 @@ const TraineerUi = ({ userId }) => {
         <div className="w-[342px]">
           <AdminArrowCard
             image={trainingImage}
-            title="לדוח ביצועי תרגילים"
+            title="ניהול תפריטי תזונה אישיים"
             link={exerciseReport ? exerciseReport : "#"}
           />
         </div>
