@@ -78,6 +78,7 @@ const MeasurementTracking = () => {
     fetchData();
   }, [id]);
 
+  console.log("measurement",measurements)
 
   const handleDownloadReport = async (e) => {
     e.preventDefault();
@@ -285,64 +286,80 @@ const sortedData = [...data].sort(
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-lg">
           <div className="px-4 py-2" dir="rtl">
+            {/* Measurement Date in the middle at the top, RTL */}
+            <div className="flex justify-center mb-2">
+              {measurements?.date && (
+                <span className="text-md font-semibold text-gray-700" dir="rtl">
+                  תאריך מדידה:{" "}
+                  {new Date(measurements.date).toLocaleDateString("he-IL")}
+                </span>
+              )}
+            </div>
             {!measurements.photo1 && (
               <div className="text-center py-8">
-                <span dir="rtl" className="text-gray-600">לא הוספת תמונות למדידה״</span>
+                <span dir="rtl" className="text-gray-600">
+                  לא הוספת תמונות למדידה״
+                </span>
               </div>
             )}
             {measurements.photo1 && (
               <div className="flex flex-wrap justify-center items-center gap-4">
                 {measurements.photo1 && (
                   <div className="w-[120px] h-[120px] flex items-center justify-center">
-                    <img 
+                    <img
                       src={
-                        measurements.photo1?.startsWith('http://') || measurements.photo1?.startsWith('https://')
-                          ? measurements.photo1  // Already full URL (S3) - use directly
-                          : `${base_url}/${measurements.photo1}`  // Local path - prepend base_url
-                      } 
-                      alt="Photo 1" 
+                        measurements.photo1?.startsWith("http://") || measurements.photo1?.startsWith("https://")
+                          ? measurements.photo1
+                          : `${base_url}/${measurements.photo1}`
+                      }
+                      alt="Photo 1"
                       className="w-full h-full rounded-lg object-contain border border-gray-200"
                       onError={(e) => {
                         console.error("Error loading photo1");
                         console.error("Path from DB:", measurements.photo1);
-                        console.error("Constructed URL:", measurements.photo1?.startsWith('http') ? measurements.photo1 : `${base_url}/${measurements.photo1}`);
-                        e.target.style.display = 'none';
+                        console.error(
+                          "Constructed URL:",
+                          measurements.photo1?.startsWith("http")
+                            ? measurements.photo1
+                            : `${base_url}/${measurements.photo1}`,
+                        );
+                        e.target.style.display = "none";
                       }}
                     />
                   </div>
                 )}
                 {measurements.photo2 && (
                   <div className="w-[120px] h-[120px] flex items-center justify-center">
-                    <img 
+                    <img
                       src={
-                        measurements.photo2?.startsWith('http://') || measurements.photo2?.startsWith('https://')
+                        measurements.photo2?.startsWith("http://") || measurements.photo2?.startsWith("https://")
                           ? measurements.photo2
                           : `${base_url}/${measurements.photo2}`
-                      } 
-                      alt="Photo 2" 
+                      }
+                      alt="Photo 2"
                       className="w-full h-full rounded-lg object-contain border border-gray-200"
                       onError={(e) => {
                         console.error("Error loading photo2");
                         console.error("Path from DB:", measurements.photo2);
-                        e.target.style.display = 'none';
+                        e.target.style.display = "none";
                       }}
                     />
                   </div>
                 )}
                 {measurements.photo3 && (
                   <div className="w-[120px] h-[120px] flex items-center justify-center">
-                    <img 
+                    <img
                       src={
-                        measurements.photo3?.startsWith('http://') || measurements.photo3?.startsWith('https://')
+                        measurements.photo3?.startsWith("http://") || measurements.photo3?.startsWith("https://")
                           ? measurements.photo3
                           : `${base_url}/${measurements.photo3}`
-                      } 
-                      alt="Photo 3" 
+                      }
+                      alt="Photo 3"
                       className="w-full h-full rounded-lg object-contain border border-gray-200"
                       onError={(e) => {
                         console.error("Error loading photo3");
                         console.error("Path from DB:", measurements.photo3);
-                        e.target.style.display = 'none';
+                        e.target.style.display = "none";
                       }}
                     />
                   </div>

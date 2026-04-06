@@ -107,8 +107,10 @@ import fitalGuide from"./image/nutrationGuide/cartOne.svg";
 import cookImage from"./image/nutrationGuide/cartTwo.svg";
 import kitchenImage from"./image/userimage/kitchenImage.svg";
 import suppermarket from"./image/nutrationGuide/cartThree.svg";
+import camera from"./image/icons/camera-icon.png"
 
 export {
+  camera,
   suppermarket,
   kitchenImage,
   cookImage,

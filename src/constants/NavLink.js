@@ -7,6 +7,7 @@ import {
   picture,
   recipe,
   training,
+  camera,
 } from "../assets/index";
 export const traineeLink = [
   {
@@ -55,7 +56,7 @@ export const traineeLink = [
     _id: 8,
     title: "תמונות תהליך",
     link: "/measurements-pictures",
-    icon: picture,
+    icon: camera,
   },
 ];
 export const supperAdminLink = [
