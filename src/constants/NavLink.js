@@ -7,6 +7,7 @@ import {
   picture,
   recipe,
   training,
+  camera,
 } from "../assets/index";
 export const traineeLink = [
   {
@@ -55,7 +56,7 @@ export const traineeLink = [
     _id: 8,
     title: "תמונות תהליך",
     link: "/measurements-pictures",
-    icon: picture,
+    icon: camera,
   },
 ];
 export const supperAdminLink = [
@@ -168,14 +169,28 @@ export const adminLink = [
 export const recipeLink = [
   {
     _id: 1,
-    title: "מתכונים",
-    link: "/recipe",
-    icon: recipe,
-  },
-  {
-    _id: 2,
     title: "קורסים",
     link: "/courses",
     icon: course,
   },
+ 
+  {
+    _id: 2,
+    title: "מאגר תרגילים",
+    link: "/recipe-exercise-library",
+    icon: exercise,
+  },
+ 
+  {
+    _id: 3,
+    title: "מתכונים",
+    link: "/recipe",
+    icon: recipe,
+  },
+];
+
+/** Mobile nav only: מתכונים first. Large screens use `recipeLink` order above. */
+export const recipeLinkMobileOrder = [
+  ...recipeLink.filter((item) => item.link === "/recipe"),
+  ...recipeLink.filter((item) => item.link !== "/recipe"),
 ];
