@@ -1,4 +1,5 @@
 import { base_url } from "@/api/baseUrl";
+import { Camera, Home } from "lucide-react";
 import logo from "@/assets/image/logo.svg";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,36 +54,13 @@ const Navbar = () => {
       task?.task_status !== "Completed"
   );
 
-  // 🔹 Close menu if user clicks outside of it
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (menuRef.current && !menuRef.current.contains(event.target)) {
-  //       setIsOpen(false);
-  //     }
-  //   };
-
-  //   if (isOpen) {
-  //     document.addEventListener("mousedown", handleClickOutside);
-  //     document.addEventListener("touchstart", handleClickOutside);
-  //   } else {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //     document.removeEventListener("touchstart", handleClickOutside);
-  //   }
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //     document.removeEventListener("touchstart", handleClickOutside);
-  //   };
-  // }, [isOpen]);
-
 useEffect(() => {
     const handleClickOutside = (event) => {
-      // 👇 নতুন শর্ত যোগ করা হলো: যদি ক্লিক মেনুর বাইরে এবং বাটনে না হয়
       if (
         menuRef.current &&
         !menuRef.current.contains(event.target) &&
         buttonRef.current &&
-        !buttonRef.current.contains(event.target) // টগল বাটনকে বাইরে ক্লিক থেকে বাদ দেওয়া হলো
+        !buttonRef.current.contains(event.target)
       ) {
         setIsOpen(false);
       }
@@ -102,6 +80,8 @@ useEffect(() => {
     };
   }, [isOpen]);
 
+  // Reverse traineeLink if userType is trainee
+  const traineeLinks = userType === "trainee" ? [...traineeLink].reverse() : traineeLink;
 
   return (
     <nav className="bg-transparent md:bg-white shadow-md">
@@ -136,7 +116,7 @@ useEffect(() => {
           </div>
         ) : userType === "trainee" ? (
           <div className="hidden md:flex justify-between items-center space-x-9">
-            {traineeLink.map(({ _id, title, link, icon: Icon }) => (
+            {traineeLinks.map(({ _id, title, link, icon: Icon }) => (
               <NavLink
                 key={_id}
                 to={link}
@@ -157,7 +137,6 @@ useEffect(() => {
                 key={_id}
                 to={link}
                 className={({ isActive }) =>
-                  // Always "#7994CB" for active, otherwise black
                   `flex items-center font-bold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
                 }
                 dir="rtl"
@@ -244,7 +223,7 @@ useEffect(() => {
               </div>
             ) : userType === "trainee" ? (
               <div className="flex flex-col space-y-2">
-                {traineeLink.map(({ _id, title, link, icon: Icon }) => (
+                {traineeLinks.map(({ _id, title, link, icon: Icon }) => (
                     <NavLink
                       key={_id}
                       to={link}

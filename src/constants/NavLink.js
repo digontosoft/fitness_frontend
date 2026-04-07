@@ -1,3 +1,4 @@
+
 import {
   course,
   exercise,
@@ -7,7 +8,8 @@ import {
   picture,
   recipe,
   training,
-  camera,
+  pic,
+  house,
 } from "../assets/index";
 export const traineeLink = [
   {
@@ -56,8 +58,16 @@ export const traineeLink = [
     _id: 8,
     title: "תמונות תהליך",
     link: "/measurements-pictures",
-    icon: camera,
+    icon:pic,
   },
+  {
+    _id:9,
+    title:"דף הבית",
+    link:"/",
+    icon:house,
+   
+  }
+
 ];
 export const supperAdminLink = [
   {
