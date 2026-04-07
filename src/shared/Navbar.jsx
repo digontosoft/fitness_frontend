@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   adminLink,
   recipeLink,
+  recipeLinkMobileOrder,
   supperAdminLink,
   traineeLink,
 } from "@/constants/NavLink";
@@ -165,29 +166,22 @@ useEffect(() => {
           <div>No valid user type or token found.</div>
         )}
 
-        {userType === "trainee" ? (
-          <Link
-            to="/"
-            className="pointer-events-auto absolute left-1/2 top-1/2 z-[1] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:mx-0 md:static md:left-auto md:top-auto md:z-auto md:translate-x-0 md:translate-y-0"
-          >
-            <img
-              src={logo}
-              alt="logo"
-              className="h-32 w-32 object-cover md:h-24 md:w-24"
-            />
-          </Link>
-        ) : (
-          <Link
-            to="/dashboard"
-            className="pointer-events-auto absolute left-1/2 top-1/2 z-[1] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:mx-0 md:static md:left-auto md:top-auto md:z-auto md:translate-x-0 md:translate-y-0"
-          >
-            <img
-              src={logo}
-              alt="logo"
-              className="h-32 w-32 object-cover md:h-24 md:w-24"
-            />
-          </Link>
-        )}
+        <Link
+          to={
+            userType === "trainee"
+              ? "/"
+              : userType === "recipe"
+                ? "/recipe"
+                : "/dashboard"
+          }
+          className="pointer-events-auto absolute left-1/2 top-1/2 z-[1] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:mx-0 md:static md:left-auto md:top-auto md:z-auto md:translate-x-0 md:translate-y-0"
+        >
+          <img
+            src={logo}
+            alt="logo"
+            className="h-32 w-32 object-cover md:h-24 md:w-24"
+          />
+        </Link>
 
         {/* Hamburger Menu Button */}
         <div className="relative z-[2] ml-auto md:ml-0 md:hidden">
@@ -246,7 +240,7 @@ useEffect(() => {
               </div>
             ) : userType === "recipe" ? (
               <div className="flex flex-col space-y-2">
-                {recipeLink.map(({ _id, title, link, icon: Icon }) => (
+                {recipeLinkMobileOrder.map(({ _id, title, link, icon: Icon }) => (
                     <NavLink
                       key={_id}
                       to={link}

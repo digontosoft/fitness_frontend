@@ -51,7 +51,6 @@ import SupperAdminRecipeBook from "@/pages/admin/managerecipebook/SupperAdminRec
 import ViewRecipeBook from "@/pages/admin/managerecipebook/ViewReipeBook";
 import TraineeUsers from "@/pages/admin/traineeusers/TraineeUsers";
 import WorkoutList from "@/pages/admin/workout-programme/WorkoutList";
-import FoodDairy from "@/pages/foodDairy/FoodDairy";
 import Complete from "@/pages/Home/mesurementForm/Complete";
 import MeasurementImage from "@/pages/Home/mesurementForm/MeasurementImage";
 import UpdateMesurement from "@/pages/Home/mesurementForm/UpdateMesurement";
@@ -517,10 +516,13 @@ export const routes = createBrowserRouter([
         path: "/courses",
         element: <Course />,
       },
-      
       {
         path: "/supermarket/:id",
         element: <Supermarket />,
+      },
+      {
+        path: "/recipe-exercise-library",
+        element: <TraineeExerciseLibrary />,
       },
     ],
   },
