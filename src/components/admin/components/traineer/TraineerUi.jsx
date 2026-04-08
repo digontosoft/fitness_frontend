@@ -1,8 +1,15 @@
 import { base_url } from "@/api/baseUrl";
-import { ArrowBurger, ArrowDumbel } from "@/assets";
+import { ArrowBurger } from "@/assets";
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 // import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
-import { Button } from "@/components/ui/button";
+import { cookImage, fitalGuide, masurmentTask } from "@/assets";
+import {
+  manageNutration,
+  manageTrainee,
+  manageTraining,
+  ArrowBurger as NutritionImage,
+  ArrowDumbel as TrainingImage,
+} from "@/assets/index";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -10,14 +17,6 @@ import AdminArrowCard from "../ui/AdminArrowCard";
 import FormTitle from "../ui/FormTitle";
 import TraineeLeftCard from "./TraineeLeftCard";
 import TraineeRightCard from "./TraineeRightCard";
-import {
-  manageTraining,
-  manageNutration,
-  ArrowBurger as NutritionImage,
-  ArrowDumbel as TrainingImage,
-  manageTrainee,
-} from "@/assets/index";
-import { cookImage, masurmentTask, fitalGuide } from "@/assets";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
@@ -177,14 +176,16 @@ const TraineerUi = ({ userId }) => {
             <div className="w-[342px]">
               <AdminArrowCard
                 image={mesurementImage}
-                title="ללוח מדדים אישי"
+                // title="ללוח מדדים אישי"
+                title="מעקב היקפים"
                 link={`/dashboard/mesurements-watch?userId=${userId}`}
               />
             </div>
             <div className="w-[342px]">
               <AdminArrowCard
                 image={fitalGuideImage}
-                title="מסלול מדריך כושר אישי"
+                // title="מסלול מדריך כושר אישי"
+                title="ניהול תפריט אישי"
                 link={`/dashboard/nutrition-lists/${userId}`}
               />
             </div>
