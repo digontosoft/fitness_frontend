@@ -317,7 +317,7 @@
 //             id="description"
 //             type="text"
 //             label="תיאור תוכנית אימון"
-//             placeholder="הוסף תיאור תוכנית אימון..."
+//             placeholder="הוסף תיאור תוכנית אימון..."
 //             register={register}
 //             validation={{ required: "Training Description is required" }}
 //             errors={errors}
@@ -438,7 +438,7 @@
 //                       options={equipmentOptions}
 //                       valueField="id"
 //                       labelField="label"
-//                       placeholder="סנן לפי ציוד"
+//                       placeholder="סנן לפי ציוד"
 //                       onChange={(selectedOptions) => {
 //                         const values = selectedOptions.map(
 //                           (option) => option.value
@@ -506,7 +506,7 @@ import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField
 import { Button } from "@/components/ui/button";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import axios from "axios";
-import { Trash } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
@@ -527,6 +527,20 @@ const AddTrainingForm = () => {
   const navigate = useNavigate();
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+  const validateSupersetAndToggle = (workouts) => {
+    const hasIncompleteSuperset = (workouts || []).some((w) => {
+      const list = Array.isArray(w?.exercises) ? w.exercises : [];
+      const last = list[list.length - 1];
+      return (
+        list.length > 0 &&
+        String(last?.manipulation ?? "").trim().toLowerCase() === "superset"
+      );
+    });
+
+    setIsSupersetIncomplete(hasIncompleteSuperset);
+    setIsButtonDisabled(hasIncompleteSuperset || (workouts || []).length === 0);
+  };
 
   // ✅ Workout select handler (single add at a time)
   const handleWorkoutSelect = (selected) => {
@@ -556,7 +570,11 @@ const AddTrainingForm = () => {
         })) || [],
     };
 
-    setSelectedTrainingExercises((prev) => [...prev, newEntry]);
+    setSelectedTrainingExercises((prev) => {
+      const updated = [...prev, newEntry];
+      validateSupersetAndToggle(updated);
+      return updated;
+    });
     setShowWorkoutSelect(false); // hide after select
   };
 
@@ -567,18 +585,67 @@ const AddTrainingForm = () => {
 
   // ✅ Exercise manipulation logic same as before
   const handleExerciseChange = (workoutIndex, exerciseIndex, field, value) => {
-    const updated = [...selectedTrainingExercises];
-    const workout = updated[workoutIndex];
-    const exercise = workout.exercises[exerciseIndex];
+    setSelectedTrainingExercises((prev) => {
+      const updated = [...prev];
+      const workout = updated[workoutIndex];
+      if (!workout) return prev;
 
-    exercise[field] = value;
-    setSelectedTrainingExercises(updated);
+      const exercises = Array.isArray(workout.exercises) ? [...workout.exercises] : [];
+      const ex = exercises[exerciseIndex];
+      if (!ex) return prev;
+
+      exercises[exerciseIndex] = { ...ex, [field]: value };
+      updated[workoutIndex] = { ...workout, exercises };
+
+      validateSupersetAndToggle(updated);
+      return updated;
+    });
   };
 
   const handleRemoveExercise = (workoutIndex, exerciseIndex) => {
     setSelectedTrainingExercises((prev) => {
       const updated = [...prev];
-      updated[workoutIndex].exercises.splice(exerciseIndex, 1);
+      const workout = updated[workoutIndex];
+      if (!workout) return prev;
+      const exercises = Array.isArray(workout.exercises) ? [...workout.exercises] : [];
+      exercises.splice(exerciseIndex, 1);
+      updated[workoutIndex] = { ...workout, exercises };
+      validateSupersetAndToggle(updated);
+      return updated;
+    });
+  };
+
+  const handleMoveExerciseUp = (workoutIndex, exerciseIndex) => {
+    if (exerciseIndex === 0) return;
+    setSelectedTrainingExercises((prev) => {
+      const updated = [...prev];
+      const workout = updated[workoutIndex];
+      if (!workout) return prev;
+      const exercises = Array.isArray(workout.exercises) ? [...workout.exercises] : [];
+      if (exerciseIndex >= exercises.length) return prev;
+      [exercises[exerciseIndex - 1], exercises[exerciseIndex]] = [
+        exercises[exerciseIndex],
+        exercises[exerciseIndex - 1],
+      ];
+      updated[workoutIndex] = { ...workout, exercises };
+      validateSupersetAndToggle(updated);
+      return updated;
+    });
+  };
+
+  const handleMoveExerciseDown = (workoutIndex, exerciseIndex) => {
+    setSelectedTrainingExercises((prev) => {
+      const updated = [...prev];
+      const workout = updated[workoutIndex];
+      if (!workout) return prev;
+      const exercises = Array.isArray(workout.exercises) ? [...workout.exercises] : [];
+      if (exerciseIndex < 0 || exerciseIndex >= exercises.length - 1) return prev;
+      [exercises[exerciseIndex], exercises[exerciseIndex + 1]] = [
+        exercises[exerciseIndex + 1],
+        exercises[exerciseIndex],
+      ];
+      updated[workoutIndex] = { ...workout, exercises };
+      validateSupersetAndToggle(updated);
       return updated;
     });
   };
@@ -630,6 +697,7 @@ const AddTrainingForm = () => {
 
       workout.exercises.push(...newExercises);
 
+      validateSupersetAndToggle(updated);
       return updated;
     });
 
@@ -658,6 +726,11 @@ const AddTrainingForm = () => {
     };
     fetchExercises();
   }, []);
+
+  useEffect(() => {
+    validateSupersetAndToggle(selectedTrainingExercises);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTrainingExercises.length]);
 
   // ✅ Submit
   const onSubmit = async (data) => {
@@ -780,6 +853,36 @@ const AddTrainingForm = () => {
                   <div key={exercise.exercise_id} className="p-3 border rounded-md">
                     <h4 className="font-medium">{exercise.name}</h4>
                     <div className="flex items-center justify-center gap-2 mt-2">
+                      {/* ✅ Up/Down order arrows */}
+                      <div className="flex flex-col gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleMoveExerciseUp(workoutIndex, exerciseIndex)}
+                          disabled={exerciseIndex === 0}
+                          className={`p-1 rounded border border-gray-300 transition-opacity ${
+                            exerciseIndex === 0
+                              ? "opacity-30 cursor-not-allowed"
+                              : "hover:bg-gray-100 cursor-pointer"
+                          }`}
+                          title="Move up"
+                        >
+                          <ChevronUp className="size-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleMoveExerciseDown(workoutIndex, exerciseIndex)}
+                          disabled={exerciseIndex === workout.exercises.length - 1}
+                          className={`p-1 rounded border border-gray-300 transition-opacity ${
+                            exerciseIndex === workout.exercises.length - 1
+                              ? "opacity-30 cursor-not-allowed"
+                              : "hover:bg-gray-100 cursor-pointer"
+                          }`}
+                          title="Move down"
+                        >
+                          <ChevronDown className="size-4" />
+                        </button>
+                      </div>
+
                       <Trash
                         className="text-[#7994CB] cursor-pointer size-9"
                         onClick={() =>

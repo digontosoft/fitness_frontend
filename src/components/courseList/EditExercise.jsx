@@ -1,8 +1,8 @@
 import { base_url } from "@/api/baseUrl";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import axios from "axios";
-import { Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ChevronDown, ChevronUp, Trash } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -29,9 +29,19 @@ const EditExercise = () => {
   const [newExerciseSets, setNewExerciseSets] = useState("");
   const [newExerciseReps, setNewExerciseReps] = useState("");
   const [newExerciseManipulation, setNewExerciseManipulation] = useState("");
+  const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
-  const fetchWorkout = async () => {
+  const validateSuperset = (list) => {
+    const items = Array.isArray(list) ? list : [];
+    const last = items[items.length - 1];
+    const incomplete =
+      items.length > 0 &&
+      String(last?.manipulation ?? "").trim().toLowerCase() === "superset";
+    setIsSupersetIncomplete(incomplete);
+  };
+
+  const fetchWorkout = useCallback(async () => {
     try {
       const response = await axios.get(`${base_url}/get-user-task/${user._id}`);
       console.log("workout:", response.data.data);
@@ -40,11 +50,11 @@ const EditExercise = () => {
       console.error("Error fetching exercises:", error);
       toast.error("Failed to fetch exercises.");
     }
-  };
+  }, [user?._id]);
 
   useEffect(() => {
     fetchWorkout();
-  }, [user._id]);
+  }, [fetchWorkout]);
 
   const filteredExercises = workoutData?.filter(
     (ex) => ex?._id === workData?.task_id
@@ -85,6 +95,7 @@ const EditExercise = () => {
           requestBody
         );
         setExerciseList(response.data.data.userTrainingExercise);
+        validateSuperset(response.data.data.userTrainingExercise);
         console.log("filteredWorkoutData:", response.data.data);
       } catch (error) {
         console.error("Error fetching exercises:", error);
@@ -144,6 +155,14 @@ const EditExercise = () => {
           manipulation: newExerciseManipulation,
         },
       ]);
+      // Superset validation after add
+      setTimeout(() => validateSuperset([...exerciseList, {
+        _id: selected._id + Date.now(),
+        exercise_id: selected,
+        sets: Number(newExerciseSets),
+        reps: Number(newExerciseReps),
+        manipulation: newExerciseManipulation,
+      }]), 0);
       // Reset states for adding new exercise
       setSelectedExerciseIdForAdd("");
       setSelectedBodyPart(null);
@@ -159,7 +178,9 @@ const EditExercise = () => {
   };
 
   const handleRemoveExercise = (idToRemove) => {
-    setExerciseList(exerciseList.filter((item) => item._id !== idToRemove));
+    const next = exerciseList.filter((item) => item._id !== idToRemove);
+    setExerciseList(next);
+    validateSuperset(next);
     toast.info("Exercise removed.");
   };
 
@@ -172,6 +193,23 @@ const EditExercise = () => {
     }
     updatedExercises[index][field] = value;
     setExerciseList(updatedExercises);
+    validateSuperset(updatedExercises);
+  };
+
+  const handleMoveUp = (index) => {
+    if (index === 0) return;
+    const updated = [...exerciseList];
+    [updated[index - 1], updated[index]] = [updated[index], updated[index - 1]];
+    setExerciseList(updated);
+    validateSuperset(updated);
+  };
+
+  const handleMoveDown = (index) => {
+    if (index === exerciseList.length - 1) return;
+    const updated = [...exerciseList];
+    [updated[index], updated[index + 1]] = [updated[index + 1], updated[index]];
+    setExerciseList(updated);
+    validateSuperset(updated);
   };
 
   const handleSubmit = async () => {
@@ -237,6 +275,35 @@ const EditExercise = () => {
             key={item._id}
             className="w-full flex items-center justify-center gap-4 bg-gray-100 p-4 rounded-xl mb-4 shadow mt-4"
           >
+            {/* ✅ Up/Down order arrows */}
+            <div className="flex flex-col gap-1">
+              <button
+                type="button"
+                onClick={() => handleMoveUp(index)}
+                disabled={index === 0}
+                className={`p-1 rounded border border-gray-300 transition-opacity ${
+                  index === 0
+                    ? "opacity-30 cursor-not-allowed"
+                    : "hover:bg-gray-100 cursor-pointer"
+                }`}
+                title="Move up"
+              >
+                <ChevronUp className="size-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleMoveDown(index)}
+                disabled={index === exerciseList.length - 1}
+                className={`p-1 rounded border border-gray-300 transition-opacity ${
+                  index === exerciseList.length - 1
+                    ? "opacity-30 cursor-not-allowed"
+                    : "hover:bg-gray-100 cursor-pointer"
+                }`}
+                title="Move down"
+              >
+                <ChevronDown className="size-4" />
+              </button>
+            </div>
             <Trash
               onClick={() => handleRemoveExercise(item._id)}
               className="text-[#7994CB]-600 cursor-pointer"
@@ -443,7 +510,12 @@ const EditExercise = () => {
 
         <Button
           onClick={handleSubmit}
-          className="bg-[#7994CB] rounded-lg text-white px-6 py-2 hover:bg-[#7994CB] mt-4"
+          disabled={isSupersetIncomplete}
+          className={`rounded-lg text-white px-6 py-2 mt-4 ${
+            isSupersetIncomplete
+              ? "bg-gray-200 text-black cursor-not-allowed"
+              : "bg-[#7994CB] hover:bg-[#7994CB]"
+          }`}
         >
           שמור שינויים
         </Button>

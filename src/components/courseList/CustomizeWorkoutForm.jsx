@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Select from "react-dropdown-select";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { base_url } from "@/api/baseUrl";
-import { Trash, Loader2 } from "lucide-react";
+import { Trash, Loader2, ChevronUp, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -21,8 +21,7 @@ const CustomizeWorkoutForm = () => {
   const [selectedBodyPart, setSelectedBodyPart] = useState(null);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState([]);
-  const [workouts, setWorkouts] = useState(workout);
-  const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const [workouts] = useState(workout);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(false);
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
@@ -30,9 +29,7 @@ const CustomizeWorkoutForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoadingExercises, setIsLoadingExercises] = useState(false);
   const [isAddingExercise, setIsAddingExercise] = useState({});
-  const [userTraining, setUserTraining] = useState([]);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const user_Id = userInfo._id;
@@ -42,17 +39,15 @@ const CustomizeWorkoutForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm();
 
-  const fetchTrainingByUserId = async () => {
+  const fetchTrainingByUserId = useCallback(async () => {
     try {
       const response = await axios.get(
         `${base_url}/get-training-by-user-id/${user_Id}`
       );
       if (response.status === 200) {
         console.log("userTrainingId:", response.data.data);
-        setUserTraining(response.data.data);
         const filteredTrainings = response.data.data.filter(
           (training) => training._id === trainings._id
         );
@@ -62,11 +57,11 @@ const CustomizeWorkoutForm = () => {
       console.error("Error fetching training:", error);
       toast.error("שגיאה בטעינת הנתונים. נסה שוב מאוחר יותר.");
     }
-  };
+  }, [trainings?._id, user_Id]);
 
   useEffect(() => {
     fetchTrainingByUserId();
-  }, []);
+  }, [fetchTrainingByUserId]);
 
   // console.log("filteredTrainings:", filteredTrainings);
 
@@ -85,6 +80,19 @@ const CustomizeWorkoutForm = () => {
 
     setIsButtonDisabled(isAnyFieldEmpty);
   }, [training]);
+
+  const validateSupersetAndToggle = (nextTraining) => {
+    const workouts = nextTraining?.workouts ?? [];
+    const hasIncompleteSuperset = workouts.some((w) => {
+      const list = Array.isArray(w?.exercises) ? w.exercises : [];
+      const last = list[list.length - 1];
+      return (
+        list.length > 0 &&
+        String(last?.manipulation ?? "").trim().toLowerCase() === "superset"
+      );
+    });
+    setIsSupersetIncomplete(hasIncompleteSuperset);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -170,8 +178,8 @@ const CustomizeWorkoutForm = () => {
         });
       });
 
-      setIsSupersetIncomplete(false);
       setTraining(updatedTraining);
+      validateSupersetAndToggle(updatedTraining);
       setAddMoreExerciseIndex(null);
       setSelectedBodyPart(null);
       setSelectedEquipment(null);
@@ -209,6 +217,7 @@ const CustomizeWorkoutForm = () => {
     //console.log("updatedTraining 1:", updatedTraining);
 
     setTraining(updatedTraining);
+    validateSupersetAndToggle(updatedTraining);
     // setSelectedWorkout(null);
     setShowWorkoutSelect(false);
   };
@@ -246,28 +255,36 @@ const CustomizeWorkoutForm = () => {
 
   // Remove an exercise from a workout
   const handleRemoveExercise = (workoutId, exerciseId) => {
-    setTraining((prev) => ({
-      ...prev,
-      workouts: prev.workouts.map((workout) =>
-        workout._id === workoutId
-          ? {
-              ...workout,
-              exercises: workout.exercises.filter(
-                (ex) => ex._id !== exerciseId
-              ),
-            }
-          : workout
-      ),
-    }));
+    setTraining((prev) => {
+      const next = {
+        ...prev,
+        workouts: prev.workouts.map((workout) =>
+          workout._id === workoutId
+            ? {
+                ...workout,
+                exercises: workout.exercises.filter(
+                  (ex) => ex._id !== exerciseId
+                ),
+              }
+            : workout
+        ),
+      };
+      validateSupersetAndToggle(next);
+      return next;
+    });
   };
 
-  const handleRemoveWorkout = (workoutId) => {
-    console.log("Removing workout:", workoutId); // Debugging log
-    setTraining((prev) => ({
-      ...prev,
-      workouts: prev.workouts.filter((workout) => workout._id !== workoutId),
-    }));
-  };
+  // const handleRemoveWorkout = (workoutId) => {
+  //   console.log("Removing workout:", workoutId); // Debugging log
+  //   setTraining((prev) => {
+  //     const next = {
+  //       ...prev,
+  //       workouts: prev.workouts.filter((workout) => workout._id !== workoutId),
+  //     };
+  //     validateSupersetAndToggle(next);
+  //     return next;
+  //   });
+  // };
   const handleExerciseChange = (workoutIndex, exerciseIndex, field, value) => {
     const updatedWorkouts = [...training.workouts];
     const workout = updatedWorkouts[workoutIndex];
@@ -353,15 +370,53 @@ const CustomizeWorkoutForm = () => {
     updatedTraining.workouts[workoutIndex].exercises[exerciseIndex][field] =
       value;
     setTraining(updatedTraining);
+    validateSupersetAndToggle(updatedTraining);
   };
 
-  const isSupersetAlreadyUsed = (workoutIndex) => {
-    if (!training) return false;
-    const currentWorkout = training.workouts[workoutIndex];
-    return currentWorkout.exercises.some(
-      (ex) => ex.manipulation.trim().toLowerCase() === "superset"
-    );
+  const handleMoveExerciseUp = (workoutIndex, exerciseIndex) => {
+    if (exerciseIndex === 0) return;
+    setTraining((prev) => {
+      const workouts = [...(prev.workouts || [])];
+      const workout = workouts[workoutIndex];
+      if (!workout) return prev;
+      const exercises = Array.isArray(workout.exercises) ? [...workout.exercises] : [];
+      if (exerciseIndex >= exercises.length) return prev;
+      [exercises[exerciseIndex - 1], exercises[exerciseIndex]] = [
+        exercises[exerciseIndex],
+        exercises[exerciseIndex - 1],
+      ];
+      workouts[workoutIndex] = { ...workout, exercises };
+      const next = { ...prev, workouts };
+      validateSupersetAndToggle(next);
+      return next;
+    });
   };
+
+  const handleMoveExerciseDown = (workoutIndex, exerciseIndex) => {
+    setTraining((prev) => {
+      const workouts = [...(prev.workouts || [])];
+      const workout = workouts[workoutIndex];
+      if (!workout) return prev;
+      const exercises = Array.isArray(workout.exercises) ? [...workout.exercises] : [];
+      if (exerciseIndex < 0 || exerciseIndex >= exercises.length - 1) return prev;
+      [exercises[exerciseIndex], exercises[exerciseIndex + 1]] = [
+        exercises[exerciseIndex + 1],
+        exercises[exerciseIndex],
+      ];
+      workouts[workoutIndex] = { ...workout, exercises };
+      const next = { ...prev, workouts };
+      validateSupersetAndToggle(next);
+      return next;
+    });
+  };
+
+  // const isSupersetAlreadyUsed = (workoutIndex) => {
+  //   if (!training) return false;
+  //   const currentWorkout = training.workouts[workoutIndex];
+  //   return currentWorkout.exercises.some(
+  //     (ex) => ex.manipulation.trim().toLowerCase() === "superset"
+  //   );
+  // };
 
   const onSubmit = async () => {
     if (isSubmitting) return;
@@ -464,6 +519,35 @@ const CustomizeWorkoutForm = () => {
                       className="flex sm:flex-row flex-col items-center justify-between sm:gap-x-2 gap-y-2"
                       dir="rtl"
                     >
+                      {/* ✅ Up/Down order arrows */}
+                      <div className="flex flex-col gap-1 self-center sm:self-auto">
+                        <button
+                          type="button"
+                          onClick={() => handleMoveExerciseUp(workoutIndex, exerciseIndex)}
+                          disabled={exerciseIndex === 0}
+                          className={`p-1 rounded border border-gray-300 transition-opacity ${
+                            exerciseIndex === 0
+                              ? "opacity-30 cursor-not-allowed"
+                              : "hover:bg-gray-100 cursor-pointer"
+                          }`}
+                          title="Move up"
+                        >
+                          <ChevronUp className="size-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleMoveExerciseDown(workoutIndex, exerciseIndex)}
+                          disabled={exerciseIndex === workout.exercises.length - 1}
+                          className={`p-1 rounded border border-gray-300 transition-opacity ${
+                            exerciseIndex === workout.exercises.length - 1
+                              ? "opacity-30 cursor-not-allowed"
+                              : "hover:bg-gray-100 cursor-pointer"
+                          }`}
+                          title="Move down"
+                        >
+                          <ChevronDown className="size-4" />
+                        </button>
+                      </div>
                       <div className="flex flex-col items-center space-y-4">
                         <p>סטים</p>
 
@@ -562,7 +646,7 @@ const CustomizeWorkoutForm = () => {
                       options={equipmentOptions}
                       valueField="id"
                       labelField="label"
-                      placeholder="סנן לפי ציוד"
+                      placeholder="סנן לפי ציוד"
                       onChange={(selectedOptions) => {
                         const values = selectedOptions.map(
                           (option) => option.value
