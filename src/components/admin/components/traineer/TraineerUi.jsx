@@ -1,5 +1,5 @@
 import { base_url } from "@/api/baseUrl";
-import { ArrowBurger, ArrowDumbel } from "@/assets";
+import { ArrowBurger, ArrowDumbel, newThree, newTrainee } from "@/assets";
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 // import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
   ArrowBurger as NutritionImage,
   ArrowDumbel as TrainingImage,
   manageTrainee,
+
 } from "@/assets/index";
 import { cookImage, masurmentTask, fitalGuide } from "@/assets";
 
@@ -190,7 +191,7 @@ const TraineerUi = ({ userId }) => {
             </div>
             <div className="w-[342px]">
               <AdminArrowCard
-                image={trainingImage}
+                image={newTrainee}
                 title="תוכניות אימון"
                 link={`/dashboard/assigned-training-list/${userId}`}
               />
@@ -206,7 +207,7 @@ const TraineerUi = ({ userId }) => {
         </div>
         <div className="w-[342px]">
           <AdminArrowCard
-            image={trainingImage}
+            image={newTrainee}
             title="ניהול תפריטי תזונה אישיים"
             link={exerciseReport ? exerciseReport : "#"}
           />
