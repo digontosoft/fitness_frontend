@@ -1,6 +1,6 @@
 
 import { base_url, file_url } from "@/api/baseUrl";
-import { ArrowBurger, newTrainee } from "@/assets";
+import { ArrowBurger, newThree, newTrainee } from "@/assets";
 
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 // import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
@@ -66,6 +66,33 @@ const TraineerUi = ({ userId }) => {
     };
     getUser();
   }, [userId]);
+
+
+
+  // console.log("user", userId);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${base_url}/measurement/calculate/${userId}`
+  //       );
+
+  //       const measurementResponse = await axios.get(
+  //         `${base_url}/report/measurement/${userId}`
+  //       );
+
+  //       if (measurementResponse.status === 200) {
+  //         setMeasurementReport(measurementResponse?.data.data.report_link);
+  //       }
+
+  //       setData(response?.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [userId]);
 
   const updateStatus = async (userType) => {
     try {
@@ -311,7 +338,7 @@ const TraineerUi = ({ userId }) => {
         )}
         <div className="w-[342px]">
           <AdminArrowCard
-            image={mesurementImage}
+            image={newThree}
             // title="נהל משימות מותאמות אישית"
             title="משימות מותאמות אישית"
             link={`/dashboard/add-custom-task?userId=${userId}`}
@@ -345,7 +372,36 @@ const TraineerUi = ({ userId }) => {
           </div>
           <div className="w-[95px] h-[90px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">
             <img
-              src={trainingImage}
+              src={newTrainee}
+              alt=""
+              className="w-full h-full object-cover rounded-md"
+            />
+          </div>
+        </div>
+      </div>
+        </div>
+        <div className="w-[342px]">
+          <div
+        className="w-full h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
+        dir="ltr"
+      >
+       
+        <Button className="rounded-2xl w-[25px] h-6 flex-shrink-0" onClick={() => handleDownload(measurementReport,"measurement-report.xlsx")}>
+          <FaArrowLeftLong />
+        </Button>
+        <div className="flex items-center gap-4 flex-1 justify-between">
+          <div className="flex-1">
+            <h1
+              className="text-sm sm:text-base font-bold leading-5 text-[#0A2533] text-right line-clamp-2"
+              dir="rtl"
+              onClick={() => handleDownload(measurementReport,"measurement-report.xlsx")}
+            >
+              הצגת מדדים קודמים
+            </h1>
+          </div>
+          <div className="w-[95px] h-[90px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">
+            <img
+              src={mesurementImage}
               alt=""
               className="w-full h-full object-cover rounded-md"
             />
@@ -354,6 +410,7 @@ const TraineerUi = ({ userId }) => {
       </div>
         </div>
       </div>
+      
       {/* {openModal && (
         <>
           <p>Modal is Open</p>
