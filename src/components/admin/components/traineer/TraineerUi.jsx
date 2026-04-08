@@ -110,7 +110,7 @@ const TraineerUi = ({ userId }) => {
           stepAverage={user?.step_average}
           stepTarget={user?.step_target}
         />
-        <TraineeLeftCard userId={userId} />
+        <TraineeLeftCard userId={userId}  user={user} setUser={setUser}/>
       </div>
 
       <div className="flex items-center justify-center">

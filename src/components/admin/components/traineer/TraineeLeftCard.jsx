@@ -9,9 +9,10 @@ import leftLeg from "@/assets/image/left-leg.svg";
 import rightArmIcon from "@/assets/image/right-arm.svg";
 import rightLeg from "@/assets/image/right-leg.svg";
 import thigh from "@/assets/image/thigh.svg";
-const TraineeLeftCard = ({ userId }) => {
+import AddStepAverageForUser from "./AddStepAverageForUser";
+const TraineeLeftCard = ({ userId, user, setUser }) => {
   const [measurementData, setMesurementData] = useState([]);
-  const [user, setUser] = useState({});
+  // const [user, setUser] = useState({});
 
   useEffect(() => {
     if (!userId) return;
@@ -63,9 +64,13 @@ const TraineeLeftCard = ({ userId }) => {
       <div className="absolute top-0 right-0">
         <img src={cardBg} alt="" className="sm:w-[250px] h-full" />
       </div>
-      <h1 className="text-2xl text-black font-bold text-right py-4 px-10 relative z-50">
-        מדדים
-      </h1>
+      <div className="flex items-center justify-between px-6 py-8 relative  ">
+  <AddStepAverageForUser user={user} setUser={setUser} />
+
+  <h1 className="text-2xl text-black font-bold">
+    מדדים
+  </h1>
+</div>
       <div className="relative grid grid-cols-2 gap-6 justify-items-center items-center">
         <div className="flex flex-col gap-4">
           <div className="flex items-center  gap-2 w-full">

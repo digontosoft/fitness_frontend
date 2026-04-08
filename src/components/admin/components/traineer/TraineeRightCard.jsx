@@ -62,9 +62,9 @@ const TraineeRightCard = ({
             </div>
           </div>
         </div>
-        <div className="z-10">
+        {/* <div className="z-10">
           <AddStepAverageForUser user={user} setUser={setUser} />
-        </div>
+        </div> */}
       </div>
       <div className="absolute top-0 right-0">
         <img src={circle} alt="" className="w-[200px] h-[180px]" />
