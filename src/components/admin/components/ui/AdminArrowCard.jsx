@@ -20,7 +20,7 @@ const AdminArrowCard = ({ image, title, link }) => {
               {title}
             </h1>
           </div>
-          <div className="w-[95px] h-[84px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">
+          <div className="w-[95px] h-[90px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">
             <img
               src={image}
               alt=""

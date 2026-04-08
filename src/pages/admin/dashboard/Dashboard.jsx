@@ -194,13 +194,14 @@
 
 
 import { base_url } from "@/api/baseUrl";
-import { aceptNewTrainee, admin, recipebook, trainee, worklist, masurmentTask, kitchenImage ,suppermarket} from "@/assets/index";
+import { aceptNewTrainee, admin, recipebook, trainee, worklist, masurmentTask, kitchenImage ,suppermarket,newOne, newTwo, newThree} from "@/assets/index";
 import AdminArrowCard from "@/components/admin/components/ui/AdminArrowCard";
 import Container from "@/shared/Container";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
+
 
 
 
@@ -400,7 +401,7 @@ const customSearchFn = ({ props, state }) => {
 ) : (
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
     <AdminArrowCard
-      image={aceptNewTrainee}
+      image={newOne}
       title="אישור מתאמנים חדשים"
       link="/dashboard/approve-email"
       imgClassName="object-contain w-full aspect-square max-h-32"
@@ -430,7 +431,7 @@ const customSearchFn = ({ props, state }) => {
       imgClassName="object-contain w-full aspect-square max-h-32"
     />
     <AdminArrowCard
-      image={suppermarket}
+      image={newThree}
       title="ניהול מדריכי תזונה"
       link="/dashboard/nutrition-lists"
       imgClassName="object-contain w-full aspect-square max-h-32"
@@ -442,7 +443,7 @@ const customSearchFn = ({ props, state }) => {
       imgClassName="object-contain w-full aspect-square max-h-32"
     />
     <AdminArrowCard
-      image={recipebook}
+      image={newTwo}
       title="ניהול חברי קהילה"
       link="/dashboard/recipe-book-users"
       imgClassName="object-contain w-full aspect-square max-h-32"
