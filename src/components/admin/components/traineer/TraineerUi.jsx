@@ -1,8 +1,10 @@
+
 import { base_url, file_url } from "@/api/baseUrl";
-import { ArrowBurger } from "@/assets";
+import { ArrowBurger, newTrainee } from "@/assets";
+
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 // import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
-import { cookImage, fitalGuide, masurmentTask } from "@/assets";
+// import { cookImage, fitalGuide, masurmentTask } from "@/assets";
 import {
   manageNutration,
   manageTrainee,
@@ -19,6 +21,15 @@ import AdminArrowCard from "../ui/AdminArrowCard";
 import FormTitle from "../ui/FormTitle";
 import TraineeLeftCard from "./TraineeLeftCard";
 import TraineeRightCard from "./TraineeRightCard";
+// import {
+  
+//   manageNutration,
+//   ArrowBurger as NutritionImage,
+//   ArrowDumbel as TrainingImage,
+//   manageTrainee,
+
+// } from "@/assets/index";
+import { cookImage, fitalGuide, masurmentTask } from "@/assets";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
@@ -289,9 +300,10 @@ const TraineerUi = ({ userId }) => {
             </div>
             <div className="w-[342px]">
               <AdminArrowCard
-                image={trainingImage}
+                // image={trainingImage}
                 // title="תוכניות אימון"
                 title="ניהול תכניות אימון"
+                image={newTrainee}
                 link={`/dashboard/assigned-training-list/${userId}`}
               />
             </div>
@@ -307,10 +319,12 @@ const TraineerUi = ({ userId }) => {
         </div>
         <div className="w-[342px]">
           {/* <AdminArrowCard
+            image={newTrainee}
+           <AdminArrowCard
             image={trainingImage}
             title="ניהול תפריטי תזונה אישיים"
             link={exerciseReport ? exerciseReport : "#"}
-          /> */}
+          />  */}
           <div
         className="w-full h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
         dir="ltr"
