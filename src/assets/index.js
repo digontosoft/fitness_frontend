@@ -110,12 +110,15 @@ import suppermarket from"./image/nutrationGuide/cartThree.svg";
 import newOne from"./image/adminimage/new1.svg";
 import newTwo from"./image/adminimage/new2.svg";
 import newThree from"./image/adminimage/new3.svg";
+import newTrainee from"./image/adminimage/trainee.svg";
 import pic from"./image/icons/pic.png";
 import house from"./image/icons/house.png";
 
 
 
+
 export {
+  newTrainee,
   newThree,
   newTwo,
   newOne,

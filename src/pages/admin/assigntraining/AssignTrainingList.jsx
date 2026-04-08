@@ -8,6 +8,7 @@ const AssignTrainingList = () => {
   return (
     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
       <Title title={"רשימת תוכניות אימון למתאמן "} />
+      {/* <Title title="ניהול תכניות אימון" /> */}
       <TrainingListForTrainee userId={id} />
     </Container>
   );
