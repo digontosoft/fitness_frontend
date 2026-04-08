@@ -40,7 +40,10 @@ const MeasurementsWatch = () => {
 
   return (
     <div>
-      <Title title={"לוח מדדים אישי"} className="py-0" />
+      <Title 
+      // title={"לוח מדדים אישי"}
+      title="מעקב היקפים"
+       className="py-0" />
       <SingleCart userId={userId} setOpen={setOpen} setId={setId} />
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>

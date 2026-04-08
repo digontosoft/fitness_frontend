@@ -107,13 +107,18 @@ import fitalGuide from"./image/nutrationGuide/cartOne.svg";
 import cookImage from"./image/nutrationGuide/cartTwo.svg";
 import kitchenImage from"./image/userimage/kitchenImage.svg";
 import suppermarket from"./image/nutrationGuide/cartThree.svg";
-
+import newOne from"./image/adminimage/new1.svg";
+import newTwo from"./image/adminimage/new2.svg";
+import newThree from"./image/adminimage/new3.svg";
 import pic from"./image/icons/pic.png";
 import house from"./image/icons/house.png";
 
 
 
 export {
+  newThree,
+  newTwo,
+  newOne,
   pic,
   house,
   suppermarket,

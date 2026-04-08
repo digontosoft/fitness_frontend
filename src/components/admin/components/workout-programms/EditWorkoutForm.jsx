@@ -352,7 +352,7 @@
 //                     options={equipmentOptions}
 //                     valueField="id"
 //                     labelField="label"
-//                     placeholder="סנן לפי ציוד"
+//                     placeholder="סנן לפי ציוד"
 //                     onChange={(selectedOptions) => {
 //                       const values = selectedOptions.map(
 //                         (option) => option.value
@@ -461,7 +461,7 @@
 //                 exercisesForm.length === 0
 //               }
 //             >
-//               עדכן תוכנית אימון
+//               עדכן תוכנית אימון
 //             </Button>
 //           </div>
 //         </form>
@@ -480,7 +480,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import axios from "axios";
-import { Trash } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
@@ -490,7 +490,7 @@ import { toast } from "sonner";
 const EditWorkoutForm = ({ workoutId }) => {
   const [exercises, setExercises] = useState([]);
   const [disableUpdateButton, setDisableUpdateButton] = useState(false);
-  const [hasSuperset, setHasSuperset] = useState(false);
+  // const [hasSuperset, setHasSuperset] = useState(false);
   const [addMoreExercise, setAddMoreExercise] = useState(false);
   const [selectedBodyPart, setSelectedBodyPart] = useState(null);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
@@ -536,10 +536,10 @@ const EditWorkoutForm = ({ workoutId }) => {
         reset(data);
 
         // Check if "superset" is already used in the fetched workout
-        const hasExistingSuperset = data.exercises.some(
-          (exercise) => exercise.manipulation?.toLowerCase() === "superset"
-        );
-        setHasSuperset(hasExistingSuperset);
+        // const hasExistingSuperset = data.exercises.some(
+        //   (exercise) => exercise.manipulation?.toLowerCase() === "superset"
+        // );
+        // setHasSuperset(hasExistingSuperset);
       } catch (error) {
         console.error("Error fetching workout:", error);
       }
@@ -556,13 +556,30 @@ const EditWorkoutForm = ({ workoutId }) => {
     setValue(`exercises.${index}.manipulation`, value);
 
     // Recalculate if there's still a "superset"
-    const hasPureSuperset = exercises.some(
-      (ex) => ex.manipulation === "superset"
-    );
-    setHasSuperset(hasPureSuperset);
+    // const hasPureSuperset = exercises.some(
+    //   (ex) => ex.manipulation === "superset"
+    // );
+    // setHasSuperset(hasPureSuperset);
 
     // Disable the update button only if the last exercise is exactly "superset"
     setDisableUpdateButton(exercises[lastIndex]?.manipulation === "superset");
+  };
+
+  // ✅ Move exercise up/down (exercise order)
+  const handleMoveUp = (index) => {
+    if (index === 0) return;
+    const current = getValues("exercises") || [];
+    const updated = [...current];
+    [updated[index - 1], updated[index]] = [updated[index], updated[index - 1]];
+    setValue("exercises", updated, { shouldDirty: true });
+  };
+
+  const handleMoveDown = (index) => {
+    const current = getValues("exercises") || [];
+    if (index >= current.length - 1) return;
+    const updated = [...current];
+    [updated[index], updated[index + 1]] = [updated[index + 1], updated[index]];
+    setValue("exercises", updated, { shouldDirty: true });
   };
 
   // const handleAddMoreExercise = (selected) => {
@@ -774,6 +791,36 @@ const isFormValid = exercisesForm?.every(
                 key={exercise._id || index}
                 className="border p-4 flex items-center justify-center gap-4 rounded-md"
               >
+                {/* ✅ Up/Down arrow buttons */}
+                <div className="flex flex-col gap-1">
+                  <button
+                    type="button"
+                    onClick={() => handleMoveUp(index)}
+                    disabled={index === 0}
+                    className={`p-1 rounded border border-gray-300 transition-opacity ${
+                      index === 0
+                        ? "opacity-30 cursor-not-allowed"
+                        : "hover:bg-gray-100 cursor-pointer"
+                    }`}
+                    title="Move up"
+                  >
+                    <ChevronUp className="size-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleMoveDown(index)}
+                    disabled={index === exercisesForm.length - 1}
+                    className={`p-1 rounded border border-gray-300 transition-opacity ${
+                      index === exercisesForm.length - 1
+                        ? "opacity-30 cursor-not-allowed"
+                        : "hover:bg-gray-100 cursor-pointer"
+                    }`}
+                    title="Move down"
+                  >
+                    <ChevronDown className="size-4" />
+                  </button>
+                </div>
+
                 <Trash
                   className="cursor-pointer text-[#7994CB]-600 size-10"
                   onClick={() => handleRemoveExercise(index, false)} // Pass false for existing exercise
