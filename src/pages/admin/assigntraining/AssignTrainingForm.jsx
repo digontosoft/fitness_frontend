@@ -4,7 +4,7 @@ import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField
 import { Button } from "@/components/ui/button";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import axios from "axios";
-import { Trash } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
@@ -12,11 +12,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const AssignTrainingForm = ({ trainingId, user_id }) => {
-  const [selectedTraining, setSelectedTraining] = useState(null);
+  // const [selectedTraining, setSelectedTraining] = useState(null);
   const [trainingbyId, setTrainingById] = useState({});
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
   const [showWorkoutDropdown, setShowWorkoutDropdown] = useState(false);
-  const [trainingList, setTrainingList] = useState([]);
+  // const [trainingList, setTrainingList] = useState([]);
   const [allExercises, setAllExercises] = useState([]);
   const [workout, setWorkout] = useState([]);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
@@ -31,6 +31,19 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const validateSupersetAndToggle = (nextTraining) => {
+    const workouts = nextTraining?.workouts ?? [];
+    const hasIncompleteSuperset = workouts.some((w) => {
+      const list = Array.isArray(w?.exercises) ? w.exercises : [];
+      const last = list[list.length - 1];
+      return (
+        list.length > 0 &&
+        String(last?.manipulation ?? "").trim().toLowerCase() === "superset"
+      );
+    });
+    setIsSupersetIncomplete(hasIncompleteSuperset);
+  };
 
   // Check if any field (sets, reps, or manipulation) is empty in any exercise
   // useEffect(() => {
@@ -66,14 +79,16 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
   useEffect(() => {
     const isAnyFieldEmpty = checkFormCompleteness();
     setIsButtonDisabled(!isAnyFieldEmpty);
+    validateSupersetAndToggle(trainingbyId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trainingbyId]);
 
   // Fetch training
   useEffect(() => {
     const fetchTraining = async () => {
       try {
-        const response = await axios.get(`${base_url}/training`);
-        setTrainingList(response.data.data);
+        await axios.get(`${base_url}/training`);
+        // setTrainingList(response.data.data);
       } catch (error) {
         console.error("Error fetching training sessions:", error);
       }
@@ -85,9 +100,9 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
   useEffect(() => {
     const fetchTraining = async () => {
       try {
-        const response = await axios.get(`${base_url}/training/${trainingId}`);
-        setTrainingById(response.data.data);
-        console.log("trainingById:", response.data.data);
+      const res = await axios.get(`${base_url}/training/${trainingId}`);
+      setTrainingById(res.data.data);
+      console.log("trainingById:", res.data.data);
       } catch (error) {
         console.error("Error fetching training sessions:", error);
       }
@@ -127,28 +142,15 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     setAddMoreExerciseIndex(workoutIndex);
   };
 
-  const handleTrainingChange = (values) => {
-    if (values.length > 0) {
-      setSelectedTraining(values[0]);
-    } else {
-      setSelectedTraining(null);
-    }
-  };
+  // const handleTrainingChange = (values) => {
+  //   if (values.length > 0) {
+  //     setSelectedTraining(values[0]);
+  //   } else {
+  //     setSelectedTraining(null);
+  //   }
+  // };
 
-  //check if superset completion
-  const checkSupersetCompletion = () => {
-    let incomplete = false;
-    selectedTraining?.workouts.forEach((workout) => {
-      const supersetExercises = workout.exercises.filter(
-        (exercise) => exercise.manipulation === "superset"
-      );
-
-      if (supersetExercises.length === 1) {
-        incomplete = true;
-      }
-    });
-    setIsSupersetIncomplete(incomplete);
-  };
+  // Superset rule enforced by validateSupersetAndToggle (last exercise cannot be superset)
 
   // When a user changes an exercise field, especially the manipulation field.
   const handleExerciseChange = (workoutIndex, exerciseIndex, field, value) => {
@@ -232,6 +234,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     updatedTraining.workouts[workoutIndex].exercises[exerciseIndex][field] =
       value;
     setTrainingById(updatedTraining);
+    validateSupersetAndToggle(updatedTraining);
   };
 
   // When new exercises are selected (for "Add More Exercise")
@@ -256,10 +259,38 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     });
 
     currentWorkout.exercises.push(...newExercises);
-    setIsSupersetIncomplete(false);
     setTrainingById(updatedTraining);
+    validateSupersetAndToggle(updatedTraining);
 
     setAddMoreExerciseIndex(null);
+  };
+
+  const handleMoveExerciseUp = (workoutIndex, exerciseIndex) => {
+    if (!trainingbyId || exerciseIndex === 0) return;
+    const updatedTraining = { ...trainingbyId };
+    const exercises = [...(updatedTraining.workouts?.[workoutIndex]?.exercises ?? [])];
+    if (exerciseIndex >= exercises.length) return;
+    [exercises[exerciseIndex - 1], exercises[exerciseIndex]] = [
+      exercises[exerciseIndex],
+      exercises[exerciseIndex - 1],
+    ];
+    updatedTraining.workouts[workoutIndex].exercises = exercises;
+    setTrainingById(updatedTraining);
+    validateSupersetAndToggle(updatedTraining);
+  };
+
+  const handleMoveExerciseDown = (workoutIndex, exerciseIndex) => {
+    if (!trainingbyId) return;
+    const updatedTraining = { ...trainingbyId };
+    const exercises = [...(updatedTraining.workouts?.[workoutIndex]?.exercises ?? [])];
+    if (exerciseIndex < 0 || exerciseIndex >= exercises.length - 1) return;
+    [exercises[exerciseIndex], exercises[exerciseIndex + 1]] = [
+      exercises[exerciseIndex + 1],
+      exercises[exerciseIndex],
+    ];
+    updatedTraining.workouts[workoutIndex].exercises = exercises;
+    setTrainingById(updatedTraining);
+    validateSupersetAndToggle(updatedTraining);
   };
 
   // useEffect(() => {
@@ -355,16 +386,16 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     if (!trainingbyId) return;
     const updatedTraining = { ...trainingbyId };
     updatedTraining.workouts[workoutIndex].exercises.splice(exerciseIndex, 1);
-    setSelectedTraining(updatedTraining);
-    checkSupersetCompletion();
-    setIsButtonDisabled(false);
+    setTrainingById(updatedTraining);
+    validateSupersetAndToggle(updatedTraining);
   };
 
   const handleRemoveWorkout = (workoutIndex) => {
     if (!trainingbyId) return;
     const updatedTraining = { ...trainingbyId };
     updatedTraining.workouts.splice(workoutIndex, 1);
-    setSelectedTraining(updatedTraining);
+    setTrainingById(updatedTraining);
+    validateSupersetAndToggle(updatedTraining);
   };
 
   const onSubmit = async (data) => {
@@ -461,6 +492,39 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                       <p>{exercise.name}</p>
                     </div>
                     <div className="flex items-center justify-center gap-4">
+                      {/* ✅ Up/Down order arrows */}
+                      <div className="flex flex-col gap-1">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleMoveExerciseUp(workoutIndex, exerciseIndex)
+                          }
+                          disabled={exerciseIndex === 0}
+                          className={`p-1 rounded border border-gray-300 transition-opacity ${
+                            exerciseIndex === 0
+                              ? "opacity-30 cursor-not-allowed"
+                              : "hover:bg-gray-100 cursor-pointer"
+                          }`}
+                          title="Move up"
+                        >
+                          <ChevronUp className="size-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleMoveExerciseDown(workoutIndex, exerciseIndex)
+                          }
+                          disabled={exerciseIndex === workout.exercises.length - 1}
+                          className={`p-1 rounded border border-gray-300 transition-opacity ${
+                            exerciseIndex === workout.exercises.length - 1
+                              ? "opacity-30 cursor-not-allowed"
+                              : "hover:bg-gray-100 cursor-pointer"
+                          }`}
+                          title="Move down"
+                        >
+                          <ChevronDown className="size-4" />
+                        </button>
+                      </div>
                       <Trash
                         className="text-[#7994CB] cursor-pointer sm:size-9 size-16"
                         onClick={() =>
@@ -552,7 +616,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                           options={equipmentOptions}
                           valueField="id"
                           labelField="label"
-                          placeholder="סנן לפי ציוד"
+                          placeholder="סנן לפי ציוד"
                           onChange={(selectedOptions) => {
                             const values = selectedOptions.map(
                               (option) => option.value
