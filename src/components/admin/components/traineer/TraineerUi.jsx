@@ -1,23 +1,33 @@
 import { base_url } from "@/api/baseUrl";
-import { ArrowBurger, ArrowDumbel, newThree, newTrainee } from "@/assets";
+import { ArrowBurger, newTrainee } from "@/assets";
+
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 // import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
+// import { cookImage, fitalGuide, masurmentTask } from "@/assets";
+import {
+  manageNutration,
+  manageTrainee,
+  manageTraining,
+  ArrowBurger as NutritionImage,
+  ArrowDumbel as TrainingImage,
+} from "@/assets/index";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { toast } from "sonner";
 import AdminArrowCard from "../ui/AdminArrowCard";
 import FormTitle from "../ui/FormTitle";
 import TraineeLeftCard from "./TraineeLeftCard";
 import TraineeRightCard from "./TraineeRightCard";
-import {
-  manageTraining,
-  manageNutration,
-  ArrowBurger as NutritionImage,
-  ArrowDumbel as TrainingImage,
-  manageTrainee,
+// import {
+  
+//   manageNutration,
+//   ArrowBurger as NutritionImage,
+//   ArrowDumbel as TrainingImage,
+//   manageTrainee,
 
-} from "@/assets/index";
+// } from "@/assets/index";
 import { cookImage, masurmentTask, fitalGuide } from "@/assets";
 
 const TraineerUi = ({ userId }) => {
@@ -89,6 +99,27 @@ const TraineerUi = ({ userId }) => {
   const manageTraineeImage = manageTrainee;
   const customTaskImage = ArrowBurger;
   const defaultImage = ArrowBurger;
+
+
+  const handleDownload = async (url, fileName = "report.xlsx") => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Download failed");
+      
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      toast.error("Download failed");
+    }
+  };
 
   return (
     <div className="space-y-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -178,14 +209,16 @@ const TraineerUi = ({ userId }) => {
             <div className="w-[342px]">
               <AdminArrowCard
                 image={mesurementImage}
-                title="ללוח מדדים אישי"
+                // title="ללוח מדדים אישי"
+                title="מעקב היקפים"
                 link={`/dashboard/mesurements-watch?userId=${userId}`}
               />
             </div>
             <div className="w-[342px]">
               <AdminArrowCard
                 image={fitalGuideImage}
-                title="מסלול מדריך כושר אישי"
+                // title="מסלול מדריך כושר אישי"
+                title="ניהול תפריט אישי"
                 link={`/dashboard/nutrition-lists/${userId}`}
               />
             </div>
@@ -206,11 +239,40 @@ const TraineerUi = ({ userId }) => {
           />
         </div>
         <div className="w-[342px]">
-          <AdminArrowCard
+          {/* <AdminArrowCard
             image={newTrainee}
+           <AdminArrowCard
+            image={trainingImage}
             title="ניהול תפריטי תזונה אישיים"
             link={exerciseReport ? exerciseReport : "#"}
-          />
+          />  */}
+          <div
+        className="w-full h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
+        dir="ltr"
+      >
+       
+        <Button className="rounded-2xl w-[25px] h-6 flex-shrink-0" onClick={() => handleDownload(exerciseReport,"exercise-report.xlsx")}>
+          <FaArrowLeftLong />
+        </Button>
+        <div className="flex items-center gap-4 flex-1 justify-between">
+          <div className="flex-1">
+            <h1
+              className="text-sm sm:text-base font-bold leading-5 text-[#0A2533] text-right line-clamp-2"
+              dir="rtl"
+              onClick={() => handleDownload(exerciseReport,"exercise-report.xlsx")}
+            >
+              ניהול תפריטי תזונה אישיים
+            </h1>
+          </div>
+          <div className="w-[95px] h-[90px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">
+            <img
+              src={trainingImage}
+              alt=""
+              className="w-full h-full object-cover rounded-md"
+            />
+          </div>
+        </div>
+      </div>
         </div>
       </div>
       {/* {openModal && (

@@ -5,7 +5,8 @@ import { NutritionList } from "./NutritionList";
 const NutritionLists = () => {
   return (
     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
-      <Title title="רשימת תזונה" />
+      {/* <Title title="רשימת תזונה" /> */}
+      <Title title="ניהול תפריט אישי" />
       <NutritionList />
     </Container>
   );
