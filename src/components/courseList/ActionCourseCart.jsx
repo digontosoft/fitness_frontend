@@ -30,7 +30,7 @@ const ActionCourseCart = () => {
       <div className="flex flex-col items-center max-w-6xl mx-auto sm:min-h-full min-h-screen h-auto bg-[#FDFDFD] sm:rounded-3xl rounded-b-none rounded-t-3xl p-2 md:p-10 relative sm:mt-0 mt-10">
         <Title title={workoutData?.task_name} />
         <RecipeParagraph trainingDesc={workoutData?.task_description} />
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
           <Button
             onClick={EditCourse}
             className="text-sm font-bold text-black hover:text-white bg-gray-100  border border-gray-400 px-10 py-4 rounded-full sm:mt-10 mt-0 w-48 md:w-40 h-12 "
