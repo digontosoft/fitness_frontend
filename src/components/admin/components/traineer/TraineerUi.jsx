@@ -1,5 +1,6 @@
-import { base_url } from "@/api/baseUrl";
-import { ArrowBurger, newTrainee } from "@/assets";
+
+import { base_url, file_url } from "@/api/baseUrl";
+import { ArrowBurger, newThree, newTrainee } from "@/assets";
 
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
 // import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
@@ -28,7 +29,7 @@ import TraineeRightCard from "./TraineeRightCard";
 //   manageTrainee,
 
 // } from "@/assets/index";
-import { cookImage, masurmentTask, fitalGuide } from "@/assets";
+import { cookImage, fitalGuide, masurmentTask } from "@/assets";
 
 const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
@@ -66,6 +67,33 @@ const TraineerUi = ({ userId }) => {
     getUser();
   }, [userId]);
 
+
+
+  // console.log("user", userId);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${base_url}/measurement/calculate/${userId}`
+  //       );
+
+  //       const measurementResponse = await axios.get(
+  //         `${base_url}/report/measurement/${userId}`
+  //       );
+
+  //       if (measurementResponse.status === 200) {
+  //         setMeasurementReport(measurementResponse?.data.data.report_link);
+  //       }
+
+  //       setData(response?.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [userId]);
+
   const updateStatus = async (userType) => {
     try {
       const response = await axios.post(`${base_url}/updateUserInfo`, {
@@ -101,23 +129,98 @@ const TraineerUi = ({ userId }) => {
   const defaultImage = ArrowBurger;
 
 
-  const handleDownload = async (url, fileName = "report.xlsx") => {
+  const getAuthHeader = () => {
+    const raw = localStorage.getItem("authToken");
+    if (!raw) return {};
     try {
-      const response = await fetch(url);
+      const token = JSON.parse(raw);
+      return { Authorization: `Bearer ${typeof token === "string" ? token : raw}` };
+    } catch {
+      return { Authorization: `Bearer ${raw.replace(/^"|"$/g, "")}` };
+    }
+  };
+
+  const toAbsoluteDownloadUrl = (rawUrl) => {
+    if (!rawUrl || typeof rawUrl !== "string") return null;
+    let u = rawUrl.trim();
+    if (!/^https?:\/\//i.test(u)) {
+      if (!base_url) return null;
+      u = `${String(base_url).replace(/\/$/, "")}/${u.replace(/^\//, "")}`;
+    }
+    if (u.startsWith("http://") && window.location.protocol === "https:") {
+      u = u.replace(/^http:\/\//i, "https://");
+    }
+    return u;
+  };
+
+  const urlMatchesConfiguredApi = (absoluteUrl) => {
+    const origins = [];
+    [base_url, file_url].forEach((base) => {
+      if (!base) return;
+      try {
+        origins.push(new URL(base).origin);
+      } catch {
+        /* ignore */
+      }
+    });
+    return origins.some((origin) => absoluteUrl.startsWith(origin));
+  };
+
+  const triggerBlobDownload = (blob, fileName) => {
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
+  };
+
+  const handleDownload = async (url, fileName = "report.xlsx") => {
+    const normalized = toAbsoluteDownloadUrl(url);
+    if (!normalized) {
+      toast.error("אין קישור להורדה");
+      return;
+    }
+
+    const useAxiosBlob =
+      urlMatchesConfiguredApi(normalized) ||
+      (() => {
+        try {
+          return new URL(normalized).origin === window.location.origin;
+        } catch {
+          return false;
+        }
+      })();
+
+    if (useAxiosBlob) {
+      try {
+        const { data } = await axios.get(normalized, {
+          responseType: "blob",
+          headers: { ...getAuthHeader() },
+        });
+        triggerBlobDownload(data, fileName);
+        return;
+      } catch {
+        /* fall through to open / fetch */
+      }
+    }
+
+    try {
+      const response = await fetch(normalized, {
+        method: "GET",
+        mode: "cors",
+        credentials: "omit",
+      });
       if (!response.ok) throw new Error("Download failed");
-      
       const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      toast.error("Download failed");
+      triggerBlobDownload(blob, fileName);
+    } catch {
+      const opened = window.open(normalized, "_blank", "noopener,noreferrer");
+      if (!opened) {
+        toast.error("ההורדה נכשלה — אפשר לנסות לאפשר חלונות קופצים");
+      }
     }
   };
 
@@ -224,8 +327,10 @@ const TraineerUi = ({ userId }) => {
             </div>
             <div className="w-[342px]">
               <AdminArrowCard
+                // image={trainingImage}
+                // title="תוכניות אימון"
+                title="ניהול תכניות אימון"
                 image={newTrainee}
-                title="תוכניות אימון"
                 link={`/dashboard/assigned-training-list/${userId}`}
               />
             </div>
@@ -233,8 +338,9 @@ const TraineerUi = ({ userId }) => {
         )}
         <div className="w-[342px]">
           <AdminArrowCard
-            image={mesurementImage}
-            title="נהל משימות מותאמות אישית"
+            image={newThree}
+            // title="נהל משימות מותאמות אישית"
+            title="משימות מותאמות אישית"
             link={`/dashboard/add-custom-task?userId=${userId}`}
           />
         </div>
@@ -261,12 +367,41 @@ const TraineerUi = ({ userId }) => {
               dir="rtl"
               onClick={() => handleDownload(exerciseReport,"exercise-report.xlsx")}
             >
-              ניהול תפריטי תזונה אישיים
+              דוח ביצועי אימונים
             </h1>
           </div>
           <div className="w-[95px] h-[90px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">
             <img
-              src={trainingImage}
+              src={newTrainee}
+              alt=""
+              className="w-full h-full object-cover rounded-md"
+            />
+          </div>
+        </div>
+      </div>
+        </div>
+        <div className="w-[342px]">
+          <div
+        className="w-full h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
+        dir="ltr"
+      >
+       
+        <Button className="rounded-2xl w-[25px] h-6 flex-shrink-0" onClick={() => handleDownload(measurementReport,"measurement-report.xlsx")}>
+          <FaArrowLeftLong />
+        </Button>
+        <div className="flex items-center gap-4 flex-1 justify-between">
+          <div className="flex-1">
+            <h1
+              className="text-sm sm:text-base font-bold leading-5 text-[#0A2533] text-right line-clamp-2"
+              dir="rtl"
+              onClick={() => handleDownload(measurementReport,"measurement-report.xlsx")}
+            >
+              הצגת מדדים קודמים
+            </h1>
+          </div>
+          <div className="w-[95px] h-[90px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">
+            <img
+              src={mesurementImage}
               alt=""
               className="w-full h-full object-cover rounded-md"
             />
@@ -275,6 +410,7 @@ const TraineerUi = ({ userId }) => {
       </div>
         </div>
       </div>
+      
       {/* {openModal && (
         <>
           <p>Modal is Open</p>

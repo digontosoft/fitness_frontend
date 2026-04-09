@@ -9,7 +9,8 @@ const AddCustomTask = () => {
 
   return (
     <Container className="min-h-[80vh] h-auto sm:px-0 px-4">
-      <Title title="הוסף משימה מותאמת אישית" />
+      {/* <Title title="הוסף משימה מותאמת אישית" /> */}
+      <Title title="משימות מותאמות אישית" />
       <AssignCustomTask userId={userId} />
     </Container>
   );
