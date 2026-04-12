@@ -35,7 +35,7 @@ const Home = () => {
         throw error;
       }
     };
-
+console.log("recurringTasks:", recurringTasks);
  
 useEffect(() => {
   const fetchMeasurement = async () => {
@@ -63,6 +63,7 @@ useEffect(() => {
   }
 }, [Id]);
 
+// console.log("getMesurement:", getMesurement);
 
 
 
