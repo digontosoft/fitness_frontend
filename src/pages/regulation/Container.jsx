@@ -23,7 +23,7 @@ const Container = () => {
     try {
       const [updateResponse] = await Promise.all([
         axios.post(`${base_url}/updateUserInfo`, updateUserInfo),
-        // axios.post(`${base_url}/food-dairy`, { user_id: userDetails?._id }),
+        axios.post(`${base_url}/food-dairy`, { user_id: userDetails?._id }),
       ]);
 
       if (updateResponse.status === 200) {

@@ -27,6 +27,10 @@ import weights from "@/assets/image/weights.svg";
 import pully from "@/assets/image/pully.svg";
 import bands from "@/assets/image/bands.svg";
 import dumbles from "@/assets/image/dumbles.svg";
+import stomache from "@/assets/image/man-belly.svg";
+import womenstomache from "@/assets/image/woman-belly.svg";
+import noEquipment from "@/assets/image/noequipment.jpeg";
+
 const VideoCourseCart = ({ exercise }) => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const [isPlaying, setIsPlaying] = useState(false);
@@ -46,6 +50,8 @@ const VideoCourseCart = ({ exercise }) => {
     customIcon = butt;
   } else if (exercise.exercise_id?.body_part === "גב תחתון") {
     customIcon = lowerBack;
+  } else if (exercise.exercise_id?.body_part === "בטן") {
+    customIcon = user?.gernder === "male" ? stomache : womenstomache;
   }
   let customEquipment = null;
   if (exercise.exercise_id?.equipment === "TRX") {
@@ -60,6 +66,8 @@ const VideoCourseCart = ({ exercise }) => {
     customEquipment = bands;
   } else if (exercise.exercise_id?.equipment === "מוטות") {
     customEquipment = weights;
+  } else if (exercise.exercise_id?.equipment === "ללא ציוד") {
+    customEquipment = noEquipment;
   }
 
   const videoUrl = exercise?.exercise_id?.video_url || "";
@@ -81,25 +89,21 @@ const VideoCourseCart = ({ exercise }) => {
     ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
     : null;
 
-  console.log("exercise:", exercise);
   return (
     <Dialog>
-      <div
-        className="w-full md:w-96 flex gap-2 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300"
-        dir="rtl"
-      >
+      <div className="w-full md:w-96 flex gap-2 items-center justify-between px-2 py-2 bg-[#FBFBFB] rounded-2xl shadow-md shadow-gray-300">
         <DialogTrigger asChild>
           <Button className="rounded-2xl cursor-pointer">
             <FaArrowLeftLong />
           </Button>
         </DialogTrigger>
-        <div className="w-full flex items-center justify-center">
-          <h1 className="text-sm font-bold text-[#0A2533] text-right">
+        <div className="w-full flex items-center" dir="rtl">
+          <h1 className="text-sm font-bold text-[#0A2533]">
             {exercise?.exercise_id?.name}
           </h1>
         </div>
         <div className="relative w-full max-w-xs mx-auto">
-          {/* Clean thumbnail with custom play button */}
+          {/* Thumbnail with custom play button */}
           {!isPlaying && thumbnail && (
             <button
               type="button"
@@ -122,7 +126,7 @@ const VideoCourseCart = ({ exercise }) => {
             </button>
           )}
 
-          {/* Actual player, starts only after click */}
+          {/* Actual player, starts after click or if no thumbnail */}
           {(isPlaying || !thumbnail) && (
             <ReactPlayer
               url={videoUrl}
@@ -155,14 +159,18 @@ const VideoCourseCart = ({ exercise }) => {
             {exercise.exercise_id?.description}
           </p>
           <div className="flex gap-2 items-center flex-row-reverse" dir="rtl">
-            <img src={customIcon} alt="" className="w-6 h-6" />
+            {customIcon && (
+              <img src={customIcon} alt="" className="w-6 h-6" />
+            )}
             <p className="flex flex-row-reverse gap-2">
               <span>{exercise.exercise_id?.body_part}</span> :{" "}
               <span>איזור בגוף</span>
             </p>
           </div>
           <div className="flex gap-2  items-center flex-row-reverse" dir="rtl">
-            <img src={customEquipment} alt="" className="w-6 h-6" />
+            {customEquipment && (
+              <img src={customEquipment} alt="" className="w-6 h-6" />
+            )}
             <p className="flex flex-row-reverse gap-2">
               <span>{exercise.exercise_id?.equipment}</span> : <span>ציוד</span>
             </p>
