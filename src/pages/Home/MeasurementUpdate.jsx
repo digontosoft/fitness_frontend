@@ -547,27 +547,7 @@ const MeasurementUpdate = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <DynamicInputField
-            id="date"
-            type="date"
-            label="תאריך"
-            placeholder="הזן נתונים כאן..."
-            register={register}
-            validation={{ required: "שדה זה חובה" }}
-            errors={errors}
-            watch={watch}
-          />
-            <DynamicInputField
-            id="thighr"
-            type="number"
-            label="ירך ימין"
-            placeholder="הזן נתונים כאן..."
-            register={register}
-            validation={{ required: "שדה זה חובה" }}
-            errors={errors}
-            watch={watch}
-          />
-            <DynamicInputField
+   <DynamicInputField
             id={Gender === "male" ? "chest" : "butt"}
             type="number"
             label={Gender === "male" ? "חָזֶה" : "ישבן"}
@@ -577,17 +557,8 @@ const MeasurementUpdate = () => {
             errors={errors}
             watch={watch}
           />
-            <DynamicInputField
-            id="arml"
-            type="number"
-            label="זרוע שמאל"
-            placeholder="הזן נתונים כאן..."
-            register={register}
-            validation={{ required: "שדה זה חובה" }}
-            errors={errors}
-            watch={watch}
-          />
-          <DynamicInputField
+
+   <DynamicInputField
             id="waist"
             type="number"
             label="היקף מותניים"
@@ -598,7 +569,7 @@ const MeasurementUpdate = () => {
             watch={watch}
           />
      
-           <DynamicInputField
+          <DynamicInputField
             id="armr"
             type="number"
             label="זרוע ימין"
@@ -608,8 +579,29 @@ const MeasurementUpdate = () => {
             errors={errors}
             watch={watch}
           />
-     
-          <DynamicInputField
+  <DynamicInputField
+            id="arml"
+            type="number"
+            label="זרוע שמאל"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
+
+  <DynamicInputField
+            id="thighr"
+            type="number"
+            label="ירך ימין"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
+
+  <DynamicInputField
             id="thighl"
             type="number"
             label="ירך שמאל"

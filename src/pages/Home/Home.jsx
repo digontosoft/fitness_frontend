@@ -13,7 +13,6 @@ const Home = () => {
   const [userSteps, setUserSteps] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskModalOpen, setIsTaskModalOpen] = useState(false);
-  const [recurringTaskModalOpen, setIsRecurringTaskModalOpen] = useState(false);
   const [userTasks, setUserTasks] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [selectedTask, setSelectedTask] = useState(null);
