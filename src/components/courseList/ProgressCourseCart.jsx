@@ -78,7 +78,7 @@ const ProgressCourseCart = () => {
         <RecipeParagraph trainingDesc={workout?.description} />
 
         <div className="flex flex-col md:flex-row-reverse gap-4">
-          <Link 
+        <Link 
             to={"/startTraining"} 
             state={{ 
               workout: selectedWorkout || workout,
@@ -109,7 +109,7 @@ const ProgressCourseCart = () => {
               )}
             </Button>
           </Link>
-          <Link 
+        <Link 
             to="/customize-workout" 
             state={{ workout: selectedWorkout || workout, training }}
             onClick={() => setIsNavigating(true)}
@@ -129,6 +129,8 @@ const ProgressCourseCart = () => {
               )}
             </Button>
           </Link>
+        
+          
         </div>
 
         <p

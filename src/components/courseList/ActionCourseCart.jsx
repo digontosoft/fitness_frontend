@@ -1,9 +1,9 @@
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import VideoCourseCart from "../common/VideoCourseCart";
 import Title from "../measurements/Tilte";
 import RecipeParagraph from "../recipe/RecipeParagraph";
-import VideoCourseCart from "../common/VideoCourseCart";
 import { Button } from "../ui/button";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 const ActionCourseCart = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,19 +30,20 @@ const ActionCourseCart = () => {
       <div className="flex flex-col items-center max-w-6xl mx-auto sm:min-h-full min-h-screen h-auto bg-[#FDFDFD] sm:rounded-3xl rounded-b-none rounded-t-3xl p-2 md:p-10 relative sm:mt-0 mt-10">
         <Title title={workoutData?.task_name} />
         <RecipeParagraph trainingDesc={workoutData?.task_description} />
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+        <div className="flex flex-col md:flex-row-reverse items-center justify-center gap-4">
+        <Button
+            onClick={handleCourse}
+            className="text-sm font-bold text-white  bg-[#7994CB] px-8 py-4 rounded-full sm:mt-10 mt-0 w-48 md:w-40 h-12"
+          >
+            התחלת אימון
+          </Button>
           <Button
             onClick={EditCourse}
             className="text-sm font-bold text-black hover:text-white bg-gray-100  border border-gray-400 px-10 py-4 rounded-full sm:mt-10 mt-0 w-48 md:w-40 h-12 "
           >
             עריכת האימון
           </Button>
-          <Button
-            onClick={handleCourse}
-            className="text-sm font-bold text-white  bg-[#7994CB] px-8 py-4 rounded-full sm:mt-10 mt-0 w-48 md:w-40 h-12"
-          >
-            התחלת אימון
-          </Button>
+         
         </div>
         <p
           dir="rtl"
