@@ -72,6 +72,7 @@ export function ExerciseTable() {
   const [exercise, setExercise] = useState([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
   const [body_part, setBodyPart] = useState("");
   const [equipment, setEquipment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -215,13 +216,13 @@ export function ExerciseTable() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Fetch data only when page changes (filters are applied client-side for smooth UX)
+  // Fetch paginated data with server-side filtering
   useEffect(() => {
     const fetchExercise = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${base_url}/exercise?page=${page}&limit=10`
+          `${base_url}/exercise?search=${searchValue}&page=${page}&limit=10&body_part=${body_part}&equipment=${equipment}`
         );
         if (response.status === 200) {
           setExercise(response.data.data);
@@ -236,7 +237,7 @@ export function ExerciseTable() {
     };
 
     fetchExercise();
-  }, [page]);
+  }, [searchValue, page, body_part, equipment]);
 
 
   const table = useReactTable({
@@ -267,10 +268,11 @@ export function ExerciseTable() {
               <input
                 type="search"
                 placeholder="סנן לפי שם"
-                value={table.getColumn("name")?.getFilterValue() || ""}
-                onChange={(event) =>
-                  table.getColumn("name")?.setFilterValue(event.target.value)
-                }
+                value={searchValue}
+                onChange={(event) => {
+                  setSearchValue(event.target.value);
+                  setPage(1);
+                }}
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-40 h-12"
               />
               <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
@@ -291,8 +293,6 @@ export function ExerciseTable() {
               onChange={(selected) => {
                 const value = selected[0]?.value || "";
                 setBodyPart(value);
-                table.getColumn("body_part")?.setFilterValue(value);
-                // optional: reset to first page for consistency
                 setPage(1);
               }}
             />
@@ -301,7 +301,16 @@ export function ExerciseTable() {
               options={equipmentOptions}
               className=" min-w-40   rounded-lg h-12 border-2 p-2"
               placeholder="סנן לפי ציוד"
-              onChange={(e) => setEquipment(e[0].value)}
+              values={
+                equipment
+                  ? equipmentOptions.filter((opt) => opt.value === equipment)
+                  : []
+              }
+              onChange={(selected) => {
+                const value = selected[0]?.value || "";
+                setEquipment(value);
+                setPage(1);
+              }}
             />
             <Link to="/dashboard/exercise-library">
               <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
