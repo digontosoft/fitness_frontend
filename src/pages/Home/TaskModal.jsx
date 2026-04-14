@@ -54,14 +54,14 @@ export function TaskModal({
           {/* Step Input */}
           <div className="space-y-3 w-full" dir="rtl">
             <Label htmlFor="steps" className="font-semibold text-start">
-              מספר הצעדים היומי
+            ממוצע הצעדים השבועי
             </Label>
             <Input
               id="steps"
               type="number"
               value={stepCount}
               onChange={(e) => setStepCount(e.target.value)}
-              placeholder="יש למלא מספר צעדים יומי"
+              placeholder="נא למלא ממוצע צעדים שבועי"
             />
           </div>
         </div>

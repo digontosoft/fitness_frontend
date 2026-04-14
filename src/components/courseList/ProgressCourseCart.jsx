@@ -1,11 +1,11 @@
-import Title from "../measurements/Tilte";
-import RecipeParagraph from "../recipe/RecipeParagraph";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Button } from "../ui/button";
-import { useEffect, useMemo, useState } from "react";
-import PersonalExercise from "../PersonalExercise";
 import { Loader2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import Title from "../measurements/Tilte";
+import PersonalExercise from "../PersonalExercise";
+import RecipeParagraph from "../recipe/RecipeParagraph";
+import { Button } from "../ui/button";
 
 const ProgressCourseCart = () => {
   const location = useLocation();
@@ -43,10 +43,10 @@ const ProgressCourseCart = () => {
       }, 2000);
     }
   }, [workout, training, navigate]);
-  console.log(exercises);
+  // console.log(exercises);
  
-  console.log("workoutdata",workout);
-  console.log(training);
+  console.log("workoutdata:",workout);
+  // console.log(training);
 
   // Show loading state if navigating or missing data
   if (isNavigating) {
@@ -74,8 +74,8 @@ const ProgressCourseCart = () => {
   return (
     <div className="bg-[#7994CB] min-h-screen border-b-8 border-white py-12 transition-all duration-300">
       <div className="flex flex-col justify-center items-center max-w-6xl mx-auto bg-white rounded-3xl p-2 md:p-10 transition-all duration-300">
-        <Title title={training?.training_id?.name} />
-        <RecipeParagraph trainingDesc={training?.training_id?.description} />
+        <Title title={workout?.name} />
+        <RecipeParagraph trainingDesc={workout?.description} />
 
         <div className="flex flex-col md:flex-row-reverse gap-4">
           <Link 

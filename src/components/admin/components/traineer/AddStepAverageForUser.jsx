@@ -1,17 +1,17 @@
 import { useState } from "react";
 
 import { base_url } from "@/api/baseUrl";
-import { toast } from "sonner";
-import axios from "axios";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import axios from "axios";
+import { toast } from "sonner";
 
 const AddStepAverageForUser = ({ user, setUser }) => {
   const [stepCount, setStepCount] = useState("");
@@ -44,7 +44,7 @@ const AddStepAverageForUser = ({ user, setUser }) => {
     }
   };
 
-  console.log("user:", user);
+  // console.log("user:", user);
 
   return (
     <Dialog dir="rtl" open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -62,7 +62,7 @@ const AddStepAverageForUser = ({ user, setUser }) => {
           {/* Step Input */}
           <div className="space-y-3 w-full" dir="rtl">
             <Label htmlFor="steps" className="font-semibold text-start">
-              מספר הצעדים היומי
+            ממוצע הצעדים השבועי
             </Label>
             <Input
               id="steps"
@@ -70,7 +70,7 @@ const AddStepAverageForUser = ({ user, setUser }) => {
               value={stepCount}
               required
               onChange={(e) => setStepCount(e.target.value)}
-              placeholder="יש למלא מספר צעדים יומי"
+              placeholder="נא למלא ממוצע צעדים שבועי"
             />
           </div>
         </div>
