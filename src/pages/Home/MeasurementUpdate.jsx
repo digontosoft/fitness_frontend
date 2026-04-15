@@ -547,21 +547,20 @@ const MeasurementUpdate = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-   <DynamicInputField
-            id={Gender === "male" ? "chest" : "butt"}
+        <DynamicInputField
+            id="waist"
             type="number"
-            label={Gender === "male" ? "חָזֶה" : "ישבן"}
+            label="היקף מותניים"
             placeholder="הזן נתונים כאן..."
             register={register}
             validation={{ required: "שדה זה חובה" }}
             errors={errors}
             watch={watch}
           />
-
    <DynamicInputField
-            id="waist"
+            id={Gender === "male" ? "chest" : "butt"}
             type="number"
-            label="היקף מותניים"
+            label={Gender === "male" ? "חָזֶה" : "ישבן"}
             placeholder="הזן נתונים כאן..."
             register={register}
             validation={{ required: "שדה זה חובה" }}
