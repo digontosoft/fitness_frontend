@@ -266,6 +266,17 @@ const TaskCompleteForm = ({ data }) => {
           </div>
         </div> */}
          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+         <DynamicInputField
+            id="waist"
+            type="number"
+            label="היקף מותניים"
+            placeholder="הזן נתונים כאן..."
+            register={register}
+            validation={{ required: "שדה זה חובה" }}
+            errors={errors}
+            watch={watch}
+          />
+
    <DynamicInputField
             id={Gender === "male" ? "chest" : "butt"}
             type="number"
@@ -276,18 +287,6 @@ const TaskCompleteForm = ({ data }) => {
             errors={errors}
             watch={watch}
           />
-
-   <DynamicInputField
-            id="waist"
-            type="number"
-            label="היקף מותניים"
-            placeholder="הזן נתונים כאן..."
-            register={register}
-            validation={{ required: "שדה זה חובה" }}
-            errors={errors}
-            watch={watch}
-          />
-     
           <DynamicInputField
             id="armr"
             type="number"

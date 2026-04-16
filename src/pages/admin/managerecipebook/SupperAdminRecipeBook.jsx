@@ -41,6 +41,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Loading from "@/components/common/Loading";
 import axios from "axios";
 import { Edit, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -48,10 +49,13 @@ import { Link } from "react-router-dom";
 
 const SupperAdminRecipeBook = () => {
   const [recipeBook, setRecipeBook] = useState([]);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState("");
 
   useEffect(() => {
     const fetchRecipeBook = async () => {
+      setFetchError("");
+      setLoading(true);
       try {
         const response = await axios.get(`${base_url}/recipeBook`);
         if (response.status === 200) {
@@ -59,11 +63,22 @@ const SupperAdminRecipeBook = () => {
           console.log("pdf:", response?.data?.data);
         }
       } catch (error) {
+        setFetchError("Failed to load recipe books");
         console.error("Error fetching recipe book:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchRecipeBook();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto min-h-screen py-20">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto min-h-screen py-20">
@@ -79,36 +94,50 @@ const SupperAdminRecipeBook = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {recipeBook?.slice().reverse().map((book) => (
-            <TableRow key={book._id}>
-              <TableCell className="font-medium">{book.title}</TableCell>
-              <TableCell className="max-w-xs truncate">
-                {book.description}
-              </TableCell>
-              <TableCell>{book.type === "normalUser" ? "Recipe Book User" : "Trainee User"}</TableCell>
-              <TableCell className="flex gap-2 items-center">
-               <Link to={`/dashboard/view-recipe-book/${book._id}`}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                 
-                >
-                  <Eye />
-                </Button>
-               </Link>
-               <Link to={`/dashboard/edit-recipe-book/${book._id}`}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                 
-                >
-                  <Edit />
-                </Button>
-               </Link>
-
+          {fetchError ? (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center text-red-500">
+                {fetchError}
               </TableCell>
             </TableRow>
-          ))}
+          ) : recipeBook?.length ? (
+            recipeBook.slice().reverse().map((book) => (
+              <TableRow key={book._id}>
+                <TableCell className="font-medium">{book.title}</TableCell>
+                <TableCell className="max-w-xs truncate">
+                  {book.description}
+                </TableCell>
+                <TableCell>{book.type === "normalUser" ? "Recipe Book User" : "Trainee User"}</TableCell>
+                <TableCell className="flex gap-2 items-center">
+                 <Link to={`/dashboard/view-recipe-book/${book._id}`}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                   
+                  >
+                    <Eye />
+                  </Button>
+                 </Link>
+                 <Link to={`/dashboard/edit-recipe-book/${book._id}`}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                   
+                  >
+                    <Edit />
+                  </Button>
+                 </Link>
+
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center">
+                No recipe books found
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

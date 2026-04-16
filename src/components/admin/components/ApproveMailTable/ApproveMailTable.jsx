@@ -34,6 +34,7 @@ export function ApproveMailTable() {
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [emails, setEmails] = React.useState([]);
+  const [loading, setLoading]=React.useState(false);
 
   const columns = [
     {
@@ -202,6 +203,7 @@ export function ApproveMailTable() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       try {
         const response = await axios.get(
           `${base_url}/approved-mail?limit=10&page=${page}&search=${search}`
@@ -213,6 +215,8 @@ export function ApproveMailTable() {
       } catch (error) {
         console.log(error);
         throw error;
+      }finally{
+        setLoading(false)
       }
     };
 
@@ -259,7 +263,8 @@ export function ApproveMailTable() {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          {/* <TableBody>
+
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -286,7 +291,40 @@ export function ApproveMailTable() {
                 </TableCell>
               </TableRow>
             )}
-          </TableBody>
+          </TableBody> */}
+          <TableBody>
+  {loading ? (
+    <TableRow>
+      <TableCell colSpan={columns.length} className="h-24 text-center">
+        <div className="flex justify-center items-center">
+          <div className="w-6 h-6 border-4 border-gray-300 border-t-[#7994CB] rounded-full animate-spin"></div>
+        </div>
+      </TableCell>
+    </TableRow>
+  ) : table.getRowModel().rows?.length ? (
+    table.getRowModel().rows.map((row) => (
+      <TableRow
+        key={row.id}
+        data-state={row.getIsSelected() && "selected"}
+      >
+        {row.getVisibleCells().map((cell) => (
+          <TableCell key={cell.id}>
+            {flexRender(
+              cell.column.columnDef.cell,
+              cell.getContext()
+            )}
+          </TableCell>
+        ))}
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={columns.length} className="h-24 text-center">
+        No results.
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
