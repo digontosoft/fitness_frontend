@@ -349,6 +349,7 @@ import AssignTraineeToAdmin from "./AssignTraineeToAdmin"; // Make sure to use t
 import DeleteModal from "./DeleteModal";
 import EditAdmin from "./EditAdmin";
 import ViewAdmin from "./ViewAdmin";
+import Loading from "@/components/common/Loading";
 
 export default function AdminTable() {
   const [admins, setAdmins] = useState([]);
@@ -361,6 +362,9 @@ export default function AdminTable() {
   const [openEdit, setIsEdit] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteAdmin, setDeleteAdmin] = useState(null);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const [fetchError, setFetchError] = useState("");
   
   // New state for the Assign Trainee modal
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
@@ -369,6 +373,8 @@ export default function AdminTable() {
   ScrollTop();
 
   const fetchUsers = async () => {
+    setFetchError("");
+    setIsFetching(true);
     try {
       const res = await axios.get(
         `${base_url}/getAdminUser?limit=1000&page=1&search=${search}`
@@ -395,7 +401,11 @@ export default function AdminTable() {
       setTotalPages(Math.ceil(filteredAdmins.length / itemsPerPage));
     } catch (err) {
       console.error(err);
+      setFetchError("Failed to load users");
       toast.error("Failed to load users");
+    } finally {
+      setIsFetching(false);
+      setIsInitialLoading(false);
     }
   };
 
@@ -553,15 +563,26 @@ export default function AdminTable() {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
+  if (isInitialLoading) {
+    return (
+      <div className="max-w-6xl mx-auto min-h-screen px-4 sm:px-0" dir="ltr">
+        <Loading />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto min-h-screen px-4 sm:px-0" dir="ltr">
-      <div className="flex justify-between py-4">
+      <div className="flex justify-between items-center py-4">
         <input
           type="search"
           placeholder="חפש מנהל..."
           onChange={(e) => setSearch(e.target.value)}
           className="border px-3 py-2 rounded-md"
         />
+        {isFetching && (
+          <span className="text-sm text-gray-500 font-medium">Loading...</span>
+        )}
       </div>
       <div className="rounded-md border">
         <Table>
@@ -582,7 +603,13 @@ export default function AdminTable() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length ? (
+            {fetchError ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center">
+                  {fetchError}
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (

@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../.."
+		},
+		{
+			"path": "../../../../../../../../MyProject/nativeApps"
+		},
+		{
+			"path": "../../../../../../../in-house-products/school_management_software"
+		}
+	],
+	"settings": {}
+}

@@ -22,6 +22,7 @@ import axios from "axios";
 import { ArrowUpDown, Eye, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import Loading from "@/components/common/Loading";
 import DeleteModal from "../adminList/DeleteModal";
 import ViewUser from "./ViewUser";
 
@@ -34,10 +35,15 @@ export default function RecipeBookUserList() {
   const [openView, setIsOpenView] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteUser, setDeleteUser] = useState(null);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const [fetchError, setFetchError] = useState("");
 
   ScrollTop();
 
   const fetchUsers = async () => {
+    setFetchError("");
+    setIsFetching(true);
     try {
       const res = await axios.get(
         `${base_url}/getUsers?limit=1000&page=1&search=${search}`
@@ -76,7 +82,11 @@ export default function RecipeBookUserList() {
       setTotalPages(Math.ceil(filteredUsers.length / itemsPerPage));
     } catch (err) {
       console.error(err);
+      setFetchError("Failed to load users");
       toast.error("Failed to load users");
+    } finally {
+      setIsFetching(false);
+      setIsInitialLoading(false);
     }
   };
 
@@ -198,6 +208,14 @@ export default function RecipeBookUserList() {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
+  if (isInitialLoading) {
+    return (
+      <div className="max-w-6xl mx-auto min-h-screen px-4 sm:px-2" dir="ltr">
+        <Loading />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto min-h-screen px-4 sm:px-2" dir="ltr">
       {/* Title Section */}
@@ -214,6 +232,9 @@ export default function RecipeBookUserList() {
           onChange={(e) => setSearch(e.target.value)}
           className="border px-3 py-2 rounded-md w-full max-w-xs"
         />
+        {isFetching && (
+          <span className="text-sm text-gray-500 font-medium">Loading...</span>
+        )}
       </div>
       
       {/* Table Section */}
@@ -236,7 +257,13 @@ export default function RecipeBookUserList() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length ? (
+            {fetchError ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center">
+                  {fetchError}
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
