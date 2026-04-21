@@ -1,15 +1,15 @@
-import CommonContainer from "@/components/startTraining/CommonContainer";
+import { base_url } from "@/api/baseUrl";
 import CourseContent from "@/components/courseList/CourseContent";
+import Title from "@/components/measurements/Tilte";
+import ButtonGroup from "@/components/startTraining/ButtonGroup";
+import CommonContainer from "@/components/startTraining/CommonContainer";
+import ExcersizeInput from "@/components/startTraining/ExcersizeInput";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 import LastExercise from "@/components/startTraining/LastExercise";
-import ExcersizeInput from "@/components/startTraining/ExcersizeInput";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import ButtonGroup from "@/components/startTraining/ButtonGroup";
-import Title from "@/components/measurements/Tilte";
 import axios from "axios";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { base_url } from "@/api/baseUrl";
 const StartTraining = () => {
   const location = useLocation();
   const workData = location.state?.data || {};
@@ -104,59 +104,32 @@ const StartTraining = () => {
   const [showPrevious, setShowPrevious] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [exerciseData, setExerciseData] = useState({});
-  const [valid, setValid] = useState({});
-  const [buttonDisabled, setButtonDisabled] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Track progress
-  const completedExercisesCount = Object.keys(exerciseData).filter(
-    (key) => exerciseData[key]?.sets_done && exerciseData[key]?.reps_done && exerciseData[key]?.lastSet
-  ).length;
+  // Track progress (keys are slot indices "0".."n-1")
+  const completedExercisesCount = exercisesToUse.reduce((acc, _, i) => {
+    const e = exerciseData[String(i)];
+    return (
+      acc +
+      (e?.sets_done && e?.reps_done && e?.lastSet ? 1 : 0)
+    );
+  }, 0);
   const totalExercises = exercisesToUse.length;
   const progressPercentage = totalExercises > 0 
     ? Math.round((completedExercisesCount / totalExercises) * 100) 
     : 0;
 
-  useEffect(() => {
-    if (valid.sets_done && valid.reps_done && valid.lastSet) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
-  }, [valid, buttonDisabled]);
-
-  console.log("exerciseData", Object.values(exerciseData));
-  const data = Object.values(exerciseData);
-
-  useEffect(() => {
-    if (data[currentIndex]) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
-  }, [currentIndex, data]);
-  
   const navigate = useNavigate();
-  const isSuperset =
-    exercisesToUse[currentIndex]?.manipulation?.toLowerCase() ===
-    "superset";
 
-  const handleInputChange = (courseId, value) => {
-    setValid(value);
-
-    // Get current exercise data to preserve sets, reps, manipulation
-    const currentExercise = exercisesToUse.find(
-      (ex) => (ex.exercise_id?._id || ex._id) === courseId
-    ) || exercisesToUse.find(
-      (ex, idx) => `course-${idx}` === courseId
-    );
+  const handleInputChange = (slotIndex, value) => {
+    const currentExercise = exercisesToUse[slotIndex];
+    const storageKey = String(slotIndex);
 
     setExerciseData((prev) => ({
       ...prev,
-      [courseId]: { 
-        ...prev[courseId], 
+      [storageKey]: {
+        ...prev[storageKey],
         ...value,
-        // Preserve workout data (target values)
         target_sets: currentExercise?.sets || 0,
         target_reps: currentExercise?.reps || 0,
         manipulation: currentExercise?.manipulation || "",
@@ -188,7 +161,6 @@ const StartTraining = () => {
     const nextIndex = getNextIndex();
 
     if (nextIndex !== currentIndex) {
-      setButtonDisabled(true);
       setCurrentIndex(nextIndex);
       setShowPrevious(true);
 
@@ -294,20 +266,16 @@ const StartTraining = () => {
   
     const exerciseDataArray = Object.entries(exerciseData)
       .map(([key, value]) => {
-        // Try multiple matching strategies
-        const exercise = exercisesToUse.find(
-          (ex) => ex.exercise_id?._id === key
-        ) || exercisesToUse.find(
-          (ex) => ex._id === key
-        ) || exercisesToUse.find(
-          (ex, idx) => `course-${idx}` === key
-        );
-  
+        const idx = Number(key);
+        if (Number.isNaN(idx) || idx < 0 || idx >= exercisesToUse.length) {
+          return null;
+        }
+        const exercise = exercisesToUse[idx];
         if (!exercise) return null;
-  
-        // Extract exercise_id - prioritize exercise_id._id (actual exercise ID)
-        const exerciseId = exercise.exercise_id?._id || exercise._id || key;
-  
+
+        const exerciseId = exercise.exercise_id?._id || exercise._id;
+        if (!exerciseId) return null;
+
         return {
           exercise_id: exerciseId,
           sets_done: Number(value.sets_done) || 0,
@@ -363,8 +331,28 @@ const StartTraining = () => {
   
   const nextIndex = currentIndex + 1;
   const currentExercise = exercisesToUse[currentIndex] || {};
-  const courseId =
-    currentExercise?.exercise_id?._id || currentExercise?._id || `course-${currentIndex}`;
+  const currentSlotKey = String(currentIndex);
+  const nextSlotKey = String(nextIndex);
+
+  const isSuperset =
+    exercisesToUse[currentIndex]?.manipulation?.toLowerCase() === "superset";
+
+  const hasRequiredInput = (entry) =>
+    Boolean(
+      entry?.sets_done && entry?.reps_done && entry?.lastSet
+    );
+
+  const currentEntry = exerciseData[currentSlotKey];
+  const nextEntry =
+    isSuperset && nextIndex < exercisesToUse.length
+      ? exerciseData[nextSlotKey]
+      : null;
+
+  const canProceed =
+    hasRequiredInput(currentEntry) &&
+    (nextEntry == null || hasRequiredInput(nextEntry));
+
+  const buttonDisabled = !canProceed || isSubmitting;
 
   // console.log("current index data", currentIndex);
   // console.log("workout", workData);
@@ -408,16 +396,14 @@ const StartTraining = () => {
             }
           />
           <LastExercise
-            currentExercise={currentExercise}
+            exerciseData={exerciseData}
+            slotIndex={currentIndex}
           />
           <ExcersizeInput
+            key={currentSlotKey}
             exerciseData={currentExercise}
-            value={exerciseData[courseId] || {}}
-            onChange={(value) => handleInputChange(courseId, value)}
-            onNext={handleNext}
-            onPrevious={handlePrevious}
-            isFirst={currentIndex === 0}
-            isLast={currentIndex === exercisesToUse.length - 1}
+            value={exerciseData[currentSlotKey]}
+            onChange={(value) => handleInputChange(currentIndex, value)}
           />
 
           {isSuperset && nextIndex < exercisesToUse.length && (
@@ -436,16 +422,15 @@ const StartTraining = () => {
                 }
               />
               <LastExercise
-                currentExercise={exercisesToUse[nextIndex] || {}}
+                exerciseData={exerciseData}
+                slotIndex={nextIndex}
+                pairFirstSlotIndex={currentIndex}
               />
               <ExcersizeInput
+                key={nextSlotKey}
                 exerciseData={exercisesToUse[nextIndex] || {}}
-                value={exerciseData[exercisesToUse[nextIndex]?.exercise_id?._id || exercisesToUse[nextIndex]?._id || `course-${nextIndex}`] || {}}
-                onChange={(value) => handleInputChange(exercisesToUse[nextIndex]?.exercise_id?._id || exercisesToUse[nextIndex]?._id || `course-${nextIndex}`, value)}
-                onNext={handleNext}
-                onPrevious={handlePrevious}
-                isFirst={currentIndex === 0}
-                isLast={currentIndex === exercisesToUse.length - 1}
+                value={exerciseData[nextSlotKey]}
+                onChange={(value) => handleInputChange(nextIndex, value)}
               />
             </>
           )}
