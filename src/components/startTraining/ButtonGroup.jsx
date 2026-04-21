@@ -7,7 +7,6 @@ const ButtonGroup = ({
   isFinished,
   disabled,
 }) => {
-  console.log('button clicked');
   return (
     <div dir="rtl">
       <div className="flex gap-2 flex-row-reverse md:gap-6 sm:mt-20 justify-center items-center">

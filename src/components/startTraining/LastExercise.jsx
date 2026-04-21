@@ -1,14 +1,35 @@
-import React from "react";
 
-const LastExercise = ({ currentExercise }) => {
-  // last time data – try done fields first, then planned, so it's user-specific
-  const sets =
-    currentExercise?.sets_done ?? currentExercise?.sets ?? "-";
-  const reps =
-    currentExercise?.reps_done ?? currentExercise?.reps ?? "-";
+const LastExercise = ({
+  exerciseData = {},
+  slotIndex,
+  pairFirstSlotIndex,
+}) => {
+  const sessionInput = (() => {
+    if (pairFirstSlotIndex != null && pairFirstSlotIndex >= 0) {
+      return exerciseData[String(pairFirstSlotIndex)];
+    }
+    if (slotIndex > 0) {
+      return exerciseData[String(slotIndex - 1)];
+    }
+    return undefined;
+  })();
+
+  const hasPrev = sessionInput != null;
+
+  const sets = hasPrev
+    ? sessionInput.sets_done ?? sessionInput.sets ?? 0
+    : 0;
+  const reps = hasPrev
+    ? sessionInput.reps_done ?? sessionInput.reps ?? 0
+    : 0;
+  const weightRaw = hasPrev
+    ? sessionInput.lastSet ?? sessionInput.last_set_weight
+    : 0;
   const weight =
-    currentExercise?.last_set_weight ?? currentExercise?.lastSet ?? "-";
-  const manipulation = currentExercise?.manipulation ?? "-";
+    weightRaw === "" || weightRaw === undefined || weightRaw === null
+      ? 0
+      : weightRaw;
+  const manipulation = hasPrev ? sessionInput.manipulation ?? 0 : 0;
 
   return (
     <div className="sm:w-96 w-full ml-auto">
