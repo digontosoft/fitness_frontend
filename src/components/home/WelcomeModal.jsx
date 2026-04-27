@@ -5,6 +5,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
+
+
 export function WelcomeModal({
   isModalOpen,
   setIsModalOpen,
@@ -12,6 +14,11 @@ export function WelcomeModal({
   user,
 }) {
   console.log("gender:", user?.gender);
+  const maleVideo = "https://www.youtube.com/embed/HHu0B6j6Jxw";
+  const femaleVideo = "https://www.youtube.com/embed/iyIaCid4IHI";
+  
+  const videoUrl =
+    user?.gender === "female" ? femaleVideo : maleVideo;
   return (
     <Dialog
       open={isModalOpen}
@@ -42,7 +49,7 @@ export function WelcomeModal({
           <div className="w-full h-[200px] sm:h-[300px] md:h-[350px] lg:h-[400px] xl:h-[450px]">
             <iframe
               className="w-full h-full rounded-lg"
-              src="https://www.youtube.com/embed/-hSma-BRzoo?si=nCUIZ0VK09ROxEQE"
+              src={videoUrl}
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
