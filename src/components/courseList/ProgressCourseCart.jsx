@@ -85,7 +85,12 @@ const ProgressCourseCart = () => {
               training: training,
               // Also pass as data for compatibility with task-based flow
               data: {
+                task_name:
+                  selectedWorkout?.workout?.name ||
+                  workout?.name ||
+                  training?.training_id?.name,
                 exercises: exercises,
+                userTrainingExercise: exercises,
                 name: selectedWorkout?.workout?.name || workout?.name || training?.training_id?.name,
                 workout_id: selectedWorkout?.workout?._id || workout?._id,
                 task_id: selectedWorkout?.task_id || workout?.task_id || null,

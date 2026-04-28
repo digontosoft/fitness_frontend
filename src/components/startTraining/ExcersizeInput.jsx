@@ -100,7 +100,7 @@ const ExcersizeInput = ({ exerciseData, value, onChange }) => {
             </p>
             <div className="flex flex-col relative">
               <label
-                htmlFor={field("lastSet")}
+                htmlFor={field("manipulation")}
                 className=" absolute px-1 text-sm font-medium text-[#7F7F7F]  bg-white -top-2.5 left-[30%]"
               >
                 משקל

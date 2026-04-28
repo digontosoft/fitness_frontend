@@ -137,7 +137,12 @@ const StartTraining = () => {
         ...value,
         target_sets: currentExercise?.sets || 0,
         target_reps: currentExercise?.reps || 0,
-        manipulation: currentExercise?.manipulation || "",
+        // Keep user-entered manipulation; use exercise manipulation only as initial fallback.
+        manipulation:
+          value?.manipulation ??
+          prev[storageKey]?.manipulation ??
+          currentExercise?.manipulation ??
+          "",
       },
     }));
   };
@@ -278,7 +283,10 @@ const StartTraining = () => {
         const exercise = exercisesToUse[idx];
         if (!exercise) return null;
 
-        const exerciseId = exercise.exercise_id?._id || exercise._id;
+        const exerciseId =
+          (typeof exercise.exercise_id === "string"
+            ? exercise.exercise_id
+            : exercise.exercise_id?._id) || exercise._id;
         if (!exerciseId) return null;
 
         return {
@@ -370,7 +378,10 @@ const StartTraining = () => {
       if (!userId || slotIndex < 0 || slotIndex >= exercisesToUse.length) return;
 
       const selectedExercise = exercisesToUse[slotIndex];
-      const exerciseId = selectedExercise?.exercise_id?._id || selectedExercise?._id;
+      const exerciseId =
+        (typeof selectedExercise?.exercise_id === "string"
+          ? selectedExercise.exercise_id
+          : selectedExercise?.exercise_id?._id) || selectedExercise?._id;
       if (!exerciseId) return;
 
       try {
