@@ -5,6 +5,10 @@ const LastExercise = ({
   pairFirstSlotIndex,
 }) => {
   const sessionInput = (() => {
+    const currentSlotInput = exerciseData[String(slotIndex)];
+    if (currentSlotInput != null) {
+      return currentSlotInput;
+    }
     if (pairFirstSlotIndex != null && pairFirstSlotIndex >= 0) {
       return exerciseData[String(pairFirstSlotIndex)];
     }

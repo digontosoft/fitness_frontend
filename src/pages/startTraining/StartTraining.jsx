@@ -7,7 +7,7 @@ import ExcersizeInput from "@/components/startTraining/ExcersizeInput";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 import LastExercise from "@/components/startTraining/LastExercise";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 const StartTraining = () => {
@@ -75,21 +75,25 @@ const StartTraining = () => {
   // console.log("User Training Workout ID:", userTrainingWorkoutId);
   // console.log("Task Name:", taskName);
   // Convert exercises to userTrainingExercise format (preserve sets, reps, manipulation)
-  const exercisesToUse = allExercises.length > 0 
-    ? allExercises.map((ex) => {
-        // If already in userTrainingExercise format (has exercise_id object)
-        if (ex.exercise_id && typeof ex.exercise_id === 'object') {
-          return {
-            ...ex,
-            sets: ex.sets || 0,
-            reps: ex.reps || 0,
-            manipulation: ex.manipulation || "",
-          };
-        }
-        // Otherwise keep as is
-        return ex;
-      })
-    : [];
+  const exercisesToUse = useMemo(
+    () =>
+      allExercises.length > 0
+        ? allExercises.map((ex) => {
+            // If already in userTrainingExercise format (has exercise_id object)
+            if (ex.exercise_id && typeof ex.exercise_id === "object") {
+              return {
+                ...ex,
+                sets: ex.sets || 0,
+                reps: ex.reps || 0,
+                manipulation: ex.manipulation || "",
+              };
+            }
+            // Otherwise keep as is
+            return ex;
+          })
+        : [],
+    [allExercises]
+  );
   
   // Update workData with extracted values
   const finalWorkData = {
@@ -104,6 +108,7 @@ const StartTraining = () => {
   const [showPrevious, setShowPrevious] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [exerciseData, setExerciseData] = useState({});
+  const [lastWorkoutData, setLastWorkoutData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Track progress (keys are slot indices "0".."n-1")
@@ -357,6 +362,57 @@ const StartTraining = () => {
   // console.log("current index data", currentIndex);
   // console.log("workout", workData);
 
+  useEffect(() => {
+    const userDetails = JSON.parse(localStorage.getItem("userInfo") || "{}");
+    const userId = userDetails?._id;
+
+    const fetchLastWorkoutByIndex = async (slotIndex) => {
+      if (!userId || slotIndex < 0 || slotIndex >= exercisesToUse.length) return;
+
+      const selectedExercise = exercisesToUse[slotIndex];
+      const exerciseId = selectedExercise?.exercise_id?._id || selectedExercise?._id;
+      if (!exerciseId) return;
+
+      try {
+        const response = await axios.post(
+          `${base_url}/get-last-workout-excercisedata`,
+          {
+            user_id: userId,
+            exercise_id: exerciseId,
+          }
+        );
+
+        const responseData = response?.data?.data || response?.data || {};
+        const normalizedData = {
+          sets_done: Number(responseData?.sets_done) || 0,
+          reps_done: Number(responseData?.reps_done) || 0,
+          last_set_weight: Number(responseData?.last_set_weight) || 0,
+          manipulation: responseData?.manipulation || selectedExercise?.manipulation || "",
+        };
+
+        setLastWorkoutData((prev) => ({
+          ...prev,
+          [String(slotIndex)]: normalizedData,
+        }));
+      } catch {
+        setLastWorkoutData((prev) => ({
+          ...prev,
+          [String(slotIndex)]: {
+            sets_done: 0,
+            reps_done: 0,
+            last_set_weight: 0,
+            manipulation: selectedExercise?.manipulation || "",
+          },
+        }));
+      }
+    };
+
+    fetchLastWorkoutByIndex(currentIndex);
+    if (isSuperset && nextIndex < exercisesToUse.length) {
+      fetchLastWorkoutByIndex(nextIndex);
+    }
+  }, [currentIndex, exercisesToUse, isSuperset, nextIndex]);
+
   return (
     <div className="px-2">
       <CommonContainer>
@@ -396,7 +452,7 @@ const StartTraining = () => {
             }
           />
           <LastExercise
-            exerciseData={exerciseData}
+            exerciseData={lastWorkoutData}
             slotIndex={currentIndex}
           />
           <ExcersizeInput
@@ -422,7 +478,7 @@ const StartTraining = () => {
                 }
               />
               <LastExercise
-                exerciseData={exerciseData}
+                exerciseData={lastWorkoutData}
                 slotIndex={nextIndex}
                 pairFirstSlotIndex={currentIndex}
               />
