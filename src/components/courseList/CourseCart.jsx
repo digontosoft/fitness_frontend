@@ -68,9 +68,11 @@ import trx from "../../assets/image/trx.svg";
 import weights from "../../assets/image/weights.svg";
 import womenback from "../../assets/image/woman-back.svg";
 import womenbelly from "../../assets/image/woman-belly.svg";
+import { maleChest } from "@/assets";
 const CourseCart = ({ exercise, handleOpen }) => {
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  console.log("user:", user);
 
   let customIcon = null;
   if (exercise?.body_part === "גב") {
@@ -82,7 +84,7 @@ const CourseCart = ({ exercise, handleOpen }) => {
   } else if (exercise?.body_part === "כתפיים") {
     customIcon = shoulder;
   } else if (exercise?.body_part === "חזה") {
-    customIcon = chest;
+    customIcon = user?.gender === "male" ? maleChest : chest;
   } else if (exercise?.body_part === "ישבן") {
     customIcon = butt;
   } else if (exercise?.body_part === "גב תחתון") {

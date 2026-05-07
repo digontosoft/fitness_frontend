@@ -113,11 +113,13 @@ import newThree from"./image/adminimage/new3.svg";
 import newTrainee from"./image/adminimage/trainee.svg";
 import pic from"./image/icons/pic.png";
 import house from"./image/icons/house.png";
+import maleChest from"./image/male-chest.svg";
 
 
 
 
 export {
+  maleChest,
   newTrainee,
   newThree,
   newTwo,
