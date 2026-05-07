@@ -116,7 +116,7 @@ const StartTraining = () => {
     const e = exerciseData[String(i)];
     return (
       acc +
-      (e?.sets_done && e?.reps_done && e?.lastSet ? 1 : 0)
+      (e?.sets_done && e?.reps_done && e?.last_set_weight ? 1 : 0)
     );
   }, 0);
   const totalExercises = exercisesToUse.length;
@@ -293,7 +293,7 @@ const StartTraining = () => {
           exercise_id: exerciseId,
           sets_done: Number(value.sets_done) || 0,
           reps_done: Number(value.reps_done) || 0,
-          last_set_weight: Number(value.lastSet) || 0,
+          last_set_weight: Number(value.last_set_weight) || 0,
         };
       })
       .filter(
@@ -352,7 +352,7 @@ const StartTraining = () => {
 
   const hasRequiredInput = (entry) =>
     Boolean(
-      entry?.sets_done && entry?.reps_done && entry?.lastSet
+      entry?.sets_done && entry?.reps_done && entry?.last_set_weight
     );
 
   const currentEntry = exerciseData[currentSlotKey];

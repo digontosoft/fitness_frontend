@@ -16,9 +16,9 @@ const ExcersizeInput = ({ exerciseData, value, onChange }) => {
     reset({
       sets_done: value?.sets_done ?? "",
       reps_done: value?.reps_done ?? "",
-      lastSet: value?.lastSet ?? "",
+      last_set_weight: value?.last_set_weight ?? "",
     });
-  }, [value?.sets_done, value?.reps_done, value?.lastSet, reset]);
+  }, [value?.sets_done, value?.reps_done, value?.last_set_weight, reset]);
 
   const handleInputChange = (fieldName, val) => {
     onChange({ ...getValues(), [fieldName]: val });
@@ -100,23 +100,26 @@ const ExcersizeInput = ({ exerciseData, value, onChange }) => {
             </p>
             <div className="flex flex-col relative">
               <label
-                htmlFor={field("manipulation")}
+                htmlFor={field("last_set_weight")}
                 className=" absolute px-1 text-sm font-medium text-[#7F7F7F]  bg-white -top-2.5 left-[30%]"
               >
                 משקל
               </label>
               <input
-                id={field("lastSet")}
-                type="text"
-                className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.lastSet ? "border-[#7994CB]" : ""}`}
-                {...register("lastSet", {
-                  required: "Last set value is required",
-                  onChange: (e) => handleInputChange("lastSet", e.target.value),
+                id={field("last_set_weight")}
+                type="number"
+                inputMode="decimal"
+                className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.last_set_weight ? "border-[#7994CB]" : ""}`}
+                {...register("last_set_weight", {
+                  required: "Last set weight is required",
+                  setValueAs: (v) => (v === "" || v == null ? "" : Number(v)),
+                  onChange: (e) =>
+                    handleInputChange("last_set_weight", e.target.value),
                 })}
               />
-              {errors.lastSet && (
+              {errors.last_set_weight && (
                 <p className="text-xs text-[#7994CB] mt-1">
-                  {errors.lastSet.message}
+                  {errors.last_set_weight.message}
                 </p>
               )}
             </div>
