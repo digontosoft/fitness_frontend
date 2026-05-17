@@ -38,10 +38,12 @@ export function WelcomeModal({
               dir="rtl"
             >
               {user?.gender === "male"
-                ? `ברוך הבא !
-תצפה בסרטון פה שיסביר לך על כל האפליקציה. אם בטעות יצאת תגיד לי ואשלח לך אותו בווטסאפ ויוצאים לדרך לתהליך האחרון שלךך 💪🕺`
-                : `ברוכה הבאה !
-תצפי בסרטון פה שיסביר לך על כל האפליקציה. אם בטעות יצאת תגידי לי ואשלח לך אותו בווטסאפ ויוצאים לדרך לתהליך האחרון שלךך 🤗🕺`}
+                ? `ברוך הבא💪
+תצפה בסרטון פה שיסביר על הכל!
+אם בטעות יצאת תרשום לווטסאפ של הליווי ונשלח לך את הסרטון מחדש ויאללה הולכים להצליח בענק ביחד!!🕺`
+                : `ברוכה הבאה🤗
+תצפי בסרטון פה שיסביר על הכל!
+אם בטעות יצאת תרשמי לווטסאפ של הליווי ונשלח לך את הסרטון מחדש ויאללה הולכים להצליח בענק ביחד!!🕺`}
             </p>
           </div>
 
@@ -61,7 +63,7 @@ export function WelcomeModal({
         <DialogFooter>
           <DialogClose asChild>
             <button
-              className="w-full bg-[#7994CB] uppercase text-white"
+              className="w-full bg-[#7994CB] uppercase text-white sm:h-auto h-10 text-center flex items-center justify-center"
               onClick={() => handleSubmit()}
             >
               הבנתי

@@ -7,7 +7,14 @@ const SingleCart = ({ id, title, description, icon, type }) => {
       className="bg-white shadow-md rounded-3xl w-full h-full flex flex-col items-center gap-3 px-3 py-4 sm:py-5"
       dir="rtl"
     >
-      <img className="w-full h-24 sm:w-full sm:h-full object-contain rounded-xl" src={icon} alt="" />
+      {/* <img className="w-full h-24 sm:w-full sm:h-full object-contain rounded-xl" src={icon} alt="" /> */}
+      <div className="sm:w-full w-24 sm:h-full h-24 rounded-2xl border border-gray-200 shadow-sm overflow-hidden p-2 bg-white">
+        <img
+          className="w-full h-24 sm:h-full object-contain rounded-xl"
+          src={icon}
+          alt=""
+        />
+      </div>
       <p className="text-center text-sm sm:text-base font-semibold text-[#0A2533]" dir="rtl">
         {title}
       </p>
