@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { cartFour } from "@/assets";
 import { base_url } from "@/api/baseUrl.js";
-import axios from "axios";
-import SingleCart from "@/components/nutritionGuides/SingleCart.jsx";
+import personalNutrationBg from "@/assets/image/personal-nutrition-menu.svg";
 import Loading from "@/components/common/Loading";
+import SingleCart from "@/components/nutritionGuides/SingleCart.jsx";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const CartGroup = () => {
   const [nutrationData, setNutrationData] = useState([]);
@@ -46,7 +46,7 @@ const CartGroup = () => {
         <SingleCart
           key={item._id}
           id={item._id}
-          icon={cartFour}
+          icon={personalNutrationBg}
           title={item.title}
           description={item.description}
           pdfLink={item.pdf_link}

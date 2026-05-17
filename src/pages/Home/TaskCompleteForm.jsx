@@ -34,9 +34,9 @@ const TaskCompleteForm = ({ data }) => {
     fetchMeasurement();
   }, [Id]);
 
-  console.log("getMesurement", getMesurement);
+  // console.log("getMesurement", getMesurement);
 
-  const id = data.measurement_id;
+  const id = data?.measurement_id;
 
   const {
     register,
@@ -184,7 +184,9 @@ const TaskCompleteForm = ({ data }) => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto justify-center py-20" dir="rtl">
+    <div 
+    className="px-4 sm:px-0 max-w-6xl mx-auto justify-center sm:py-20"
+    dir="rtl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* <div className="w-full justify-center flex flex-col md:flex-row-reverse gap-4">
           <div className="w-full">

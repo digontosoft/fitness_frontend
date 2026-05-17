@@ -92,6 +92,7 @@
 
 import { base_url } from "@/api/baseUrl";
 import Loading from "@/components/common/Loading";
+import Title from "@/components/measurements/Tilte";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -139,8 +140,9 @@ const MeasurementImage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-20 my-20">
-      <h2 className="text-2xl font-bold mb-4 text-center">תמונות תהליך</h2>
+    <div className="min-h-screen w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-20">
+      {/* <h2 className="text-2xl font-bold mb-4 text-center">תמונות תהליך</h2> */}
+      <Title title="תמונות תהליך" />
 
       {measurements.map((measurement, idx) => {
         const formattedDate = formatDate(measurement.date);

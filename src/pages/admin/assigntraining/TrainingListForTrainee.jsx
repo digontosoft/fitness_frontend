@@ -166,9 +166,11 @@ export function TrainingListForTrainee({ userId }) {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           `${base_url}/get-training-by-user-id/${userId}?page=${page}&&limit=10&&search=${search}`
@@ -179,6 +181,8 @@ export function TrainingListForTrainee({ userId }) {
         console.log("response:", response);
       } catch (error) {
         console.error("Error fetching exercises:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -243,7 +247,18 @@ export function TrainingListForTrainee({ userId }) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length ? (
+            {loading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  <div className="flex justify-center items-center">
+                    <div className="w-6 h-6 border-4 border-gray-300 border-t-[#7994CB] rounded-full animate-spin"></div>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
