@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export function TaskModal({
@@ -13,8 +13,13 @@ export function TaskModal({
   selectedTask,
   user_id,
   fetchUserSteps,
+  fetchUserTasks,
 }) {
   const [stepCount, setStepCount] = useState("");
+
+  useEffect(() => {
+    if (!isModalOpen) setStepCount("");
+  }, [isModalOpen]);
 
   const handleSubmit = async () => {
     if (!stepCount) return alert("Please enter a valid step count.");
@@ -25,15 +30,15 @@ export function TaskModal({
         task_id: selectedTask?._id,
         user_id,
       };
-      await axios
-        .post(`${base_url}/update-user-steps-task`, payload)
-        .then((res) => {
-          if (res.status === 200) {
-            toast.success(res.data.message);
-            fetchUserSteps();
-            setIsModalOpen(false);
-          }
-        });
+      const res = await axios.post(
+        `${base_url}/update-user-steps-task`,
+        payload
+      );
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        await Promise.all([fetchUserSteps(), fetchUserTasks()]);
+        setIsModalOpen(false);
+      }
     } catch (error) {
       console.error("Error submitting steps:", error);
       alert("Failed to submit steps.");

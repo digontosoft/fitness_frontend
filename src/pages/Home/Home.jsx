@@ -80,38 +80,36 @@ useEffect(() => {
 
   const fetchUserSteps = async () => {
     try {
-      await axios
-        .get(`${base_url}/get-user-steps-vs-target/${user?._id}`)
-        .then((response) => {
-          if (response.status === 200) {
-            const userData = response.data.data;
-            setUserSteps(userData);
-          }
-        });
+      const response = await axios.get(
+        `${base_url}/get-user-steps-vs-target/${user?._id}`
+      );
+      if (response.status === 200) {
+        setUserSteps(response.data.data);
+      }
     } catch (err) {
       console.log("error:", err);
     }
   };
 
-  useEffect(() => {
-    const fetchUserTask = async () => {
-      setLoading(true);
-      try {
-        await axios
-          .get(`${base_url}/get-user-task/${user._id}`)
-          .then((response) => {
-            if (response.status === 200) {
-              setUserTasks(response.data.data);
-              setLoading(false);
-            }
-          });
-      } catch (error) {
-        console.error("Error fetching recipe book:", error);
+  const fetchUserTasks = async (showLoading = false) => {
+    if (showLoading) setLoading(true);
+    try {
+      const response = await axios.get(
+        `${base_url}/get-user-task/${user._id}`
+      );
+      if (response.status === 200) {
+        setUserTasks(response.data.data);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching user tasks:", error);
+    } finally {
+      if (showLoading) setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUserSteps();
-    fetchUserTask();
+    fetchUserTasks(true);
     fetchUserRecurringTasks();
   }, [user?._id]);
 
@@ -208,6 +206,7 @@ useEffect(() => {
         setIsModalOpen={setIsTaskModalOpen}
         selectedTask={selectedTask}
         fetchUserSteps={fetchUserSteps}
+        fetchUserTasks={fetchUserTasks}
         user_id={user?._id}
       />
     </div>
