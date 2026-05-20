@@ -737,6 +737,7 @@ const MeasurementWomen = () => {
                   dir="rtl"
                 />
                 <FInput
+                  type="number"
                   label="מס׳ נייד*"
                   placeholder="התשובה שלך"
                   name="cell_phone_number"
@@ -750,18 +751,21 @@ const MeasurementWomen = () => {
                   dir="rtl"
                 />
                 <FInput
+                  type="number"
                   label="גובה"
                   placeholder="התשובה שלך"
                   name="height"
                   dir="rtl"
                 />
                 <FInput
+                  type="number"
                   label="משקל נוכחי - אם לא יודע לרשום הערכה של 5 קילו פלוס מינוס (אין צורך להישקל)"
                   placeholder="התשובה שלך"
                   name="weight"
                   dir="rtl"
                 />
                 <FInput
+                  type="number"
                   label="המשקל הגבוה שהגעת אליו במהלך חייך (לא חובה)"
                   placeholder="התשובה שלך"
                   name="highest_weight"
@@ -812,7 +816,7 @@ const MeasurementWomen = () => {
                   <FInput
                     label="כמה פעמים בשבוע ? 1-5"
                     placeholder="התשובה שלך"
-                    name="strength_training_description"
+                    name="how_many_times_want_training_in_week"
                     dir="rtl"
                   />
                   <FInput
