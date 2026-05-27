@@ -61,7 +61,7 @@ function EditApproveMail({ id, email, updateDate, defaultExpiryDate }) {
       console.error("Error fetching expiry date:", error);
       reset({
         expiry_date: formatExpiryDate(defaultExpiryDate),
-        email: email ?? "",
+        email: email ?? "" ,
       });
     } finally {
       setLoading(false);
