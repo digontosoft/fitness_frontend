@@ -108,7 +108,12 @@ export function TraineeUsersLists() {
           <Eye className="w-4 h-4" />
         </Button>
            
-            <EditApproveMail id={userId} updateDate={updateDate} />
+            <EditApproveMail
+              id={userId}
+              email={row.original.email}
+              updateDate={updateDate}
+              defaultExpiryDate={row.original.expiry_date}
+            />
             <Button
               className="bg-[#7994CB]"
               size="sm"
@@ -242,22 +247,24 @@ export function TraineeUsersLists() {
 
    const updateDate = async (data) => {
     try {
-      const response = await axios.patch(
-        `${base_url}/update-approved-mail`,
-        data
-      );
+      const response = await axios.patch(`${base_url}/update-approved-mail`, {
+        email: data.email,
+        expiry_date: data.expiry_date,
+      });
       if (response.status === 200) {
         toast.success("Date updated successfully.");
-        // setEmails((prevEmails) =>
-        //   prevEmails.map((email) =>
-        //     email._id === data._id
-        //       ? { ...email, expiry_date: data.expiry_date }
-        //       : email
-        //   )
-        // );
+        setAdminUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.email === data.email
+              ? { ...user, expiry_date: data.expiry_date }
+              : user
+          )
+        );
       }
     } catch (error) {
-      toast.error("Failed to update date.");
+      toast.error(
+        error.response?.data?.message || "Failed to update date."
+      );
     }
   };
 

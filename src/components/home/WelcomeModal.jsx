@@ -30,19 +30,17 @@ export function WelcomeModal({
           <div className="flex flex-col items-center justify-center space-y-2">
             <h1 className="text-xl sm:text-2xl font-bold text-center" dir="rtl">
               {user?.gender === "male"
-                ? "היי, ברוך הבא (:"
-                : "היי, ברוכה הבאה :) י"}
+                ? "ברוך הבא💪"
+                : "ברוכה הבאה🤗"}
             </h1>
             <p
               className="text-sm sm:text-base font-normal text-center leading-5 sm:leading-6"
               dir="rtl"
             >
               {user?.gender === "male"
-                ? `ברוך הבא💪
-תצפה בסרטון פה שיסביר על הכל!
+                ? `תצפה בסרטון פה שיסביר על הכל!
 אם בטעות יצאת תרשום לווטסאפ של הליווי ונשלח לך את הסרטון מחדש ויאללה הולכים להצליח בענק ביחד!!🕺`
-                : `ברוכה הבאה🤗
-תצפי בסרטון פה שיסביר על הכל!
+                : `תצפי בסרטון פה שיסביר על הכל!
 אם בטעות יצאת תרשמי לווטסאפ של הליווי ונשלח לך את הסרטון מחדש ויאללה הולכים להצליח בענק ביחד!!🕺`}
             </p>
           </div>

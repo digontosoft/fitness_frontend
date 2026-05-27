@@ -4,7 +4,7 @@ import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField
 import { Button } from "@/components/ui/button";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import axios from "axios";
-import { ChevronDown, ChevronUp, Trash } from "lucide-react";
+import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
@@ -21,6 +21,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
   const [workout, setWorkout] = useState([]);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedBodyPart, setSelectedBodyPart] = useState(null);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState([]);
@@ -401,6 +402,8 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
   const onSubmit = async (data) => {
     // console.log("training name:", data)
 
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const formattedWorkouts = trainingbyId.workouts.map(
         (workout) => (
@@ -435,6 +438,8 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     } catch (error) {
       console.error("Error updating training session:", error);
       toast.error("Failed to update training session.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -686,14 +691,21 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
           <Button
             type="submit"
             className={
-              isButtonDisabled || isSupersetIncomplete
+              isButtonDisabled || isSupersetIncomplete || isSubmitting
                 ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
                 : "text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
             }
-            disabled={isButtonDisabled || isSupersetIncomplete}
+            disabled={isButtonDisabled || isSupersetIncomplete || isSubmitting}
           >
-            {/* שייך תוכנית אימון */}
-            שייך אימון למתאמן
+            {isSubmitting ? (
+              <span className="inline-flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                שומר...
+              </span>
+            ) : (
+              // שייך תוכנית אימון
+              "שייך אימון למתאמן"
+            )}
           </Button>
         </div>
       </form>

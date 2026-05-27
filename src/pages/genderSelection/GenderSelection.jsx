@@ -7,6 +7,7 @@ import { Loader } from "lucide-react";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import { bodyBuilder, female, man } from "../../assets/index";
 
 const GenderSelection = () => {
@@ -21,6 +22,7 @@ const GenderSelection = () => {
   };
 
   const handleNextStep = () => {
+    if (!gender || loading) return;
     setLoading(true);
     const updateUserInfo = {
       user_id: id?._id,
@@ -68,11 +70,15 @@ const GenderSelection = () => {
             <div className="flex flex-col gap-4">
               <img src={female} alt="" />
               <Button
-                variant="ai"
+                type="button"
+                variant="ghost"
                 size="lg"
-                className={`bg-gray-400 hover:bg-gray-500 transition duration-300 rounded-full h-8 text-white font-semibold flex justify-center items-center w-full ${
-                  gender === "female" ? "bg-[#7994CB]" : ""
-                }`}
+                className={cn(
+                  "h-8 w-full rounded-full font-semibold text-white transition duration-300",
+                  gender === "female"
+                    ? "bg-[#7994CB] hover:bg-[#6883ba] hover:text-white"
+                    : "bg-gray-400 hover:bg-gray-500 hover:text-white"
+                )}
                 onClick={() => handleGenderSelection("female")}
               >
                 <p>נקבה</p>
@@ -81,11 +87,15 @@ const GenderSelection = () => {
             <div className="flex flex-col gap-4">
               <img src={man} alt="" />
               <Button
-                variant="ai"
+                type="button"
+                variant="ghost"
                 size="lg"
-                className={`bg-gray-400 hover:bg-gray-500 transition duration-300 rounded-full h-8 text-white font-semibold flex justify-center items-center w-full ${
-                  gender === "male" ? "bg-[#7994CB]" : ""
-                }`}
+                className={cn(
+                  "h-8 w-full rounded-full font-semibold text-white transition duration-300",
+                  gender === "male"
+                    ? "bg-[#7994CB] hover:bg-[#6883ba] hover:text-white"
+                    : "bg-gray-400 hover:bg-gray-500 hover:text-white"
+                )}
                 onClick={() => handleGenderSelection("male")}
               >
                 <p>זכר</p>
@@ -95,9 +105,14 @@ const GenderSelection = () => {
           <div className="flex flex-col justify-center items-center gap-8 w-full">
             <Button
               type="submit"
-              variant="ai"
               size="lg"
-              className=" bg-[#141414] hover:bg-gray-700 transition duration-300 rounded-full text-white px-6  flex justify-center items-center border-[2px] border-slate-50 md:border-none"
+              disabled={!gender || loading}
+              className={cn(
+                "flex items-center justify-center rounded-full border-[2px] border-slate-50 px-6 text-white transition duration-300 md:border-none",
+                gender && !loading
+                  ? "bg-[#141414] hover:bg-gray-700"
+                  : "cursor-not-allowed bg-gray-500 opacity-60"
+              )}
               onClick={handleNextStep}
             >
              {loading ? <><Loader className="animate-spin h-6 w-6 flex items-center gap-2" /> <p>המשך לשלב הבא</p></> :  <p>המשך לשלב הבא</p>}

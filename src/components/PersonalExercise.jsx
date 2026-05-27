@@ -1,8 +1,8 @@
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import { FaPlay } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import ReactPlayer from "react-player";
 import HeroVideo from "./startTraining/HeroVideo";
 import { Button } from "./ui/button";
@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
+import { maleChest } from "@/assets";
 import backHand from "@/assets/image/back-hand.svg";
 import back from "@/assets/image/back.svg";
 import bands from "@/assets/image/bands.svg";
@@ -24,16 +25,15 @@ import chest from "@/assets/image/chest.svg";
 import dumbles from "@/assets/image/dumbles.svg";
 import frontHand from "@/assets/image/front-hand.svg";
 import lowerBack from "@/assets/image/lower-back.svg";
-import stomache from "@/assets/image/man-belly.svg";
 import machine from "@/assets/image/machine.svg";
+import stomache from "@/assets/image/man-belly.svg";
+import noEquipment from "@/assets/image/noequipment.jpeg";
 import pully from "@/assets/image/pully.svg";
 import shoulder from "@/assets/image/shoulder.svg";
 import trx from "@/assets/image/trx.svg";
 import weights from "@/assets/image/weights.svg";
 import womenback from "@/assets/image/woman-back.svg";
 import womenstomache from "@/assets/image/woman-belly.svg";
-import noEquipment from "@/assets/image/noequipment.jpeg";
-
 
 const PersonalExercise = ({ exercise }) => {
   console.log("exerciseP:", exercise.exercise_id);
@@ -55,7 +55,7 @@ const PersonalExercise = ({ exercise }) => {
 
   let customIcon = null;
   if (exerciseData?.body_part === "גב") {
-    customIcon = user?.gernder === "male" ? back : womenback;
+    customIcon = user?.gender === "male" ? back : womenback;
   } else if (exerciseData?.body_part === "יד קדמית") {
     customIcon = frontHand;
   } else if (exerciseData?.body_part === "יד אחורית") {
@@ -63,7 +63,7 @@ const PersonalExercise = ({ exercise }) => {
   } else if (exerciseData?.body_part === "כתפיים") {
     customIcon = shoulder;
   } else if (exerciseData?.body_part === "חזה") {
-    customIcon = chest;
+    customIcon = user?.gender === "male" ? maleChest : chest;
   } else if (exerciseData?.body_part === "ישבן") {
     customIcon = butt;
   } else if (exerciseData?.body_part === "גב תחתון") {

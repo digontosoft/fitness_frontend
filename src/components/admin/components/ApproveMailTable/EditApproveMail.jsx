@@ -14,46 +14,79 @@ import axios from "axios";
 import { Edit } from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
-function EditApproveMail({ id, updateDate }) {
+const formatExpiryDate = (date) => {
+  if (!date) return "";
+  const parsed = moment(date);
+  return parsed.isValid() ? parsed.format("YYYY-MM-DD") : "";
+};
+
+function EditApproveMail({ id, email, updateDate, defaultExpiryDate }) {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
   const {
-    register,
+    control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      expiry_date: "",
+      email: "",
+    },
+  });
 
   const loadMail = async () => {
     if (!id) return;
     try {
       setLoading(true);
-      const response = await axios.get(`${base_url}/approved-mail/${id}`);
-      const data = response.data.approvedEmail;
+      let data = null;
+      try {
+        const userRes = await axios.get(`${base_url}/getUser/${id}`);
+        data = userRes.data?.data ?? userRes.data;
+      } catch {
+        const mailRes = await axios.get(`${base_url}/approved-mail/${id}`);
+        data =
+          mailRes.data?.approvedEmail ??
+          mailRes.data?.data ??
+          mailRes.data;
+      }
       reset({
-        expiry_date: data?.expiry_date
-          ? moment(data.expiry_date).format("YYYY-MM-DD")
-          : "",
+        expiry_date: formatExpiryDate(data?.expiry_date ?? defaultExpiryDate),
+        email: data?.email ?? email ?? "",
       });
     } catch (error) {
-      console.error("Error fetching email:", error);
+      console.error("Error fetching expiry date:", error);
+      reset({
+        expiry_date: formatExpiryDate(defaultExpiryDate),
+        email: email ?? "",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const onSubmit = async (data) => {
-    await updateDate(data);
+    await updateDate({
+      email: data.email,
+      expiry_date: data.expiry_date,
+    });
+    setOpen(false);
   };
   return (
     <Dialog
       open={open}
       onOpenChange={(nextOpen) => {
         setOpen(nextOpen);
-        if (nextOpen) loadMail();
+        if (nextOpen) {
+          reset({
+            expiry_date: formatExpiryDate(defaultExpiryDate),
+            email: email ?? "",
+          });
+          loadMail();
+        }
       }}
     >
       <DialogTrigger asChild>
@@ -102,17 +135,23 @@ function EditApproveMail({ id, updateDate }) {
               <Label htmlFor="expiry_date" dir="rtl">
                 תאריך סיום
               </Label>
-              <Input
-                dir="rtl"
-                id="expiry_date"
-                type="date"
-                disabled={loading}
-                {...register("expiry_date", {
-                  required: "Expiry Date is required",
-                })}
-                className={`${
-                  errors.expiry_date ? "border-[#7994CB]" : ""
-                } flex items-center justify-end`}
+              <Controller
+                name="expiry_date"
+                control={control}
+                rules={{ required: "Expiry Date is required" }}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    dir="rtl"
+                    id="expiry_date"
+                    type="date"
+                    disabled={loading}
+                    value={field.value ?? ""}
+                    className={`${
+                      errors.expiry_date ? "border-[#7994CB]" : ""
+                    } flex items-center justify-end`}
+                  />
+                )}
               />
               {errors.expiry_date && (
                 <p className="text-[#7994CB] text-sm mt-1" dir="rtl">
