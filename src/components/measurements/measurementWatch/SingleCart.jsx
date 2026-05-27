@@ -1,91 +1,16 @@
-// // import { mwatchData } from "@/constants/mwatchData";
-// import { pixelCartImg } from "@/assets";
-// import SmallCart from "./SmallCart";
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-// import { base_url } from "@/api/baseUrl";
-
-// const SingleCart = ({ userId, setOpen, setId }) => {
-//   const getButtonClass = (data) => {
-//     if (data.green) {
-//       return "bg-green-400 hover:bg-green-500 text-white text-xs font-bold";
-//     } else if (data.blck) {
-//       return "bg-gray-800 hover:bg-gray-600 text-white text-xs font-bold";
-//     } else if (data.red) {
-//       return "bg-[#7994CB] hover:bg-[#7994CB] text-white text-xs font-bold";
-//     }
-//     return "bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold";
-//   };
-
-//   const [data, setData] = useState([]);
-
-//   console.log("userId", userId);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const response = await axios.get(
-//           `${base_url}/measurement/calculate/${userId}`
-//         );
-
-//         setData(response?.data);
-//       } catch (error) {
-//         console.error("Error fetching data:", error);
-//       }
-//     };
-//     fetchData();
-//   }, [userId]);
-
-//   return (
-//     <div
-//       className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:pt-10 sm:p-4 sm:px-0 px-4"
-//       dir="rtl"
-//     >
-//       {data.map((data) => (
-//         <div
-//           key={data._id}
-//           dir="rtl"
-//           className="border rounded-2xl shadow-lg p-4 flex flex-col space-y-4 "
-//           style={{
-//             backgroundImage: `url(${pixelCartImg})`,
-//             backgroundSize: "cover",
-//             backgroundPosition: "center",
-//           }}
-//         >
-//           {/* Title and Icon */}
-//           <div className="flex gap-2 items-center space-x-2 text-white">
-//             {/* <img src={data.icon} alt="icon" className="w-6 h-6 text-white" /> */}
-//             <h3 className="text-lg font-bold">{data.cartTitle}</h3>
-//           </div>
-
-//           <div className="flex justify-center items-start"></div>
-
-//           <div className="flex justify-center items-center">
-//             <SmallCart data={data} setOpen={setOpen} setId={setId} />
-//           </div>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-
-// export default SingleCart;
-
-// import { mwatchData } from "@/constants/mwatchData";
-
-import SmallCart from "./SmallCart";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { base_url } from "@/api/baseUrl";
-import rightArm from "@/assets/image/right-arm.svg";
-import leftArm from "@/assets/image/left-arm.svg";
 import butt from "@/assets/image/butt.svg";
 import chest from "@/assets/image/chest.svg";
-import womenHips from "@/assets/image/women-hips.svg";
+import leftArm from "@/assets/image/left-arm.svg";
 import leftLeg from "@/assets/image/left-leg.svg";
-import rightLeg from "@/assets/image/right-thigh.svg";
 import maleChest from "@/assets/image/male-chest.svg";
 import manWaist from "@/assets/image/man-waist.svg";
+import rightArm from "@/assets/image/right-arm.svg";
+import rightLeg from "@/assets/image/right-thigh.svg";
+import womenHips from "@/assets/image/women-hips.svg";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import SmallCart from "./SmallCart";
 const SingleCart = ({ userId, setOpen, setId }) => {
   const [data, setData] = useState([]);
   const [user, setUser] = useState({});
@@ -150,7 +75,7 @@ const SingleCart = ({ userId, setOpen, setId }) => {
       className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:pt-10 sm:p-4 sm:px-0 px-4 sm:mb-0 mb-10"
       dir="rtl"
     >
-      {sortedData.map((data, index) => {
+      {data.map((data, index) => {
         let customImage = null;
         const items = Array.isArray(data?.item) ? data.item : [];
 
