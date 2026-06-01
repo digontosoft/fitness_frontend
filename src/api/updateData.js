@@ -4,7 +4,7 @@ import { base_url } from "./baseUrl";
 
 export const updateEmailStatus = async (status) => {
   try {
-    const response = await axios.put(
+    const response = await axios.patch(
       `${base_url}/update-approved-mail`,
       status
     );

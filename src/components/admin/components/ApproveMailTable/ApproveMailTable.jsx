@@ -10,6 +10,7 @@ import { ArrowUpDown, Trash } from "lucide-react";
 import moment from "moment";
 import * as React from "react";
 
+import { updateApprovedMail } from "@/api/approvedMail";
 import { base_url } from "@/api/baseUrl";
 import { deleteEmail } from "@/api/deleteData";
 import PaginationComp from "@/components/pagination";
@@ -113,22 +114,27 @@ export function ApproveMailTable() {
 
   const updateDate = async (data) => {
     try {
-      const response = await axios.patch(
-        `${base_url}/update-approved-mail`,
-        data
-      );
+      const response = await updateApprovedMail({
+        email: data.email,
+        expiry_date: data.expiry_date,
+        ...(data.isActive !== undefined && { isActive: data.isActive }),
+        ...(data.status !== undefined && { status: data.status }),
+      });
       if (response.status === 200) {
         toast.success("Date updated successfully.");
         setEmails((prevEmails) =>
           prevEmails.map((email) =>
-            email._id === data._id
+            email.email === data.email
               ? { ...email, expiry_date: data.expiry_date }
               : email
           )
         );
       }
     } catch (error) {
-      toast.error("Failed to update date.");
+      toast.error(
+        error.response?.data?.message || "Failed to update date."
+      );
+      throw error;
     }
   };
 
