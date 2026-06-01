@@ -15,6 +15,7 @@ import { Edit } from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const formatExpiryDate = (date) => {
   if (!date) return "";
@@ -69,11 +70,19 @@ function EditApproveMail({ id, email, updateDate, defaultExpiryDate }) {
   };
 
   const onSubmit = async (data) => {
-    await updateDate({
-      email: data.email,
-      expiry_date: data.expiry_date,
-    });
-    setOpen(false);
+    if (!data.email) {
+      toast.error("לא נמצא כתובת מייל לעדכון.");
+      return;
+    }
+    try {
+      await updateDate({
+        email: data.email,
+        expiry_date: data.expiry_date,
+      });
+      setOpen(false);
+    } catch {
+      // Error toast is shown in updateDate
+    }
   };
   return (
     <Dialog

@@ -1,3 +1,4 @@
+import { updateApprovedMail } from "@/api/approvedMail";
 import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import {
@@ -246,8 +247,12 @@ export function TraineeUsersLists() {
   };
 
    const updateDate = async (data) => {
+    if (!data?.email) {
+      toast.error("Email is required to update expiry date.");
+      throw new Error("Missing email");
+    }
     try {
-      const response = await axios.patch(`${base_url}/update-approved-mail`, {
+      const response = await updateApprovedMail({
         email: data.email,
         expiry_date: data.expiry_date,
       });
@@ -265,6 +270,7 @@ export function TraineeUsersLists() {
       toast.error(
         error.response?.data?.message || "Failed to update date."
       );
+      throw error;
     }
   };
 
