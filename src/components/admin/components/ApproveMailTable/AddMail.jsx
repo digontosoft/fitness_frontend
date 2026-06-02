@@ -125,7 +125,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import BasicButton from "../ui/BasicButton";
 
-export default function AddMail({ setEmails }) {
+export default function AddMail({ onEmailAdded }) {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const {
@@ -144,7 +144,9 @@ export default function AddMail({ setEmails }) {
       const response = await axios.post(`${base_url}/approved-mail`, data);
       toast.success(response.data.message);
       reset();
-      setEmails();
+      if (onEmailAdded) {
+        await onEmailAdded();
+      }
       setOpen(false);
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");

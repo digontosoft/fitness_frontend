@@ -24,7 +24,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { GoSearch } from "react-icons/go";
 import { toast } from "sonner";
 import AddMail from "./AddMail";
@@ -207,27 +207,33 @@ export function ApproveMailTable() {
   const [totalPages, setTotalPages] = React.useState(1);
   const [search, setSearch] = React.useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      try {
-        const response = await axios.get(
-          `${base_url}/approved-mail?limit=10&page=${page}&search=${search}`
-        );
-        console.log("emails:", response.data);
-        setEmails(response.data.approvedEmail);
-        setTotalPages(response.data.pagination.totalPages);
-        setPage(response.data.pagination.currentPage);
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }finally{
-        setLoading(false)
-      }
-    };
+  const fetchEmails = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${base_url}/approved-mail?limit=10&page=${page}&search=${search}`
+      );
+      setEmails(response.data.approvedEmail ?? []);
+      setTotalPages(response.data.pagination?.totalPages ?? 1);
+      setPage(response.data.pagination?.currentPage ?? page);
+    } catch (error) {
+      console.error("Error fetching emails:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, search]);
 
-    fetchData();
-  }, [page, totalPages, search]);
+  useEffect(() => {
+    fetchEmails();
+  }, [fetchEmails]);
+
+  const handleEmailAdded = async () => {
+    if (page !== 1) {
+      setPage(1);
+    } else {
+      await fetchEmails();
+    }
+  };
 
   return (
     <div className="w-full" dir="ltr">
@@ -249,7 +255,7 @@ export function ApproveMailTable() {
           </div>
         </div>
 
-        <AddMail setEmails={setEmails} />
+        <AddMail onEmailAdded={handleEmailAdded} />
       </div>
       <div className="rounded-md border">
         <Table>
