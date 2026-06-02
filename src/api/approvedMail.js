@@ -1,11 +1,10 @@
 import axios from "axios";
-
-const url =
-  window.location.hostname === "localhost"
-    ? "/api/v1"
-    : "https://api.fitalal.com/api/v1";
+import { base_url } from "./baseUrl";
 
 export const updateApprovedMail = async (payload) => {
-  const response = await axios.patch(`${url}/update-approved-mail`, payload);
+  const response = await axios.patch(
+    `${base_url}/update-approved-mail`,
+    payload
+  );
   return response;
 };
