@@ -1,7 +1,9 @@
-import { FaArrowLeftLong } from "react-icons/fa6";
+import HeroVideo from "@/components/startTraining/HeroVideo";
+import { useState } from "react";
 import { FaPlay } from "react-icons/fa";
-import { Button } from "../ui/button";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import ReactPlayer from "react-player";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,64 +13,121 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import HeroVideo from "@/components/startTraining/HeroVideo";
-import { useState } from "react";
-import back from "@/assets/image/back.svg";
-import womenback from "@/assets/image/woman-back.svg";
-import lowerBack from "@/assets/image/lower-back.svg";
-import frontHand from "@/assets/image/front-hand.svg";
-import backHand from "@/assets/image/back-hand.svg";
-import shoulder from "@/assets/image/shoulder.svg";
-import chest from "@/assets/image/chest.svg";
-import butt from "@/assets/image/butt.svg";
-import trx from "@/assets/image/trx.svg";
-import machine from "@/assets/image/machine.svg";
-import weights from "@/assets/image/weights.svg";
-import pully from "@/assets/image/pully.svg";
-import bands from "@/assets/image/bands.svg";
-import dumbles from "@/assets/image/dumbles.svg";
-import stomache from "@/assets/image/man-belly.svg";
-import womenstomache from "@/assets/image/woman-belly.svg";
-import noEquipment from "@/assets/image/noequipment.jpeg";
+// import back from "@/assets/image/back.svg";
+// import womenback from "@/assets/image/woman-back.svg";
+// import lowerBack from "@/assets/image/lower-back.svg";
+// import frontHand from "@/assets/image/front-hand.svg";
+// import backHand from "@/assets/image/back-hand.svg";
+// import shoulder from "@/assets/image/shoulder.svg";
+// import chest from "@/assets/image/chest.svg";
+// import butt from "@/assets/image/butt.svg";
+// import trx from "@/assets/image/trx.svg";
+// import machine from "@/assets/image/machine.svg";
+// import weights from "@/assets/image/weights.svg";
+// import pully from "@/assets/image/pully.svg";
+// import bands from "@/assets/image/bands.svg";
+// import dumbles from "@/assets/image/dumbles.svg";
+// import stomache from "@/assets/image/man-belly.svg";
+// import womenstomache from "@/assets/image/woman-belly.svg";
+// import noEquipment from "@/assets/image/noequipment.jpeg";
+
+
+import { maleChest } from "@/assets";
+import backHand from "../../assets/image/back-hand.svg";
+import back from "../../assets/image/back.svg";
+import bands from "../../assets/image/bands.svg";
+import butt from "../../assets/image/butt.svg";
+import chest from "../../assets/image/chest.svg";
+import dumbles from "../../assets/image/dumbles.svg";
+import frontHand from "../../assets/image/front-hand.svg";
+import leg from "../../assets/image/leg.svg";
+import lowerBack from "../../assets/image/lower-back.svg";
+import machine from "../../assets/image/machine.svg";
+import menbelly from "../../assets/image/man-belly.svg";
+import noequipment from "../../assets/image/no-equipment.svg";
+import pully from "../../assets/image/pully.svg";
+import shoulder from "../../assets/image/shoulder.svg";
+import trx from "../../assets/image/trx.svg";
+import weights from "../../assets/image/weights.svg";
+import womenback from "../../assets/image/woman-back.svg";
+import womenbelly from "../../assets/image/woman-belly.svg";
 
 const VideoCourseCart = ({ exercise }) => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // let customIcon = null;
+  // if (exercise.exercise_id?.body_part === "גב") {
+  //   customIcon = user?.gernder === "male" ? back : womenback;
+  // } else if (exercise.exercise_id?.body_part === "יד קדמית") {
+  //   customIcon = frontHand;
+  // } else if (exercise.exercise_id?.body_part === "יד אחורית") {
+  //   customIcon = backHand;
+  // } else if (exercise.exercise_id?.body_part === "כתפיים") {
+  //   customIcon = shoulder;
+  // } else if (exercise.exercise_id?.body_part === "חזה") {
+  //   customIcon = chest;
+  // } else if (exercise.exercise_id?.body_part === "ישבן") {
+  //   customIcon = butt;
+  // } else if (exercise.exercise_id?.body_part === "גב תחתון") {
+  //   customIcon = lowerBack;
+  // } else if (exercise.exercise_id?.body_part === "בטן") {
+  //   customIcon = user?.gernder === "male" ? stomache : womenstomache;
+  // }
+  // let customEquipment = null;
+  // if (exercise.exercise_id?.equipment === "TRX") {
+  //   customEquipment = trx;
+  // } else if (exercise.exercise_id?.equipment === "מכונות") {
+  //   customEquipment = machine;
+  // } else if (exercise.exercise_id?.equipment === "משקולות") {
+  //   customEquipment = dumbles;
+  // } else if (exercise.exercise_id?.equipment === "פולי") {
+  //   customEquipment = pully;
+  // } else if (exercise.exercise_id?.equipment === "גומיות") {
+  //   customEquipment = bands;
+  // } else if (exercise.exercise_id?.equipment === "מוטות") {
+  //   customEquipment = weights;
+  // } else if (exercise.exercise_id?.equipment === "ללא ציוד") {
+  //   customEquipment = noEquipment;
+  // }
+
   let customIcon = null;
-  if (exercise.exercise_id?.body_part === "גב") {
-    customIcon = user?.gernder === "male" ? back : womenback;
-  } else if (exercise.exercise_id?.body_part === "יד קדמית") {
-    customIcon = frontHand;
-  } else if (exercise.exercise_id?.body_part === "יד אחורית") {
-    customIcon = backHand;
-  } else if (exercise.exercise_id?.body_part === "כתפיים") {
-    customIcon = shoulder;
-  } else if (exercise.exercise_id?.body_part === "חזה") {
-    customIcon = chest;
-  } else if (exercise.exercise_id?.body_part === "ישבן") {
-    customIcon = butt;
-  } else if (exercise.exercise_id?.body_part === "גב תחתון") {
-    customIcon = lowerBack;
-  } else if (exercise.exercise_id?.body_part === "בטן") {
-    customIcon = user?.gernder === "male" ? stomache : womenstomache;
-  }
-  let customEquipment = null;
-  if (exercise.exercise_id?.equipment === "TRX") {
-    customEquipment = trx;
-  } else if (exercise.exercise_id?.equipment === "מכונות") {
-    customEquipment = machine;
-  } else if (exercise.exercise_id?.equipment === "משקולות") {
-    customEquipment = dumbles;
-  } else if (exercise.exercise_id?.equipment === "פולי") {
-    customEquipment = pully;
-  } else if (exercise.exercise_id?.equipment === "גומיות") {
-    customEquipment = bands;
-  } else if (exercise.exercise_id?.equipment === "מוטות") {
-    customEquipment = weights;
-  } else if (exercise.exercise_id?.equipment === "ללא ציוד") {
-    customEquipment = noEquipment;
-  }
+    if (exercise?.exercise_id.body_part === "גב") {
+      customIcon = user?.gender === "male" ? back : womenback;
+    } else if (exercise?.exercise_id.body_part === "יד קדמית") {
+      customIcon = frontHand;
+    } else if (exercise?.exercise_id.body_part === "יד אחורית") {
+      customIcon = backHand;
+    } else if (exercise?.exercise_id.body_part === "כתפיים") {
+      customIcon = shoulder;
+    } else if (exercise?.exercise_id.body_part === "חזה") {
+      customIcon = user?.gender === "male" ? maleChest : chest;
+    } else if (exercise?.exercise_id.body_part === "ישבן") {
+      customIcon = butt;
+    } else if (exercise?.exercise_id.body_part === "גב תחתון") {
+      customIcon = lowerBack;
+    }else if (exercise?.exercise_id.body_part === "רגליים") {
+      customIcon = leg;
+    }else if (exercise?.exercise_id.body_part === "בטן") {
+      customIcon = user.gender === "male" ? menbelly : womenbelly;
+    }
+  
+    let customEquipment = null;
+    if (exercise?.equipment === "TRX") {
+      customEquipment = trx;
+    } else if (exercise?.exercise_id.equipment === "מכונות" || exercise?.exercise_id.equipment === "מכונה") {
+      customEquipment = machine;
+    } else if (exercise?.exercise_id.equipment === "משקולות") {
+      customEquipment = dumbles;
+    } else if (exercise?.exercise_id.equipment === "פולי") {
+      customEquipment = pully;
+    } else if (exercise?.exercise_id.equipment === "גומיות") {
+      customEquipment = bands;
+    } else if (exercise?.exercise_id.equipment === "מוטות") {
+      customEquipment = weights;
+    }else if (exercise?.exercise_id.equipment === "ללא ציוד") {
+      customEquipment = noequipment;
+    }
 
   const videoUrl = exercise?.exercise_id?.video_url || "";
 
