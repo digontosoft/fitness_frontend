@@ -480,7 +480,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import axios from "axios";
-import { ChevronDown, ChevronUp, Trash } from "lucide-react";
+import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
@@ -498,6 +498,7 @@ const EditWorkoutForm = ({ workoutId }) => {
   const [newExerciseData, setNewExerciseData] = useState(null);
 
   const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -684,49 +685,53 @@ const handleRemoveExercise = (indexToRemove) => {
   //   }
   // };
 
-  const onSubmit = (data) => {
-    // Start with the existing exercises from the form
+  const onSubmit = async (data) => {
+    if (isSubmitting) return;
+
     const updatedExercises = data.exercises.map((ex) => ({
-      exercise_id: ex.exercise_id._id, // Assuming ex.exercise_id is an object with _id
+      exercise_id: ex.exercise_id._id,
       sets: ex.sets,
       reps: ex.reps,
       manipulation: ex.manipulation,
     }));
 
-    // Check if there's new exercise data and if it's complete
     if (
       newExerciseData &&
-      newExerciseData.exercise_id && // Ensure exercise_id exists
+      newExerciseData.exercise_id &&
       newExerciseData.sets &&
       newExerciseData.reps
     ) {
       updatedExercises.push({
-        exercise_id: newExerciseData.exercise_id._id, // Make sure this matches the structure of your exercise_id
-        sets: parseInt(newExerciseData.sets, 10), // Ensure sets and reps are numbers
+        exercise_id: newExerciseData.exercise_id._id,
+        sets: parseInt(newExerciseData.sets, 10),
         reps: parseInt(newExerciseData.reps, 10),
-        manipulation: newExerciseData.manipulation || "", // Handle if manipulation can be empty
+        manipulation: newExerciseData.manipulation || "",
       });
     }
 
     const workoutData = {
       name: data.name,
       description: data.description,
-      exercises: updatedExercises, // Use the potentially augmented list of exercises
+      exercises: updatedExercises,
     };
 
-    axios
-      .put(`${base_url}/workout/${workoutId}`, workoutData)
-      .then((response) => {
-        if (response.status === 200) {
-          toast.success("Workout updated successfully");
-          navigate("/dashboard/workout-list");
-          setNewExerciseData(null); // Clear the new exercise data after successful submission
-        }
-      })
-      .catch((error) => {
-        toast.error("Failed to update workout");
-        console.log(error);
-      });
+    setIsSubmitting(true);
+    try {
+      const response = await axios.put(
+        `${base_url}/workout/${workoutId}`,
+        workoutData
+      );
+      if (response.status === 200) {
+        toast.success("Workout updated successfully");
+        navigate("/dashboard/workout-list");
+        setNewExerciseData(null);
+      }
+    } catch (error) {
+      toast.error("Failed to update workout");
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // const isFormValid =
@@ -1024,12 +1029,19 @@ const isFormValid = exercisesForm?.every(
               className="text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
               disabled={
                 disableUpdateButton ||
-                !isFormValid 
-                ||
-                (exercisesForm.length === 0 && !newExerciseData) // Disable if no exercises at all
+                !isFormValid ||
+                (exercisesForm.length === 0 && !newExerciseData) ||
+                isSubmitting
               }
             >
-              עדכן תוכנית אימון                               
+              {isSubmitting ? (
+                <span className="inline-flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  שומר...
+                </span>
+              ) : (
+                "עדכן תוכנית אימון"
+              )}
             </Button>
           </div>
         </form>
