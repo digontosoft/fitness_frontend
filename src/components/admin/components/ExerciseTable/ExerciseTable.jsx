@@ -1,6 +1,5 @@
 import { base_url } from "@/api/baseUrl";
 import { deleteExercise } from "@/api/deleteData";
-import Loading from "@/components/common/Loading";
 import PaginationComp from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +31,7 @@ import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { GoSearch } from "react-icons/go";
 import { Link } from "react-router-dom";
+import { useDebounce } from "@/hooks/useDebounce";
 import ExerciseDetails from "./ExerciseDetails";
 
 const bodyPartOptions = [
@@ -73,6 +73,7 @@ export function ExerciseTable() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [searchValue, setSearchValue] = useState("");
+  const debouncedSearch = useDebounce(searchValue, 500);
   const [body_part, setBodyPart] = useState("");
   const [equipment, setEquipment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -216,13 +217,17 @@ export function ExerciseTable() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
   // Fetch paginated data with server-side filtering
   useEffect(() => {
     const fetchExercise = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${base_url}/exercise?search=${searchValue}&page=${page}&limit=10&body_part=${body_part}&equipment=${equipment}`
+          `${base_url}/exercise?search=${debouncedSearch}&page=${page}&limit=10&body_part=${body_part}&equipment=${equipment}`
         );
         if (response.status === 200) {
           setExercise(response.data.data);
@@ -237,7 +242,7 @@ export function ExerciseTable() {
     };
 
     fetchExercise();
-  }, [searchValue, page, body_part, equipment]);
+  }, [debouncedSearch, page, body_part, equipment]);
 
 
   const table = useReactTable({
@@ -256,118 +261,117 @@ export function ExerciseTable() {
 
   return (
     <div className="w-full" dir="ltr">
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
-            <div
-              className="flex justify-between items-center relative min-w-40 h-12"
-              dir="rtl"
-            >
-              <input
-                type="search"
-                placeholder="סנן לפי שם"
-                value={searchValue}
-                onChange={(event) => {
-                  setSearchValue(event.target.value);
-                  setPage(1);
-                }}
-                className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-40 h-12"
-              />
-              <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
-                <GoSearch className="text-white" />
-              </div>
-            </div>
+      <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
+        <div
+          className="flex justify-between items-center relative min-w-40 h-12"
+          dir="rtl"
+        >
+          <input
+            type="search"
+            placeholder="סנן לפי שם"
+            value={searchValue}
+            onChange={(event) => setSearchValue(event.target.value)}
+            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-40 h-12"
+          />
+          <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
+            <GoSearch className="text-white" />
+          </div>
+        </div>
 
-            <Select
-              direction="rtl"
-              className="min-w-40 h-12 border-2 p-2"
-              placeholder="סנן לפי חלק בגוף"
-              options={bodyPartOptions}
-              values={
-                body_part
-                  ? bodyPartOptions.filter((opt) => opt.value === body_part)
-                  : []
-              }
-              onChange={(selected) => {
-                const value = selected[0]?.value || "";
-                setBodyPart(value);
-                setPage(1);
-              }}
-            />
-            <Select
-              direction="rtl"
-              options={equipmentOptions}
-              className=" min-w-40   rounded-lg h-12 border-2 p-2"
-              placeholder="סנן לפי ציוד"
-              values={
-                equipment
-                  ? equipmentOptions.filter((opt) => opt.value === equipment)
-                  : []
-              }
-              onChange={(selected) => {
-                const value = selected[0]?.value || "";
-                setEquipment(value);
-                setPage(1);
-              }}
-            />
-            <Link to="/dashboard/exercise-library">
-              <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
-                הוסף תרגיל חדש
-              </Button>
-            </Link>
-          </div>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    ))}
-                  </TableRow>
+        <Select
+          direction="rtl"
+          className="min-w-40 h-12 border-2 p-2"
+          placeholder="סנן לפי חלק בגוף"
+          options={bodyPartOptions}
+          values={
+            body_part
+              ? bodyPartOptions.filter((opt) => opt.value === body_part)
+              : []
+          }
+          onChange={(selected) => {
+            const value = selected[0]?.value || "";
+            setBodyPart(value);
+            setPage(1);
+          }}
+        />
+        <Select
+          direction="rtl"
+          options={equipmentOptions}
+          className=" min-w-40   rounded-lg h-12 border-2 p-2"
+          placeholder="סנן לפי ציוד"
+          values={
+            equipment
+              ? equipmentOptions.filter((opt) => opt.value === equipment)
+              : []
+          }
+          onChange={(selected) => {
+            const value = selected[0]?.value || "";
+            setEquipment(value);
+            setPage(1);
+          }}
+        />
+        <Link to="/dashboard/exercise-library">
+          <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
+            הוסף תרגיל חדש
+          </Button>
+        </Link>
+      </div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
                 ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No results.
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  <div className="flex justify-center items-center">
+                    <div className="w-6 h-6 border-4 border-gray-300 border-t-[#7994CB] rounded-full animate-spin" />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </>
-      )}
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
       {/* Delete Confirmation Modal */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent>

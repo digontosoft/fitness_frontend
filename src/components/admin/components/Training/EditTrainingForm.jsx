@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import axios from "axios";
-import { ChevronDown, ChevronUp, Trash } from "lucide-react";
+import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
@@ -27,6 +27,7 @@ const EditTrainingForm = () => {
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -237,6 +238,8 @@ const EditTrainingForm = () => {
   //console.log("Training:", training);
 
   const handleRemoveWorkout = (workoutId) => {
+    const isLastWorkout = (training.workouts || []).length === 1;
+
     setTraining((prev) => {
       const next = {
         ...prev,
@@ -245,6 +248,16 @@ const EditTrainingForm = () => {
       validateSupersetAndToggle(next);
       return next;
     });
+
+    setExerciseSelectVisible((prev) => {
+      const updated = { ...prev };
+      delete updated[workoutId];
+      return updated;
+    });
+
+    if (isLastWorkout) {
+      setShowWorkoutSelect(true);
+    }
   };
 
   // const handleSetChange = (workoutId, exerciseId, field, value) => {
@@ -392,6 +405,8 @@ const EditTrainingForm = () => {
   };
 
   const onSubmit = async (data) => {
+    if (isSubmitting) return;
+
     const payload = {
       name: data.name,
       description: data.description,
@@ -410,6 +425,7 @@ const EditTrainingForm = () => {
       })),
     };
 
+    setIsSubmitting(true);
     try {
       const response = await axios.put(`${base_url}/training/${id}`, payload);
       if (response.status === 200) {
@@ -419,8 +435,9 @@ const EditTrainingForm = () => {
       toast.success("Training session updated successfully!");
     } catch (error) {
       console.log(error);
-
       console.error("Error updating training:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -649,13 +666,20 @@ const EditTrainingForm = () => {
             <Button
               type="submit"
               className={
-                isButtonDisabled || isSupersetIncomplete
+                isButtonDisabled || isSupersetIncomplete || isSubmitting
                   ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200 sm:order-first order-last"
                   : "text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB] sm:order-first order-last"
               }
-              disabled={isButtonDisabled || isSupersetIncomplete}
+              disabled={isButtonDisabled || isSupersetIncomplete || isSubmitting}
             >
-              שמור תוכנית אימון חדשה
+              {isSubmitting ? (
+                <span className="inline-flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  שומר...
+                </span>
+              ) : (
+                "שמור תוכנית אימון חדשה"
+              )}
             </Button>
             <Button
               type="button"

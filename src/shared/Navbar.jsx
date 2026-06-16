@@ -1,5 +1,4 @@
 import { base_url } from "@/api/baseUrl";
-import { Camera, Home } from "lucide-react";
 import logo from "@/assets/image/logo.svg";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,10 +13,11 @@ import { LogOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CiMenuFries } from "react-icons/ci";
 import { MdOutlineClose } from "react-icons/md";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [userTasks, setUserTasks] = useState([]);
+  const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userInfo"));
   const userType = userData?.userType;
   const menuRef = useRef(null);
@@ -26,9 +26,27 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
-  const logout = () => {
+  const logout = (e) => {
+    e?.preventDefault();
     localStorage.removeItem("userInfo");
     localStorage.removeItem("authToken");
+    setIsOpen(false);
+    navigate("/login", { replace: true });
+  };
+
+  const getHomeRoute = () => {
+    switch (userType) {
+      case "trainee":
+        return "/";
+      case "recipe":
+        return "/recipe";
+      case "admin":
+        return "/admin-dashboard";
+      case "supperadmin":
+        return "/dashboard";
+      default:
+        return "/";
+    }
   };
 
   useEffect(() => {
@@ -55,30 +73,30 @@ const Navbar = () => {
   );
 
 useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target)
-      ) {
-        setIsOpen(false);
-      }
-    };
+ const handleClickOutside = (event) => {
+ if (
+ menuRef.current &&
+ !menuRef.current.contains(event.target) &&
+ buttonRef.current &&
+ !buttonRef.current.contains(event.target)
+ ) {
+ setIsOpen(false);
+ }
+ };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      document.addEventListener("touchstart", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    }
+if (isOpen) {
+ document.addEventListener("mousedown", handleClickOutside);
+ document.addEventListener("touchstart", handleClickOutside);
+ } else {
+ document.removeEventListener("mousedown", handleClickOutside);
+ document.removeEventListener("touchstart", handleClickOutside);
+ }
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, [isOpen]);
+ return () => {
+ document.removeEventListener("mousedown", handleClickOutside);
+ document.removeEventListener("touchstart", handleClickOutside);
+ };
+ }, [isOpen]);
 
   // Reverse traineeLink if userType is trainee
   const traineeLinks = userType === "trainee" ? [...traineeLink].reverse() : traineeLink;
@@ -86,9 +104,9 @@ useEffect(() => {
   return (
     <nav className="bg-transparent md:bg-white shadow-md">
       <div className="container mx-auto relative flex min-h-[8rem] items-center justify-between px-3 py-0 sm:justify-between md:min-h-0 md:p-4">
-        {/* Logo */}
+        {/* Logout */}
         <a
-          href=""
+          href="#"
           className="hidden sm:flex items-center space-x-2"
           onClick={logout}
         >
@@ -167,14 +185,8 @@ useEffect(() => {
         )}
 
         <Link
-          to={
-            userType === "trainee"
-              ? "/"
-              : userType === "recipe"
-                ? "/recipe"
-                : "/dashboard"
-          }
-          className="pointer-events-auto absolute left-1/2 top-1/2 z-[1] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:mx-0 md:static md:left-auto md:top-auto md:z-auto md:translate-x-0 md:translate-y-0"
+          to={getHomeRoute()}
+          className="pointer-events-auto absolute left-1/2 top-1/2 z-[2] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:mx-0 md:static md:left-auto md:top-auto md:z-auto md:translate-x-0 md:translate-y-0"
         >
           <img
             src={logo}
@@ -277,7 +289,7 @@ useEffect(() => {
             )}
           </div>
           <a
-            href=""
+            href="#"
             className="mt-3 flex w-full items-center gap-x-4 border-t border-gray-200 pt-3 font-semibold text-black"
             dir="rtl"
             onClick={logout}

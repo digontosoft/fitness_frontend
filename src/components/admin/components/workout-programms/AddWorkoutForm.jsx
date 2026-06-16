@@ -333,7 +333,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import axios from "axios";
-import { ChevronDown, ChevronUp, Trash } from "lucide-react";
+import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
@@ -348,6 +348,7 @@ const AddWorkoutForm = () => {
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [filteredExercisesForSelection, setFilteredExercisesForSelection] =
     useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
   const {
@@ -445,6 +446,7 @@ const AddWorkoutForm = () => {
   };
 
   const onSubmit = async (data) => {
+    if (isSubmitting) return;
     if (workoutExercises.length === 0) {
       toast.error("Please add at least one exercise to the workout.");
       return;
@@ -461,6 +463,7 @@ const AddWorkoutForm = () => {
       })),
     };
 
+    setIsSubmitting(true);
     try {
       const response = await axios.post(`${base_url}/workout`, workoutData);
       if (response.status === 201) {
@@ -475,6 +478,8 @@ const AddWorkoutForm = () => {
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to create workout");
       console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -659,9 +664,18 @@ const AddWorkoutForm = () => {
           <Button
             type="submit"
             className="text-white px-4 md:px-8 py-3 text-base rounded-full bg-[#7994CB] hover:bg-[#7994CB]/90 focus:ring-2 focus:ring-customBg focus:ring-opacity-50"
-            disabled={workoutExercises.length === 0 || !isFormValid}
+            disabled={
+              workoutExercises.length === 0 || !isFormValid || isSubmitting
+            }
           >
-            לשמור תוכנית אימון חדשה
+            {isSubmitting ? (
+              <span className="inline-flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                שומר...
+              </span>
+            ) : (
+              "לשמור תוכנית אימון חדשה"
+            )}
           </Button>
         </div>
       </form>

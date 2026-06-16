@@ -1,14 +1,15 @@
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, Edit, Trash } from "lucide-react";
+import { base_url } from "@/api/baseUrl";
+import { deleteWorkout } from "@/api/deleteData";
+import Loading from "@/components/common/Loading";
+import PaginationComp from "@/components/pagination";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -17,22 +18,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import axios from "axios";
-import { base_url } from "@/api/baseUrl";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { deleteWorkout } from "@/api/deleteData";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import WorkoutDetails from "./WorkoutDetails";
-import PaginationComp from "@/components/pagination";
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import axios from "axios";
+import { ArrowUpDown, Edit, Loader2, Trash } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GoSearch } from "react-icons/go";
-import Loading from "@/components/common/Loading";
+import { Link } from "react-router-dom";
+import WorkoutDetails from "./WorkoutDetails";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function WorkoutLists() {
   const [sorting, setSorting] = useState([]);
@@ -43,6 +43,12 @@ export default function WorkoutLists() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedWorkout, setselectedWorkout] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedSearch = useDebounce(searchValue, 500);
+  const prevDebouncedSearch = useRef(debouncedSearch);
 
   const columns = [
     {
@@ -113,43 +119,73 @@ export default function WorkoutLists() {
     setDeleteModalOpen(true);
   };
 
+  const fetchWorkouts = useCallback(async (pageToFetch, searchTerm) => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({
+        page: String(pageToFetch),
+        limit: "10",
+      });
+
+      const trimmedSearch = String(searchTerm ?? "").trim();
+      if (trimmedSearch) {
+        params.set("search", trimmedSearch);
+      }
+
+      const response = await axios.get(`${base_url}/workout?${params.toString()}`);
+      if (response.status === 200) {
+        const data = response.data.data ?? [];
+        const pagination = response.data.pagination ?? {};
+
+        if (data.length === 0 && pageToFetch > 1) {
+          setPage(pageToFetch - 1);
+          return;
+        }
+
+        setWorkout(data);
+        setTotalPages(
+          pagination.pages ?? pagination.totalPages ?? pagination.total_pages ?? 1
+        );
+        setPage(
+          pagination.page ??
+            pagination.currentPage ??
+            pagination.current_page ??
+            pageToFetch
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching workout:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const handleDelete = async () => {
-    console.log(selectedWorkout);
-    if (!selectedWorkout) return;
+    if (!selectedWorkout || isDeleting) return;
+    setIsDeleting(true);
     try {
       await deleteWorkout(selectedWorkout);
-      setWorkout((prevWorkout) =>
-        prevWorkout.filter((e) => e._id !== selectedWorkout)
-      );
       setDeleteModalOpen(false);
       setselectedWorkout(null);
+      await fetchWorkouts(page, debouncedSearch);
     } catch (error) {
       console.error("Error deleting workout:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${base_url}/workout?page=${page}&&limit=10`
-        );
-        console.log("response:", response);
-        if (response.status === 200) {
-          setTotalPages(response.data.pagination.totalPages);
-          setPage(response.data.pagination.currentPage);
-          setWorkout(response.data.data);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching workout:", error);
-      }
-    };
-    fetchData();
-  }, [page, totalPages]);
+    const searchChanged = prevDebouncedSearch.current !== debouncedSearch;
+    prevDebouncedSearch.current = debouncedSearch;
+
+    const requestPage = searchChanged ? 1 : page;
+    if (searchChanged && page !== 1) {
+      setPage(1);
+    }
+
+    fetchWorkouts(requestPage, debouncedSearch);
+  }, [page, debouncedSearch, fetchWorkouts]);
 
   const table = useReactTable({
     data: workout,
@@ -181,10 +217,8 @@ export default function WorkoutLists() {
                 name=""
                 id=""
                 placeholder="שם מסנן...."
-                value={table.getColumn("name")?.getFilterValue() || ""}
-                onChange={(event) =>
-                  table.getColumn("name")?.setFilterValue(event.target.value)
-                }
+                value={searchValue}
+                onChange={(event) => setSearchValue(event.target.value)}
                 className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
               />
               <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
@@ -258,8 +292,19 @@ export default function WorkoutLists() {
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
               בטל
             </Button>
-            <Button className="bg-[#7994CB] text-white" onClick={handleDelete}>
-              מחק
+            <Button
+              className="bg-[#7994CB] text-white"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <span className="inline-flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  מוחק...
+                </span>
+              ) : (
+                "מחק"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

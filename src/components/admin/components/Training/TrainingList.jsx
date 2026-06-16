@@ -17,12 +17,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import axios from "axios";
-import { ArrowUpDown, Edit, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowUpDown, Edit, Loader2, Trash } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-// import ExerciseDetails from "./ExerciseDetails";
 import { deleteTraining } from "@/api/deleteData";
-import Loading from "@/components/common/Loading";
+import { useDebounce } from "@/hooks/useDebounce";
 import PaginationComp from "@/components/pagination";
 import {
   Dialog,
@@ -43,30 +42,60 @@ export function TrainingList() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedTraining, setSelectedTraining] = useState(null);
   const { state: userId } = useLocation();
-  const [search, setSearch] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedSearch = useDebounce(searchValue, 500);
   const [loading, setLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const prevDebouncedSearch = useRef(debouncedSearch);
+
   useEffect(() => {
     const fetchData = async () => {
+      const searchChanged = prevDebouncedSearch.current !== debouncedSearch;
+      prevDebouncedSearch.current = debouncedSearch;
+
+      const requestPage = searchChanged ? 1 : page;
+      if (searchChanged && page !== 1) {
+        setPage(1);
+      }
+
       setLoading(true);
       try {
+        const params = new URLSearchParams({
+          page: String(requestPage),
+          limit: "10",
+        });
+        const trimmedSearch = debouncedSearch.trim();
+        if (trimmedSearch) {
+          params.set("search", trimmedSearch);
+        }
+
         const response = await axios.get(
-          `${base_url}/training?page=${page}&limit=10&search=${search}`
+          `${base_url}/training?${params.toString()}`
         );
         if (response.status === 200) {
-          setTraining(response.data.data);
-          setTotalPages(response.data.pagination.pages);
-          setPage(response.data.pagination.page);
-          setLoading(false);
+          setTraining(response.data.data ?? []);
+          setTotalPages(
+            response.data.pagination?.pages ??
+              response.data.pagination?.totalPages ??
+              1
+          );
+          setPage(
+            response.data.pagination?.page ??
+              response.data.pagination?.currentPage ??
+              requestPage
+          );
         }
       } catch (error) {
-        console.error("Error fetching exercises:", error);
+        console.error("Error fetching training:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
-  }, [page, search]);
+  }, [page, debouncedSearch]);
   const columns = [
     {
       accessorKey: "name",
@@ -150,7 +179,8 @@ export function TrainingList() {
   };
 
   const handleDelete = async () => {
-    if (!selectedTraining) return;
+    if (!selectedTraining || isDeleting) return;
+    setIsDeleting(true);
     try {
       await deleteTraining(selectedTraining);
       setTraining((prevTraining) =>
@@ -160,6 +190,8 @@ export function TrainingList() {
       setSelectedTraining(null);
     } catch (error) {
       console.error("Error deleting training:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -181,86 +213,86 @@ export function TrainingList() {
 
   return (
     <div className="w-full" dir="ltr">
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
-            <div
-              className="flex justify-between items-center relative max-w-sm h-12"
-              dir="rtl"
-            >
-              <input
-                type="search"
-                name=""
-                id=""
-                placeholder="שם מסנן...."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
-              />
-              <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
-                <GoSearch className="text-white" />
-              </div>
-            </div>
-            {user.userType === "supperadmin" && (
-              <Link to="/dashboard/add-training-program">
-                <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
-                  צור תוכנית אימון{" "}
-                </Button>
-              </Link>
-            )}
+      <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
+        <div
+          className="flex justify-between items-center relative max-w-sm h-12"
+          dir="rtl"
+        >
+          <input
+            type="search"
+            placeholder="סנן לפי שם תוכנית אימון..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
+          />
+          <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
+            <GoSearch className="text-white" />
           </div>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    ))}
-                  </TableRow>
+        </div>
+        {user.userType === "supperadmin" && (
+          <Link to="/dashboard/add-training-program">
+            <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
+              צור תוכנית אימון{" "}
+            </Button>
+          </Link>
+        )}
+      </div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
                 ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No results.
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  <div className="flex justify-center items-center">
+                    <div className="w-6 h-6 border-4 border-gray-300 border-t-[#7994CB] rounded-full animate-spin" />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </>
-      )}
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
       {/* Delete Confirmation Modal */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
@@ -273,8 +305,15 @@ export function TrainingList() {
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
               Cancel
             </Button>
-            <Button className="bg-[#7994CB] text-white" onClick={handleDelete}>
-              Delete
+            <Button className="bg-[#7994CB] text-white" onClick={handleDelete} disabled={isDeleting}>
+              {isDeleting ? (
+                <span className="inline-flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  מוחק...
+                </span>
+              ) : (
+                "Delete"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

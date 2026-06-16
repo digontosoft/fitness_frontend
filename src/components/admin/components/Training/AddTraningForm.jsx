@@ -506,7 +506,7 @@ import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField
 import { Button } from "@/components/ui/button";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import axios from "axios";
-import { ChevronDown, ChevronUp, Trash } from "lucide-react";
+import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
@@ -524,6 +524,7 @@ const AddTrainingForm = () => {
   const [selectedBodyPart, setSelectedBodyPart] = useState(null);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
@@ -581,6 +582,27 @@ const AddTrainingForm = () => {
   // ✅ Add more workout button
   const handleAddMoreWorkout = () => {
     setShowWorkoutSelect(true);
+  };
+
+  const handleRemoveWorkout = (workoutIndex) => {
+    const isLastWorkout = selectedTrainingExercises.length === 1;
+
+    setSelectedTrainingExercises((prev) => {
+      const updated = prev.filter((_, index) => index !== workoutIndex);
+      validateSupersetAndToggle(updated);
+      return updated;
+    });
+
+    setAddMoreExercise((prev) => {
+      if (prev === null) return null;
+      if (prev === workoutIndex) return null;
+      if (prev > workoutIndex) return prev - 1;
+      return prev;
+    });
+
+    if (isLastWorkout) {
+      setShowWorkoutSelect(true);
+    }
   };
 
   // ✅ Exercise manipulation logic same as before
@@ -734,6 +756,9 @@ const AddTrainingForm = () => {
 
   // ✅ Submit
   const onSubmit = async (data) => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     try {
       const payload = {
         name: data.name,
@@ -749,16 +774,16 @@ const AddTrainingForm = () => {
         })),
       };
 
-      console.log('training payload:', payload)
       await axios.post(`${base_url}/training`, payload);
       toast.success("Training session saved successfully!");
       reset();
       setSelectedTrainingExercises([]);
       navigate("/dashboard/training-list");
-
     } catch (err) {
       console.error("Error submitting:", err);
       toast.error("Failed to save training session.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
  
@@ -848,9 +873,18 @@ const AddTrainingForm = () => {
           {selectedTrainingExercises.map((workout, workoutIndex) => (
             <div key={workout.workout} className="p-4 border rounded-lg">
               <h3 className="text-lg font-semibold">{workout.name}</h3>
+              <div className="flex items-center gap-x-2" dir="rtl">
+                <Trash
+                  className="text-[#7994CB] cursor-pointer size-9"
+                  onClick={() => handleRemoveWorkout(workoutIndex)}
+                />
+              </div>
               <div className="space-y-2 mt-2">
                 {workout.exercises.map((exercise, exerciseIndex) => (
-                  <div key={exercise.exercise_id} className="p-3 border rounded-md">
+                  <div
+                    key={`${workout.workout}-${exercise.exercise_id}-${exerciseIndex}`}
+                    className="p-3 border rounded-md"
+                  >
                     <h4 className="font-medium">{exercise.name}</h4>
                     <div className="flex items-center justify-center gap-2 mt-2">
                       {/* ✅ Up/Down order arrows */}
@@ -1009,14 +1043,21 @@ const AddTrainingForm = () => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            disabled={isButtonDisabled || isSupersetIncomplete}
+            disabled={isButtonDisabled || isSupersetIncomplete || isSubmitting}
             className={`px-8 py-2 rounded-full ${
-              isButtonDisabled || isSupersetIncomplete
+              isButtonDisabled || isSupersetIncomplete || isSubmitting
                 ? "bg-gray-200 text-black"
                 : "bg-[#7994CB] text-white"
             }`}
           >
-            שמור תכנית אימון חדשה
+            {isSubmitting ? (
+              <span className="inline-flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                שומר...
+              </span>
+            ) : (
+              "שמור תכנית אימון חדשה"
+            )}
           </Button>
         </div>
       </form>
