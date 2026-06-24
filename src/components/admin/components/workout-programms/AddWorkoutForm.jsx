@@ -522,77 +522,79 @@ const AddWorkoutForm = () => {
           {workoutExercises.map((exercise, index) => (
             <div
               key={index}
-              className="border p-4 flex items-center justify-center gap-4 rounded-md"
+              className="border p-4 rounded-md space-y-4"
             >
-              {/* ✅ Up/Down arrow buttons */}
-              <div className="flex flex-col gap-1">
-                <button
-                  type="button"
-                  onClick={() => handleMoveUp(index)}
-                  disabled={index === 0}
-                  className={`p-1 rounded border border-gray-300 transition-opacity ${
-                    index === 0
-                      ? "opacity-30 cursor-not-allowed"
-                      : "hover:bg-gray-100 cursor-pointer"
-                  }`}
-                  title="Move up"
-                >
-                  <ChevronUp className="size-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleMoveDown(index)}
-                  disabled={index === workoutExercises.length - 1}
-                  className={`p-1 rounded border border-gray-300 transition-opacity ${
-                    index === workoutExercises.length - 1
-                      ? "opacity-30 cursor-not-allowed"
-                      : "hover:bg-gray-100 cursor-pointer"
-                  }`}
-                  title="Move down"
-                >
-                  <ChevronDown className="size-4" />
-                </button>
+              <div className="flex items-center justify-between gap-2">
+                <p className="font-medium">{exercise.exercise_id?.name}</p>
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  {/* ✅ Up/Down arrow buttons */}
+                  <button
+                    type="button"
+                    onClick={() => handleMoveUp(index)}
+                    disabled={index === 0}
+                    className={`p-2 rounded border border-gray-300 transition-opacity ${
+                      index === 0
+                        ? "opacity-30 cursor-not-allowed"
+                        : "hover:bg-gray-100 cursor-pointer"
+                    }`}
+                    title="Move up"
+                  >
+                    <ChevronUp className="size-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleMoveDown(index)}
+                    disabled={index === workoutExercises.length - 1}
+                    className={`p-2 rounded border border-gray-300 transition-opacity ${
+                      index === workoutExercises.length - 1
+                        ? "opacity-30 cursor-not-allowed"
+                        : "hover:bg-gray-100 cursor-pointer"
+                    }`}
+                    title="Move down"
+                  >
+                    <ChevronDown className="size-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveExercise(index)}
+                    title="Remove exercise"
+                    className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
+                  >
+                    <Trash className="size-4" />
+                  </button>
+                </div>
               </div>
 
-              <Trash
-                className="cursor-pointer text-[#7994CB]-600 size-10"
-                onClick={() => handleRemoveExercise(index)}
-              />
-
-              <div className="space-y-4">
-                <p className="text-center">{exercise.exercise_id?.name}</p>
-                <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
-                  <div className="flex flex-col space-y-2">
-                    <label>סטים</label>
-                    <Input
-                      type="number"
-                      value={exercise.sets}
-                      onChange={(e) =>
-                        handleInputChange(index, "sets", e.target.value)
-                      }
-                    />
-                  </div>
-                  <div className="flex flex-col space-y-2">
-                    <label>חזרות</label>
-                    <Input
-                      type="number"
-                      value={exercise.reps}
-                      onChange={(e) =>
-                        handleInputChange(index, "reps", e.target.value)
-                      }
-                    />
-                  </div>
-                  <div className="flex flex-col space-y-2">
-                    <label>מניפולציה</label>
-                    <Input
-                      type="text"
-                      value={exercise.manipulation}
-                      onChange={(e) =>
-                        handleInputChange(index, "manipulation", e.target.value)
-                      }
-                      placeholder="Enter manipulation"
-                    />
-                  </div>
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
+                <div className="flex flex-col space-y-2">
+                  <label>סטים</label>
+                  <Input
+                    type="number"
+                    value={exercise.sets}
+                    onChange={(e) =>
+                      handleInputChange(index, "sets", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <label>חזרות</label>
+                  <Input
+                    type="number"
+                    value={exercise.reps}
+                    onChange={(e) =>
+                      handleInputChange(index, "reps", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <label>מניפולציה</label>
+                  <Input
+                    type="text"
+                    value={exercise.manipulation}
+                    onChange={(e) =>
+                      handleInputChange(index, "manipulation", e.target.value)
+                    }
+                  />
                 </div>
               </div>
             </div>

@@ -485,22 +485,36 @@ const EditTrainingForm = () => {
                 key={workout._id}
                 className="border py-2 px-4 rounded-md my-4"
               >
-                <h1 className="font-semibold text-center">{workout?.name}</h1>
-                <div className="flex items-center gap-x-2" dir="rtl">
-                  <Trash
-                    className="cursor-pointer text-[#7994CB]-600"
-                    onClick={() => handleRemoveWorkout(workout._id)} // Fix the typo here
-                  />
+                <div className="flex items-center justify-between gap-2">
+                  <h1 className="font-semibold">{workout?.name}</h1>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveWorkout(workout._id)}
+                    title="Remove workout"
+                    className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
+                  >
+                    <Trash className="size-5" />
+                  </button>
                 </div>
                 {workout?.exercises?.map((ex, exerciseIndex) => (
                   <div
                     key={ex._id}
-                    className="border py-2 px-4 rounded-md my-4 flex items-center justify-between gap-x-2"
+                    className="border py-2 px-4 rounded-md my-4"
                   >
-                    <div>
-                      <p className="py-4 text-center" dir="rtl">
+                    <div className="flex items-center justify-between gap-2">
+                      <p dir="rtl">
                         {ex?.name} {ex?.exercise_id?.name}
                       </p>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveExercise(workout._id, ex._id)}
+                        title="Remove exercise"
+                        className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
+                      >
+                        <Trash className="size-4" />
+                      </button>
+                    </div>
+                    <div>
                       <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
                         {/* ✅ Up/Down order arrows */}
                         <div className="flex flex-col gap-1 self-center sm:self-auto">
@@ -578,10 +592,6 @@ const EditTrainingForm = () => {
                         </div>
                       </div>
                     </div>
-                    <Trash
-                      className="cursor-pointer text-[#7994CB]-600 size-9"
-                      onClick={() => handleRemoveExercise(workout._id, ex._id)}
-                    />
                   </div>
                 ))}
 

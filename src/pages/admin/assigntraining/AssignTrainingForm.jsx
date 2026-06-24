@@ -483,29 +483,28 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               <div key={workout._id} className="border p-4 rounded-lg">
                 <div className="flex justify-between items-center">
                   <h3 className="font-bold">{workout.name}</h3>
-                  <Button
+                  <button
                     type="button"
-                    className="text-white bg-[#7994CB]"
                     onClick={() => handleRemoveWorkout(workoutIndex)}
+                    title="Remove workout"
+                    className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                   >
-                    <Trash className=" text-white cursor-pointer" />
-                  </Button>
+                    <Trash className="size-5" />
+                  </button>
                 </div>
                 {workout.exercises.map((exercise, exerciseIndex) => (
                   <div key={exercise._id} className="space-y-4 mt-4">
-                    <div>
+                    <div className="flex items-center justify-between gap-2">
                       <p>{exercise.name}</p>
-                    </div>
-                    <div className="flex items-center justify-center gap-4">
-                      {/* ✅ Up/Down order arrows */}
-                      <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        {/* ✅ Up/Down order arrows */}
                         <button
                           type="button"
                           onClick={() =>
                             handleMoveExerciseUp(workoutIndex, exerciseIndex)
                           }
                           disabled={exerciseIndex === 0}
-                          className={`p-1 rounded border border-gray-300 transition-opacity ${
+                          className={`p-2 rounded border border-gray-300 transition-opacity ${
                             exerciseIndex === 0
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
@@ -520,7 +519,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                             handleMoveExerciseDown(workoutIndex, exerciseIndex)
                           }
                           disabled={exerciseIndex === workout.exercises.length - 1}
-                          className={`p-1 rounded border border-gray-300 transition-opacity ${
+                          className={`p-2 rounded border border-gray-300 transition-opacity ${
                             exerciseIndex === workout.exercises.length - 1
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
@@ -529,14 +528,19 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         >
                           <ChevronDown className="size-4" />
                         </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleRemoveExercise(workoutIndex, exerciseIndex)
+                          }
+                          title="Remove exercise"
+                          className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
+                        >
+                          <Trash className="size-4" />
+                        </button>
                       </div>
-                      <Trash
-                        className="text-[#7994CB] cursor-pointer sm:size-9 size-16"
-                        onClick={() =>
-                          handleRemoveExercise(workoutIndex, exerciseIndex)
-                        }
-                      />
-
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
                       <div className="flex flex-col gap-y-4">
                         <label htmlFor="sets">סטים</label>
                         <input

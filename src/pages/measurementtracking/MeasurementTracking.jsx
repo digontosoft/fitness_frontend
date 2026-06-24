@@ -209,7 +209,7 @@ const sortedData = [...data].sort(
   console.log('measurement data:', data);
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <Title title={"לוח מדדים אישי"} />
       {loading ? (
         <Loading />

@@ -101,11 +101,12 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-4">
-      <div className="flex justify-center gap-2">
+    <div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-4 w-full">
+      <div className="flex justify-start gap-2 overflow-x-auto max-w-full pl-4 pr-1">
         <Button
           size="sm"
           variant="outline"
+          className="flex-shrink-0"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
@@ -114,19 +115,19 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
 
         {pageNumbers.map((number, index) =>
           number === "..." ? (
-            <span key={index} className="px-2 text-gray-500">
+            <span key={index} className="px-2 text-gray-500 flex-shrink-0">
               ...
             </span>
           ) : (
             <Button
               size="sm"
               key={number}
-              onClick={() => onPageChange(number)}
-              className={`${
+              className={`flex-shrink-0 ${
                 currentPage === number
                   ? "bg-[#7994CB] text-white"
                   : "bg-white text-black border hover:text-white"
               }`}
+              onClick={() => onPageChange(number)}
             >
               {number}
             </Button>
@@ -136,6 +137,7 @@ const PaginationComp = ({ currentPage, totalPages, onPageChange }) => {
         <Button
           size="sm"
           variant="outline"
+          className="flex-shrink-0"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
