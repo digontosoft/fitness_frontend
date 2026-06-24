@@ -119,22 +119,26 @@ export const TraineeExerciseLibraryCard = () => {
 </div>
 
         <div className="flex flex-col sm:flex-row sm:gap-4 md:gap-16 gap-4 w-full sm:w-auto items-center justify-center">
-          <Select
-            direction="rtl"
-            className="w-full sm:min-w-[310px] rounded-lg h-12 border-2 p-2"
-            placeholder="סנן לפי חלק בגוף"
-            options={bodyPartOptions}
-            onChange={(e) => setBodyPart(e[0]?.value || "")}
-            isMulti={false}
-          />
-          <Select
-            direction="rtl"
-            options={equipmentOptions}
-            className="w-full sm:min-w-[310px] rounded-lg h-12 border-2 p-2"
-            placeholder="סנן לפי ציוד"
-            onChange={(e) => setEquipment(e[0]?.value || "")}
-            isMulti={false}
-          />
+          <div className="w-3/4 sm:w-auto">
+            <Select
+              direction="rtl"
+              className="w-full sm:min-w-[310px] rounded-lg h-12 border-2 p-2"
+              placeholder="סנן לפי חלק בגוף"
+              options={bodyPartOptions}
+              onChange={(e) => setBodyPart(e[0]?.value || "")}
+              isMulti={false}
+            />
+          </div>
+          <div className="w-3/4 sm:w-auto">
+            <Select
+              direction="rtl"
+              options={equipmentOptions}
+              className="w-full sm:min-w-[310px] rounded-lg h-12 border-2 p-2"
+              placeholder="סנן לפי ציוד"
+              onChange={(e) => setEquipment(e[0]?.value || "")}
+              isMulti={false}
+            />
+          </div>
         </div>
       </div>
 

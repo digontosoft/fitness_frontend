@@ -136,6 +136,7 @@ export default function AddMail({ onEmailAdded }) {
     formState: { errors },
   } = useForm();
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  console.log("Current user role:", user);
 
   const onSubmit = async (data) => {
     try {
@@ -209,7 +210,7 @@ export default function AddMail({ onEmailAdded }) {
                       <SelectValue placeholder="Select role" />
                     </SelectTrigger>
                     <SelectContent>
-                      {user?.role === "admin" ? (
+                      {user?.userType === "admin" ? (
                         <>
                           <SelectItem
                             value="trainee"

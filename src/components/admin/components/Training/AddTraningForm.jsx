@@ -872,12 +872,16 @@ const AddTrainingForm = () => {
         <div className="space-y-4 sm:w-[550px]">
           {selectedTrainingExercises.map((workout, workoutIndex) => (
             <div key={workout.workout} className="p-4 border rounded-lg">
-              <h3 className="text-lg font-semibold">{workout.name}</h3>
-              <div className="flex items-center gap-x-2" dir="rtl">
-                <Trash
-                  className="text-[#7994CB] cursor-pointer size-9"
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="text-lg font-semibold">{workout.name}</h3>
+                <button
+                  type="button"
                   onClick={() => handleRemoveWorkout(workoutIndex)}
-                />
+                  title="Remove workout"
+                  className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
+                >
+                  <Trash className="size-5" />
+                </button>
               </div>
               <div className="space-y-2 mt-2">
                 {workout.exercises.map((exercise, exerciseIndex) => (
@@ -885,15 +889,14 @@ const AddTrainingForm = () => {
                     key={`${workout.workout}-${exercise.exercise_id}-${exerciseIndex}`}
                     className="p-3 border rounded-md"
                   >
-                    <h4 className="font-medium">{exercise.name}</h4>
-                    <div className="flex items-center justify-center gap-2 mt-2">
-                      {/* ✅ Up/Down order arrows */}
-                      <div className="flex flex-col gap-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="font-medium">{exercise.name}</h4>
+                      <div className="flex items-center gap-1 flex-shrink-0">
                         <button
                           type="button"
                           onClick={() => handleMoveExerciseUp(workoutIndex, exerciseIndex)}
                           disabled={exerciseIndex === 0}
-                          className={`p-1 rounded border border-gray-300 transition-opacity ${
+                          className={`p-2 rounded border border-gray-300 transition-opacity ${
                             exerciseIndex === 0
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
@@ -906,7 +909,7 @@ const AddTrainingForm = () => {
                           type="button"
                           onClick={() => handleMoveExerciseDown(workoutIndex, exerciseIndex)}
                           disabled={exerciseIndex === workout.exercises.length - 1}
-                          className={`p-1 rounded border border-gray-300 transition-opacity ${
+                          className={`p-2 rounded border border-gray-300 transition-opacity ${
                             exerciseIndex === workout.exercises.length - 1
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
@@ -915,19 +918,30 @@ const AddTrainingForm = () => {
                         >
                           <ChevronDown className="size-4" />
                         </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleRemoveExercise(workoutIndex, exerciseIndex)
+                          }
+                          title="Remove exercise"
+                          className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
+                        >
+                          <Trash className="size-4" />
+                        </button>
                       </div>
-
-                      <Trash
-                        className="text-[#7994CB] cursor-pointer size-9"
-                        onClick={() =>
-                          handleRemoveExercise(workoutIndex, exerciseIndex)
-                        }
-                      />
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 mt-3">
                       <div>
-                        <label htmlFor="sets">סטים</label>
+                        <label
+                          htmlFor={`sets-${workoutIndex}-${exerciseIndex}`}
+                          className="block text-xs text-gray-500 mb-1 text-center"
+                        >
+                          סטים
+                        </label>
                         <input
+                          id={`sets-${workoutIndex}-${exerciseIndex}`}
                           type="number"
-                          className="border rounded p-1 w-full"
+                          className="border rounded p-2 w-full text-center"
                           value={exercise.sets}
                           onChange={(e) =>
                             handleExerciseChange(
@@ -940,10 +954,16 @@ const AddTrainingForm = () => {
                         />
                       </div>
                       <div>
-                        <label htmlFor="reps">חזרות</label>
+                        <label
+                          htmlFor={`reps-${workoutIndex}-${exerciseIndex}`}
+                          className="block text-xs text-gray-500 mb-1 text-center"
+                        >
+                          חזרות
+                        </label>
                         <input
+                          id={`reps-${workoutIndex}-${exerciseIndex}`}
                           type="number"
-                          className="border rounded p-1 w-full"
+                          className="border rounded p-2 w-full text-center"
                           value={exercise.reps}
                           onChange={(e) =>
                             handleExerciseChange(
@@ -956,10 +976,16 @@ const AddTrainingForm = () => {
                         />
                       </div>
                       <div>
-                        <label htmlFor="manipulation">מניפולציה</label>
+                        <label
+                          htmlFor={`manipulation-${workoutIndex}-${exerciseIndex}`}
+                          className="block text-xs text-gray-500 mb-1 text-center"
+                        >
+                          מניפולציה
+                        </label>
                         <input
+                          id={`manipulation-${workoutIndex}-${exerciseIndex}`}
                           type="text"
-                          className="border rounded p-1 w-full text-center placeholder:text-sm"
+                          className="border rounded p-2 w-full text-center text-sm"
                           value={exercise.manipulation}
                           onChange={(e) =>
                             handleExerciseChange(

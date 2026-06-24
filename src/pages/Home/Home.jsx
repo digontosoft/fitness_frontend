@@ -21,6 +21,9 @@ const Home = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const Id = user._id;
 
+
+  console.log("userInfo:", userInfo);
+
   const [getMesurement, setMesurement] = useState([]);
 
   

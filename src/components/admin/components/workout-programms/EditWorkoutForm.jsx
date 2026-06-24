@@ -794,81 +794,81 @@ const isFormValid = exercisesForm?.every(
             {exercisesForm?.map((exercise, index) => (
               <div
                 key={exercise._id || index}
-                className="border p-4 flex items-center justify-center gap-4 rounded-md"
+                className="border p-4 rounded-md space-y-4"
               >
-                {/* ✅ Up/Down arrow buttons */}
-                <div className="flex flex-col gap-1">
-                  <button
-                    type="button"
-                    onClick={() => handleMoveUp(index)}
-                    disabled={index === 0}
-                    className={`p-1 rounded border border-gray-300 transition-opacity ${
-                      index === 0
-                        ? "opacity-30 cursor-not-allowed"
-                        : "hover:bg-gray-100 cursor-pointer"
-                    }`}
-                    title="Move up"
-                  >
-                    <ChevronUp className="size-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleMoveDown(index)}
-                    disabled={index === exercisesForm.length - 1}
-                    className={`p-1 rounded border border-gray-300 transition-opacity ${
-                      index === exercisesForm.length - 1
-                        ? "opacity-30 cursor-not-allowed"
-                        : "hover:bg-gray-100 cursor-pointer"
-                    }`}
-                    title="Move down"
-                  >
-                    <ChevronDown className="size-4" />
-                  </button>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="font-medium">{exercise.exercise_id?.name}</p>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    {/* ✅ Up/Down arrow buttons */}
+                    <button
+                      type="button"
+                      onClick={() => handleMoveUp(index)}
+                      disabled={index === 0}
+                      className={`p-2 rounded border border-gray-300 transition-opacity ${
+                        index === 0
+                          ? "opacity-30 cursor-not-allowed"
+                          : "hover:bg-gray-100 cursor-pointer"
+                      }`}
+                      title="Move up"
+                    >
+                      <ChevronUp className="size-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleMoveDown(index)}
+                      disabled={index === exercisesForm.length - 1}
+                      className={`p-2 rounded border border-gray-300 transition-opacity ${
+                        index === exercisesForm.length - 1
+                          ? "opacity-30 cursor-not-allowed"
+                          : "hover:bg-gray-100 cursor-pointer"
+                      }`}
+                      title="Move down"
+                    >
+                      <ChevronDown className="size-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveExercise(index, false)} // Pass false for existing exercise
+                      title="Remove exercise"
+                      className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
+                    >
+                      <Trash className="size-4" />
+                    </button>
+                  </div>
                 </div>
-
-                <Trash
-                  className="cursor-pointer text-[#7994CB]-600 size-10"
-                  onClick={() => handleRemoveExercise(index, false)} // Pass false for existing exercise
-                />
-                <div className="space-y-4">
-                  <p className="text-center">{exercise.exercise_id?.name}</p>
-                  <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
-                    <div className="flex flex-col space-y-2">
-                      <label htmlFor={`sets-${exercise._id}`}>סטים</label>
-                      <Input
-                        id={`sets-${exercise._id}`}
-                        type="number"
-                        // className="w-full  h-10 px-2"
-                        {...register(`exercises.${index}.sets`, {
-                          valueAsNumber: true,
-                        })}
-                      />
-                    </div>
-                    <div className="flex flex-col space-y-2">
-                      <label htmlFor={`reps-${exercise._id}`}>חזרות</label>
-                      <Input
-                        id={`reps-${exercise._id}`}
-                        type="number"
-                        // className="w-full  h-10 px-2"
-                        {...register(`exercises.${index}.reps`, {
-                          valueAsNumber: true,
-                        })}
-                      />
-                    </div>
-                    <div className="flex flex-col space-y-2">
-                      <label htmlFor={`manipulation-${exercise._id}`}>
-                        מניפולציה
-                      </label>
-                      <Input
-                        type="text"
-                        value={exercise.manipulation || ""}
-                        onChange={(e) =>
-                          handleManipulationChange(e, index, exercise)
-                        }
-                        placeholder="Enter a manipulation"
-                        // className="w-full  p-2 rounded"
-                      />
-                    </div>
+                <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
+                  <div className="flex flex-col space-y-2">
+                    <label htmlFor={`sets-${exercise._id}`}>סטים</label>
+                    <Input
+                      id={`sets-${exercise._id}`}
+                      type="number"
+                      {...register(`exercises.${index}.sets`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <label htmlFor={`reps-${exercise._id}`}>חזרות</label>
+                    <Input
+                      id={`reps-${exercise._id}`}
+                      type="number"
+                      {...register(`exercises.${index}.reps`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <label htmlFor={`manipulation-${exercise._id}`}>
+                      מניפולציה
+                    </label>
+                    <Input
+                      type="text"
+                      value={exercise.manipulation || ""}
+                      onChange={(e) =>
+                        handleManipulationChange(e, index, exercise)
+                      }
+                      placeholder="Enter a manipulation"
+                    />
                   </div>
                 </div>
               </div>
@@ -958,14 +958,20 @@ const isFormValid = exercisesForm?.every(
             )}
             {newExerciseData && (
               <div className="border p-4 mt-4 rounded space-y-4">
-                <p className="text-center font-semibold">
-                  {newExerciseData.exercise_id?.name}
-                </p>
-                <div className="flex gap-4">
-                  <Trash
-                    className="cursor-pointer text-[#7994CB]-600 sm:size-10 size-20"
+                <div className="flex items-center justify-between gap-2">
+                  <p className="font-semibold">
+                    {newExerciseData.exercise_id?.name}
+                  </p>
+                  <button
+                    type="button"
                     onClick={() => handleRemoveExercise(null, true)} // Pass true for new exercise
-                  />
+                    title="Remove exercise"
+                    className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
+                  >
+                    <Trash className="size-4" />
+                  </button>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex flex-col space-y-2">
                     <label htmlFor="sets">סטים</label>
                     <Input

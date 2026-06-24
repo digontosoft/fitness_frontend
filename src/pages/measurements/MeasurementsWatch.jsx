@@ -39,8 +39,8 @@ const MeasurementsWatch = () => {
   console.log("measurements:", measurements);
 
   return (
-    <div>
-      <Title 
+    <div className="overflow-x-hidden">
+      <Title
       // title={"לוח מדדים אישי"}
       title="מעקב היקפים"
        className="py-0" />

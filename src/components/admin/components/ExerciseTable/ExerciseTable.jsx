@@ -263,7 +263,7 @@ export function ExerciseTable() {
     <div className="w-full" dir="ltr">
       <div className="flex flex-col md:flex-row items-center justify-between py-4 gap-3">
         <div
-          className="flex justify-between items-center relative min-w-40 h-12"
+          className="flex justify-between items-center relative w-3/4 md:w-auto md:min-w-40 h-12"
           dir="rtl"
         >
           <input
@@ -271,33 +271,36 @@ export function ExerciseTable() {
             placeholder="סנן לפי שם"
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
-            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-40 h-12"
+            className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm w-full md:min-w-40 h-12"
           />
           <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
             <GoSearch className="text-white" />
           </div>
         </div>
 
-        <Select
-          direction="rtl"
-          className="min-w-40 h-12 border-2 p-2"
-          placeholder="סנן לפי חלק בגוף"
-          options={bodyPartOptions}
-          values={
-            body_part
-              ? bodyPartOptions.filter((opt) => opt.value === body_part)
-              : []
-          }
-          onChange={(selected) => {
-            const value = selected[0]?.value || "";
-            setBodyPart(value);
-            setPage(1);
-          }}
-        />
+        <div className="w-3/4 md:w-auto">
+          <Select
+            direction="rtl"
+            className="w-full md:min-w-40 h-12 border-2 p-2"
+            placeholder="סנן לפי חלק בגוף"
+            options={bodyPartOptions}
+            values={
+              body_part
+                ? bodyPartOptions.filter((opt) => opt.value === body_part)
+                : []
+            }
+            onChange={(selected) => {
+              const value = selected[0]?.value || "";
+              setBodyPart(value);
+              setPage(1);
+            }}
+          />
+        </div>
+        <div className="w-3/4 md:w-auto">
         <Select
           direction="rtl"
           options={equipmentOptions}
-          className=" min-w-40   rounded-lg h-12 border-2 p-2"
+          className="w-full md:min-w-40 rounded-lg h-12 border-2 p-2"
           placeholder="סנן לפי ציוד"
           values={
             equipment
@@ -310,6 +313,7 @@ export function ExerciseTable() {
             setPage(1);
           }}
         />
+        </div>
         <Link to="/dashboard/exercise-library">
           <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
             הוסף תרגיל חדש
