@@ -6,7 +6,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Trash } from "lucide-react";
+import { ArrowUpDown, Loader2, Trash } from "lucide-react";
 import moment from "moment";
 import * as React from "react";
 
@@ -15,6 +15,13 @@ import { base_url } from "@/api/baseUrl";
 import { deleteEmail } from "@/api/deleteData";
 import PaginationComp from "@/components/pagination";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -36,6 +43,9 @@ export function ApproveMailTable() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [emails, setEmails] = React.useState([]);
   const [loading, setLoading]=React.useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
+  const [selectedEmail, setSelectedEmail] = React.useState(null);
+  const [isDeleting, setIsDeleting] = React.useState(false);
 
   const columns = [
     {
@@ -88,7 +98,7 @@ export function ApproveMailTable() {
             <Button
               className="bg-[#7994CB]"
               size="sm"
-              onClick={() => handleDelete(row.original)}
+              onClick={() => handleOpenDeleteModal(row.original)}
             >
               <Trash />
             </Button>
@@ -167,20 +177,28 @@ export function ApproveMailTable() {
     // }
   };
 
-  const handleDelete = async (rowData) => {
+  const handleOpenDeleteModal = (rowData) => {
+    setSelectedEmail(rowData);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!selectedEmail || isDeleting) return;
     const payload = {
-      email: rowData?.email,
-      // isActive: false,
-      // status: 0,
+      email: selectedEmail?.email,
     };
-    console.log("emaildDelete:", payload);
+    setIsDeleting(true);
     try {
       await deleteEmail(payload);
       setEmails((prevEmails) =>
-        prevEmails.filter((email) => email._id !== rowData._id)
+        prevEmails.filter((email) => email._id !== selectedEmail._id)
       );
+      setDeleteModalOpen(false);
+      setSelectedEmail(null);
     } catch (error) {
       console.error("Error deleting email:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -347,6 +365,35 @@ export function ApproveMailTable() {
         />
       </div>
       {/* {open&& <EditApproveMail open={open} setOpen={setOpen} approveMail={approveMail}/>} */}
+
+      {/* Delete Confirmation Modal */}
+      <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>אשר מחיקה</DialogTitle>
+          </DialogHeader>
+          <p>האם אתה בטוח שברצונך למחוק כתובת דואר אלקטרוני זו</p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
+              בטל
+            </Button>
+            <Button
+              className="bg-[#7994CB] text-white"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <span className="inline-flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  מוחק...
+                </span>
+              ) : (
+                "מחק"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

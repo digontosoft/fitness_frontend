@@ -180,7 +180,7 @@ export default function AddMail({ onEmailAdded }) {
                   required: "Email is required",
                   pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                    message: "Enter a valid email address",
+                    message: "הכנס כתובת מייל תקנית",
                   },
                 })}
                 className={`${errors.email ? "border-[#7994CB]" : ""}`}
@@ -207,7 +207,7 @@ export default function AddMail({ onEmailAdded }) {
                         errors.role ? "border-[#7994CB]" : ""
                       }`}
                     >
-                      <SelectValue placeholder="Select role" />
+                      <SelectValue placeholder="בחר סוג משתמש" />
                     </SelectTrigger>
                     <SelectContent>
                       {user?.userType === "admin" ? (
@@ -216,13 +216,13 @@ export default function AddMail({ onEmailAdded }) {
                             value="trainee"
                             className="hover:bg-gray-50"
                           >
-                            Trainee
+                            מתאמן
                           </SelectItem>
                           <SelectItem
                             value="recipe"
                             className="hover:bg-gray-50"
                           >
-                            Recipe
+                             משתמש תזונה
                           </SelectItem>
                         </>
                       ) : (
@@ -231,25 +231,25 @@ export default function AddMail({ onEmailAdded }) {
                             value="trainee"
                             className="hover:bg-gray-50"
                           >
-                            Trainee
+                            מתאמן
                           </SelectItem>
                           <SelectItem
                             value="recipe"
                             className="hover:bg-gray-50"
                           >
-                            Recipe
+                            משתמש תזונה
                           </SelectItem>
                           <SelectItem
                             value="admin"
                             className="hover:bg-gray-50"
                           >
-                            Admin
+                            מאמן
                           </SelectItem>
                           <SelectItem
                             value="supperadmin"
                             className="hover:bg-gray-50"
                           >
-                            Supperadmin
+                            מנהל מאמנים
                           </SelectItem>
                         </>
                       )}
