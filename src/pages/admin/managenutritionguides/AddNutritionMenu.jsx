@@ -51,14 +51,14 @@ const [isLoading, setIsLoading] = useState(false);
       });
 
       if (response.status === 201) {
-        toast.success("Nutrition menu saved successfully!");
+        toast.success("תפריט התזונה נשמר בהצלחה!");
         setIsLoading(false);
         reset();
         userDetails.userType === "admin" ? navigate(`/admin-dashboard/nutrition-lists/${userId}`) :navigate(`/dashboard/nutrition-lists/${userId}`);
       }
     } catch (error) {
       console.error("Error submitting nutrition menu:", error);
-      toast.error("Failed to save nutrition.");
+      toast.error("שמירת תפריט התזונה נכשלה");
     }
   };
 
@@ -74,7 +74,7 @@ const [isLoading, setIsLoading] = useState(false);
             placeholder={"הוסף שם תפריט תזונה אישי..."}
             register={register}
             validation={{
-              required: "Nutrition menu name is required",
+              required: "נדרש שם תפריט תזונה",
             }}
             errors={errors}
           />
@@ -87,7 +87,7 @@ const [isLoading, setIsLoading] = useState(false);
             placeholder={"הוסף תיאור תפריט תזונה אישי..."}
             register={register}
             validation={{
-              required: "Nutrition menu description is required",
+              required: "נדרש תיאור תפריט תזונה",
             }}
             errors={errors}
           />

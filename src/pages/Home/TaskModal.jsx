@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { UI_TEXT } from "@/constants/hebrewText";
 import { toast } from "sonner";
 
 export function TaskModal({
@@ -22,7 +23,7 @@ export function TaskModal({
   }, [isModalOpen]);
 
   const handleSubmit = async () => {
-    if (!stepCount) return alert("Please enter a valid step count.");
+    if (!stepCount) return alert(UI_TEXT.validStepCount);
 
     try {
       const payload = {
@@ -41,7 +42,7 @@ export function TaskModal({
       }
     } catch (error) {
       console.error("Error submitting steps:", error);
-      alert("Failed to submit steps.");
+      alert(UI_TEXT.submitStepsFailed);
     }
   };
 
@@ -76,7 +77,7 @@ export function TaskModal({
             onClick={handleSubmit}
             className="bg-[#7994CB] hover:bg-[#7994CB] w-full"
           >
-            {selectedTask ? "עדכן מעקב" : "Create Task"}
+            {selectedTask ? "עדכן מעקב" : UI_TEXT.createTask}
           </Button>
         </DialogFooter>
       </DialogContent>

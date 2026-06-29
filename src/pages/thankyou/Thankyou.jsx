@@ -3,6 +3,7 @@ import BasicButton from "@/components/admin/components/ui/BasicButton";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { UI_TEXT } from "@/constants/hebrewText";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -17,13 +18,13 @@ const ThankYou = () => {
 
   const onSubmit = async (data) => {
     try {
-      console.log("Submitted email:", data);
+      // console.log("Submitted email:", data);
       const response = await axios.post(`${base_url}/approved-mail`, data);
       toast.success(response.data.message);
       reset();
       navigate("/login");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || UI_TEXT.somethingWentWrong);
     }
   };
 
@@ -49,10 +50,10 @@ const ThankYou = () => {
               placeholder="דואר אלקטרוני"
               dir="rtl"
               {...register("email", {
-                required: "Email is required",
+                required: UI_TEXT.emailRequired,
                 pattern: {
                   value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                  message: "Enter a valid email address",
+                  message: UI_TEXT.validEmailRequired,
                 },
               })}
               className={`w-full mt-1 p-3 border rounded-md focus:outline-none focus:ring-2 ${

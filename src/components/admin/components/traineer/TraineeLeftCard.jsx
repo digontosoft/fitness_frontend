@@ -33,7 +33,7 @@ const TraineeLeftCard = ({ userId, user, setUser }) => {
     fetchMeasurement();
   }, [userId]);
 
-  console.log('measurement data:', measurementData);
+  // console.log('measurement data:', measurementData);
 
   useEffect(() => {
     if (!userId) return;

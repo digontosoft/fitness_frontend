@@ -32,6 +32,7 @@ import Select from "react-dropdown-select";
 import { GoSearch } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { useDebounce } from "@/hooks/useDebounce";
+import { UI_TEXT } from "@/constants/hebrewText";
 import ExerciseDetails from "./ExerciseDetails";
 
 const bodyPartOptions = [
@@ -369,7 +370,7 @@ export function ExerciseTable() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {UI_TEXT.noResults}
                 </TableCell>
               </TableRow>
             )}
@@ -380,15 +381,15 @@ export function ExerciseTable() {
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{UI_TEXT.confirmDeletion}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this exercise?</p>
+          <p>{UI_TEXT.confirmDeletionExercise}</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-              Cancel
+              {UI_TEXT.cancel}
             </Button>
             <Button className="bg-[#7994CB] text-white" onClick={handleDelete}>
-              Delete
+              {UI_TEXT.delete}
             </Button>
           </DialogFooter>
         </DialogContent>

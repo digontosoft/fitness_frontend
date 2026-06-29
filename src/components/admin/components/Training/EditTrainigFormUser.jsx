@@ -4,6 +4,7 @@ import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -84,8 +85,8 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
     fetchData();
   }, [trainingId]);
 
-  console.log("training-Data", training);
-  console.log("training-Id", trainingId);
+  // console.log("training-Data", training);
+  // console.log("training-Id", trainingId);
 
   const handleMoreExercise = (workoutIndex, e) => {
     e.preventDefault();
@@ -121,7 +122,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       });
 
       if (exerciseExists) {
-        toast.error(`Exercise "${exercise.name || exercise.label || 'Unknown'}" is already added to this workout.`);
+        toast.error(`התרגיל "${exercise.name || exercise.label || 'לא ידוע'}" כבר נוסף לאימון זה.`);
       } else {
         newExercises.push({
           _id: exercise._id,
@@ -158,7 +159,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         try {
           const response = await axios.get(url);
           setSelectedExercise(response.data.data || []);
-          console.log("Filtered exercises for selection:", response.data.data);
+          // console.log("Filtered exercises for selection:", response.data.data);
         } catch (error) {
           console.error("Error fetching filtered exercises:", error);
           setSelectedExercise([]);
@@ -255,7 +256,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   };
 
   const handleRemoveWorkout = (workoutId) => {
-    console.log("Removing workout:", workoutId); // Debugging log
+    // console.log("Removing workout:", workoutId); // Debugging log
     setTraining((prev) => {
       const next = {
         ...prev,
@@ -298,7 +299,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           } else {
             // If there is no next exercise or it's not a superset, the superset is incomplete
             setIsSupersetIncomplete(true);
-            toast.error("The next exercise must also be a superset.");
+            toast.error("התרגיל הבא חייב להיות גם סופרסט.");
             return;
           }
         }
@@ -318,7 +319,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       if (previousExercise && previousExercise.manipulation === "superset") {
         setIsSupersetIncomplete(true);
         toast.error(
-          "Cannot remove superset from this exercise as the previous exercise is a superset."
+          "לא ניתן להסיר סופרסט מתרגיל זה כי התרגיל הקודם הוא סופרסט."
         );
         return;
       }
@@ -414,18 +415,18 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         })),
       })),
     };
-    console.log("edited payload", payload);
+    // console.log("edited payload", payload);
     try {
       const response = await axios.put(
         `${base_url}/update-user-training/${trainingId}`,
         payload
       );
       if (response.status === 200) {
-        toast.success("Training session updated successfully!");
+        toast.success(UI_TEXT.trainingUpdated);
         navigate(-1);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
   //console.log("training-Data", training);
@@ -437,9 +438,9 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           id="name"
           type="text"
           label="שם תוכנית אימון "
-          placeholder="Enter training name..."
+          placeholder="הזן שם תוכנית אימון..."
           register={register}
-          validation={{ required: !user_Id && "Name is required" }}
+          validation={{ required: !user_Id && UI_TEXT.nameRequired }}
           errors={errors}
           defaultValue={training?.name}
         />
@@ -447,9 +448,9 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           id="description"
           type="text"
           label="תיאור"
-          placeholder="Enter description..."
+          placeholder="הזן תיאור..."
           register={register}
-          validation={{ required: !user_Id && "Description is required" }}
+          validation={{ required: !user_Id && UI_TEXT.descriptionRequired }}
           errors={errors}
           defaultValue={training?.description}
         />
@@ -494,7 +495,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                     <button
                       type="button"
                       onClick={() => handleRemoveExercise(workout._id, ex._id)}
-                      title="Remove exercise"
+                      title="הסר תרגיל"
                       className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                     >
                       <Trash className="size-4" />
@@ -513,7 +514,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
                           }`}
-                          title="Move up"
+                          title="הזז למעלה"
                         >
                           <ChevronUp className="size-4" />
                         </button>
@@ -526,7 +527,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
                           }`}
-                          title="Move down"
+                          title="הזז למטה"
                         >
                           <ChevronDown className="size-4" />
                         </button>

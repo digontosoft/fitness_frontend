@@ -168,12 +168,12 @@
 //   //     .put(`${base_url}/workout/${workoutId}`, workoutData)
 //   //     .then((response) => {
 //   //       if (response.status === 200) {
-//   //         toast.success("Workout updated successfully");
+//   //         toast.success(UI_TEXT.workoutUpdated);
 //   //         navigate("/dashboard/workout-list");
 //   //       }
 //   //     })
 //   //     .catch((error) => {
-//   //       toast.error("Failed to update workout");
+//   //       toast.error(UI_TEXT.workoutUpdateFailed);
 //   //       console.log(error);
 //   //     });
 //   // };
@@ -212,13 +212,13 @@
 //       .put(`${base_url}/workout/${workoutId}`, workoutData)
 //       .then((response) => {
 //         if (response.status === 200) {
-//           toast.success("Workout updated successfully");
+//           toast.success(UI_TEXT.workoutUpdated);
 //           navigate("/dashboard/workout-list");
 //           setNewExerciseData(null); // Clear the new exercise data after successful submission
 //         }
 //       })
 //       .catch((error) => {
-//         toast.error("Failed to update workout");
+//         toast.error(UI_TEXT.workoutUpdateFailed);
 //         console.log(error);
 //       });
 //   };
@@ -254,7 +254,7 @@
 //               id="name"
 //               type="text"
 //               label="שם האימון"
-//               placeholder="Add שם האימון...."
+//               placeholder="הוסף שם האימון...."
 //               register={register}
 //               errors={errors}
 //               required
@@ -313,7 +313,7 @@
 //                       onChange={(e) =>
 //                         handleManipulationChange(e, index, exercise)
 //                       }
-//                       placeholder="Enter a manipulation"
+//                       placeholder="הזן מניפולציה"
 //                       className="w-full  p-2 rounded"
 //                     />
 //                   </div>
@@ -479,6 +479,7 @@ import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -722,13 +723,13 @@ const handleRemoveExercise = (indexToRemove) => {
         workoutData
       );
       if (response.status === 200) {
-        toast.success("Workout updated successfully");
+        toast.success(UI_TEXT.workoutUpdated);
         navigate("/dashboard/workout-list");
         setNewExerciseData(null);
       }
     } catch (error) {
-      toast.error("Failed to update workout");
-      console.log(error);
+      toast.error(UI_TEXT.workoutUpdateFailed);
+      // console.log(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -775,7 +776,7 @@ const isFormValid = exercisesForm?.every(
               id="name"
               type="text"
               label="שם האימון"
-              placeholder="Add שם האימון...."
+              placeholder="הוסף שם האימון...."
               register={register}
               errors={errors}
               required
@@ -809,7 +810,7 @@ const isFormValid = exercisesForm?.every(
                           ? "opacity-30 cursor-not-allowed"
                           : "hover:bg-gray-100 cursor-pointer"
                       }`}
-                      title="Move up"
+                      title="הזז למעלה"
                     >
                       <ChevronUp className="size-4" />
                     </button>
@@ -822,14 +823,14 @@ const isFormValid = exercisesForm?.every(
                           ? "opacity-30 cursor-not-allowed"
                           : "hover:bg-gray-100 cursor-pointer"
                       }`}
-                      title="Move down"
+                      title="הזז למטה"
                     >
                       <ChevronDown className="size-4" />
                     </button>
                     <button
                       type="button"
                       onClick={() => handleRemoveExercise(index, false)} // Pass false for existing exercise
-                      title="Remove exercise"
+                      title="הסר תרגיל"
                       className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                     >
                       <Trash className="size-4" />
@@ -867,7 +868,7 @@ const isFormValid = exercisesForm?.every(
                       onChange={(e) =>
                         handleManipulationChange(e, index, exercise)
                       }
-                      placeholder="Enter a manipulation"
+                      placeholder="הזן מניפולציה"
                     />
                   </div>
                 </div>
@@ -965,7 +966,7 @@ const isFormValid = exercisesForm?.every(
                   <button
                     type="button"
                     onClick={() => handleRemoveExercise(null, true)} // Pass true for new exercise
-                    title="Remove exercise"
+                    title={UI_TEXT.removeExercise}
                     className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                   >
                     <Trash className="size-4" />
@@ -1043,7 +1044,7 @@ const isFormValid = exercisesForm?.every(
               {isSubmitting ? (
                 <span className="inline-flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  שומר...
+                  {UI_TEXT.saving}
                 </span>
               ) : (
                 "עדכן תוכנית אימון"

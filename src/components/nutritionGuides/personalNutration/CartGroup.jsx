@@ -21,7 +21,7 @@ const CartGroup = () => {
         );
         setNutrationData(response?.data?.data);
       } catch (error) {
-        console.log("personal nutrition menu error:", error);
+        // console.log("personal nutrition menu error:", error);
       } finally {
         setLoading(false);
       }

@@ -73,7 +73,7 @@
 //    try {
 //       axios.post(`${base_url}/updateAdminId`, payload).then((res) => {
 //         if (res.status === 200) {
-//           toast.success("Trainees assigned to admin successfully");
+//           toast.success("המתאמנים שויכו למאמן בהצלחה");
 //           setIsLoading(false);
 //         }
 //       });
@@ -234,7 +234,7 @@
 //     try {
 //       axios.post(`${base_url}/updateAdminId`, payload).then((res) => {
 //         if (res.status === 200) {
-//           toast.success("Trainees assigned to admin successfully");
+//           toast.success("המתאמנים שויכו למאמן בהצלחה");
 //           setIsLoading(false);
 //           setIsOpen(false);
 //           setSelectedUsers([]);
@@ -321,7 +321,7 @@
 //               ) : (
 //                 <TableRow>
 //                   <TableCell colSpan={2} className="text-center text-gray-500">
-//                     No trainees found
+//                     לא נמצאו מתאמנים
 //                   </TableCell>
 //                 </TableRow>
 //               )}
@@ -430,12 +430,12 @@ const AssignTraineeToAdmin = ({ adminId, isOpen, onClose }) => {
     try {
       const res = await axios.post(`${base_url}/updateAdminId`, payload);
       if (res.status === 200) {
-        toast.success("Trainees assigned to admin successfully");
+        toast.success("המתאמנים שויכו למאמן בהצלחה");
         onClose(); // Close modal after success
       }
     } catch (error) {
       console.error("Error assigning trainees:", error);
-      toast.error("Failed to assign trainees");
+      toast.error("שיוך המתאמנים נכשל");
     } finally {
       setIsLoading(false);
     }
@@ -503,7 +503,7 @@ const AssignTraineeToAdmin = ({ adminId, isOpen, onClose }) => {
               ) : (
                 <TableRow>
                   <TableCell colSpan={4} className="text-center text-gray-500">
-                    No trainees found
+                    לא נמצאו מתאמנים
                   </TableCell>
                 </TableRow>
               )}

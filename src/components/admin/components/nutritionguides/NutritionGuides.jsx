@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import BasicCard from "../ui/BasicCard";
+import { UI_TEXT } from "@/constants/hebrewText";
 import NotFound from "@/shared/NotFound";
 import BackDashBoardButton from "@/shared/BackDashBoardButton";
 import FormTitle from "@/components/admin/components/ui/FormTitle";
@@ -9,11 +10,11 @@ const NutritionGuides = () => {
   return (
     <div className="min-h-[72vh] h-auto grid gap-5">
       <div className="space-y-5">
-        <FormTitle title="Manage Nutrition Guides" />
+        <FormTitle title="ניהול מדריכי תזונה" />
         <div>
           <Link to="/dashboard/add-nutrition-guide">
             <BasicCard>
-              <span>Add Nutrition Guides</span>
+              <span>הוסף מדריך תזונה</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -33,7 +34,7 @@ const NutritionGuides = () => {
             </BasicCard>
           </Link>
         </div>
-        <NotFound title="No Data Found" />
+        <NotFound title={UI_TEXT.noDataFound} />
       </div>
       <BackDashBoardButton />
     </div>

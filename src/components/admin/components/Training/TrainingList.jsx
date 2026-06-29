@@ -31,6 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { GoSearch } from "react-icons/go";
+import { UI_TEXT } from "@/constants/hebrewText";
 import TrainingDetails from "./TrainingDetails";
 
 export function TrainingList() {
@@ -173,7 +174,7 @@ export function TrainingList() {
   ];
 
   const handleOpenDeleteModal = (trainingId) => {
-    console.log('training id:', trainingId)
+    // console.log('training id:', trainingId)
     setSelectedTraining(trainingId);
     setDeleteModalOpen(true);
   };
@@ -286,7 +287,7 @@ export function TrainingList() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {UI_TEXT.noResults}
                 </TableCell>
               </TableRow>
             )}
@@ -298,21 +299,21 @@ export function TrainingList() {
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{UI_TEXT.confirmDeletion}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this training?</p>
+          <p>{UI_TEXT.confirmDeletionTraining}</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-              Cancel
+              {UI_TEXT.cancel}
             </Button>
             <Button className="bg-[#7994CB] text-white" onClick={handleDelete} disabled={isDeleting}>
               {isDeleting ? (
                 <span className="inline-flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  מוחק...
+                  {UI_TEXT.deleting}
                 </span>
               ) : (
-                "Delete"
+                UI_TEXT.delete
               )}
             </Button>
           </DialogFooter>

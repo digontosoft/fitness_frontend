@@ -5,6 +5,7 @@ import { upload } from "../../assets/index";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { base_url } from "@/api/baseUrl";
+import { UI_TEXT } from "@/constants/hebrewText";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { UserInfoContext } from "@/context";
@@ -13,7 +14,7 @@ const InputForm = () => {
   const [previews, setPreviews] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
   const userId = userDetails._id;
-  console.log("user id", userId);
+  // console.log("user id", userId);
   const navigate = useNavigate();
   const { userInfo } = useContext(UserInfoContext);
 
@@ -39,7 +40,7 @@ const InputForm = () => {
 
     formData.append("user_id", userId);
 
-    console.log("This is my form data:", Object.fromEntries(formData));
+    // console.log("This is my form data:", Object.fromEntries(formData));
 
     try {
       const response = await axios.post(`${base_url}/measurement`, formData, {
@@ -48,12 +49,12 @@ const InputForm = () => {
         },
       });
       if (response.status === 201) {
-        toast.success("Measurment assign successfully");
+        toast.success("המדידה נשמרה בהצלחה!");
         navigate("/");
-        console.log("Success:", response.data);
+        // console.log("Success:", response.data);
       }
     } catch (error) {
-      console.log("Error uploading form data:", error);
+      // console.log("Error uploading form data:", error);
     }
   };
 
@@ -81,7 +82,7 @@ const InputForm = () => {
     if (validFiles.length > 0) {
       const totalFiles = files.length + validFiles.length;
       if (totalFiles > 4) {
-        toast.warning("You can upload up to 4 images only.");
+        toast.warning(UI_TEXT.maxFourImages);
         return;
       }
       setFiles((prevFiles) => [...prevFiles, ...validFiles]);
@@ -95,7 +96,7 @@ const InputForm = () => {
   const validateFile = (file) => {
     const validTypes = ["image/jpeg", "image/png", "application/pdf"];
     if (!validTypes.includes(file.type)) {
-      alert("Invalid file type. Please upload an image or PDF.");
+      alert(UI_TEXT.invalidImageOrPdf);
       return false;
     }
     return true;
@@ -208,7 +209,7 @@ const InputForm = () => {
               onDrop={handleDrop}
             >
               <div>
-                <img src={upload} alt="Upload Icon" />
+                <img src={upload} alt="סמל העלאה" />
               </div>
               <p className="mb-2">בחר או גרור קובץ תמונה</p>
 
@@ -255,7 +256,7 @@ const InputForm = () => {
                     {file.type.startsWith("image/") && (
                       <img
                         src={previews[index]}
-                        alt="Preview"
+                        alt="תצוגה מקדימה"
                         className="w-10 h-10 object-cover border rounded-full"
                       />
                     )}

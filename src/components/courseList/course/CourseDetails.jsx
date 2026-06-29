@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 import backHand from "@/assets/image/back-hand.svg";
 import back from "@/assets/image/back.svg";
@@ -46,7 +47,7 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
       .then((response) => {
         if (response.status === 200) {
           setExerciseData(response.data.data);
-          console.log("first", response.data.data);
+          // console.log("first", response.data.data);
         }
       })
       .finally(() => setLoading(false));
@@ -101,7 +102,7 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
         </DialogHeader>
 
         {loading ? (
-          <p className="text-center text-gray-500">Loading...</p>
+          <p className="text-center text-gray-500">{UI_TEXT.loading}</p>
         ) : (
           <div className="flex flex-col items-center gap-4">
             <div className="w-full">

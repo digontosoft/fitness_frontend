@@ -1,4 +1,3 @@
-import { base_url } from "@/api/baseUrl";
 import logo from "@/assets/image/logo.svg";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,20 +7,20 @@ import {
   supperAdminLink,
   traineeLink,
 } from "@/constants/NavLink";
-import axios from "axios";
 import { LogOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CiMenuFries } from "react-icons/ci";
 import { MdOutlineClose } from "react-icons/md";
+import { UI_TEXT } from "@/constants/hebrewText";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [userTasks, setUserTasks] = useState([]);
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userInfo"));
   const userType = userData?.userType;
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -50,53 +49,30 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const fetchUserTask = async () => {
-      try {
-        await axios
-          .get(`${base_url}/get-user-task/${userData?._id}`)
-          .then((response) => {
-            if (response.status === 200) {
-              setUserTasks(response.data.data);
-            }
-          });
-      } catch (error) {
-        console.error("Error fetching recipe book:", error);
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
       }
     };
-    fetchUserTask();
-  }, [userData?._id]);
 
-  const hasWorkoutTask = userTasks.some(
-    (task) =>
-      (task?.task_type === "workout" && task?.task_status !== "Disabled") ||
-      task?.task_status !== "Completed"
-  );
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    }
 
-useEffect(() => {
- const handleClickOutside = (event) => {
- if (
- menuRef.current &&
- !menuRef.current.contains(event.target) &&
- buttonRef.current &&
- !buttonRef.current.contains(event.target)
- ) {
- setIsOpen(false);
- }
- };
-
-if (isOpen) {
- document.addEventListener("mousedown", handleClickOutside);
- document.addEventListener("touchstart", handleClickOutside);
- } else {
- document.removeEventListener("mousedown", handleClickOutside);
- document.removeEventListener("touchstart", handleClickOutside);
- }
-
- return () => {
- document.removeEventListener("mousedown", handleClickOutside);
- document.removeEventListener("touchstart", handleClickOutside);
- };
- }, [isOpen]);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isOpen]);
 
   // Reverse traineeLink if userType is trainee
   const traineeLinks = userType === "trainee" ? [...traineeLink].reverse() : traineeLink;
@@ -143,7 +119,7 @@ if (isOpen) {
                 }
                 dir="rtl"
               >
-                <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
+                <img src={Icon} alt={`סמל ${title}`} className="w-5 h-5" />
                 <span>{title}</span>
               </NavLink>
             ))}
@@ -159,7 +135,7 @@ if (isOpen) {
                 }
                 dir="rtl"
               >
-                <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
+                <img src={Icon} alt={`סמל ${title}`} className="w-5 h-5" />
                 <span dir="rtl">{title}</span>
               </NavLink>
             ))}
@@ -181,7 +157,7 @@ if (isOpen) {
             ))}
           </div>
         ) : (
-          <div>No valid user type or token found.</div>
+          <div>{UI_TEXT.invalidUserType}</div>
         )}
 
         <Link
@@ -190,7 +166,7 @@ if (isOpen) {
         >
           <img
             src={logo}
-            alt="logo"
+            alt="לוגו"
             className="h-32 w-32 object-cover md:h-24 md:w-24"
           />
         </Link>
@@ -202,7 +178,7 @@ if (isOpen) {
             variant="ghost"
             size="icon"
             onClick={toggleMenu}
-            aria-label="Toggle Navigation Menu"
+            aria-label="פתח/סגור תפריט ניווט"
           >
             {isOpen ? <MdOutlineClose /> : <CiMenuFries />}
           </Button>
@@ -245,7 +221,7 @@ if (isOpen) {
                       onClick={() => setIsOpen(false)}
                       dir="rtl"
                     >
-                      <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
+                      <img src={Icon} alt={`סמל ${title}`} className="w-5 h-5" />
                       <span>{title}</span>
                     </NavLink>
                   ))}
@@ -262,7 +238,7 @@ if (isOpen) {
                       onClick={() => setIsOpen(false)}
                       dir="rtl"
                     >
-                      <img src={Icon} alt={`${title} icon`} className="w-5 h-5" />
+                      <img src={Icon} alt={`סמל ${title}`} className="w-5 h-5" />
                       <span dir="rtl">{title}</span>
                     </NavLink>
                   ))}
@@ -285,7 +261,7 @@ if (isOpen) {
                 ))}
               </div>
             ) : (
-              <div>No valid user type or token found.</div>
+              <div>{UI_TEXT.invalidUserType}</div>
             )}
           </div>
           <a

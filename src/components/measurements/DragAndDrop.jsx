@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { upload } from "../../assets/index";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 const DragAndDrop = ({ register, setValue, errors }) => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  console.log("file name and previw", file);
+  // console.log("file name and previw", file);
 
   const handleDragOver = (e) => e.preventDefault();
   const handleDragEnter = (e) => e.preventDefault();
@@ -27,7 +28,7 @@ const DragAndDrop = ({ register, setValue, errors }) => {
   const validateFile = (file) => {
     const validTypes = ["image/jpeg", "image/png", "application/pdf"];
     if (!validTypes.includes(file.type)) {
-      alert("Invalid file type. Please upload an image or PDF.");
+      alert(UI_TEXT.invalidImageOrPdf);
       return false;
     }
     return true;
@@ -35,7 +36,7 @@ const DragAndDrop = ({ register, setValue, errors }) => {
 
   const updateFileAndPreview = (file) => {
     const previewURL = URL.createObjectURL(file);
-    console.log("Generated Preview URL:", previewURL); // Debug log
+    // console.log("Generated Preview URL:", previewURL); // Debug log
     setFile(file);
     setPreview(previewURL);
     setValue("uploadedFile", file); // Optional
@@ -78,7 +79,7 @@ const DragAndDrop = ({ register, setValue, errors }) => {
           {/* PDF Placeholder */}
           {preview && file?.type === "application/pdf" && (
             <div className="w-24 h-24 bg-gray-200 flex items-center justify-center text-sm text-gray-600 border rounded-lg mb-4">
-              PDF File
+              {UI_TEXT.pdfFile}
             </div>
           )}
 

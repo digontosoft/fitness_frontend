@@ -5,6 +5,7 @@ import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -201,7 +202,7 @@ const EditTrainingForm = () => {
         try {
           const response = await axios.get(url);
           setSelectedExercise(response.data.data || []);
-          console.log("Filtered exercises for selection:", response.data.data);
+          // console.log("Filtered exercises for selection:", response.data.data);
         } catch (error) {
           console.error("Error fetching filtered exercises:", error);
           setSelectedExercise([]);
@@ -299,7 +300,7 @@ const EditTrainingForm = () => {
 
       // Check if this is the last exercise
       const isLastExercise = exerciseIndex === workout.exercises.length - 1;
-      console.log("firstExercise", isLastExercise);
+      // console.log("firstExercise", isLastExercise);
 
       // If it's not the last exercise, check the next exercise
       if (!isLastExercise) {
@@ -312,7 +313,7 @@ const EditTrainingForm = () => {
           } else {
             // If there is no next exercise or it's not a superset, the superset is incomplete
             setIsSupersetIncomplete(true);
-            toast.error("The next exercise must also be a superset.");
+            toast.error("התרגיל הבא חייב להיות גם סופרסט.");
             return;
           }
         }
@@ -332,7 +333,7 @@ const EditTrainingForm = () => {
       if (previousExercise && previousExercise.manipulation === "superset") {
         setIsSupersetIncomplete(true);
         toast.error(
-          "Cannot remove superset from this exercise as the previous exercise is a superset."
+          "לא ניתן להסיר סופרסט מתרגיל זה כי התרגיל הקודם הוא סופרסט."
         );
         return;
       }
@@ -432,9 +433,9 @@ const EditTrainingForm = () => {
         navigate("/dashboard/training-list");
       }
 
-      toast.success("Training session updated successfully!");
+      toast.success(UI_TEXT.trainingUpdated);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       console.error("Error updating training:", error);
     } finally {
       setIsSubmitting(false);
@@ -450,10 +451,10 @@ const EditTrainingForm = () => {
           <DynamicInputField
             id="name"
             type="text"
-            label="Training Name"
-            placeholder="Enter training name..."
+            label="שם תוכנית אימון"
+            placeholder="הזן שם תוכנית אימון..."
             register={register}
-            validation={{ required: !id && "Name is required" }}
+            validation={{ required: !id && UI_TEXT.nameRequired }}
             errors={errors}
             defaultValue={training?.name}
           />
@@ -461,10 +462,10 @@ const EditTrainingForm = () => {
           <DynamicTextAreaField
             id="description"
             type="text"
-            label="Description"
-            placeholder="Enter description..."
+            label="תיאור"
+            placeholder="הזן תיאור..."
             register={register}
-            validation={{ required: !id && "Description is required" }}
+            validation={{ required: !id && UI_TEXT.descriptionRequired }}
             errors={errors}
             defaultValue={training?.description}
           />
@@ -490,7 +491,7 @@ const EditTrainingForm = () => {
                   <button
                     type="button"
                     onClick={() => handleRemoveWorkout(workout._id)}
-                    title="Remove workout"
+                    title="הסר אימון"
                     className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                   >
                     <Trash className="size-5" />
@@ -508,7 +509,7 @@ const EditTrainingForm = () => {
                       <button
                         type="button"
                         onClick={() => handleRemoveExercise(workout._id, ex._id)}
-                        title="Remove exercise"
+                        title="הסר תרגיל"
                         className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                       >
                         <Trash className="size-4" />
@@ -527,7 +528,7 @@ const EditTrainingForm = () => {
                                 ? "opacity-30 cursor-not-allowed"
                                 : "hover:bg-gray-100 cursor-pointer"
                             }`}
-                            title="Move up"
+                            title="הזז למעלה"
                           >
                             <ChevronUp className="size-4" />
                           </button>
@@ -540,7 +541,7 @@ const EditTrainingForm = () => {
                                 ? "opacity-30 cursor-not-allowed"
                                 : "hover:bg-gray-100 cursor-pointer"
                             }`}
-                            title="Move down"
+                            title="הזז למטה"
                           >
                             <ChevronDown className="size-4" />
                           </button>
@@ -685,7 +686,7 @@ const EditTrainingForm = () => {
               {isSubmitting ? (
                 <span className="inline-flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  שומר...
+                  {UI_TEXT.saving}
                 </span>
               ) : (
                 "שמור תוכנית אימון חדשה"

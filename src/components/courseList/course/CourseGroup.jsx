@@ -23,12 +23,12 @@ const CourseGroup = () => {
           }
         });
       } catch (err) {
-        console.log("courses:", err);
+        // console.log("courses:", err);
       }
     };
     fetchCourses();
   }, []);
-  console.log("courses", courses);
+  // console.log("courses", courses);
 
   return (
     <div className="max-w-6xl mx-auto">

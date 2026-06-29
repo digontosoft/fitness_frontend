@@ -22,6 +22,7 @@ import axios from "axios";
 import { Edit, Loader, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { UI_TEXT } from "@/constants/hebrewText";
 import EditCustomTask from "./EditCustomTask";
 import TaskModal from "./TaskModal";
 
@@ -145,7 +146,7 @@ try {
  setDeleteLoading(true);
 const response = await axios.delete(`${base_url}/delete-task-template/${taskToDeleteId}`);
  if (response.status === 200) {
-  toast.success("Task deleted successfully!");
+  toast.success(UI_TEXT.taskDeleted);
   setDeleteLoading(false);
  fetchData();
  }
@@ -214,7 +215,7 @@ const response = await axios.delete(`${base_url}/delete-task-template/${taskToDe
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No tasks found.
+                  לא נמצאו משימות.
                 </TableCell>
               </TableRow>
             )}
@@ -234,14 +235,14 @@ const response = await axios.delete(`${base_url}/delete-task-template/${taskToDe
      <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
  <AlertDialogContent>
  <AlertDialogHeader>
-  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+  <AlertDialogTitle>{UI_TEXT.confirmDeleteTaskTitle}</AlertDialogTitle>
   <AlertDialogDescription>
-  This action cannot be undone. This will permanently delete the task.
+  {UI_TEXT.confirmDeleteTaskBody}
   </AlertDialogDescription>
  </AlertDialogHeader>
  <AlertDialogFooter>
-  <AlertDialogCancel>Cancel</AlertDialogCancel>
-  <AlertDialogAction onClick={handleDeleteTask} className="bg-[#7994CB] hover:bg-[#7994CB]-dark">{deleteLoading ? <><Loader className="mr-2 h-4 w-4 animate-spin" />Deleting</> : "Continue"}</AlertDialogAction>
+  <AlertDialogCancel>{UI_TEXT.cancel}</AlertDialogCancel>
+  <AlertDialogAction onClick={handleDeleteTask} className="bg-[#7994CB] hover:bg-[#7994CB]-dark">{deleteLoading ? <><Loader className="mr-2 h-4 w-4 animate-spin" />{UI_TEXT.deleting}</> : UI_TEXT.continue}</AlertDialogAction>
  </AlertDialogFooter>
  </AlertDialogContent>
  </AlertDialog>

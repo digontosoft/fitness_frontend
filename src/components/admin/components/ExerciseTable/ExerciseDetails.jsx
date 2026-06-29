@@ -9,24 +9,44 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Eye } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import HeroVideo from "@/components/startTraining/HeroVideo";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 export default function ExerciseDetails({ exerciseId }) {
-  const [exerciseData, setExerciseData] = useState({});
-  useEffect(() => {
-    axios.get(`${base_url}/exercise/${exerciseId}`).then((response) => {
+  const [exerciseData, setExerciseData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  // Fetch only when user opens the details dialog (not on list mount)
+  const fetchExerciseDetails = async () => {
+    if (!exerciseId) return;
+    setLoading(true);
+    try {
+      const response = await axios.get(`${base_url}/exercise/${exerciseId}`);
       if (response.status === 200) {
         setExerciseData(response.data.data);
       }
-    });
-  }, [exerciseId]);
-  console.log(exerciseData);
+    } catch (error) {
+      console.error("Error fetching exercise details:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOpenChange = (isOpen) => {
+    setOpen(isOpen);
+    if (isOpen) {
+      fetchExerciseDetails();
+    } else {
+      setExerciseData(null);
+    }
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button className="bg-[#7994CB]" size="sm">
           <Eye />
@@ -39,6 +59,10 @@ export default function ExerciseDetails({ exerciseId }) {
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center gap-4">
+          {loading ? (
+            <p className="text-center text-gray-500">{UI_TEXT.loading}</p>
+          ) : exerciseData ? (
+            <>
           <div className="w-full aspect-video rounded-lg overflow-hidden">
             <HeroVideo videoUrl={exerciseData?.video_url} />
           </div>
@@ -52,6 +76,10 @@ export default function ExerciseDetails({ exerciseId }) {
           <p className="text-sm text-gray-600 text-center px-4">
             {exerciseData?.equipment} : ציוד
           </p>
+            </>
+          ) : (
+            <p className="text-center text-gray-500">{UI_TEXT.noResults}</p>
+          )}
         </div>
         <DialogFooter>
           <DialogClose asChild>

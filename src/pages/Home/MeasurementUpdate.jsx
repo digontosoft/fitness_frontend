@@ -369,6 +369,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { UI_TEXT } from "@/constants/hebrewText";
 import { upload } from "../../assets/index";
 
 // Helper function to convert a file to a Base64 string
@@ -454,13 +455,13 @@ const MeasurementUpdate = () => {
       );
 
       if (response.status === 201) {
-        toast.success("Measurement updated successfully!");
+        toast.success(UI_TEXT.measurementUpdated);
         reset();
         setIsLoading(false);
         navigate("/");
       }
     } catch (error) {
-      toast.error("Error updating measurement. Please try again.");
+      toast.error(UI_TEXT.measurementUpdateFailed);
       console.error("Error updating measurement:", error);
     }
   };
@@ -490,7 +491,7 @@ const MeasurementUpdate = () => {
 
     const totalFiles = files.length + newFiles.length;
     if (totalFiles > 4) {
-      toast.warning("You can upload up to 4 images only.");
+      toast.warning(UI_TEXT.maxFourImages);
       return;
     }
 
@@ -515,7 +516,7 @@ const MeasurementUpdate = () => {
   const validateFile = (file) => {
     const validTypes = ["image/jpeg", "image/png", "image/jpg"];
     if (!validTypes.includes(file.type)) {
-      toast.warning("Invalid file type. Please upload an image.");
+      toast.warning(UI_TEXT.invalidImage);
       return false;
     }
     return true;
@@ -537,7 +538,7 @@ const MeasurementUpdate = () => {
   
   // Conditional rendering
   if (getMesurement === null) {
-    return <div>Loading measurement data...</div>;
+    return <div>{UI_TEXT.loadingMeasurementData}</div>;
   }
 
   return (
@@ -638,7 +639,7 @@ const MeasurementUpdate = () => {
               <div>
                 <img
                   src={upload}
-                  alt="Upload Icon"
+                  alt="סמל העלאה"
                   style={{
                     filter:
                       "brightness(0) saturate(100%) invert(63%) sepia(10%) saturate(2556%) hue-rotate(186deg) brightness(94%) contrast(86%)",
@@ -677,7 +678,7 @@ const MeasurementUpdate = () => {
                 {file.type.startsWith("image/") && (
                   <img
                     src={URL.createObjectURL(file)}
-                    alt={`Preview ${index + 1}`}
+                    alt={`תצוגה מקדימה ${index + 1}`}
                     className="w-10 h-10 object-cover border rounded-full"
                   />
                 )}

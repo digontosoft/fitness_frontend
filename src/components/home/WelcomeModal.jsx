@@ -4,8 +4,7 @@ import {
   DialogContent,
   DialogFooter,
 } from "@/components/ui/dialog";
-
-
+import { UI_TEXT } from "@/constants/hebrewText";
 
 export function WelcomeModal({
   isModalOpen,
@@ -13,7 +12,7 @@ export function WelcomeModal({
   handleSubmit,
   user,
 }) {
-  console.log("gender:", user?.gender);
+  // console.log("gender:", user?.gender);
   const maleVideo = "https://www.youtube.com/embed/HHu0B6j6Jxw";
   const femaleVideo = "https://www.youtube.com/embed/iyIaCid4IHI";
   
@@ -50,7 +49,7 @@ export function WelcomeModal({
             <iframe
               className="w-full h-full rounded-lg"
               src={videoUrl}
-              title="YouTube video player"
+              title={UI_TEXT.youtubePlayer}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"

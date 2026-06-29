@@ -35,8 +35,8 @@ const TraineerUi = ({ userId }) => {
   const [user, setUser] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openAnswer, setOpenAnswer] = useState(false);
-  const [exerciseReport, setExerciseReport] = useState(null);
-  const [measurementReport, setMeasurementReport] = useState(null);
+  const [exerciseReportLoading, setExerciseReportLoading] = useState(false);
+  const [measurementReportLoading, setMeasurementReportLoading] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userInfo"));
 
   useEffect(() => {
@@ -48,20 +48,8 @@ const TraineerUi = ({ userId }) => {
           "selectedUserId",
           JSON.stringify(response.data.data._id)
         );
-        const exerciseResponse = await axios.get(
-          `${base_url}/report/excercise/${userId}`
-        );
-        if (exerciseResponse.status === 200) {
-          setExerciseReport(exerciseResponse?.data.data.report_link);
-        }
-        const measurementResponse = await axios.get(
-          `${base_url}/report/measurement/${userId}`
-        );
-        if (measurementResponse.status === 200) {
-          setMeasurementReport(measurementResponse?.data.data.report_link);
-        }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     getUser();
@@ -101,7 +89,7 @@ const TraineerUi = ({ userId }) => {
         userType,
       });
       if (response.status === 200) {
-        toast.success("User Type Updated Successfully");
+        toast.success("סוג המשתמש עודכן בהצלחה");
         setUser((prevUser) => ({
           ...prevUser,
           userType,
@@ -224,6 +212,40 @@ const TraineerUi = ({ userId }) => {
     }
   };
 
+  const handleExerciseReportDownload = async () => {
+    if (!userId || exerciseReportLoading) return;
+
+    setExerciseReportLoading(true);
+    try {
+      const response = await axios.get(`${base_url}/report/excercise/${userId}`);
+      const reportLink = response?.data?.data?.report_link;
+      await handleDownload(reportLink, "exercise-report.xlsx");
+    } catch (error) {
+      console.error("Error fetching exercise report:", error);
+      toast.error("ההורדה נכשלה");
+    } finally {
+      setExerciseReportLoading(false);
+    }
+  };
+
+  const handleMeasurementReportDownload = async () => {
+    if (!userId || measurementReportLoading) return;
+
+    setMeasurementReportLoading(true);
+    try {
+      const response = await axios.get(
+        `${base_url}/report/measurement/${userId}`
+      );
+      const reportLink = response?.data?.data?.report_link;
+      await handleDownload(reportLink, "measurement-report.xlsx");
+    } catch (error) {
+      console.error("Error fetching measurement report:", error);
+      toast.error("ההורדה נכשלה");
+    } finally {
+      setMeasurementReportLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="flex flex-col items-center justify-center gap-4">
@@ -286,11 +308,32 @@ const TraineerUi = ({ userId }) => {
               />
             </div>
             <div className="w-[342px]">
-              <AdminArrowCard
-                image={mesurementImage}
-                title="הצגת מדדים קודמים"
-                link={measurementReport ? measurementReport : "#"}
-              />
+              <div
+                className="w-full h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
+                dir="ltr"
+                onClick={handleMeasurementReportDownload}
+              >
+                <Button className="rounded-2xl w-[25px] h-6 flex-shrink-0">
+                  <FaArrowLeftLong />
+                </Button>
+                <div className="flex items-center gap-4 flex-1 justify-between">
+                  <div className="flex-1">
+                    <h1
+                      className="text-sm sm:text-base font-bold leading-5 text-[#0A2533] text-right line-clamp-2"
+                      dir="rtl"
+                    >
+                      {measurementReportLoading ? "טוען..." : "הצגת מדדים קודמים"}
+                    </h1>
+                  </div>
+                  <div className="w-[95px] h-[90px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">
+                    <img
+                      src={mesurementImage}
+                      alt=""
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="w-[342px]">
               <AdminArrowCard
@@ -357,7 +400,11 @@ const TraineerUi = ({ userId }) => {
         dir="ltr"
       >
        
-        <Button className="rounded-2xl w-[25px] h-6 flex-shrink-0" onClick={() => handleDownload(exerciseReport,"exercise-report.xlsx")}>
+        <Button
+          className="rounded-2xl w-[25px] h-6 flex-shrink-0"
+          onClick={handleExerciseReportDownload}
+          disabled={exerciseReportLoading}
+        >
           <FaArrowLeftLong />
         </Button>
         <div className="flex items-center gap-4 flex-1 justify-between">
@@ -365,9 +412,9 @@ const TraineerUi = ({ userId }) => {
             <h1
               className="text-sm sm:text-base font-bold leading-5 text-[#0A2533] text-right line-clamp-2"
               dir="rtl"
-              onClick={() => handleDownload(exerciseReport,"exercise-report.xlsx")}
+              onClick={handleExerciseReportDownload}
             >
-              דוח ביצועי אימונים
+              {exerciseReportLoading ? "טוען..." : "דוח ביצועי אימונים"}
             </h1>
           </div>
           <div className="w-[95px] h-[90px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">
@@ -386,7 +433,11 @@ const TraineerUi = ({ userId }) => {
         dir="ltr"
       >
        
-        <Button className="rounded-2xl w-[25px] h-6 flex-shrink-0" onClick={() => handleDownload(measurementReport,"measurement-report.xlsx")}>
+        <Button
+          className="rounded-2xl w-[25px] h-6 flex-shrink-0"
+          onClick={handleMeasurementReportDownload}
+          disabled={measurementReportLoading}
+        >
           <FaArrowLeftLong />
         </Button>
         <div className="flex items-center gap-4 flex-1 justify-between">
@@ -394,9 +445,9 @@ const TraineerUi = ({ userId }) => {
             <h1
               className="text-sm sm:text-base font-bold leading-5 text-[#0A2533] text-right line-clamp-2"
               dir="rtl"
-              onClick={() => handleDownload(measurementReport,"measurement-report.xlsx")}
+              onClick={handleMeasurementReportDownload}
             >
-              הצגת מדדים קודמים
+              {measurementReportLoading ? "טוען..." : "הצגת מדדים קודמים"}
             </h1>
           </div>
           <div className="w-[95px] h-[90px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">

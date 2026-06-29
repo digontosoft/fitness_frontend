@@ -20,7 +20,7 @@ const ManageFitnessGuide = () => {
     //     </div>
     //   </div>
     // </div>
-    <AdminArrowCard image={ArrowBurger} title={"Manage Fitness Guide"} />
+    <AdminArrowCard image={ArrowBurger} title={"ניהול מדריך כושר"} />
   );
 };
 

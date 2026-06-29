@@ -93,10 +93,10 @@
 //   const handleDelete = async (id) => {
 //     try {
 //       await axios.delete(`${base_url}/deleteUser/${deleteAdmin._id}`);
-//       toast.success("Admin deleted successfully");
+//       toast.success("המנהל נמחק בהצלחה");
 //       setAdmins((prev) => prev.filter((u) => u._id !== deleteAdmin._id));
 //     } catch (err) {
-//       toast.error("Delete failed");
+//       toast.error(UI_TEXT.deleteFailed);
 //     } finally {
 //       setDeleteModalOpen(false);
 //       setDeleteAdmin(null);
@@ -118,13 +118,13 @@
 //         userType: formData.userType,
 //       });
 //       if (res.status === 200) {
-//         toast.success("Admin updated successfully!");
+//         toast.success("המנהל עודכן בהצלחה!");
 //         setIsEdit(false);
 //         setIsEditModal(null);
 //         fetchUsers();
 //       }
 //     } catch (err) {
-//       toast.error("Update failed!");
+//       toast.error(UI_TEXT.updateFailed);
 //     }
 //     // console.log("payload", formData);
 //   };
@@ -219,11 +219,11 @@
 //       });
 
 //       if (response.status === 200) {
-//         toast.success("User Type Updated Successfully");
+//         toast.success("סוג המשתמש עודכן בהצלחה");
 //         fetchUsers();
 //       }
 //     } catch (error) {
-//       toast.error("Failed to update user type");
+//       toast.error("עדכון סוג המשתמש נכשל");
 //       console.log("error:", error);
 //     }
 //   };
@@ -282,7 +282,7 @@
 //             ) : (
 //               <TableRow>
 //                 <TableCell colSpan={columns.length} className="text-center">
-//                   No admins found
+//                   לא נמצאו מנהלים
 //                 </TableCell>
 //               </TableRow>
 //             )}
@@ -350,6 +350,7 @@ import DeleteModal from "./DeleteModal";
 import EditAdmin from "./EditAdmin";
 import ViewAdmin from "./ViewAdmin";
 import Loading from "@/components/common/Loading";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 export default function AdminTable() {
   const [admins, setAdmins] = useState([]);
@@ -401,8 +402,8 @@ export default function AdminTable() {
       setTotalPages(Math.ceil(filteredAdmins.length / itemsPerPage));
     } catch (err) {
       console.error(err);
-      setFetchError("Failed to load users");
-      toast.error("Failed to load users");
+      setFetchError(UI_TEXT.loadUsersFailed);
+      toast.error(UI_TEXT.loadUsersFailed);
     } finally {
       setIsFetching(false);
       setIsInitialLoading(false);
@@ -420,10 +421,10 @@ export default function AdminTable() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${base_url}/deleteUser/${deleteAdmin._id}`);
-      toast.success("Admin deleted successfully");
+      toast.success("המנהל נמחק בהצלחה");
       setAdmins((prev) => prev.filter((u) => u._id !== deleteAdmin._id));
     } catch (err) {
-      toast.error("Delete failed");
+      toast.error(UI_TEXT.deleteFailed);
     } finally {
       setDeleteModalOpen(false);
       setDeleteAdmin(null);
@@ -445,13 +446,13 @@ export default function AdminTable() {
         userType: formData.userType,
       });
       if (res.status === 200) {
-        toast.success("Admin updated successfully!");
+        toast.success("המנהל עודכן בהצלחה!");
         setIsEdit(false);
         setIsEditModal(null);
         fetchUsers();
       }
     } catch (err) {
-      toast.error("Update failed!");
+      toast.error(UI_TEXT.updateFailed);
     }
   };
 
@@ -467,12 +468,12 @@ export default function AdminTable() {
         userType: "trainee",
       });
       if (response.status === 200) {
-        toast.success("User Type Updated Successfully");
+        toast.success("סוג המשתמש עודכן בהצלחה");
         fetchUsers();
       }
     } catch (error) {
-      toast.error("Failed to update user type");
-      console.log("error:", error);
+      toast.error("עדכון סוג המשתמש נכשל");
+      // console.log("error:", error);
     }
   };
 
@@ -528,7 +529,7 @@ export default function AdminTable() {
               className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
               size="sm"
             >
-              Admin
+              {UI_TEXT.admin}
             </Button>
             <Button
               className="bg-[#7994CB] font-bold"
@@ -581,7 +582,7 @@ export default function AdminTable() {
           className="border px-3 py-2 rounded-md"
         />
         {isFetching && (
-          <span className="text-sm text-gray-500 font-medium">Loading...</span>
+          <span className="text-sm text-gray-500 font-medium">{UI_TEXT.loading}</span>
         )}
       </div>
       <div className="rounded-md border">
@@ -625,7 +626,7 @@ export default function AdminTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  No admins found
+                  לא נמצאו מנהלים
                 </TableCell>
               </TableRow>
             )}

@@ -1,7 +1,7 @@
 import circle from "@/assets/image/circle.svg";
+import bgCard from "@/assets/image/image.svg";
 import men from "@/assets/image/men.svg";
 import women from "@/assets/image/women.svg";
-import bgCard from "@/assets/image/image.svg";
 
 const RightCard = ({ userSteps }) => {
   const progress = userSteps?.step_average || 0;
@@ -62,7 +62,7 @@ const RightCard = ({ userSteps }) => {
         <img
           src={circle}
           alt=""
-          className="absolute inset-0 w-full h-full object-contain"
+          className="absolute inset-0 w-full h-full sm:left-8 sm:-top-6 left-5 -top-7 object-contain"
         />
         <div className="relative w-full h-full flex items-center justify-center">
           <img

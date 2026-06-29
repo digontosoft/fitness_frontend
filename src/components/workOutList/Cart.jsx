@@ -3,7 +3,7 @@ import whiteLogo from "../../assets/image/blueLogo.svg";
 import workoutCartBg from "../../assets/image/workoutList/Bg.png";
 const Cart = ({ workout, training }) => {
  
-  console.log('training:', training);
+  // console.log('training:', training);
 
   return (
     <Link

@@ -6,6 +6,7 @@ import CommonContainer from "@/components/startTraining/CommonContainer";
 import ExcersizeInput from "@/components/startTraining/ExcersizeInput";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 import LastExercise from "@/components/startTraining/LastExercise";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,17 +16,7 @@ const StartTraining = () => {
   const workData = location.state?.data || {};
   const training = location.state?.training || location.state?.trainings || {};
   const workout = location.state?.workout || {};
-  
-  // console.log("=== StartTraining Data ===");
-  // console.log("workData:", workData);
-  // console.log("training:", training);
-  // console.log("workout:", workout);
-  // console.log("training.workouts:", training?.workouts);
-  
-  // Handle different data sources:
-  // 1. Task-based flow (ActionCourseCart): workData has userTrainingExercise
-  // 2. Training.workouts flow: training.workouts[0].exercises
-  // 3. Workout list flow: workout.exercises
+
   
   let allExercises = [];
   let selectedWorkoutData = null;
@@ -104,9 +95,11 @@ const StartTraining = () => {
     userTrainingExercise: exercisesToUse,
   };
   
+  const isSingleExercise = exercisesToUse.length === 1;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPrevious, setShowPrevious] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
+  const [isFinished, setIsFinished] = useState(isSingleExercise);
   const [exerciseData, setExerciseData] = useState({});
   const [lastWorkoutData, setLastWorkoutData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -168,16 +161,17 @@ const StartTraining = () => {
   };
 
   const handleNext = () => {
+    if (isSingleExercise) {
+      return;
+    }
+
     const nextIndex = getNextIndex();
 
     if (nextIndex !== currentIndex) {
       setCurrentIndex(nextIndex);
       setShowPrevious(true);
 
-      if (
-        exercisesToUse.length === 1 ||
-        nextIndex === exercisesToUse.length - 1
-      ) {
+      if (nextIndex === exercisesToUse.length - 1) {
         setIsFinished(true);
       }
     }
@@ -266,7 +260,7 @@ const StartTraining = () => {
   const handleFinish = async () => {
     // Only user_training_workout_id is required, task_id is optional
     if (!finalWorkData?.user_training_workout_id) {
-      toast.error("Missing required workout information. Cannot complete workout.");
+      toast.error(UI_TEXT.missingWorkoutInfo);
       console.error("Missing data:", {
         task_id: finalWorkData?.task_id,
         user_training_workout_id: finalWorkData?.user_training_workout_id,
@@ -303,7 +297,7 @@ const StartTraining = () => {
       );
   
     if (!exerciseDataArray.length) {
-      toast.error("Please complete at least one exercise");
+      toast.error(UI_TEXT.completeAtLeastOneExercise);
       return;
     }
   
@@ -327,7 +321,7 @@ const StartTraining = () => {
       );
   
       if (response.status === 200) {
-        toast.success("Workout completed successfully!");
+        toast.success(UI_TEXT.workoutCompleted);
         navigate("/");
       }
     } catch (error) {
@@ -335,7 +329,7 @@ const StartTraining = () => {
       const errorMessage =
         error.response?.data?.message ||
         error.message ||
-        "Failed to complete workout";
+        UI_TEXT.workoutCompleteFailed;
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -503,10 +497,10 @@ const StartTraining = () => {
           )}
         </>
         <ButtonGroup
-          onNext={isFinished ? handleFinish : handleNext}
+          onNext={isSingleExercise || isFinished ? handleFinish : handleNext}
           onPrevious={handlePrevious}
-          showPrevious={showPrevious}
-          isFinished={isFinished}
+          showPrevious={!isSingleExercise && showPrevious}
+          isFinished={isSingleExercise || isFinished}
           disabled={buttonDisabled || isSubmitting}
         />
       </CommonContainer>

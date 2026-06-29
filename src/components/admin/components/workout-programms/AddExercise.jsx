@@ -1,5 +1,6 @@
 import { Trash } from "lucide-react";
 import { useEffect, useState } from "react";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 const AddExercise = ({
   exercise,
@@ -66,7 +67,7 @@ const AddExercise = ({
         <button
           type="button"
           onClick={() => handleRemoveExercise(exercise?._id, false)} // Pass false for existing exercise
-          title="Remove exercise"
+          title={UI_TEXT.removeExercise}
           className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
         >
           <Trash className="size-4" />

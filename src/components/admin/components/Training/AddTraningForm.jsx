@@ -285,7 +285,7 @@
 
 //       await axios.post(`${base_url}/training`, payload).then((response) => {
 //         if (response.status === 201) {
-//           toast.success("Training session saved successfully!");
+//           toast.success(UI_TEXT.trainingSaved);
 //           setSelectedTrainingExercises([]);
 //           reset();
 //           navigate("/dashboard/training-list");
@@ -293,7 +293,7 @@
 //       });
 //     } catch (error) {
 //       console.error("Error submitting training session:", error);
-//       toast.error("Failed to save training session.");
+//       toast.error(UI_TEXT.trainingSaveFailed);
 //     }
 //   };
 //   return (
@@ -308,7 +308,7 @@
 //             placeholder="הוסף 
 // שם תוכנית אימון..."
 //             register={register}
-//             validation={{ required: "Training Name is required" }}
+//             validation={{ required: "נדרש שם תוכנית אימון" }}
 //             errors={errors}
 //           />
 
@@ -319,7 +319,7 @@
 //             label="תיאור תוכנית אימון"
 //             placeholder="הוסף תיאור תוכנית אימון..."
 //             register={register}
-//             validation={{ required: "Training Description is required" }}
+//             validation={{ required: "נדרש תיאור תוכנית אימון" }}
 //             errors={errors}
 //           />
 
@@ -505,6 +505,7 @@ import DynamicInputField from "@/components/measurements/DynamicInputField";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 import { Button } from "@/components/ui/button";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -553,7 +554,7 @@ const AddTrainingForm = () => {
       (w) => w.workout === newWorkout._id
     );
     if (alreadyExists) {
-      toast.error("Workout already added!");
+      toast.error(UI_TEXT.workoutAlreadyAdded);
       setShowWorkoutSelect(false);
       return;
     }
@@ -775,13 +776,13 @@ const AddTrainingForm = () => {
       };
 
       await axios.post(`${base_url}/training`, payload);
-      toast.success("Training session saved successfully!");
+      toast.success(UI_TEXT.trainingSaved);
       reset();
       setSelectedTrainingExercises([]);
       navigate("/dashboard/training-list");
     } catch (err) {
       console.error("Error submitting:", err);
-      toast.error("Failed to save training session.");
+      toast.error(UI_TEXT.trainingSaveFailed);
     } finally {
       setIsSubmitting(false);
     }
@@ -838,7 +839,7 @@ const AddTrainingForm = () => {
             label="שם תוכנית אימון"
             placeholder="הוסף שם תוכנית אימון..."
             register={register}
-            validation={{ required: "Training Name is required" }}
+            validation={{ required: "נדרש שם תוכנית אימון" }}
             errors={errors}
           />
 
@@ -849,7 +850,7 @@ const AddTrainingForm = () => {
             label="תיאור תוכנית אימון"
             placeholder="הוסף תיאור תוכנית אימון..."
             register={register}
-            validation={{ required: "Training Description is required" }}
+            validation={{ required: "נדרש תיאור תוכנית אימון" }}
             errors={errors}
           />
         </div>
@@ -877,7 +878,7 @@ const AddTrainingForm = () => {
                 <button
                   type="button"
                   onClick={() => handleRemoveWorkout(workoutIndex)}
-                  title="Remove workout"
+                  title="הסר אימון"
                   className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                 >
                   <Trash className="size-5" />
@@ -901,7 +902,7 @@ const AddTrainingForm = () => {
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
                           }`}
-                          title="Move up"
+                          title="הזז למעלה"
                         >
                           <ChevronUp className="size-4" />
                         </button>
@@ -914,7 +915,7 @@ const AddTrainingForm = () => {
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
                           }`}
-                          title="Move down"
+                          title="הזז למטה"
                         >
                           <ChevronDown className="size-4" />
                         </button>
@@ -923,7 +924,7 @@ const AddTrainingForm = () => {
                           onClick={() =>
                             handleRemoveExercise(workoutIndex, exerciseIndex)
                           }
-                          title="Remove exercise"
+                          title="הסר תרגיל"
                           className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                         >
                           <Trash className="size-4" />
@@ -1079,7 +1080,7 @@ const AddTrainingForm = () => {
             {isSubmitting ? (
               <span className="inline-flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                שומר...
+                {UI_TEXT.saving}
               </span>
             ) : (
               "שמור תכנית אימון חדשה"

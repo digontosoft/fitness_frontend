@@ -45,7 +45,7 @@ const EditNutrition = () => {
       if (data.file && data.file[0]) {
         formData.append("file", data.file[0]);
       }
-      console.log("formData", formData.get("title"));
+      // console.log("formData", formData.get("title"));
 
       await axios
         .put(`${base_url}/nutritionGuide/${id}`, formData, {
@@ -55,13 +55,13 @@ const EditNutrition = () => {
         })
         .then((response) => {
           if (response.status === 200) {
-            toast.success("Nutrition updated successfully!");
+            toast.success("מדריך התזונה עודכן בהצלחה!");
             navigate("/dashboard/nutrition-lists");
           }
         });
     } catch (error) {
       console.error("Error updating nutrition:", error);
-      toast.error("Failed to update nutrition.");
+      toast.error("עדכון מדריך התזונה נכשל");
     }
   };
 
@@ -86,9 +86,9 @@ const EditNutrition = () => {
                     id="title"
                     type="text"
                     label="שם מדריך תזונה"
-                    placeholder="Add שם האימון...."
+                    placeholder="הזן שם מדריך תזונה..."
                     register={register}
-                    validation={{ required: "שם האימון is required" }}
+                    validation={{ required: "נדרש שם מדריך תזונה" }}
                     errors={errors}
                     defaultValue={nutrition?.title}
                   />
@@ -100,7 +100,7 @@ const EditNutrition = () => {
                     label="תיאור מדריך תזונה"
                     placeholder="דגשים מיוחדים (במידה ויש)..."
                     register={register}
-                    validation={{ required: "דגשים מיוחדים is required" }}
+                    validation={{ required: "נדרש תיאור מדריך תזונה" }}
                     errors={errors}
                     defaultValue={nutrition?.description}
                   />

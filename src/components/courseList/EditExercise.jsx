@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Trash } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useLocation, useNavigate } from "react-router-dom";
+import { UI_TEXT } from "@/constants/hebrewText";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 
@@ -44,11 +45,11 @@ const EditExercise = () => {
   const fetchWorkout = useCallback(async () => {
     try {
       const response = await axios.get(`${base_url}/get-user-task/${user._id}`);
-      console.log("workout:", response.data.data);
+      // console.log("workout:", response.data.data);
       setWorkoutData(response.data.data);
     } catch (error) {
       console.error("Error fetching exercises:", error);
-      toast.error("Failed to fetch exercises.");
+      toast.error("טעינת התרגילים נכשלה");
     }
   }, [user?._id]);
 
@@ -59,7 +60,7 @@ const EditExercise = () => {
   const filteredExercises = workoutData?.filter(
     (ex) => ex?._id === workData?.task_id
   );
-  console.log("filteredExercises:", filteredExercises);
+  // console.log("filteredExercises:", filteredExercises);
 
   const fetchExercises = async () => {
     try {
@@ -68,7 +69,7 @@ const EditExercise = () => {
       setSelectedExerciseOptions(response.data.data); // Initially show all exercises
     } catch (error) {
       console.error("Error fetching exercises:", error);
-      toast.error("Failed to fetch exercises.");
+      toast.error("טעינת התרגילים נכשלה");
     }
   };
 
@@ -96,10 +97,10 @@ const EditExercise = () => {
         );
         setExerciseList(response.data.data.userTrainingExercise);
         validateSuperset(response.data.data.userTrainingExercise);
-        console.log("filteredWorkoutData:", response.data.data);
+        // console.log("filteredWorkoutData:", response.data.data);
       } catch (error) {
         console.error("Error fetching exercises:", error);
-        toast.error("Failed to fetch exercises.");
+        toast.error("טעינת התרגילים נכשלה");
       }
     };
 
@@ -128,15 +129,15 @@ const EditExercise = () => {
 
   const handleAddNewExercise = () => {
     if (!selectedExerciseIdForAdd) {
-      toast.error("Please select an exercise to add.");
+      toast.error("נא לבחור תרגיל להוספה");
       return;
     }
     if (!newExerciseSets || Number(newExerciseSets) <= 0) {
-      toast.error("Please enter a valid number of sets for the new exercise.");
+      toast.error("נא להזין מספר סטים תקין לתרגיל החדש");
       return;
     }
     if (!newExerciseReps || Number(newExerciseReps) <= 0) {
-      toast.error("Please enter a valid number of reps for the new exercise.");
+      toast.error("נא להזין מספר חזרות תקין לתרגיל החדש");
       return;
     }
 
@@ -171,9 +172,9 @@ const EditExercise = () => {
       setNewExerciseReps("");
       setNewExerciseManipulation("");
       setShowDropdown(false); // Hide dropdowns after adding
-      toast.success("Exercise added successfully!");
+      toast.success("התרגיל נוסף בהצלחה!");
     } else {
-      toast.error("Selected exercise not found.");
+      toast.error("התרגיל שנבחר לא נמצא");
     }
   };
 
@@ -181,14 +182,14 @@ const EditExercise = () => {
     const next = exerciseList.filter((item) => item._id !== idToRemove);
     setExerciseList(next);
     validateSuperset(next);
-    toast.info("Exercise removed.");
+    toast.info("התרגיל הוסר");
   };
 
   const handleChange = (index, field, value) => {
     const updatedExercises = [...exerciseList];
     // Basic validation for sets and reps
     if ((field === "sets" || field === "reps") && Number(value) < 0) {
-      toast.error(`${field} cannot be negative.`);
+      toast.error(`${field === "sets" ? "סטים" : "חזרות"} לא יכולים להיות שליליים`);
       return;
     }
     updatedExercises[index][field] = value;
@@ -217,16 +218,16 @@ const EditExercise = () => {
     for (const item of exerciseList) {
       if (!item.sets || Number(item.sets) <= 0) {
         toast.error(
-          `Please enter valid sets for ${
-            item.exercise_id?.name || "an exercise"
+          `נא להזין מספר סטים תקין עבור ${
+            item.exercise_id?.name || "תרגיל"
           }.`
         );
         return;
       }
       if (!item.reps || Number(item.reps) <= 0) {
         toast.error(
-          `Please enter valid reps for ${
-            item.exercise_id?.name || "an exercise"
+          `נא להזין מספר חזרות תקין עבור ${
+            item.exercise_id?.name || "תרגיל"
           }.`
         );
         return;
@@ -249,7 +250,7 @@ const EditExercise = () => {
         payload
       );
       if (response.status === 200) {
-        toast.success("Workout updated successfully!");
+        toast.success(UI_TEXT.workoutUpdated);
         setAllExercises((prevExercises) => [
           ...prevExercises,
           response?.data.data.userTrainingExercise,
@@ -258,7 +259,7 @@ const EditExercise = () => {
       }
     } catch (error) {
       console.error("Error updating workout:", error);
-      toast.error("Error updating workout.");
+      toast.error(UI_TEXT.workoutUpdateFailed);
     }
   };
 
@@ -286,7 +287,7 @@ const EditExercise = () => {
                     ? "opacity-30 cursor-not-allowed"
                     : "hover:bg-gray-100 cursor-pointer"
                 }`}
-                title="Move up"
+                title="הזז למעלה"
               >
                 <ChevronUp className="size-4" />
               </button>
@@ -299,7 +300,7 @@ const EditExercise = () => {
                     ? "opacity-30 cursor-not-allowed"
                     : "hover:bg-gray-100 cursor-pointer"
                 }`}
-                title="Move down"
+                title="הזז למטה"
               >
                 <ChevronDown className="size-4" />
               </button>
@@ -310,7 +311,7 @@ const EditExercise = () => {
             />
             <div>
               <h2 className="text-lg text-center font-semibold text-gray-800">
-                {item.exercise_id?.name || "Exercise"}
+                {item.exercise_id?.name || "תרגיל"}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-items-center mt-2">
                 <div className="flex flex-col items-center md:justify-center gap-3">

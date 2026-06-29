@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -18,7 +19,7 @@ const AddStepAverageForUser = ({ user, setUser }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async () => {
-    if (!stepCount) return alert("Please enter a valid step count.");
+    if (!stepCount) return alert(UI_TEXT.validStepCount);
 
     try {
       setIsLoading(true);
@@ -26,10 +27,10 @@ const AddStepAverageForUser = ({ user, setUser }) => {
         step_target: stepCount,
         user_id: user._id,
       };
-      console.log("stepCount", payload);
+      // console.log("stepCount", payload);
       await axios.post(`${base_url}/updateUserInfo`, payload).then((res) => {
         if (res.status === 200) {
-          toast.success("User Step Target Updated Successfully");
+          toast.success("יעד הצעדים עודכן בהצלחה");
           setUser((prevUser) => ({
             ...prevUser,
             step_target: stepCount,
@@ -40,7 +41,7 @@ const AddStepAverageForUser = ({ user, setUser }) => {
       });
     } catch (error) {
       console.error("Error submitting steps:", error);
-      alert("Failed to submit steps.");
+      alert(UI_TEXT.submitStepsFailed);
     }
   };
 

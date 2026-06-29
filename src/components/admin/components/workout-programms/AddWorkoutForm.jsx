@@ -128,14 +128,14 @@
 //     };
 
 //     if (workoutExercises.length === 0) {
-//       toast.error("Please add at least one exercise to the workout.");
+//       toast.error("נא להוסיף לפחות תרגיל אחד לאימון.");
 //       return;
 //     }
 
 //     try {
 //       const response = await axios.post(`${base_url}/workout`, workoutData);
 //       if (response.status === 201) {
-//         toast.success("Workout created successfully");
+//         toast.success(UI_TEXT.workoutCreated);
 //         reset();
 //         setWorkoutExercises([]);
 //         setSelectedBodyPart(null);
@@ -144,7 +144,7 @@
 //         navigate("/dashboard/workout-list");
 //       }
 //     } catch (error) {
-//       toast.error(error.response?.data?.message || "Failed to create workout");
+//       toast.error(error.response?.data?.message || UI_TEXT.workoutCreateFailed);
 //       console.error(error);
 //     }
 //   };
@@ -169,7 +169,7 @@
 //             label="שם תוכנית אימון"
 //             placeholder="הוסף שם תוכנית אימון ...."
 //             register={register}
-//             validation={{ required: "Workout name is required" }}
+//             validation={{ required: "נדרש שם אימון" }}
 //             errors={errors}
 //           />
 
@@ -180,7 +180,7 @@
 //             label=" תיאור האימון "
 //             placeholder="הוסף תיאור לאימון...."
 //             register={register}
-//             validation={{ required: "Workout Description is required" }}
+//             validation={{ required: "נדרש תיאור אימון" }}
 //             errors={errors}
 //           />
 
@@ -332,6 +332,7 @@ import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -448,7 +449,7 @@ const AddWorkoutForm = () => {
   const onSubmit = async (data) => {
     if (isSubmitting) return;
     if (workoutExercises.length === 0) {
-      toast.error("Please add at least one exercise to the workout.");
+      toast.error("נא להוסיף לפחות תרגיל אחד לאימון.");
       return;
     }
 
@@ -467,7 +468,7 @@ const AddWorkoutForm = () => {
     try {
       const response = await axios.post(`${base_url}/workout`, workoutData);
       if (response.status === 201) {
-        toast.success("Workout created successfully");
+        toast.success(UI_TEXT.workoutCreated);
         reset();
         setWorkoutExercises([]);
         setSelectedBodyPart(null);
@@ -476,7 +477,7 @@ const AddWorkoutForm = () => {
         navigate("/dashboard/workout-list");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to create workout");
+      toast.error(error.response?.data?.message || UI_TEXT.workoutCreateFailed);
       console.error(error);
     } finally {
       setIsSubmitting(false);
@@ -503,7 +504,7 @@ const AddWorkoutForm = () => {
             label="שם תוכנית אימון"
             placeholder="הוסף שם תוכנית אימון ...."
             register={register}
-            validation={{ required: "Workout name is required" }}
+            validation={{ required: "נדרש שם אימון" }}
             errors={errors}
           />
 
@@ -514,7 +515,7 @@ const AddWorkoutForm = () => {
             label=" תיאור האימון "
             placeholder="הוסף תיאור לאימון...."
             register={register}
-            validation={{ required: "Workout Description is required" }}
+            validation={{ required: "נדרש תיאור אימון" }}
             errors={errors}
           />
 
@@ -537,7 +538,7 @@ const AddWorkoutForm = () => {
                         ? "opacity-30 cursor-not-allowed"
                         : "hover:bg-gray-100 cursor-pointer"
                     }`}
-                    title="Move up"
+                    title="הזז למעלה"
                   >
                     <ChevronUp className="size-4" />
                   </button>
@@ -550,14 +551,14 @@ const AddWorkoutForm = () => {
                         ? "opacity-30 cursor-not-allowed"
                         : "hover:bg-gray-100 cursor-pointer"
                     }`}
-                    title="Move down"
+                    title="הזז למטה"
                   >
                     <ChevronDown className="size-4" />
                   </button>
                   <button
                     type="button"
                     onClick={() => handleRemoveExercise(index)}
-                    title="Remove exercise"
+                    title="הסר תרגיל"
                     className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                   >
                     <Trash className="size-4" />
@@ -673,7 +674,7 @@ const AddWorkoutForm = () => {
             {isSubmitting ? (
               <span className="inline-flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                שומר...
+                {UI_TEXT.saving}
               </span>
             ) : (
               "לשמור תוכנית אימון חדשה"

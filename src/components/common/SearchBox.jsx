@@ -1,10 +1,11 @@
 import React from "react";
 import { GoSearch } from "react-icons/go";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 const SearchBox = ({
   value,
   onChange,
-  placeholder = "Search...",
+  placeholder = UI_TEXT.searchPlaceholder,
   containerClass = "",
   inputClass = "",
   iconClass = "",

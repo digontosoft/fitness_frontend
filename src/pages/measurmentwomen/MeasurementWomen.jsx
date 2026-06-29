@@ -641,13 +641,13 @@ const MeasurementWomen = () => {
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("authToken");
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  console.log("gender", user?.gender);
+  // console.log("gender", user?.gender);
   const { id } = verifyToken(token);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   const handleFormSubmit = (data) => {
-    console.log("data:", data);
+    // console.log("data:", data);
     setLoading(true);
     const questionnaries = {
       user_id: id,
@@ -658,14 +658,14 @@ const MeasurementWomen = () => {
         .post(`${base_url}/upsertUserDetails`, questionnaries)
         .then((response) => {
           if (response.status === 200) {
-            toast.success("Questionaries Upload successfully!!!");
+            toast.success("השאלון נשלח בהצלחה!");
             navigate("/");
           }
         });
-      console.log("questionnaries", questionnaries);
+      // console.log("questionnaries", questionnaries);
     } catch (err) {
       toast.error(err);
-      console.log("quesntionariesError:", err);
+      // console.log("quesntionariesError:", err);
     } finally {
       setLoading(false);
     }

@@ -9,7 +9,7 @@ const ActionCourseCart = () => {
   const navigate = useNavigate();
 
   const workoutData = location.state.data;
-  console.log("workoutData:", workoutData);
+  // console.log("workoutData:", workoutData);
 
   const handleCourse = () => {
     navigate("/startTraining", { state: { data: workoutData } });

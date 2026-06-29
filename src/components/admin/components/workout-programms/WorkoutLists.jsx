@@ -33,6 +33,7 @@ import { GoSearch } from "react-icons/go";
 import { Link } from "react-router-dom";
 import WorkoutDetails from "./WorkoutDetails";
 import { useDebounce } from "@/hooks/useDebounce";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 export default function WorkoutLists() {
   const [sorting, setSorting] = useState([]);
@@ -272,7 +273,7 @@ export default function WorkoutLists() {
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      No results.
+                      {UI_TEXT.noResults}
                     </TableCell>
                   </TableRow>
                 )}
@@ -285,12 +286,12 @@ export default function WorkoutLists() {
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>אשר מחיקה</DialogTitle>
+            <DialogTitle>{UI_TEXT.confirmDeletion}</DialogTitle>
           </DialogHeader>
-          <p>האם אתה בטוח שברצונך למחוק אימון זה</p>
+          <p>האם אתה בטוח שברצונך למחוק אימון זה?</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-              בטל
+              {UI_TEXT.cancel}
             </Button>
             <Button
               className="bg-[#7994CB] text-white"
@@ -300,10 +301,10 @@ export default function WorkoutLists() {
               {isDeleting ? (
                 <span className="inline-flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  מוחק...
+                  {UI_TEXT.deleting}
                 </span>
               ) : (
-                "מחק"
+                UI_TEXT.delete
               )}
             </Button>
           </DialogFooter>

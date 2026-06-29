@@ -24,6 +24,7 @@ import { Loader } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 const TaskModal = ({ open, setOpen, userId, fetchData }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,16 +48,16 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
     try{
       const response = await axios.post(`${base_url}/create-task-template`, payload);
       if(response.status === 201){
-        toast.success("Task added successfully!");
+        toast.success(UI_TEXT.taskAdded);
          setIsLoading(false);
          setOpen(false);
          reset(); 
          fetchData();
       }
     }catch(error){
-      console.log(error);
+      // console.log(error);
     }
-    console.log("Form Submitted:", payload);
+    // console.log("Form Submitted:", payload);
    
   };
 
@@ -76,7 +77,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
             <Input
               id="title"
               placeholder="כותרת המשימה"
-              {...register("title", { required: "Title is required" })}
+              {...register("title", { required: UI_TEXT.titleRequired })}
             />
             {errors.title && <p className="text-[#7994CB] text-sm">{errors.title.message}</p>}
           </div>
@@ -89,8 +90,8 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
               rows={4}
               placeholder="תוכן המשימה"
               {...register("description", {
-                required: "Description is required",
-                minLength: { value: 10, message: "Minimum 10 characters required" },
+                required: UI_TEXT.descriptionRequired,
+                minLength: { value: 10, message: UI_TEXT.minTenChars },
               })}
             />
             {errors.description && (
@@ -104,7 +105,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
             <Input
               id="name"
               placeholder="שם המשימה"
-              {...register("name", { required: "Name is required" })}
+              {...register("name", { required: UI_TEXT.nameRequired })}
             />
             {errors.name && <p className="text-[#7994CB] text-sm">{errors.name.message}</p>}
           </div>
@@ -115,7 +116,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
             <Controller
               name="type"
               control={control}
-              rules={{ required: "Task type is required" }}
+              rules={{ required: UI_TEXT.taskTypeRequired }}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger id="type" className="w-full" dir="rtl">
@@ -154,7 +155,7 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
     className="w-full sm:w-auto"
     dir="rtl"
   >
-    בטל
+    ביטול
   </Button>
   <Button 
     type="submit" 

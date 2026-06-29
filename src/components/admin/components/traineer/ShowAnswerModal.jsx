@@ -17,7 +17,7 @@ function ShowAnswerModal() {
         const response = await axios.get(`${base_url}/userDetails/${Id}`);
         setUserInfo(response.data.data);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoading(false);
       }
@@ -25,7 +25,7 @@ function ShowAnswerModal() {
     getUserInfo();
   }, [Id]);
 
-  console.log('user info:', userInfo);
+  // console.log('user info:', userInfo);
 
   return (
     <>

@@ -3,6 +3,7 @@ import { NutrationData } from "@/constants/NutrationData";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { GoSearch } from "react-icons/go";
+import { UI_TEXT } from "@/constants/hebrewText";
 import Loading from "../common/Loading";
 import SingleCart from "./SingleCart";
 
@@ -27,7 +28,7 @@ export const NutritionCart = () => {
         setNutrationData(mergedData);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Something went wrong, please try again later.");
+        setError(UI_TEXT.somethingWentWrongLater);
       } finally {
         setLoading(false);
       }
@@ -41,7 +42,7 @@ export const NutritionCart = () => {
     (item) => item?.title?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  console.log("filterData", filterData);
+  // console.log("filterData", filterData);
   return (
     <div className="my-6 sm:my-8 md:my-10">
       <div className="flex justify-center px-2">
@@ -91,7 +92,7 @@ export const NutritionCart = () => {
               ) : null
             )
           ) : (
-            <p className="text-center col-span-full px-2">No results found.</p>
+            <p className="text-center col-span-full px-2">{UI_TEXT.noResultsFound}</p>
           )}
         </div>
       )}

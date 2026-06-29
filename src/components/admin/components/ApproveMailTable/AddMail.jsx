@@ -76,7 +76,7 @@
 //                   id="expiry_date"
 //                   type="date"
 //                   {...register("expiry_date", {
-//                     required: "Expiry Date is required",
+//                     required: UI_TEXT.expiryDateRequired,
 //                   })}
 //                   className={`w-full border border-gray-300 rounded-lg p-3 text-right ${
 //                     errors.expiry_date ? "border-red-500" : ""
@@ -123,6 +123,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { UI_TEXT } from "@/constants/hebrewText";
 import BasicButton from "../ui/BasicButton";
 
 export default function AddMail({ onEmailAdded }) {
@@ -136,12 +137,12 @@ export default function AddMail({ onEmailAdded }) {
     formState: { errors },
   } = useForm();
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  console.log("Current user role:", user);
+  // console.log("Current user role:", user);
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      console.log("Submitted email:", data);
+      // console.log("Submitted email:", data);
       const response = await axios.post(`${base_url}/approved-mail`, data);
       toast.success(response.data.message);
       reset();
@@ -150,7 +151,7 @@ export default function AddMail({ onEmailAdded }) {
       }
       setOpen(false);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || UI_TEXT.somethingWentWrong);
     } finally {
       setLoading(false);
     }
@@ -177,10 +178,10 @@ export default function AddMail({ onEmailAdded }) {
                 id="email"
                 type="email"
                 {...register("email", {
-                  required: "Email is required",
+                  required: UI_TEXT.emailRequired,
                   pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                    message: "הכנס כתובת מייל תקנית",
+                    message: UI_TEXT.validEmailRequired,
                   },
                 })}
                 className={`${errors.email ? "border-[#7994CB]" : ""}`}
@@ -199,7 +200,7 @@ export default function AddMail({ onEmailAdded }) {
               <Controller
                 name="role"
                 control={control}
-                rules={{ required: "Role is required" }}
+                rules={{ required: UI_TEXT.roleRequired }}
                 render={({ field }) => (
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger
@@ -272,7 +273,7 @@ export default function AddMail({ onEmailAdded }) {
                   id="expiry_date"
                   type="date"
                   {...register("expiry_date", {
-                    required: "Expiry Date is required",
+                    required: UI_TEXT.expiryDateRequired,
                   })}
                   className={`w-full border border-gray-300 rounded-lg p-3 text-right ${
                     errors.expiry_date ? "border-[#7994CB]" : ""
