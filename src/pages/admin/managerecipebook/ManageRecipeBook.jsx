@@ -67,12 +67,12 @@ const ManageRecipeBook = () => {
 
       if (response.status === 200) {
         setLoading(false);
-        toast.success("Recipe Book updated successfully!");
+        toast.success("ספר המתכונים עודכן בהצלחה!");
         navigate("/dashboard/manage-recipe-book");
       }
     } catch (error) {
       console.error("Error updating recipe book:", error);
-      toast.error("Failed to update recipe book.");
+      toast.error("עדכון ספר המתכונים נכשל");
     }
   };
   if(recipeBookLoading){
@@ -96,9 +96,9 @@ const ManageRecipeBook = () => {
                     id="title"
                     type="text"
                     label="שם ספר המתכונים"
-                    placeholder="Add שם האימון...."
+                    placeholder="הזן שם ספר מתכונים..."
                     register={register}
-                    validation={{ required: "שם האימון is required" }}
+                    validation={{ required: "נדרש שם ספר מתכונים" }}
                     errors={errors}
                     defaultValue={nutrition?.title}
                   />
@@ -114,7 +114,7 @@ const ManageRecipeBook = () => {
                       id="description"
                       placeholder="דגשים מיוחדים (במידה ויש)..."
                       defaultValue={nutrition?.description}
-                      {...register("description", { required: "דגשים מיוחדים is required" })}
+                      {...register("description", { required: "נדרש תיאור ספר מתכונים" })}
                       className="sm:min-w-[350px] border border-gray-300 rounded-md p-2 min-h-[120px] resize-y"
                     />
                     {errors.description && (

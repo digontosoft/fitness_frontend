@@ -42,7 +42,7 @@ const MeasurementTracking = () => {
         );
         if (response.status === 200) {
           setData(response?.data);
-          console.log("measurement tracking data", response?.data);
+          // console.log("measurement tracking data", response?.data);
         }
         const measurementResponse = await axios.get(
           `${base_url}/report/measurement/${userId._id}`
@@ -60,7 +60,7 @@ const MeasurementTracking = () => {
 
     fetchData();
   }, [userId?._id]);
-  console.log('measurement report:', measurementReport);
+  // console.log('measurement report:', measurementReport);
 
   useEffect(() => {
    if (!id) return;
@@ -70,7 +70,7 @@ const MeasurementTracking = () => {
           `${base_url}/get-measurement-by-id/${id}`
         );
         setMeasurements(response?.data?.data);
-        console.log('measurements:', response?.data);
+        // console.log('measurements:', response?.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -78,7 +78,7 @@ const MeasurementTracking = () => {
     fetchData();
   }, [id]);
 
-  console.log("measurement",measurements)
+  // console.log("measurement",measurements)
 
   const handleDownloadReport = async (e) => {
     e.preventDefault();
@@ -125,7 +125,7 @@ const MeasurementTracking = () => {
           throw new Error('Fetch failed');
         }
       } catch (fetchError) {
-        console.log("Fetch method failed, using direct download:", fetchError);
+        // console.log("Fetch method failed, using direct download:", fetchError);
         
         // Method 2: Create a form and submit it (works better for cross-origin)
         const form = document.createElement('form');
@@ -206,7 +206,7 @@ const sortedData = [...data].sort(
 );
 
 
-  console.log('measurement data:', data);
+  // console.log('measurement data:', data);
 
   return (
     <div className="overflow-x-hidden">

@@ -15,7 +15,7 @@ const CustomizeWorkoutForm = () => {
   const {
     state: { workout, training: trainings },
   } = useLocation();
-  console.log("trainings:", trainings);
+  // console.log("trainings:", trainings);
   const [training, setTraining] = useState({});
   const [allExercises, setAllExercises] = useState([]);
   const [selectedBodyPart, setSelectedBodyPart] = useState(null);
@@ -47,7 +47,7 @@ const CustomizeWorkoutForm = () => {
         `${base_url}/get-training-by-user-id/${user_Id}`
       );
       if (response.status === 200) {
-        console.log("userTrainingId:", response.data.data);
+        // console.log("userTrainingId:", response.data.data);
         const filteredTrainings = response.data.data.filter(
           (training) => training._id === trainings._id
         );
@@ -137,7 +137,7 @@ const CustomizeWorkoutForm = () => {
         try {
           const response = await axios.get(url);
           setSelectedExercise(response.data.data || []);
-          console.log("Filtered exercises for selection:", response.data.data);
+          // console.log("Filtered exercises for selection:", response.data.data);
         } catch (error) {
           console.error("Error fetching filtered exercises:", error);
           setSelectedExercise([]);
@@ -318,7 +318,7 @@ const CustomizeWorkoutForm = () => {
           } else {
             // If there is no next exercise or it's not a superset, the superset is incomplete
             setIsSupersetIncomplete(true);
-            toast.error("The next exercise must also be a superset.");
+            toast.error("התרגיל הבא חייב להיות גם סופרסט");
             return;
           }
         }
@@ -338,7 +338,7 @@ const CustomizeWorkoutForm = () => {
       if (previousExercise && previousExercise.manipulation === "superset") {
         setIsSupersetIncomplete(true);
         toast.error(
-          "Cannot remove superset from this exercise as the previous exercise is a superset."
+          "לא ניתן להסיר סופרסט מתרגיל זה כי התרגיל הקודם הוא סופרסט"
         );
         return;
       }
@@ -454,7 +454,7 @@ const CustomizeWorkoutForm = () => {
         }, 500);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error("שגיאה בשמירת תוכנית האימון. נסה שוב מאוחר יותר.");
     } finally {
       setIsSubmitting(false);
@@ -469,9 +469,9 @@ const CustomizeWorkoutForm = () => {
           id="name"
           type="text"
           label="שם תוכנית אימון "
-          placeholder="Enter training name..."
+          placeholder="הזן שם תוכנית אימון..."
           register={register}
-          validation={{ required: !user_Id && "Name is required" }}
+          validation={{ required: !user_Id && "נדרש שם" }}
           errors={errors}
           defaultValue={training?.name}
           disabled={true}
@@ -480,9 +480,9 @@ const CustomizeWorkoutForm = () => {
           id="description"
           type="text"
           label="תיאור"
-          placeholder="Enter description..."
+          placeholder="הזן תיאור..."
           register={register}
-          validation={{ required: !user_Id && "Description is required" }}
+          validation={{ required: !user_Id && "נדרש תיאור" }}
           errors={errors}
           defaultValue={training?.description}
           disabled={true}
@@ -530,7 +530,7 @@ const CustomizeWorkoutForm = () => {
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
                           }`}
-                          title="Move up"
+                          title="הזז למעלה"
                         >
                           <ChevronUp className="size-4" />
                         </button>
@@ -543,7 +543,7 @@ const CustomizeWorkoutForm = () => {
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
                           }`}
-                          title="Move down"
+                          title="הזז למטה"
                         >
                           <ChevronDown className="size-4" />
                         </button>

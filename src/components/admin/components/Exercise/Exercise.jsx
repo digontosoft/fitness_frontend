@@ -1,3 +1,4 @@
+import { UI_TEXT } from "@/constants/hebrewText";
 import NotFound from "@/shared/NotFound";
 import { Link } from "react-router-dom";
 import BasicButton from "../ui/BasicButton";
@@ -9,11 +10,11 @@ const Exercise = () => {
   return (
     <div className="min-h-[72vh] h-auto grid gap-5">
       <div className="space-y-5">
-        <FormTitle title="Manage Exercise" />
+        <FormTitle title="ניהול תרגילים" />
         <div>
           <Link to="/dashboard/add-exercise">
             <BasicCard>
-              <span>Add Exercise</span>
+              <span>הוסף תרגיל</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -33,11 +34,11 @@ const Exercise = () => {
             </BasicCard>
           </Link>
         </div>
-        <NotFound title="No Data Found" />
+        <NotFound title={UI_TEXT.noDataFound} />
       </div>
       <Link to="/dashboard/" className="self-end">
         <BasicButton
-          title="Back To Dashboard"
+          title={UI_TEXT.backToDashboard}
           icon={<MoveIcon className="w-10 h-10" />}
         />
       </Link>

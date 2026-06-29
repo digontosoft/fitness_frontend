@@ -52,7 +52,7 @@ const ExcersizeInput = ({ exerciseData, value, onChange }) => {
                 type="number"
                 className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.sets_done ? "border-[#7994CB]" : ""}`}
                 {...register("sets_done", {
-                  required: "Exercise name is required",
+                  required: "נדרש מספר סטים", // Sets count required
                   onChange: (e) =>
                     handleInputChange("sets_done", e.target.value),
                 })}
@@ -81,7 +81,7 @@ const ExcersizeInput = ({ exerciseData, value, onChange }) => {
                 type="number"
                 className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.reps_done ? "border-[#7994CB]" : ""}`}
                 {...register("reps_done", {
-                  required: "reps_done reps are required",
+                  required: "נדרש מספר חזרות", // Reps count required
                   onChange: (e) =>
                     handleInputChange("reps_done", e.target.value),
                 })}
@@ -111,7 +111,7 @@ const ExcersizeInput = ({ exerciseData, value, onChange }) => {
                 inputMode="decimal"
                 className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.last_set_weight ? "border-[#7994CB]" : ""}`}
                 {...register("last_set_weight", {
-                  required: "Last set weight is required",
+                  required: "נדרש משקל", // Weight required
                   setValueAs: (v) => (v === "" || v == null ? "" : Number(v)),
                   onChange: (e) =>
                     handleInputChange("last_set_weight", e.target.value),

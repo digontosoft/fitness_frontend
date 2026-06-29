@@ -50,6 +50,8 @@ const AddExerciseForm = ({ exerciseId }) => {
   } = useForm();
 
   useEffect(() => {
+    if (!exerciseId) return;
+
     axios.get(`${base_url}/exercise/${exerciseId}`).then((response) => {
       if (response.status === 200) {
         setExerciseData(response.data.data);
@@ -64,7 +66,7 @@ const AddExerciseForm = ({ exerciseId }) => {
   const crateExercise = (data) => {
     try {
       axios.post(`${base_url}/exercise`, data).then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 201) {
           toast.success(response.data.message);
           reset();
@@ -72,20 +74,20 @@ const AddExerciseForm = ({ exerciseId }) => {
         }
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
   const updateExercise = (data) => {
     try {
       axios.put(`${base_url}/exercise/${exerciseId}`, data).then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/dashboard/exercise-list");
         }
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

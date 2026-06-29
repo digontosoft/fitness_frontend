@@ -36,7 +36,7 @@ import womenback from "@/assets/image/woman-back.svg";
 import womenstomache from "@/assets/image/woman-belly.svg";
 
 const PersonalExercise = ({ exercise }) => {
-  console.log("exerciseP:", exercise.exercise_id);
+  // console.log("exerciseP:", exercise);
   const exerciseId = exercise?.exercise_id?._id;
   const [exerciseData, setExerciseData] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -46,7 +46,7 @@ const PersonalExercise = ({ exercise }) => {
     axios.get(`${base_url}/exercise/${exerciseId}`).then((response) => {
       if (response.status === 200) {
         setExerciseData(response.data.data);
-        console.log("exerciseData:", response.data.data);
+        // console.log("exerciseData:", response.data.data);
       }
     });
   }, [exerciseId]);

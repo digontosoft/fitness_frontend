@@ -16,6 +16,7 @@ import moment from "moment";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 const formatExpiryDate = (date) => {
   if (!date) return "";
@@ -147,7 +148,7 @@ function EditApproveMail({ id, email, updateDate, defaultExpiryDate }) {
               <Controller
                 name="expiry_date"
                 control={control}
-                rules={{ required: "Expiry Date is required" }}
+                rules={{ required: UI_TEXT.expiryDateRequired }}
                 render={({ field }) => (
                   <Input
                     {...field}

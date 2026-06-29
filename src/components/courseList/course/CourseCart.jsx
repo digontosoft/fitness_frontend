@@ -38,7 +38,7 @@ import { Link } from "react-router-dom";
 const CourseCart = ({ course }) => {
   const imageUrl = `${base_url}/${course?.image}`;
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  console.log("course", course);
+  // console.log("course", course);
   // // Determine the appropriate title based on course type and user gender
   // const getCourseTitle = () => {
   //   if (course?.title === "חכם בסופר") {

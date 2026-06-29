@@ -1,4 +1,5 @@
 import { base_url } from "@/api/baseUrl";
+import { UI_TEXT } from "@/constants/hebrewText";
 import PaginationComp from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import {
@@ -82,8 +83,8 @@ export default function RecipeBookUserList() {
       setTotalPages(Math.ceil(filteredUsers.length / itemsPerPage));
     } catch (err) {
       console.error(err);
-      setFetchError("Failed to load users");
-      toast.error("Failed to load users");
+      setFetchError(UI_TEXT.loadUsersFailed);
+      toast.error(UI_TEXT.loadUsersFailed);
     } finally {
       setIsFetching(false);
       setIsInitialLoading(false);
@@ -102,11 +103,11 @@ export default function RecipeBookUserList() {
   const handleDelete = async () => {
     try {
       await axios.delete(`${base_url}/deleteUser/${deleteUser._id}`);
-      toast.success("User deleted successfully");
+      toast.success("המשתמש נמחק בהצלחה");
       setUsers((prev) => prev.filter((u) => u._id !== deleteUser._id));
       fetchUsers();
     } catch (err) {
-      toast.error("Delete failed");
+      toast.error(UI_TEXT.deleteFailed);
     } finally {
       setDeleteModalOpen(false);
       setDeleteUser(null);
@@ -138,7 +139,7 @@ export default function RecipeBookUserList() {
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => row.getValue("name") || "N/A",
+      cell: ({ row }) => row.getValue("name") || "לא זמין",
     },
     {
       accessorKey: "email",
@@ -233,7 +234,7 @@ export default function RecipeBookUserList() {
           className="border px-3 py-2 rounded-md w-full max-w-xs"
         />
         {isFetching && (
-          <span className="text-sm text-gray-500 font-medium">Loading...</span>
+          <span className="text-sm text-gray-500 font-medium">{UI_TEXT.loading}</span>
         )}
       </div>
       
@@ -279,7 +280,7 @@ export default function RecipeBookUserList() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  No users found
+                  לא נמצאו משתמשים
                 </TableCell>
               </TableRow>
             )}

@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dialog";
 import { GoSearch } from "react-icons/go";
 import Loading from "@/components/common/Loading";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 export function NutritionList() {
   const [sorting, setSorting] = useState([]);
@@ -266,15 +267,15 @@ export function NutritionList() {
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{UI_TEXT.confirmDeletion}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this nutrition guide?</p>
+          <p>{UI_TEXT.confirmDeletionNutrition}</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-              Cancel
+              {UI_TEXT.cancel}
             </Button>
             <Button className="bg-[#7994CB] text-white" onClick={handleDelete}>
-              Delete
+              {UI_TEXT.delete}
             </Button>
           </DialogFooter>
         </DialogContent>

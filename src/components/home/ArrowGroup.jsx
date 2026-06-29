@@ -28,7 +28,7 @@ const ArrowGroup = ({ task, onclick }) => {
         console.error("Error fetching workout task:", error);
       }
     } else if (task.task_type === "measurement") {
-      console.log("Navigating to /measurements with data:", task);
+      // console.log("Navigating to /measurements with data:", task);
       navigate("/mesurement-complete", { state: task });
     } else if (task.task_type === "food_dairy") {
       // navigate("/food-dairy", { state: task });

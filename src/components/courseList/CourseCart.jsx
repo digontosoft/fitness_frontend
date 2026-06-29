@@ -72,7 +72,7 @@ import { maleChest } from "@/assets";
 const CourseCart = ({ exercise, handleOpen }) => {
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  console.log("user:", user);
+  // console.log("user:", user);
 
   let customIcon = null;
   if (exercise?.body_part === "גב") {

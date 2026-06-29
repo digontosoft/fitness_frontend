@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/dialog";
 import { GoSearch } from "react-icons/go";
 import { toast } from "sonner";
+import { UI_TEXT } from "@/constants/hebrewText";
 import UserDetails from "./UserDetails";
 
 export function TraineeUsersLists() {
@@ -169,7 +170,7 @@ export function TraineeUsersLists() {
                 ? "משתמש מתאמן"
                 : row.original.userType === "recipe"
                 ? "משתמש ספר מתכונים"
-                :"Admin"}
+                :"מנהל"}
             </Button>
 
             <Button
@@ -234,9 +235,9 @@ export function TraineeUsersLists() {
       const response = await axios.delete(
         `${base_url}/deleteUser/${selectedUser}`
       );
-      console.log("delete:", data.user_id);
+      // console.log("delete:", data.user_id);
       if (response.status === 200) {
-        toast.success("User deleted successfully.");
+        toast.success("המשתמש נמחק בהצלחה.");
       }
       setUsers((prevUsers) => prevUsers.filter((e) => e._id !== selectedUser));
       setDeleteModalOpen(false);
@@ -248,7 +249,7 @@ export function TraineeUsersLists() {
 
    const updateDate = async (data) => {
     if (!data?.email) {
-      toast.error("Email is required to update expiry date.");
+      toast.error("נדרש דואר אלקטרוני לעדכון תאריך התפוגה.");
       throw new Error("Missing email");
     }
     try {
@@ -257,7 +258,7 @@ export function TraineeUsersLists() {
         expiry_date: data.expiry_date,
       });
       if (response.status === 200) {
-        toast.success("Date updated successfully.");
+        toast.success("התאריך עודכן בהצלחה.");
         setAdminUsers((prevUsers) =>
           prevUsers.map((user) =>
             user.email === data.email
@@ -268,7 +269,7 @@ export function TraineeUsersLists() {
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Failed to update date."
+        error.response?.data?.message || "עדכון התאריך נכשל."
       );
       throw error;
     }
@@ -282,12 +283,12 @@ export function TraineeUsersLists() {
       });
 
       if (response.status === 200) {
-        toast.success("User Type Updated Successfully");
+        toast.success("סוג המשתמש עודכן בהצלחה");
         fetchAdminUser();
       }
     } catch (error) {
-      toast.error("Failed to update user type");
-      console.log("error:", error);
+      toast.error("עדכון סוג המשתמש נכשל");
+      // console.log("error:", error);
     }
   };
 
@@ -377,7 +378,7 @@ export function TraineeUsersLists() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {UI_TEXT.noResults}
                 </TableCell>
               </TableRow>
             )}
@@ -389,15 +390,15 @@ export function TraineeUsersLists() {
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{UI_TEXT.confirmDeletion}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this user?</p>
+          <p>{UI_TEXT.confirmDeletionUser}</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-              Cancel
+              {UI_TEXT.cancel}
             </Button>
             <Button className="bg-[#7994CB] text-white" onClick={handleDelete}>
-              Delete
+              {UI_TEXT.delete}
             </Button>
           </DialogFooter>
         </DialogContent>

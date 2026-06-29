@@ -23,7 +23,7 @@ export function RecurringTasksCard({
         .post(`${base_url}/complete-recurring-task/${selectedTask?._id}`)
         .then((res) => {
           if (res.status === 200) {
-            toast.success("Task completed successfully!");
+            toast.success("המשימה הושלמה בהצלחה!");
             setRecurringTasks((prevTasks) => prevTasks.filter((task) => task._id !== selectedTask._id));
             setIsRecurringModalOpen(false);
             setLoading(false);
@@ -56,7 +56,7 @@ export function RecurringTasksCard({
                 : "bg-gray-100 text-gray-800"
             }`}
           >
-            Status: {selectedTask?.status}
+            סטטוס: {selectedTask?.status}
           </Badge>
         </div>
         
@@ -71,10 +71,10 @@ export function RecurringTasksCard({
             {loading ? (
               <>
                 <Loader className="mr-2 h-4 w-4 animate-spin" />
-                Completing...
+                משלים...
               </>
             ) : (
-              "Complete"
+              "השלם"
             )}
           </Button>
         </DialogFooter>

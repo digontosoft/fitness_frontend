@@ -23,6 +23,8 @@ const MeasurementsWatch = () => {
   const [measurements, setMeasurements] = React.useState([]);
 
   useEffect(() => {
+    if (!id) return;
+
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -36,7 +38,7 @@ const MeasurementsWatch = () => {
     fetchData();
   }, [id]);
 
-  console.log("measurements:", measurements);
+  // console.log("measurements:", measurements);
 
   return (
     <div className="overflow-x-hidden">

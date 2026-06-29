@@ -81,7 +81,7 @@
 //             </div>
 //           </div>
 //         ) : (
-//           <p className="text-center text-gray-500">Loading...</p>
+//           <p className="text-center text-gray-500">{UI_TEXT.loading}</p>
 //         )}
 //         <DialogFooter>
 //           <DialogClose asChild>
@@ -104,32 +104,52 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Eye } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 export default function WorkoutDetails({ workoutId }) {
   const [workoutData, setWorkoutData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    if (workoutId) {
-      axios.get(`${base_url}/workout/${workoutId}`).then((response) => {
-        if (response.status === 200) {
-          setWorkoutData(response.data.data);
-        }
-      });
+  // Fetch only when user opens the details dialog (not on list mount)
+  const fetchWorkoutDetails = async () => {
+    if (!workoutId) return;
+    setLoading(true);
+    try {
+      const response = await axios.get(`${base_url}/workout/${workoutId}`);
+      if (response.status === 200) {
+        setWorkoutData(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching workout details:", error);
+    } finally {
+      setLoading(false);
     }
-  }, [workoutId]);
+  };
+
+  const handleOpenChange = (isOpen) => {
+    setOpen(isOpen);
+    if (isOpen) {
+      fetchWorkoutDetails();
+    } else {
+      setWorkoutData(null);
+    }
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button className="bg-[#7994CB] p-2 sm:p-3" size="sm">
           <Eye />
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[90%] h-[70%] max-w-lg md:max-w-2xl lg:max-w-4xl p-4 sm:p-6 rounded-lg overflow-y-scroll">
-        {workoutData ? (
+        {loading ? (
+          <p className="text-center text-gray-500">{UI_TEXT.loading}</p>
+        ) : workoutData ? (
           <div className="flex flex-col items-center gap-4">
             <h2 className="text-lg font-bold text-center">
               {workoutData?.name}
@@ -180,7 +200,7 @@ export default function WorkoutDetails({ workoutId }) {
             </div>
           </div>
         ) : (
-          <p className="text-center text-gray-500">Loading...</p>
+          <p className="text-center text-gray-500">{UI_TEXT.noResults}</p>
         )}
         <DialogFooter>
           <DialogClose asChild>

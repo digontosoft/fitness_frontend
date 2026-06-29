@@ -3,6 +3,7 @@ import DynamicInputField from "@/components/measurements/DynamicInputField";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 import { Button } from "@/components/ui/button";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -103,7 +104,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
       try {
       const res = await axios.get(`${base_url}/training/${trainingId}`);
       setTrainingById(res.data.data);
-      console.log("trainingById:", res.data.data);
+      // console.log("trainingById:", res.data.data);
       } catch (error) {
         console.error("Error fetching training sessions:", error);
       }
@@ -187,7 +188,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
           } else {
             // If there is no next exercise or it's not a superset, the superset is incomplete
             setIsSupersetIncomplete(true);
-            toast.error("The next exercise must also be a superset.");
+            toast.error("התרגיל הבא חייב להיות גם סופרסט.");
             return;
           }
         }
@@ -207,7 +208,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
       if (previousExercise && previousExercise.manipulation === "superset") {
         setIsSupersetIncomplete(true);
         toast.error(
-          "Cannot remove superset from this exercise as the previous exercise is a superset."
+          "לא ניתן להסיר סופרסט מתרגיל זה כי התרגיל הקודם הוא סופרסט."
         );
         return;
       }
@@ -327,7 +328,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
         try {
           const response = await axios.get(url);
           setSelectedExercise(response.data.data || []);
-          console.log("Filtered exercises for selection:", response.data.data);
+          // console.log("Filtered exercises for selection:", response.data.data);
         } catch (error) {
           console.error("Error fetching filtered exercises:", error);
           setSelectedExercise([]);
@@ -364,7 +365,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
           name: fullWorkoutData.name,
           exercises: fullWorkoutData.exercises.map(
             (exercise) => (
-              console.log("exercise_id:", exercise.exercise_id._id),
+              // console.log("exercise_id:", exercise.exercise_id._id),
               {
                 _id: exercise.exercise_id._id,
                 exercise_id: exercise.exercise_id._id,
@@ -407,7 +408,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     try {
       const formattedWorkouts = trainingbyId.workouts.map(
         (workout) => (
-          console.log("workout:", workout),
+          // console.log("workout:", workout),
           {
             workout: workout._id,
             exercises: workout.exercises.map((exercise) => ({
@@ -428,16 +429,16 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
         workouts: formattedWorkouts,
       };
 
-      console.log("assignTraining:", payload);
+      // console.log("assignTraining:", payload);
 
       const response = await axios.post(`${base_url}/assign-training`, payload);
       if (response.status === 201) {
-        toast.success("Training session updated successfully!");
+        toast.success(UI_TEXT.trainingUpdated);
         navigate(`/dashboard/assigned-training-list/${user_id}`);
       }
     } catch (error) {
       console.error("Error updating training session:", error);
-      toast.error("Failed to update training session.");
+      toast.error(UI_TEXT.trainingUpdateFailed);
     } finally {
       setIsSubmitting(false);
     }
@@ -456,7 +457,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               register={register}
               validation={{
                 required: !trainingbyId?.name
-                  ? "Training Name is required"
+                  ? "נדרש שם תוכנית אימון"
                   : false,
               }}
               errors={errors}
@@ -472,7 +473,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
               register={register}
               validation={{
                 required: !trainingbyId?.description
-                  ? "Training Description is required"
+                  ? "נדרש תיאור תוכנית אימון"
                   : false,
               }}
               errors={errors}
@@ -486,7 +487,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                   <button
                     type="button"
                     onClick={() => handleRemoveWorkout(workoutIndex)}
-                    title="Remove workout"
+                    title="הסר אימון"
                     className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                   >
                     <Trash className="size-5" />
@@ -509,7 +510,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
                           }`}
-                          title="Move up"
+                          title="הזז למעלה"
                         >
                           <ChevronUp className="size-4" />
                         </button>
@@ -524,7 +525,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                               ? "opacity-30 cursor-not-allowed"
                               : "hover:bg-gray-100 cursor-pointer"
                           }`}
-                          title="Move down"
+                          title="הזז למטה"
                         >
                           <ChevronDown className="size-4" />
                         </button>
@@ -533,7 +534,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                           onClick={() =>
                             handleRemoveExercise(workoutIndex, exerciseIndex)
                           }
-                          title="Remove exercise"
+                          title="הסר תרגיל"
                           className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
                         >
                           <Trash className="size-4" />
@@ -684,7 +685,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                 onClick={() => setShowWorkoutDropdown(!showWorkoutDropdown)}
               >
                 {showWorkoutDropdown
-                  ? "Hide Workout Dropdown"
+                  ? "הסתר בורר אימונים"
                   : "הוסף אימון לתוכנית"}
               </Button>
             </div>
@@ -704,7 +705,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
             {isSubmitting ? (
               <span className="inline-flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                שומר...
+                {UI_TEXT.saving}
               </span>
             ) : (
               // שייך תוכנית אימון

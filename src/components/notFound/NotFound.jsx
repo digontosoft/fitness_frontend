@@ -1,12 +1,13 @@
+import { UI_TEXT } from "@/constants/hebrewText";
 import { Link } from "react-router-dom";
 import nofFound from "../../assets/image/notFound.png";
 const NotFound = () => {
   return (
     <div className="not-found-container">
-      <img src={nofFound} alt="Page Not Found" className="not-found-image" />
+      <img src={nofFound} alt={UI_TEXT.pageNotFound} className="not-found-image" />
       <div className="not-found-content">
         <Link to={"/"} className="back-to-home-button">
-          Back to Home
+          {UI_TEXT.backToHome}
         </Link>
       </div>
     </div>

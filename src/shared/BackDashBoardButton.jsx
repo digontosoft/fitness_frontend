@@ -1,5 +1,6 @@
 import MoveIcon from "@/assets/icons/Icon";
 import BasicButton from "@/components/admin/components/ui/BasicButton";
+import { UI_TEXT } from "@/constants/hebrewText";
 import { Link } from "react-router-dom";
 
 const BackDashBoardButton = ({ className }) => {
@@ -7,7 +8,7 @@ const BackDashBoardButton = ({ className }) => {
     <Link to="/dashboard/">
       <BasicButton
         className={className}
-        title="Back To Dashboard"
+        title={UI_TEXT.backToDashboard}
         icon={<MoveIcon className="w-10 h-10" />}
       />
     </Link>

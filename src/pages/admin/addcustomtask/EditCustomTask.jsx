@@ -10,10 +10,11 @@ import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
   const [isLoading, setIsLoading] = useState(false);
-  console.log('task', task);
+  // console.log('task', task);
   const {
     register,
     handleSubmit,
@@ -52,16 +53,16 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
     try {
       const response = await axios.put(`${base_url}/update-task-template/${task._id}`, payload);
       if (response.status === 200) {
-        toast.success("Task updated successfully!");
+        toast.success(UI_TEXT.taskUpdated);
         setIsLoading(false);
         setOpen(false);
         reset();
         fetchData();
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setIsLoading(false);
-      toast.error("Something went wrong!");
+      toast.error(UI_TEXT.somethingWentWrong);
     }
   };
 
@@ -75,7 +76,7 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
             <Input
               id="title"
               placeholder="כותרת המשימה"
-              {...register("title", { required: "כותרת המשימה " })}
+              {...register("title", { required: UI_TEXT.titleRequired })}
             />
             {errors.title && <p className="text-[#7994CB] text-sm">{errors.title.message}</p>}
           </div>
@@ -88,8 +89,8 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
               rows={4}
               placeholder="תוכן המשימה "
               {...register("description", {
-                required: "תוכן המשימה ",
-                minLength: { value: 10, message: "Minimum 10 characters required" },
+                required: UI_TEXT.descriptionRequired,
+                minLength: { value: 10, message: UI_TEXT.minTenChars },
               })}
             />
             {errors.description && (
@@ -103,7 +104,7 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
             <Input
               id="name"
               placeholder="שם המשימה "
-              {...register("name", { required: "שם המשימה " })}
+              {...register("name", { required: UI_TEXT.nameRequired })}
             />
             {errors.name && <p className="text-[#7994CB] text-sm">{errors.name.message}</p>}
           </div>
@@ -114,7 +115,7 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
             <Controller
               name="frequency"
               control={control}
-              rules={{ required: "אינטרוול משימה" }}
+              rules={{ required: UI_TEXT.taskTypeRequired }}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger id="frequency" className="w-full" dir="rtl">
@@ -122,12 +123,13 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
                   </SelectTrigger>
                   <SelectContent>
                     {[
-                      { value: "1day", label: "One Day" },
-                      { value: "2days", label: "Two Days" },
-                      { value: "3days", label: "Three Days" },
-                      { value: "1week", label: "One Week" },
-                      { value: "2weeks", label: "Two Weeks" },
-                      { value: "1month", label: "One Month" },
+                      { value: "oncetime", label: "חד פעמי" },
+                      { value: "1day", label: "כל יום" },
+                      { value: "2days", label: "כל יומיים" },
+                      { value: "3days", label: "כל שלושה ימים" },
+                      { value: "1week", label: "כל שבוע" },
+                      { value: "2weeks", label: "כל שבועיים" },
+                      { value: "1month", label: "כל חודש" },
                     ].map((item) => (
                       <SelectItem key={item.value} value={item.value} dir="rtl">
                         {item.label}
@@ -148,15 +150,15 @@ const EditCustomTask = ({ open, setOpen, userId, task, fetchData }) => {
               onClick={() => setOpen(false)}
               className="w-full sm:w-auto"
             >
-              בטל
+              ביטול
             </Button>
             <Button type="submit" className="w-full sm:w-auto bg-[#7994CB]" disabled={isLoading}>
               {isLoading ? (
                 <>
-                  <Loader className="mr-2 animate-spin" />Saving
+                  <Loader className="mr-2 animate-spin" />{UI_TEXT.saving}
                 </>
               ) : (
-                "Save"
+                UI_TEXT.save
               )}
             </Button>
           </DialogFooter>

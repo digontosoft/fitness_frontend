@@ -50,7 +50,7 @@
 //       }
 //     } catch (error) {
 //       console.error("Error submitting training session:", error);
-//       toast.error("Failed to save nutrition.");
+//       toast.error("שמירת מדריך התזונה נכשלה");
 //     }
 //   };
 
@@ -70,7 +70,7 @@
 //             placeholder={"Add nutrition guide name..."}
 //             register={register}
 //             validation={{
-//               required: "Nutrition guide name is required",
+//               required: "נדרש שם מדריך תזונה",
 //             }}
 //             errors={errors}
 //           />
@@ -83,7 +83,7 @@
 //             placeholder={"Add nutrition guide description..."}
 //             register={register}
 //             validation={{
-//               required: "Nutrition guide description is required",
+//               required: "נדרש תיאור מדריך תזונה",
 //             }}
 //             errors={errors}
 //           />
@@ -174,7 +174,7 @@ const AddNutritionForm = () => {
         file: base64File,
       };
 
-      console.log("nutritionGuide:", payload);
+      // console.log("nutritionGuide:", payload);
 
       const response = await axios.post(`${base_url}/nutritionGuide`, payload, {
         headers: {
@@ -184,14 +184,14 @@ const AddNutritionForm = () => {
       });
 
       if (response.status === 201) {
-        toast.success("Nutrition Guide saved successfully!");
+        toast.success("מדריך התזונה נשמר בהצלחה!");
         setIsLoading(false);
         reset();
          userDetails.userType === "admin" ? navigate(`/admin-dashboard/nutrition-lists`) :navigate(`/dashboard/nutrition-lists`);
       }
     } catch (error) {
       console.error("Error submitting nutrition guide:", error);
-      toast.error("Failed to save nutrition.");
+      toast.error("שמירת מדריך התזונה נכשלה");
     }
   };
 
@@ -207,7 +207,7 @@ const AddNutritionForm = () => {
             placeholder={"הוסף שם למדריך תזונה ..."}
             register={register}
             validation={{
-              required: "Nutrition guide name is required",
+              required: "נדרש שם מדריך תזונה",
             }}
             errors={errors}
           />
@@ -220,7 +220,7 @@ const AddNutritionForm = () => {
             placeholder={"הוסף תיאור מדריך תזונה ..."}
             register={register}
             validation={{
-              required: "Nutrition guide description is required",
+              required: "נדרש תיאור מדריך תזונה",
             }}
             errors={errors}
           />

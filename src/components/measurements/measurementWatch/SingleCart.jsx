@@ -14,9 +14,9 @@ import SmallCart from "./SmallCart";
 const SingleCart = ({ userId, setOpen, setId }) => {
   const [data, setData] = useState([]);
   const [user, setUser] = useState({});
-  const [measurementReport, setMeasurementReport] = useState(null);
+  const [reportLoading, setReportLoading] = useState(false);
 
-  console.log("user", userId);
+  // console.log("user", userId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,15 +24,6 @@ const SingleCart = ({ userId, setOpen, setId }) => {
         const response = await axios.get(
           `${base_url}/measurement/calculate/${userId}`
         );
-
-        const measurementResponse = await axios.get(
-          `${base_url}/report/measurement/${userId}`
-        );
-
-        if (measurementResponse.status === 200) {
-          setMeasurementReport(measurementResponse?.data.data.report_link);
-        }
-
         setData(response?.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -40,6 +31,26 @@ const SingleCart = ({ userId, setOpen, setId }) => {
     };
     fetchData();
   }, [userId]);
+
+  const handleReportClick = async (e) => {
+    e.preventDefault();
+    if (!userId || reportLoading) return;
+
+    setReportLoading(true);
+    try {
+      const response = await axios.get(
+        `${base_url}/report/measurement/${userId}`
+      );
+      const reportLink = response?.data?.data?.report_link;
+      if (reportLink) {
+        window.open(reportLink, "_blank");
+      }
+    } catch (error) {
+      console.error("Error fetching report:", error);
+    } finally {
+      setReportLoading(false);
+    }
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -51,7 +62,7 @@ const SingleCart = ({ userId, setOpen, setId }) => {
           JSON.stringify(response.data.data._id)
         );
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     getUser();
@@ -124,11 +135,11 @@ const SingleCart = ({ userId, setOpen, setId }) => {
               />
             </div>
             <a
-              href={measurementReport}
-              download
+              href="#"
+              onClick={handleReportClick}
               className="text-lg font-semibold text-center underline cursor-pointer"
             >
-              הצגת מדדים קודמים
+              {reportLoading ? "טוען..." : "הצגת מדדים קודמים"}
             </a>
           </div>
         );

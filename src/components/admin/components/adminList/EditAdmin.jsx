@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 const EditAdmin = ({ admin, onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -44,12 +45,12 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
           ✖
         </button>
 
-        <h2 className="text-xl font-bold mb-4">Edit Admin</h2>
+        <h2 className="text-xl font-bold mb-4">{UI_TEXT.editAdmin}</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* First Name */}
           <div>
-            <label className="block text-sm font-medium">First Name</label>
+            <label className="block text-sm font-medium">{UI_TEXT.firstName}</label>
             <input
               type="text"
               name="firstName"
@@ -61,7 +62,7 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
 
           {/* Last Name */}
           <div>
-            <label className="block text-sm font-medium">Last Name</label>
+            <label className="block text-sm font-medium">{UI_TEXT.lastName}</label>
             <input
               type="text"
               name="lastName"
@@ -73,7 +74,7 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
 
           {/* Full Name */}
           <div>
-            <label className="block text-sm font-medium">Full Name</label>
+            <label className="block text-sm font-medium">{UI_TEXT.fullName}</label>
             <input
               type="text"
               name="full_name"
@@ -85,7 +86,7 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium">Email</label>
+            <label className="block text-sm font-medium">{UI_TEXT.email}</label>
             <input
               type="email"
               name="email"
@@ -97,30 +98,30 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
 
           {/* Role */}
           <div>
-            <label className="block text-sm font-medium">Role</label>
+            <label className="block text-sm font-medium">{UI_TEXT.role}</label>
             <select
               name="userType"
               value={formData.userType}
               onChange={handleChange}
               className="w-full border rounded px-3 py-2"
             >
-              <option value="admin">Admin</option>
-              <option value="supperadmin">Super Admin</option>
+              <option value="admin">{UI_TEXT.admin}</option>
+              <option value="supperadmin">{UI_TEXT.superAdmin}</option>
             </select>
           </div>
 
           {/* Gender */}
           <div>
-            <label className="block text-sm font-medium">Gender</label>
+            <label className="block text-sm font-medium">{UI_TEXT.gender}</label>
             <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
               className="w-full border rounded px-3 py-2"
             >
-              <option value="">Select gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              <option value="">{UI_TEXT.selectGender}</option>
+              <option value="male">{UI_TEXT.male}</option>
+              <option value="female">{UI_TEXT.female}</option>
             </select>
           </div>
 
@@ -131,13 +132,13 @@ const EditAdmin = ({ admin, onClose, onSave }) => {
               onClick={onClose}
               className="px-4 py-2 bg-gray-300 rounded"
             >
-              Cancel
+              {UI_TEXT.cancel}
             </button>
             <button
               type="submit"
               className="px-4 py-2 bg-[#7994CB] text-white rounded"
             >
-              Save
+              {UI_TEXT.save}
             </button>
           </div>
         </form>

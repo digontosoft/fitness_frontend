@@ -22,7 +22,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
       }
     });
   }, [userId]);
-  console.log('user data:', userData);
+  // console.log('user data:', userData);
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogTrigger asChild>

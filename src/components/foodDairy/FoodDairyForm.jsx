@@ -18,7 +18,7 @@
 //   //       data
 //   //     );
 //   //     if (response.status === 200) {
-//   //       toast.success("Food dairy task updated successfully");
+//   //       toast.success("יומן האכילה עודכן בהצלחה");
 //   //       navigate("/");
 //   //     }
 //   //   } catch (error) {
@@ -63,7 +63,7 @@
 //       <textarea
 //         type="text"
 //         {...register("lunch", { required: true })}
-//         placeholder="Enter items"
+//         placeholder="הזן פריטים"
 //         className="w-full border p-2 rounded-md"
 //       />
 
@@ -71,7 +71,7 @@
 //       <textarea
 //         type="text"
 //         {...register("dinner", { required: true })}
-//         placeholder="Enter items"
+//         placeholder="הזן פריטים"
 //         className="w-full border p-2 rounded-md"
 //       /> */}
 

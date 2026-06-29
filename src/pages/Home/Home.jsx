@@ -22,7 +22,7 @@ const Home = () => {
   const Id = user._id;
 
 
-  console.log("userInfo:", userInfo);
+  // console.log("userInfo:", userInfo);
 
   const [getMesurement, setMesurement] = useState([]);
 
@@ -37,7 +37,7 @@ const Home = () => {
         throw error;
       }
     };
-console.log("recurringTasks:", recurringTasks);
+// console.log("recurringTasks:", recurringTasks);
  
 useEffect(() => {
   const fetchMeasurement = async () => {
@@ -90,7 +90,7 @@ useEffect(() => {
         setUserSteps(response.data.data);
       }
     } catch (err) {
-      console.log("error:", err);
+      // console.log("error:", err);
     }
   };
 

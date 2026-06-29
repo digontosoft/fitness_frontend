@@ -16,11 +16,11 @@ const Supermarket = () => {
         axios.get(`${base_url}/course/${id}`).then((res) => {
           if (res.status === 200) {
             setCourse(res.data.course);
-            console.log("courses:", res?.data.course);
+            // console.log("courses:", res?.data.course);
           }
         });
       } catch (err) {
-        console.log("courses:", err);
+        // console.log("courses:", err);
       }
     };
     fetchCourse();

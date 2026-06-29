@@ -41,7 +41,7 @@ const GenderSelection = () => {
         });
     } catch (err) {
       toast.error(err.response.data.message);
-      console.log("error:", err);
+      // console.log("error:", err);
     } finally {
       setLoading(false);
     }

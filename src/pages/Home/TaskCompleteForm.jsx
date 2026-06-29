@@ -7,6 +7,7 @@ import { base_url } from "@/api/baseUrl";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { UI_TEXT } from "@/constants/hebrewText";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -24,7 +25,7 @@ const TaskCompleteForm = ({ data }) => {
       try {
         const response = await axios.get(`${base_url}/measurement/${Id}`);
         if (response.status === 200) {
-          console.log("measurement:", response.data.data);
+          // console.log("measurement:", response.data.data);
           setMesurement(response.data.data);
         }
       } catch (error) {
@@ -60,7 +61,7 @@ const TaskCompleteForm = ({ data }) => {
 
   useEffect(() => {
     if (getMesurement) {
-      console.log(getMesurement.waist);
+      // console.log(getMesurement.waist);
       reset({
         mode: "task",
         date: getMesurement.date || "",
@@ -82,7 +83,7 @@ const TaskCompleteForm = ({ data }) => {
     }
   }, [getMesurement]);
 
-  console.log("id", id);
+  // console.log("id", id);
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -100,7 +101,7 @@ const TaskCompleteForm = ({ data }) => {
     formData.append("user_id", Id);
 
     for (const pair of formData.entries()) {
-      console.log(`${pair[0]}:`, pair[1]);
+      // console.log(`${pair[0]}:`, pair[1]);
     }
 
     try {
@@ -112,11 +113,11 @@ const TaskCompleteForm = ({ data }) => {
         }
       );
       if (response.status === 200) {
-        toast.success("Measurement Task Complete successfully!");
+        toast.success(UI_TEXT.measurementTaskComplete);
         navigate("/");
       }
     } catch (error) {
-      toast.error("Error updating measurement. Please try again.");
+      toast.error(UI_TEXT.measurementUpdateFailed);
       console.error("Error updating measurement:", error);
     }
   };
@@ -145,7 +146,7 @@ const TaskCompleteForm = ({ data }) => {
     if (validFiles.length > 0) {
       const totalFiles = files.length + validFiles.length;
       if (totalFiles > 4) {
-        toast.warning("You can upload up to 4 images only.");
+        toast.warning(UI_TEXT.maxFourImages);
         return;
       }
       setFiles((prevFiles) => [...prevFiles, ...validFiles]);
@@ -168,7 +169,7 @@ const TaskCompleteForm = ({ data }) => {
       "application/pdf",
     ];
     if (!validTypes.includes(file.type)) {
-      alert("Invalid file type. Please upload an image or PDF.");
+      alert(UI_TEXT.invalidImageOrPdf);
       return false;
     }
     return true;
@@ -355,7 +356,7 @@ const TaskCompleteForm = ({ data }) => {
               onDrop={handleDrop}
             >
               <div>
-                <img src={upload} alt="Upload Icon" 
+                <img src={upload} alt="סמל העלאה" 
                 style={{
                     filter:
                       "brightness(0) saturate(100%) invert(63%) sepia(10%) saturate(2556%) hue-rotate(186deg) brightness(94%) contrast(86%)",
@@ -403,7 +404,7 @@ const TaskCompleteForm = ({ data }) => {
                     {file.type.startsWith("image/") && (
                       <img
                         src={previews[index]}
-                        alt="Preview"
+                        alt="תצוגה מקדימה"
                         className="w-10 h-10 object-cover border rounded-full"
                       />
                     )}

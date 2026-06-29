@@ -60,10 +60,10 @@ const SupperAdminRecipeBook = () => {
         const response = await axios.get(`${base_url}/recipeBook`);
         if (response.status === 200) {
           setRecipeBook(response.data.data);
-          console.log("pdf:", response?.data?.data);
+          // console.log("pdf:", response?.data?.data);
         }
       } catch (error) {
-        setFetchError("Failed to load recipe books");
+        setFetchError("טעינת ספרי המתכונים נכשלה");
         console.error("Error fetching recipe book:", error);
       } finally {
         setLoading(false);
@@ -107,7 +107,7 @@ const SupperAdminRecipeBook = () => {
                 <TableCell className="max-w-xs truncate">
                   {book.description}
                 </TableCell>
-                <TableCell>{book.type === "normalUser" ? "Recipe Book User" : "Trainee User"}</TableCell>
+                <TableCell>{book.type === "normalUser" ? "מתכונים בלבד" : "למתאמנים"}</TableCell>
                 <TableCell className="flex gap-2 items-center">
                  <Link to={`/dashboard/view-recipe-book/${book._id}`}>
                   <Button
@@ -134,7 +134,7 @@ const SupperAdminRecipeBook = () => {
           ) : (
             <TableRow>
               <TableCell colSpan={4} className="text-center">
-                No recipe books found
+                לא נמצאו ספרי מתכונים
               </TableCell>
             </TableRow>
           )}

@@ -7,33 +7,52 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Eye } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 export default function TrainingDetails({ trainingId }) {
   const [trainingData, setTrainingData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    if (trainingId) {
-      axios.get(`${base_url}/training/${trainingId}`).then((response) => {
-        if (response.status === 200) {
-          setTrainingData(response.data.data);
-          console.log("Training-Data:", response.data.data);
-        }
-      });
+  // Fetch only when user opens the details dialog (not on list mount)
+  const fetchTrainingDetails = async () => {
+    if (!trainingId) return;
+    setLoading(true);
+    try {
+      const response = await axios.get(`${base_url}/training/${trainingId}`);
+      if (response.status === 200) {
+        setTrainingData(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching training details:", error);
+    } finally {
+      setLoading(false);
     }
-  }, [trainingId]);
+  };
+
+  const handleOpenChange = (isOpen) => {
+    setOpen(isOpen);
+    if (isOpen) {
+      fetchTrainingDetails();
+    } else {
+      setTrainingData(null);
+    }
+  };
 
   return (
-    <Dialog className="">
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button className="bg-[#7994CB]" size="sm">
           <Eye />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl w-[90%] h-[70%] mx-auto p-6 rounded-lg overflow-y-scroll">
-        {trainingData ? (
+        {loading ? (
+          <p className="text-center text-gray-500">{UI_TEXT.loading}</p>
+        ) : trainingData ? (
           <div className="flex flex-col items-center gap-6">
             <h2 className="text-xl font-bold text-gray-900">
               {trainingData.name}
@@ -44,7 +63,7 @@ export default function TrainingDetails({ trainingId }) {
               {trainingData.workouts?.length > 0 ? (
                 trainingData.workouts.map(
                   (workoutItem) => (
-                    console.log("workoutItem", workoutItem),
+                    // console.log("workoutItem", workoutItem),
                     (
                       <div
                         key={workoutItem._id}
@@ -58,7 +77,7 @@ export default function TrainingDetails({ trainingId }) {
                           <div className="mt-3">
                             {workoutItem.exercises.map(
                               (exercise) => (
-                                console.log("exercise", exercise),
+                                // console.log("exercise", exercise),
                                 (
                                   <div
                                     key={exercise._id}
@@ -110,7 +129,7 @@ export default function TrainingDetails({ trainingId }) {
             </div>
           </div>
         ) : (
-          <p className="text-center text-gray-500">Loading...</p>
+          <p className="text-center text-gray-500">{UI_TEXT.noResults}</p>
         )}
 
         <DialogFooter>

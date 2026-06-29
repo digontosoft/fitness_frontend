@@ -34,6 +34,7 @@ import axios from "axios";
 import { useCallback, useEffect } from "react";
 import { GoSearch } from "react-icons/go";
 import { toast } from "sonner";
+import { UI_TEXT } from "@/constants/hebrewText";
 import AddMail from "./AddMail";
 
 export function ApproveMailTable() {
@@ -111,7 +112,7 @@ export function ApproveMailTable() {
               {row.original.isActive === true ? (
                 <span className="text-[#7994CB]">בטל מנוי</span>
               ) : (
-                <span className="text-green-500">Activate</span>
+                <span className="text-green-500">{UI_TEXT.activate}</span>
               )}
             </Button>
           </div>
@@ -131,7 +132,7 @@ export function ApproveMailTable() {
         ...(data.status !== undefined && { status: data.status }),
       });
       if (response.status === 200) {
-        toast.success("Date updated successfully.");
+        toast.success("התאריך עודכן בהצלחה.");
         setEmails((prevEmails) =>
           prevEmails.map((email) =>
             email.email === data.email
@@ -142,7 +143,7 @@ export function ApproveMailTable() {
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Failed to update date."
+        error.response?.data?.message || "עדכון התאריך נכשל."
       );
       throw error;
     }
@@ -154,7 +155,7 @@ export function ApproveMailTable() {
       ...rowData,
       isActive: updatedStatus,
     };
-    console.log("data", data);
+    // console.log("data", data);
 
     // try {
     //   const response = await axios.patch(
@@ -317,7 +318,7 @@ export function ApproveMailTable() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {UI_TEXT.noResults}
                 </TableCell>
               </TableRow>
             )}
@@ -350,7 +351,7 @@ export function ApproveMailTable() {
   ) : (
     <TableRow>
       <TableCell colSpan={columns.length} className="h-24 text-center">
-        No results.
+        {UI_TEXT.noResults}
       </TableCell>
     </TableRow>
   )}
@@ -370,12 +371,12 @@ export function ApproveMailTable() {
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>אשר מחיקה</DialogTitle>
+            <DialogTitle>{UI_TEXT.confirmDeletion}</DialogTitle>
           </DialogHeader>
-          <p>האם אתה בטוח שברצונך למחוק כתובת דואר אלקטרוני זו</p>
+          <p>האם אתה בטוח שברצונך למחוק כתובת דואר אלקטרוני זו?</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-              בטל
+              {UI_TEXT.cancel}
             </Button>
             <Button
               className="bg-[#7994CB] text-white"
@@ -385,10 +386,10 @@ export function ApproveMailTable() {
               {isDeleting ? (
                 <span className="inline-flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  מוחק...
+                  {UI_TEXT.deleting}
                 </span>
               ) : (
-                "מחק"
+                UI_TEXT.delete
               )}
             </Button>
           </DialogFooter>

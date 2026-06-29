@@ -32,6 +32,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import TrainingForTraineeDetails from "./TrainingForTraineeDetails";
+import { UI_TEXT } from "@/constants/hebrewText";
 // import TrainingDetails from "./TrainingDetails";
 
 export function TrainingListForTrainee({ userId }) {
@@ -51,7 +52,7 @@ export function TrainingListForTrainee({ userId }) {
         const response = await axios.get(`${base_url}/getUser/${userId}`);
         setUser(response.data.data);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     getUser();
@@ -178,7 +179,7 @@ export function TrainingListForTrainee({ userId }) {
         setTraining(response.data.data);
         setTotalPages(response.data.pagination.pages);
         setPage(response.data.pagination.page);
-        console.log("response:", response);
+        // console.log("response:", response);
       } catch (error) {
         console.error("Error fetching exercises:", error);
       } finally {
@@ -186,7 +187,7 @@ export function TrainingListForTrainee({ userId }) {
       }
     };
     fetchData();
-  }, [userId, page, totalPages, search]);
+  }, [userId, page, search]);
 
   const table = useReactTable({
     data: training,
@@ -292,15 +293,15 @@ export function TrainingListForTrainee({ userId }) {
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{UI_TEXT.confirmDeletion}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this exercise?</p>
+          <p>{UI_TEXT.confirmDeletionTraining}</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-              Cancel
+              {UI_TEXT.cancel}
             </Button>
             <Button className="bg-[#7994CB] text-white" onClick={handleDelete}>
-              Delete
+              {UI_TEXT.delete}
             </Button>
           </DialogFooter>
         </DialogContent>

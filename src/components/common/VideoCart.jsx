@@ -1,4 +1,5 @@
 import React from "react";
+import { UI_TEXT } from "@/constants/hebrewText";
 
 const VideoCart = ({ sourceLink }) => {
   return (
@@ -7,7 +8,7 @@ const VideoCart = ({ sourceLink }) => {
         <iframe
           className="absolute top-0 left-0 w-[100%]  h-[100%] md:h-[100%] rounded-2xl"
           src={sourceLink}
-          title="YouTube video player"
+          title={UI_TEXT.youtubePlayer}
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerpolicy="strict-origin-when-cross-origin"
