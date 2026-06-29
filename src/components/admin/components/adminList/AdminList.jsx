@@ -121,7 +121,7 @@
 //         toast.success("המנהל עודכן בהצלחה!");
 //         setIsEdit(false);
 //         setIsEditModal(null);
-//         fetchUsers();
+//         fetchUsers(page);
 //       }
 //     } catch (err) {
 //       toast.error(UI_TEXT.updateFailed);
@@ -220,7 +220,7 @@
 
 //       if (response.status === 200) {
 //         toast.success("סוג המשתמש עודכן בהצלחה");
-//         fetchUsers();
+//         fetchUsers(page);
 //       }
 //     } catch (error) {
 //       toast.error("עדכון סוג המשתמש נכשל");
@@ -343,7 +343,7 @@ import {
 } from "@tanstack/react-table";
 import axios from "axios";
 import { ArrowUpDown, Eye, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import AssignTraineeToAdmin from "./AssignTraineeToAdmin"; // Make sure to use the new component
 import DeleteModal from "./DeleteModal";
@@ -351,12 +351,15 @@ import EditAdmin from "./EditAdmin";
 import ViewAdmin from "./ViewAdmin";
 import Loading from "@/components/common/Loading";
 import { UI_TEXT } from "@/constants/hebrewText";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function AdminTable() {
   const [admins, setAdmins] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [search, setSearch] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedSearch = useDebounce(searchValue, 500);
+  const prevDebouncedSearch = useRef(debouncedSearch);
   const [isViewAdmin, setViewAdmin] = useState(null);
   const [openView, setIsOpenView] = useState(false);
   const [EditModal, setIsEditModal] = useState(null);
@@ -373,33 +376,30 @@ export default function AdminTable() {
 
   ScrollTop();
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (requestPage) => {
     setFetchError("");
     setIsFetching(true);
     try {
+      const params = new URLSearchParams({
+        page: String(requestPage),
+        limit: "10",
+      });
+      const trimmedSearch = debouncedSearch.trim();
+      if (trimmedSearch) {
+        params.set("search", trimmedSearch);
+      }
+
       const res = await axios.get(
-        `${base_url}/getAdminUser?limit=1000&page=1&search=${search}`
+        `${base_url}/getAdminUser?${params.toString()}`
       );
-      const onlyAdmins = res.data.data.filter(
-        (user) => user.userType === "admin"
-      );
-      const filteredAdmins = onlyAdmins.filter((user) =>
-        user.email?.toLowerCase().includes(search.toLowerCase())
-      );
-      const itemsPerPage = 10;
-      const startIndex = (page - 1) * itemsPerPage;
-      const paginatedAdmins = filteredAdmins.slice(
-        startIndex,
-        startIndex + itemsPerPage
-      );
-      const formattedAdmins = paginatedAdmins.map((user) => ({
+      const formattedAdmins = (res.data.data || []).map((user) => ({
         ...user,
         name: user.full_name
           ? user.full_name
           : `${user.firstName || ""} ${user.lastName || ""}`,
       }));
       setAdmins(formattedAdmins);
-      setTotalPages(Math.ceil(filteredAdmins.length / itemsPerPage));
+      setTotalPages(res.data.pagination?.pages ?? 1);
     } catch (err) {
       console.error(err);
       setFetchError(UI_TEXT.loadUsersFailed);
@@ -411,8 +411,17 @@ export default function AdminTable() {
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, [page, search]);
+    const searchChanged = prevDebouncedSearch.current !== debouncedSearch;
+    prevDebouncedSearch.current = debouncedSearch;
+
+    const requestPage = searchChanged ? 1 : page;
+    if (searchChanged && page !== 1) {
+      setPage(1);
+    }
+
+    fetchUsers(requestPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, debouncedSearch]);
 
   const handleDeleteClick = (admin) => {
     setDeleteAdmin(admin);
@@ -449,7 +458,7 @@ export default function AdminTable() {
         toast.success("המנהל עודכן בהצלחה!");
         setIsEdit(false);
         setIsEditModal(null);
-        fetchUsers();
+        fetchUsers(page);
       }
     } catch (err) {
       toast.error(UI_TEXT.updateFailed);
@@ -469,7 +478,7 @@ export default function AdminTable() {
       });
       if (response.status === 200) {
         toast.success("סוג המשתמש עודכן בהצלחה");
-        fetchUsers();
+        fetchUsers(page);
       }
     } catch (error) {
       toast.error("עדכון סוג המשתמש נכשל");
@@ -578,7 +587,8 @@ export default function AdminTable() {
         <input
           type="search"
           placeholder="חפש מנהל..."
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
           className="border px-3 py-2 rounded-md"
         />
         {isFetching && (
