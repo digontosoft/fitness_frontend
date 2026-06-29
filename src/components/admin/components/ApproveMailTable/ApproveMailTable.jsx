@@ -30,11 +30,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { useCallback, useEffect } from "react";
 import { GoSearch } from "react-icons/go";
 import { toast } from "sonner";
-import { UI_TEXT } from "@/constants/hebrewText";
 import AddMail from "./AddMail";
 
 export function ApproveMailTable() {
@@ -157,25 +157,25 @@ export function ApproveMailTable() {
     };
     // console.log("data", data);
 
-    // try {
-    //   const response = await axios.patch(
-    //     `${base_url}/update-approved-mail`,
-    //     data
-    //   );
-    //   if (response.status === 200) {
-    //     toast.success(response.data.message);
-    //     setEmails((prevEmails) =>
-    //       prevEmails.map((email) =>
-    //         email._id === rowData._id
-    //           ? { ...email, isActive: updatedStatus }
-    //           : email
-    //       )
-    //     );
-    //   }
-    // } catch (error) {
-    //   console.error("Error updating status:", error);
-    //   toast.error("Failed to update status.");
-    // }
+    try {
+      const response = await axios.patch(
+        `${base_url}/update-approved-mail`,
+        data
+      );
+      if (response.status === 200) {
+        toast.success("האימייל המאושר עודכן בהצלחה");
+        setEmails((prevEmails) =>
+          prevEmails.map((email) =>
+            email._id === rowData._id
+              ? { ...email, isActive: updatedStatus }
+              : email
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("עדכון הסטטוס נכשל.");
+    }
   };
 
   const handleOpenDeleteModal = (rowData) => {

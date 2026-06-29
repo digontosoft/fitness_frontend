@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
-import { ChevronDown, ChevronUp, Trash } from "lucide-react";
+import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
@@ -25,6 +25,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   //console.log("userId", userId);
@@ -400,6 +401,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   };
 
   const onSubmit = async () => {
+    if (isSubmitting) return;
     // console.log("payload", training);
     const payload = {
       user_id: user_Id,
@@ -416,6 +418,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       })),
     };
     // console.log("edited payload", payload);
+    setIsSubmitting(true);
     try {
       const response = await axios.put(
         `${base_url}/update-user-training/${trainingId}`,
@@ -427,6 +430,8 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       }
     } catch (error) {
       // console.log(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   //console.log("training-Data", training);
@@ -679,13 +684,20 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           <Button
             type="submit"
             className={
-              isButtonDisabled || isSupersetIncomplete
+              isButtonDisabled || isSupersetIncomplete || isSubmitting
                 ? "text-black px-4 md:px-8 py-2 rounded-full bg-gray-200"
                 : "text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
             }
-            disabled={isButtonDisabled || isSupersetIncomplete}
+            disabled={isButtonDisabled || isSupersetIncomplete || isSubmitting}
           >
-            שמיר תוכנית אימון
+            {isSubmitting ? (
+              <span className="inline-flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {UI_TEXT.saving}
+              </span>
+            ) : (
+              "שמיר תוכנית אימון"
+            )}
           </Button>
           <Button
             onClick={() => setShowWorkoutSelect(true)}
