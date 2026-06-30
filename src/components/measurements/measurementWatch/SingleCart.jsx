@@ -14,7 +14,7 @@ import SmallCart from "./SmallCart";
 const SingleCart = ({ userId, setOpen, setId }) => {
   const [data, setData] = useState([]);
   const [user, setUser] = useState({});
-  const [reportLoading, setReportLoading] = useState(false);
+  const [loadingCardKey, setLoadingCardKey] = useState(null);
 
   // console.log("user", userId);
 
@@ -32,23 +32,28 @@ const SingleCart = ({ userId, setOpen, setId }) => {
     fetchData();
   }, [userId]);
 
-  const handleReportClick = async (e) => {
+  const handleReportClick = async (e, cardKey) => {
     e.preventDefault();
-    if (!userId || reportLoading) return;
+    if (!userId || loadingCardKey !== null) return;
 
-    setReportLoading(true);
+    setLoadingCardKey(cardKey);
     try {
       const response = await axios.get(
-        `${base_url}/report/measurement/${userId}`
+        `${base_url}/report/measurement/${userId}`,
+        { responseType: "blob" }
       );
-      const reportLink = response?.data?.data?.report_link;
-      if (reportLink) {
-        window.open(reportLink, "_blank");
-      }
+      const url = URL.createObjectURL(response.data);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "measurement_report.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error fetching report:", error);
     } finally {
-      setReportLoading(false);
+      setLoadingCardKey(null);
     }
   };
 
@@ -62,24 +67,24 @@ const SingleCart = ({ userId, setOpen, setId }) => {
           JSON.stringify(response.data.data._id)
         );
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       }
     };
     getUser();
   }, [userId]);
 
-  const sortOrder = [
-    "ירך ימין",
-    "ירך שמאלה",
-    "מותן",
-    "חזה",
-    "זרוע ימין",
-    "זרוע שמאל",
-  ];
+  // const sortOrder = [
+  //   "ירך ימין",
+  //   "ירך שמאלה",
+  //   "מותן",
+  //   "חזה",
+  //   "זרוע ימין",
+  //   "זרוע שמאל",
+  // ];
 
-  const sortedData = [...data].sort(
-    (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
-  );
+  // const sortedData = [...data].sort(
+  //   (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
+  // );
 
   return (
     <div
@@ -106,9 +111,10 @@ const SingleCart = ({ userId, setOpen, setId }) => {
           customImage = user?.gender === "male" ? maleChest : chest;
         }
 
+        const cardKey = data._id ?? `${data.cartTitle}-${index}`;
         return (
           <div
-            key={data._id ?? `${data.cartTitle}-${index}`}
+            key={cardKey}
             dir="rtl"
             className="rounded-2xl p-4 flex flex-col space-y-4 bg-[#F1F0EB]"
           >
@@ -136,10 +142,10 @@ const SingleCart = ({ userId, setOpen, setId }) => {
             </div>
             <a
               href="#"
-              onClick={handleReportClick}
+              onClick={(e) => handleReportClick(e, cardKey)}
               className="text-lg font-semibold text-center underline cursor-pointer"
             >
-              {reportLoading ? "טוען..." : "הצגת מדדים קודמים"}
+              {loadingCardKey === cardKey ? "טוען..." : "הצגת מדדים קודמים"}
             </a>
           </div>
         );

@@ -82,6 +82,7 @@ const AddExercise = ({
               type="number"
               className="w-full border border-[#7994CB]/30 h-10 px-2 rounded-md"
               value={sets}
+              min="0"
               onChange={(e) => setSets(e.target.value)}
               onBlur={handleInputChange}
               required
@@ -94,6 +95,7 @@ const AddExercise = ({
               type="number"
               className="w-full border border-[#7994CB]/30 h-10 px-2 rounded-md"
               value={reps}
+              min="0"
               onChange={(e) => setReps(e.target.value)}
               onBlur={handleInputChange}
               required

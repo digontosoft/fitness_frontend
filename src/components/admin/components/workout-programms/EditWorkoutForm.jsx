@@ -727,9 +727,8 @@ const handleRemoveExercise = (indexToRemove) => {
         navigate("/dashboard/workout-list");
         setNewExerciseData(null);
       }
-    } catch (error) {
+    } catch {
       toast.error(UI_TEXT.workoutUpdateFailed);
-      // console.log(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -843,6 +842,7 @@ const isFormValid = exercisesForm?.every(
                     <Input
                       id={`sets-${exercise._id}`}
                       type="number"
+                      min={0}
                       {...register(`exercises.${index}.sets`, {
                         valueAsNumber: true,
                       })}
@@ -853,6 +853,7 @@ const isFormValid = exercisesForm?.every(
                     <Input
                       id={`reps-${exercise._id}`}
                       type="number"
+                      min={0}
                       {...register(`exercises.${index}.reps`, {
                         valueAsNumber: true,
                       })}
@@ -978,6 +979,7 @@ const isFormValid = exercisesForm?.every(
                     <Input
                       type="number"
                       id="sets"
+                      min={0}
                       value={newExerciseData.sets}
                       onChange={(e) =>
                         setNewExerciseData({
@@ -992,6 +994,7 @@ const isFormValid = exercisesForm?.every(
                     <Input
                       type="number"
                       id="reps"
+                      min={0}
                       value={newExerciseData.reps}
                       onChange={(e) =>
                         setNewExerciseData({

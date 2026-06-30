@@ -942,6 +942,7 @@ const AddTrainingForm = () => {
                         <input
                           id={`sets-${workoutIndex}-${exerciseIndex}`}
                           type="number"
+                          min="0"
                           className="border rounded p-2 w-full text-center"
                           value={exercise.sets}
                           onChange={(e) =>
@@ -964,6 +965,7 @@ const AddTrainingForm = () => {
                         <input
                           id={`reps-${workoutIndex}-${exerciseIndex}`}
                           type="number"
+                          min="0"
                           className="border rounded p-2 w-full text-center"
                           value={exercise.reps}
                           onChange={(e) =>

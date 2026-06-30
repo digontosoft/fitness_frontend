@@ -484,7 +484,6 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                   className="inline-flex items-center gap-1 p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0 text-sm"
                 >
                   <Trash className="size-4" />
-                  הסר אימון
                 </button>
               </div>
 
@@ -542,6 +541,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
 
                         <Input
                           type="number"
+                          min={0}
                           defaultValue={ex?.sets}
                           onChange={(e) =>
                             handleExerciseChange(
@@ -557,6 +557,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                         <p>חזרות</p>
                         <Input
                           type="number"
+                          min={0}
                           defaultValue={ex?.reps}
                           onChange={(e) =>
                             handleExerciseChange(

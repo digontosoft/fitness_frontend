@@ -275,6 +275,7 @@ const TaskCompleteForm = ({ data }) => {
             label="היקף מותניים"
             placeholder="הזן נתונים כאן..."
             register={register}
+            min={0}
             validation={{ required: "שדה זה חובה" }}
             errors={errors}
             watch={watch}
@@ -286,6 +287,7 @@ const TaskCompleteForm = ({ data }) => {
             label={Gender === "male" ? "חָזֶה" : "ישבן"}
             placeholder="הזן נתונים כאן..."
             register={register}
+            min={0}
             validation={{ required: "שדה זה חובה" }}
             errors={errors}
             watch={watch}
@@ -296,6 +298,7 @@ const TaskCompleteForm = ({ data }) => {
             label="זרוע ימין"
             placeholder="הזן נתונים כאן..."
             register={register}
+            min={0}
             validation={{ required: "שדה זה חובה" }}
             errors={errors}
             watch={watch}
@@ -306,6 +309,7 @@ const TaskCompleteForm = ({ data }) => {
             label="זרוע שמאל"
             placeholder="הזן נתונים כאן..."
             register={register}
+            min={0}
             validation={{ required: "שדה זה חובה" }}
             errors={errors}
             watch={watch}
@@ -317,6 +321,7 @@ const TaskCompleteForm = ({ data }) => {
             label="ירך ימין"
             placeholder="הזן נתונים כאן..."
             register={register}
+            min={0}
             validation={{ required: "שדה זה חובה" }}
             errors={errors}
             watch={watch}
@@ -328,6 +333,7 @@ const TaskCompleteForm = ({ data }) => {
             label="ירך שמאל"
             placeholder="הזן נתונים כאן..."
             register={register}
+            min={0}
             validation={{ required: "שדה זה חובה" }}
             errors={errors}
             watch={watch}

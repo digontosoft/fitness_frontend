@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Controller, useFormContext } from "react-hook-form";
 
-const FInput = ({ label, name, placeholder, type = "text" }) => {
+const FInput = ({ label, name, placeholder, type = "text", min }) => {
   const { control } = useFormContext();
 
   return (
@@ -18,6 +18,7 @@ const FInput = ({ label, name, placeholder, type = "text" }) => {
               {...field}
               type={type}
               id={name}
+              min={min}
               className={`w-full h-[56px] p-4 gap-4 rounded-[16px] border-[2px] ${
                 error ? "border-[#7994CB]" : "border-opacity-0"
               } focus:outline-none focus:ring-2 focus:ring-[#7994CB]`}

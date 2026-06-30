@@ -546,6 +546,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         <label htmlFor="sets">סטים</label>
                         <input
                           type="number"
+                          min="0"
                           value={exercise.sets}
                           onChange={(e) =>
                             handleExerciseChange(
@@ -562,6 +563,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         <label htmlFor="reps">חזרות</label>
                         <input
                           type="number"
+                          min="0"
                           value={exercise.reps}
                           onChange={(e) =>
                             handleExerciseChange(

@@ -162,6 +162,7 @@ const InputForm = () => {
               label={userInfo.gender === "male" ? "חָזֶה" : "קַת"}
               placeholder="הזן נתונים כאן..."
               register={register}
+              min={0}
               validation={{
                 required: userInfo.gender === "male" ? "חָזֶה" : "קַת",
               }}
@@ -174,6 +175,7 @@ const InputForm = () => {
               label={"מוֹתֶן"}
               placeholder="הזן נתונים כאן..."
               register={register}
+              min={0}
               validation={{
                 required: "שדה זה נדרש",
               }}

@@ -68,6 +68,7 @@ const AddStepAverageForUser = ({ user, setUser }) => {
             <Input
               id="steps"
               type="number"
+              min={0}
               value={stepCount}
               required
               onChange={(e) => setStepCount(e.target.value)}

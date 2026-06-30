@@ -12,6 +12,7 @@ const DynamicInputField = ({
   className,
   defaultValue,
   disabled,
+  min,
 }) => {
   const value = typeof watch === "function" ? watch(id) : null;
   return (
@@ -32,6 +33,7 @@ const DynamicInputField = ({
           defaultValue={defaultValue}
           {...register(id, validation)}
           placeholder={placeholder}
+          min={min}
           className={twMerge`w-full border ${
             errors[id] ? "border-[#7994CB]" : "border-gray-300"
           } rounded-lg p-3 text-right focus:outline-none focus:ring-2 ${
