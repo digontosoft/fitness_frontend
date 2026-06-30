@@ -738,6 +738,7 @@ const MeasurementWomen = () => {
                 />
                 <FInput
                   type="number"
+                  min={0}
                   label="מס׳ נייד*"
                   placeholder="התשובה שלך"
                   name="cell_phone_number"
@@ -745,6 +746,7 @@ const MeasurementWomen = () => {
                 />
                 <FInput
                   type="number"
+                  min={0}
                   label="גיל"
                   placeholder="התשובה שלך"
                   name="age"
@@ -752,6 +754,7 @@ const MeasurementWomen = () => {
                 />
                 <FInput
                   type="number"
+                  min={0}
                   label="גובה"
                   placeholder="התשובה שלך"
                   name="height"
@@ -759,6 +762,7 @@ const MeasurementWomen = () => {
                 />
                 <FInput
                   type="number"
+                  min={0}
                   label="משקל נוכחי - אם לא יודע לרשום הערכה של 5 קילו פלוס מינוס (אין צורך להישקל)"
                   placeholder="התשובה שלך"
                   name="weight"
@@ -766,6 +770,7 @@ const MeasurementWomen = () => {
                 />
                 <FInput
                   type="number"
+                  min={0}
                   label="המשקל הגבוה שהגעת אליו במהלך חייך (לא חובה)"
                   placeholder="התשובה שלך"
                   name="highest_weight"
@@ -1023,6 +1028,7 @@ const MeasurementWomen = () => {
                 />
                 <FInput
                   type="number"
+                  min={0}
                   label="גיל"
                   placeholder="התשובה שלך"
                   name="age"

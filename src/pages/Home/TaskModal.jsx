@@ -65,6 +65,7 @@ export function TaskModal({
             <Input
               id="steps"
               type="number"
+              min={0}
               value={stepCount}
               onChange={(e) => setStepCount(e.target.value)}
               placeholder="נא למלא ממוצע צעדים שבועי"

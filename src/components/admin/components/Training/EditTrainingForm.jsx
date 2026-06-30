@@ -550,6 +550,7 @@ const EditTrainingForm = () => {
                           <p>סטים</p>
                           <Input
                             type="number"
+                            min={0}
                             defaultValue={ex?.sets}
                             onChange={(e) =>
                               handleExerciseChange(
@@ -565,6 +566,7 @@ const EditTrainingForm = () => {
                           <p>חזרות</p>
                           <Input
                             type="number"
+                            min={0}
                             defaultValue={ex?.reps}
                             onChange={(e) =>
                               handleExerciseChange(

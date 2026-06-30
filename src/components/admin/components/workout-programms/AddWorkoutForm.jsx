@@ -571,6 +571,7 @@ const AddWorkoutForm = () => {
                   <label>סטים</label>
                   <Input
                     type="number"
+                    min={0}
                     value={exercise.sets}
                     onChange={(e) =>
                       handleInputChange(index, "sets", e.target.value)
@@ -581,6 +582,7 @@ const AddWorkoutForm = () => {
                   <label>חזרות</label>
                   <Input
                     type="number"
+                    min={0}
                     value={exercise.reps}
                     onChange={(e) =>
                       handleInputChange(index, "reps", e.target.value)

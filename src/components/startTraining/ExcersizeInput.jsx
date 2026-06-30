@@ -50,9 +50,10 @@ const ExcersizeInput = ({ exerciseData, value, onChange }) => {
               <input
                 id={field("sets_done")}
                 type="number"
+                min="0"
                 className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.sets_done ? "border-[#7994CB]" : ""}`}
                 {...register("sets_done", {
-                  required: "נדרש מספר סטים", // Sets count required
+                  required: "נדרש מספר סטים",
                   onChange: (e) =>
                     handleInputChange("sets_done", e.target.value),
                 })}
@@ -79,9 +80,10 @@ const ExcersizeInput = ({ exerciseData, value, onChange }) => {
               <input
                 id={field("reps_done")}
                 type="number"
+                min="0"
                 className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.reps_done ? "border-[#7994CB]" : ""}`}
                 {...register("reps_done", {
-                  required: "נדרש מספר חזרות", // Reps count required
+                  required: "נדרש מספר חזרות",
                   onChange: (e) =>
                     handleInputChange("reps_done", e.target.value),
                 })}
@@ -108,10 +110,11 @@ const ExcersizeInput = ({ exerciseData, value, onChange }) => {
               <input
                 id={field("last_set_weight")}
                 type="number"
+                min="0"
                 inputMode="decimal"
                 className={`border w-24 sm:w-28 md:w-32 border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] ${errors.last_set_weight ? "border-[#7994CB]" : ""}`}
                 {...register("last_set_weight", {
-                  required: "נדרש משקל", // Weight required
+                  required: "נדרש משקל",
                   setValueAs: (v) => (v === "" || v == null ? "" : Number(v)),
                   onChange: (e) =>
                     handleInputChange("last_set_weight", e.target.value),
