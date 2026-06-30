@@ -1,5 +1,5 @@
 
-import { base_url, file_url } from "@/api/baseUrl";
+import { base_url } from "@/api/baseUrl";
 import { ArrowBurger, newThree, newTrainee } from "@/assets";
 
 import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerModal";
@@ -117,109 +117,25 @@ const TraineerUi = ({ userId }) => {
   const defaultImage = ArrowBurger;
 
 
-  const getAuthHeader = () => {
-    const raw = localStorage.getItem("authToken");
-    if (!raw) return {};
-    try {
-      const token = JSON.parse(raw);
-      return { Authorization: `Bearer ${typeof token === "string" ? token : raw}` };
-    } catch {
-      return { Authorization: `Bearer ${raw.replace(/^"|"$/g, "")}` };
-    }
-  };
-
-  const toAbsoluteDownloadUrl = (rawUrl) => {
-    if (!rawUrl || typeof rawUrl !== "string") return null;
-    let u = rawUrl.trim();
-    if (!/^https?:\/\//i.test(u)) {
-      if (!base_url) return null;
-      u = `${String(base_url).replace(/\/$/, "")}/${u.replace(/^\//, "")}`;
-    }
-    if (u.startsWith("http://") && window.location.protocol === "https:") {
-      u = u.replace(/^http:\/\//i, "https://");
-    }
-    return u;
-  };
-
-  const urlMatchesConfiguredApi = (absoluteUrl) => {
-    const origins = [];
-    [base_url, file_url].forEach((base) => {
-      if (!base) return;
-      try {
-        origins.push(new URL(base).origin);
-      } catch {
-        /* ignore */
-      }
-    });
-    return origins.some((origin) => absoluteUrl.startsWith(origin));
-  };
-
   const triggerBlobDownload = (blob, fileName) => {
-    const blobUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = blobUrl;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(blobUrl);
-  };
-
-  const handleDownload = async (url, fileName = "report.xlsx") => {
-    const normalized = toAbsoluteDownloadUrl(url);
-    if (!normalized) {
-      toast.error("אין קישור להורדה");
-      return;
-    }
-
-    const useAxiosBlob =
-      urlMatchesConfiguredApi(normalized) ||
-      (() => {
-        try {
-          return new URL(normalized).origin === window.location.origin;
-        } catch {
-          return false;
-        }
-      })();
-
-    if (useAxiosBlob) {
-      try {
-        const { data } = await axios.get(normalized, {
-          responseType: "blob",
-          headers: { ...getAuthHeader() },
-        });
-        triggerBlobDownload(data, fileName);
-        return;
-      } catch {
-        /* fall through to open / fetch */
-      }
-    }
-
-    try {
-      const response = await fetch(normalized, {
-        method: "GET",
-        mode: "cors",
-        credentials: "omit",
-      });
-      if (!response.ok) throw new Error("Download failed");
-      const blob = await response.blob();
-      triggerBlobDownload(blob, fileName);
-    } catch {
-      const opened = window.open(normalized, "_blank", "noopener,noreferrer");
-      if (!opened) {
-        toast.error("ההורדה נכשלה — אפשר לנסות לאפשר חלונות קופצים");
-      }
-    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const handleExerciseReportDownload = async () => {
     if (!userId || exerciseReportLoading) return;
-
     setExerciseReportLoading(true);
     try {
-      const response = await axios.get(`${base_url}/report/excercise/${userId}`);
-      const reportLink = response?.data?.data?.report_link;
-      await handleDownload(reportLink, "exercise-report.xlsx");
+      const { data } = await axios.get(`${base_url}/report/excercise/${userId}`, {
+        responseType: "blob",
+      });
+      triggerBlobDownload(data, "exercise-report.xlsx");
     } catch (error) {
       console.error("Error fetching exercise report:", error);
       toast.error("ההורדה נכשלה");
@@ -230,14 +146,12 @@ const TraineerUi = ({ userId }) => {
 
   const handleMeasurementReportDownload = async () => {
     if (!userId || measurementReportLoading) return;
-
     setMeasurementReportLoading(true);
     try {
-      const response = await axios.get(
-        `${base_url}/report/measurement/${userId}`
-      );
-      const reportLink = response?.data?.data?.report_link;
-      await handleDownload(reportLink, "measurement-report.xlsx");
+      const { data } = await axios.get(`${base_url}/report/measurement/${userId}`, {
+        responseType: "blob",
+      });
+      triggerBlobDownload(data, "measurement-report.xlsx");
     } catch (error) {
       console.error("Error fetching measurement report:", error);
       toast.error("ההורדה נכשלה");

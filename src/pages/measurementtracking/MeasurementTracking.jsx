@@ -28,8 +28,7 @@ const MeasurementTracking = () => {
   const [id, setId] = useState(null);
   const [measurements, setMeasurements] = useState([]);
   const [open, setOpen] = useState(false);
-  const [measurementReport, setMeasurementReport] = useState(null);
-  const [downloadingReport, setDownloadingReport] = useState(false);
+  const [loadingCardKey, setLoadingCardKey] = useState(null);
   const userId = JSON.parse(localStorage.getItem("userInfo"));
   const gender = userId?.gender;
 
@@ -42,14 +41,6 @@ const MeasurementTracking = () => {
         );
         if (response.status === 200) {
           setData(response?.data);
-          // console.log("measurement tracking data", response?.data);
-        }
-        const measurementResponse = await axios.get(
-          `${base_url}/report/measurement/${userId._id}`
-        );
-
-        if (measurementResponse.status === 200) {
-          setMeasurementReport(measurementResponse?.data.data.report_link);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -60,7 +51,6 @@ const MeasurementTracking = () => {
 
     fetchData();
   }, [userId?._id]);
-  // console.log('measurement report:', measurementReport);
 
   useEffect(() => {
    if (!id) return;
@@ -80,100 +70,28 @@ const MeasurementTracking = () => {
 
   // console.log("measurement",measurements)
 
-  const handleDownloadReport = async (e) => {
+  const handleDownloadReport = async (e, cardKey) => {
     e.preventDefault();
-    
-    if (downloadingReport) return; // Prevent multiple clicks
-    
-    setDownloadingReport(true);
-    
-    const downloadFile = async (reportUrl) => {
-      // Extract filename from URL
-      const urlParts = reportUrl.split('/');
-      const filename = urlParts[urlParts.length - 1] || 'measurement_report.xlsx';
-      
-      // Method 1: Try using fetch with proper error handling
-      try {
-        const token = localStorage.getItem("authToken");
-        const fetchResponse = await fetch(reportUrl, {
-          method: 'GET',
-          headers: token ? {
-            'Authorization': `Bearer ${token}`,
-          } : {},
-          credentials: 'include',
-        });
-        
-        if (fetchResponse.ok) {
-          const blob = await fetchResponse.blob();
-          const blobUrl = window.URL.createObjectURL(blob);
-          
-          // Create download link
-          const link = document.createElement('a');
-          link.href = blobUrl;
-          link.download = filename;
-          link.style.display = 'none';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          
-          // Clean up
-          setTimeout(() => {
-            window.URL.revokeObjectURL(blobUrl);
-          }, 100);
-        } else {
-          // If fetch fails, try direct download link
-          throw new Error('Fetch failed');
-        }
-      } catch (fetchError) {
-        // console.log("Fetch method failed, using direct download:", fetchError);
-        
-        // Method 2: Create a form and submit it (works better for cross-origin)
-        const form = document.createElement('form');
-        form.method = 'GET';
-        form.action = reportUrl;
-        form.target = '_blank';
-        form.style.display = 'none';
-        document.body.appendChild(form);
-        form.submit();
-        document.body.removeChild(form);
-        
-        // Also try creating a direct download link as backup
-        const link = document.createElement('a');
-        link.href = reportUrl;
-        link.download = filename;
-        link.target = '_blank';
-        link.style.display = 'none';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    };
-    
-    // If report is already available, use it directly
-    if (measurementReport) {
-      await downloadFile(measurementReport);
-      setDownloadingReport(false);
-      return;
-    }
-    
-    // If report is not available, fetch it first
-    try {
-      const measurementResponse = await axios.get(
-        `${base_url}/report/measurement/${userId._id}`
-      );
+    if (loadingCardKey !== null) return;
 
-      if (measurementResponse.status === 200) {
-        const reportUrl = measurementResponse?.data.data.report_link;
-        setMeasurementReport(reportUrl);
-        
-        if (reportUrl) {
-          await downloadFile(reportUrl);
-        }
-      }
+    setLoadingCardKey(cardKey);
+    try {
+      const { data: blob } = await axios.get(
+        `${base_url}/report/measurement/${userId._id}`,
+        { responseType: "blob" }
+      );
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "measurement_report.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error fetching measurement report:", error);
     } finally {
-      setDownloadingReport(false);
+      setLoadingCardKey(null);
     }
   };
 
@@ -219,6 +137,7 @@ const sortedData = [...data].sort(
           dir="rtl"
         >
           {sortedData.map((cart, index) => {
+            const cardKey = cart._id ?? `${cart.cartTitle}-${index}`;
             let customImage = null;
             const items = Array.isArray(cart?.item) ? cart.item : [];
 
@@ -270,13 +189,13 @@ const sortedData = [...data].sort(
                   />
                 </div>
                 <a
-                  onClick={handleDownloadReport}
-                  href={measurementReport || '#'}
+                  href="#"
+                  onClick={(e) => handleDownloadReport(e, cardKey)}
                   className={`text-lg font-semibold text-center underline ${
-                    downloadingReport ? 'cursor-wait opacity-50' : 'cursor-pointer'
+                    loadingCardKey === cardKey ? 'cursor-wait opacity-50' : 'cursor-pointer'
                   }`}
                 >
-                  {downloadingReport ? 'טוען...' : 'הצגת מדדים קודמים'}
+                  {loadingCardKey === cardKey ? 'טוען...' : 'הצגת מדדים קודמים'}
                 </a>
               </div>
             );
