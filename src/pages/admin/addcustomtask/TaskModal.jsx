@@ -19,12 +19,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { Loader } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { UI_TEXT } from "@/constants/hebrewText";
 
 const TaskModal = ({ open, setOpen, userId, fetchData }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +55,8 @@ const TaskModal = ({ open, setOpen, userId, fetchData }) => {
          fetchData();
       }
     }catch(error){
-      // console.log(error);
+      console.log(error);
+      toast.error(UI_TEXT.taskAddFailed);
     }
     // console.log("Form Submitted:", payload);
    
