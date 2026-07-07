@@ -43,6 +43,8 @@ const EditNutrition = () => {
     });
   }, [id, reset]);
 
+  const MAX_FILE_SIZE_MB = 20;
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -53,6 +55,11 @@ const EditNutrition = () => {
     if (file.type !== "application/pdf") {
       setSelectedFile(null);
       setFileError("קובץ חייב להיות בפורמט PDF");
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      setSelectedFile(null);
+      setFileError(`גודל הקובץ חורג מ-${MAX_FILE_SIZE_MB}MB`);
       return;
     }
     setSelectedFile(file);
@@ -82,7 +89,12 @@ const EditNutrition = () => {
       }
     } catch (error) {
       console.error("Error updating nutrition:", error);
-      toast.error("עדכון מדריך התזונה נכשל");
+      const status = error?.response?.status;
+      if (status === 413 || status === 502) {
+        toast.error("הקובץ גדול מדי. נסה קובץ קטן יותר או פנה למנהל המערכת");
+      } else {
+        toast.error("עדכון מדריך התזונה נכשל");
+      }
     } finally {
       setSubmitting(false);
     }
