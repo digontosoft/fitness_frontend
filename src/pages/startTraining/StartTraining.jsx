@@ -79,17 +79,62 @@ const StartTraining = () => {
       try {
         const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
         if (!user?._id) return;
+
         const taskRes = await axios.get(`${base_url}/get-user-task/${user._id}`);
         const matchedTask = taskRes.data.data?.find((t) => t._id === taskId);
         if (!matchedTask) return;
-        const workoutRes = await axios.post(`${base_url}/get-user-workout-task`, {
-          userId: user._id,
-          workoutId: matchedTask.workout_id,
-          taskId: matchedTask._id,
-        });
-        const fresh = workoutRes.data.data?.userTrainingExercise;
-        if (Array.isArray(fresh) && fresh.length > 0) {
-          setLiveExercises(fresh);
+
+        // Fetch workout exercises (full details: video, description) AND
+        // training plan exercises (fresh sets/reps/manipulation) in parallel
+        const [workoutRes, trainingRes] = await Promise.all([
+          axios.post(`${base_url}/get-user-workout-task`, {
+            userId: user._id,
+            workoutId: matchedTask.workout_id,
+            taskId: matchedTask._id,
+          }),
+          axios.get(`${base_url}/get-training-by-user-id/${user._id}`),
+        ]);
+
+        const workoutExercises = workoutRes.data.data?.userTrainingExercise;
+        if (!Array.isArray(workoutExercises) || workoutExercises.length === 0) return;
+
+        // Find the matching workout in the training plan (updated by CustomizeWorkoutForm)
+        const getExId = (ex) =>
+          typeof ex?.exercise_id === "object"
+            ? ex.exercise_id?._id
+            : ex?.exercise_id || ex?._id;
+
+        const allTrainings = trainingRes.data.data || [];
+        let planExercises = null;
+        for (const t of allTrainings) {
+          const mw = t.workouts?.find(
+            (w) =>
+              w.workout?._id === matchedTask.workout_id ||
+              w._id === matchedTask.workout_id
+          );
+          if (Array.isArray(mw?.exercises) && mw.exercises.length > 0) {
+            planExercises = mw.exercises;
+            break;
+          }
+        }
+
+        if (planExercises) {
+          // Merge: keep workout exercises for display data (video_url, description),
+          // overlay fresh sets/reps/manipulation from the updated training plan
+          const merged = workoutExercises.map((wEx) => {
+            const wId = getExId(wEx);
+            const planEx = planExercises.find((p) => getExId(p) === wId);
+            if (!planEx) return wEx;
+            return {
+              ...wEx,
+              sets: planEx.sets ?? wEx.sets,
+              reps: planEx.reps ?? wEx.reps,
+              manipulation: planEx.manipulation ?? wEx.manipulation,
+            };
+          });
+          setLiveExercises(merged);
+        } else {
+          setLiveExercises(workoutExercises);
         }
       } catch (err) {
         console.error("StartTraining: failed to fetch fresh exercises:", err);
