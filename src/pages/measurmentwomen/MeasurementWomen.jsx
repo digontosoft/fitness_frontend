@@ -627,54 +627,69 @@ import FInput from "@/components/admin/components/ui/FInput";
 import FRadioInput from "@/components/admin/components/ui/FRadioIntput";
 import FSelectInput from "@/components/admin/components/ui/FSelectInput";
 import FTextarea from "@/components/admin/components/ui/FTextarea";
-import Loading from "@/components/common/Loading";
 import { Button } from "@/components/ui/button";
 import { questionnaries } from "@/constants/ValidationSchema";
 import { verifyToken } from "@/constants/verifyToken";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+
 const MeasurementWomen = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("authToken");
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  // console.log("gender", user?.gender);
   const { id } = verifyToken(token);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const handleFormSubmit = (data) => {
-    // console.log("data:", data);
+
+  const handleFormSubmit = async (data) => {
     setLoading(true);
-    const questionnaries = {
-      user_id: id,
-      ...data,
-    };
     try {
-      axios
-        .post(`${base_url}/upsertUserDetails`, questionnaries)
-        .then((response) => {
-          if (response.status === 200) {
-            toast.success("השאלון נשלח בהצלחה!");
-            navigate("/");
-          }
-        });
-      // console.log("questionnaries", questionnaries);
+      const payload = { user_id: id, ...data };
+      const response = await axios.post(`${base_url}/upsertUserDetails`, payload);
+
+      if (response.status === 200) {
+        // Update localStorage so ProtectedRoutes sees is_question_answered: true
+        const updatedUser = { ...user, is_question_answered: true };
+        localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+
+        toast.success("השאלון נשלח בהצלחה!");
+
+        // Navigate to role-based home page
+        const userType = user?.userType;
+        if (userType === "admin") {
+          navigate("/admin-dashboard", { replace: true });
+        } else if (userType === "supperadmin") {
+          navigate("/dashboard", { replace: true });
+        } else {
+          navigate("/", { replace: true });
+        }
+      }
     } catch (err) {
-      toast.error(err);
-      // console.log("quesntionariesError:", err);
+      console.error("Questionnaire submit error:", err);
+      toast.error("שגיאה בשליחת השאלון. נסה שוב.");
     } finally {
       setLoading(false);
     }
   };
-  if (loading) {
-    return <Loading />;
-  }
   return (
     <>
+      {/* Full-screen loader overlay while submitting */}
+      {loading && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm">
+          <Loader2 className="w-14 h-14 animate-spin text-[#7994CB]" />
+          <p className="mt-4 text-lg font-semibold text-[#0A2533]" dir="rtl">
+            שולח את השאלון, אנא המתן...
+          </p>
+        </div>
+      )}
+
       <div className="py-12 relative overflow-hidden sm:px-0 px-4">
         <div
           className="absolute top-24 inset-[24%] w-full h-full"
