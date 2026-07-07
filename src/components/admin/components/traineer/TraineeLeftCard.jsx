@@ -6,9 +6,11 @@ import butt from "@/assets/image/butt.svg";
 import cardBg from "@/assets/image/image.svg";
 import leftArmIcon from "@/assets/image/left-arm.svg";
 import leftLeg from "@/assets/image/left-leg.svg";
+import chest from "@/assets/image/man-chest.svg";
+import manWaist from "@/assets/image/man-waist.svg";
 import rightArmIcon from "@/assets/image/right-arm.svg";
 import rightLeg from "@/assets/image/right-leg.svg";
-import thigh from "@/assets/image/thigh.svg";
+import womanWaist from "@/assets/image/women-hips.svg";
 // import AddStepAverageForUser from "./AddStepAverageForUser";
 const TraineeLeftCard = ({ userId, user, setUser }) => {
   const [measurementData, setMesurementData] = useState([]);
@@ -50,14 +52,6 @@ const TraineeLeftCard = ({ userId, user, setUser }) => {
     };
     fetchMeasurement();
   }, [userId]);
-  const leftArm = Number(measurementData?.arml) || 0;
-  const rightArm = Number(measurementData?.armr) || 0;
-  const total = leftArm + rightArm;
-  const avg = Math.floor(total / 2);
-  const leftThigh = Number(measurementData?.thighl) || 0;
-  const rightThigh = Number(measurementData?.thighr) || 0;
-  const totalThigh = leftThigh + rightThigh;
-  const avgThigh = Math.floor(totalThigh / 2);
 
   return (
     <div className="relative sm:w-[500px] w-full h-[245px] rounded-2xl bg-[#F1F0EB]">
@@ -76,10 +70,14 @@ const TraineeLeftCard = ({ userId, user, setUser }) => {
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-end gap-2 w-full">
               <p className="sm:text-lg text-xs font-bold text-black">
-                ישבן: {avgThigh}
+                {user?.gender === "male" ? (
+                  <>חזה: {measurementData?.chest}</>
+                ) : (
+                  <>ישבן: {measurementData?.butt}</>
+                )}
               </p>
               <img
-                src={butt}
+                src={user?.gender === "female" ? butt : chest}
                 alt=""
                 className="object-cover sm:h-6 sm:w-6 h-5 w-5"
               />
@@ -111,7 +109,7 @@ const TraineeLeftCard = ({ userId, user, setUser }) => {
                 היקף מותניים: {measurementData?.waist}
               </p>
               <img
-                src={thigh}
+                src={user?.gender === "female" ? womanWaist : manWaist}
                 alt=""
                 className="object-cover sm:h-5 sm:w-5 h-4 w-4"
               />

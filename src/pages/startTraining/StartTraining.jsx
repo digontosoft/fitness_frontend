@@ -8,7 +8,7 @@ import HeroVideo from "@/components/startTraining/HeroVideo";
 import LastExercise from "@/components/startTraining/LastExercise";
 import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 const StartTraining = () => {
@@ -17,75 +17,93 @@ const StartTraining = () => {
   const training = location.state?.training || location.state?.trainings || {};
   const workout = location.state?.workout || {};
 
-  
-  let allExercises = [];
-  let selectedWorkoutData = null;
-  let taskId = null;
-  let userTrainingWorkoutId = null;
-  let taskName = null;
-  
-  // Priority 1: Check if coming from training.workouts structure (customize workout flow)
-  if (training?.workouts && training.workouts.length > 0) {
-    // Get first workout or find by workout._id if available
-    selectedWorkoutData = workout?._id 
-      ? training.workouts.find(w => w.workout?._id === workout._id || w._id === workout._id)
-      : training.workouts[0];
-    
-    if (selectedWorkoutData?.exercises) {
-      allExercises = selectedWorkoutData.exercises;
-      taskId = selectedWorkoutData.task_id;
-      userTrainingWorkoutId = selectedWorkoutData.user_training_workout_id;
-      taskName = selectedWorkoutData.workout?.name || training.training_id?.name;
+  // Derive stable values from location.state once per navigation
+  const stateData = useMemo(() => {
+    let exercises = [];
+    let taskId = null;
+    let userTrainingWorkoutId = null;
+    let taskName = null;
+
+    if (training?.workouts && training.workouts.length > 0) {
+      const selectedWorkout = workout?._id
+        ? training.workouts.find(w => w.workout?._id === workout._id || w._id === workout._id)
+        : training.workouts[0];
+      if (selectedWorkout?.exercises) {
+        exercises = selectedWorkout.exercises;
+        taskId = selectedWorkout.task_id;
+        userTrainingWorkoutId = selectedWorkout.user_training_workout_id;
+        taskName = selectedWorkout.workout?.name || training.training_id?.name;
+      }
+    } else if (workData?.userTrainingExercise?.length > 0) {
+      exercises = workData.userTrainingExercise;
+      taskId = workData.task_id;
+      userTrainingWorkoutId = workData.user_training_workout_id;
+      taskName = workData.task_name;
+    } else if (workout?.exercises?.length > 0) {
+      exercises = workout.exercises;
+      taskId = workout.task_id;
+      userTrainingWorkoutId = workout.user_training_workout_id;
+      taskName = workout.name;
+    } else if (workData?.exercises?.length > 0) {
+      exercises = workData.exercises;
+      taskId = workData.task_id;
+      userTrainingWorkoutId = workData.user_training_workout_id;
+      taskName = workData.task_name || workData.name;
     }
-  }
-  // Priority 2: Check if coming from task-based flow (ActionCourseCart)
-  else if (workData?.userTrainingExercise && workData.userTrainingExercise.length > 0) {
-    allExercises = workData.userTrainingExercise;
-    taskId = workData.task_id;
-    userTrainingWorkoutId = workData.user_training_workout_id;
-    taskName = workData.task_name;
-  }
-  // Priority 3: Check if coming from workout list (workout.exercises)
-  else if (workout?.exercises && workout.exercises.length > 0) {
-    allExercises = workout.exercises;
-    taskId = workout?.task_id;
-    userTrainingWorkoutId = workout?.user_training_workout_id;
-    taskName = workout?.name;
-  }
-  // Priority 4: Fallback to workData.exercises
-  else if (workData?.exercises && workData.exercises.length > 0) {
-    allExercises = workData.exercises;
-    taskId = workData.task_id;
-    userTrainingWorkoutId = workData.user_training_workout_id;
-    taskName = workData.task_name || workData.name;
-  }
-  
-  // console.log("Selected workout data:", selectedWorkoutData);
-  // console.log("All exercises:", allExercises);
-  // console.log("Task ID:", taskId);
-  // console.log("User Training Workout ID:", userTrainingWorkoutId);
-  // console.log("Task Name:", taskName);
-  // Convert exercises to userTrainingExercise format (preserve sets, reps, manipulation)
-  const exercisesToUse = useMemo(
-    () =>
-      allExercises.length > 0
-        ? allExercises.map((ex) => {
-            // If already in userTrainingExercise format (has exercise_id object)
-            if (ex.exercise_id && typeof ex.exercise_id === "object") {
-              return {
-                ...ex,
-                sets: ex.sets || 0,
-                reps: ex.reps || 0,
-                manipulation: ex.manipulation || "",
-              };
-            }
-            // Otherwise keep as is
-            return ex;
-          })
-        : [],
-    [allExercises]
-  );
-  
+
+    return { exercises, taskId, userTrainingWorkoutId, taskName };
+  // location.state is frozen at navigation time — intentionally run once
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const { exercises: allExercisesFromState, taskId, userTrainingWorkoutId, taskName } = stateData;
+
+  const normalizeExercises = (list) =>
+    list.map((ex) => {
+      if (ex.exercise_id && typeof ex.exercise_id === "object") {
+        return { ...ex, sets: ex.sets || 0, reps: ex.reps || 0, manipulation: ex.manipulation || "" };
+      }
+      return ex;
+    });
+
+  // liveExercises: null = not yet fetched; [...] = fresh data from API
+  const [liveExercises, setLiveExercises] = useState(null);
+  const fetchedRef = useRef(false);
+
+  // On mount: fetch fresh exercises so edits in EditExercise are always reflected
+  useEffect(() => {
+    if (fetchedRef.current || !taskId) return;
+    fetchedRef.current = true;
+
+    const fetchFresh = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
+        if (!user?._id) return;
+        const taskRes = await axios.get(`${base_url}/get-user-task/${user._id}`);
+        const matchedTask = taskRes.data.data?.find((t) => t._id === taskId);
+        if (!matchedTask) return;
+        const workoutRes = await axios.post(`${base_url}/get-user-workout-task`, {
+          userId: user._id,
+          workoutId: matchedTask.workout_id,
+          taskId: matchedTask._id,
+        });
+        const fresh = workoutRes.data.data?.userTrainingExercise;
+        if (Array.isArray(fresh) && fresh.length > 0) {
+          setLiveExercises(fresh);
+        }
+      } catch (err) {
+        console.error("StartTraining: failed to fetch fresh exercises:", err);
+      }
+    };
+
+    fetchFresh();
+  }, [taskId]);
+
+  const exercisesToUse = useMemo(() => {
+    const source = liveExercises ?? allExercisesFromState;
+    return source.length > 0 ? normalizeExercises(source) : [];
+  }, [liveExercises, allExercisesFromState]);
+
   // Update workData with extracted values
   const finalWorkData = {
     ...workData,
@@ -94,15 +112,20 @@ const StartTraining = () => {
     task_name: taskName || workData.task_name,
     userTrainingExercise: exercisesToUse,
   };
-  
+
   const isSingleExercise = exercisesToUse.length === 1;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPrevious, setShowPrevious] = useState(false);
-  const [isFinished, setIsFinished] = useState(isSingleExercise);
+  const [isFinished, setIsFinished] = useState(false);
   const [exerciseData, setExerciseData] = useState({});
   const [lastWorkoutData, setLastWorkoutData] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Sync isFinished when exercises load
+  useEffect(() => {
+    setIsFinished(exercisesToUse.length === 1);
+  }, [exercisesToUse.length]);
   
   // Track progress (keys are slot indices "0".."n-1")
   const completedExercisesCount = exercisesToUse.reduce((acc, _, i) => {

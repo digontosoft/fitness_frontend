@@ -75,9 +75,24 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           axios.get(`${base_url}/get-training-by-id/${trainingId}`),
         ]);
 
-        if (exerciseRes.status === 200) setAllExercises(exerciseRes.data.data);
         if (workoutRes.status === 200) setWorkouts(workoutRes.data.data);
         if (trainingRes.status === 200) setTraining(trainingRes.data.data);
+
+        if (exerciseRes.status === 200) {
+          const firstData = exerciseRes.data.data;
+          const totalPages = exerciseRes.data.pagination?.totalPages || 1;
+
+          if (totalPages <= 1) {
+            setAllExercises(firstData);
+          } else {
+            const pageRequests = [];
+            for (let page = 2; page <= totalPages; page++) {
+              pageRequests.push(axios.get(`${base_url}/exercise?page=${page}`));
+            }
+            const rest = await Promise.all(pageRequests);
+            setAllExercises([...firstData, ...rest.flatMap((r) => r.data.data)]);
+          }
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -127,6 +142,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       } else {
         newExercises.push({
           _id: exercise._id,
+          exercise_id: exercise._id,
           name: exercise.name,
           sets: "",
           reps: "",
@@ -410,7 +426,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         workout: w?.workout?._id,
         exercises: (w.exercises || []).map((ex) => ({
           _id: ex?._id,
-          exercise_id: ex?._id,
+          exercise_id: ex?.exercise_id?._id || ex?.exercise_id || ex?._id,
           sets: Number(ex.sets),
           reps: Number(ex.reps),
           manipulation: ex.manipulation,

@@ -6,8 +6,6 @@ import ShowAnswerModal from "@/components/admin/components/traineer/ShowAnswerMo
 // import { FoodDairyModal } from "@/components/foodDairy/FoodDairyModal";
 // import { cookImage, fitalGuide, masurmentTask } from "@/assets";
 import {
-  manageNutration,
-  manageTrainee,
   manageTraining,
   ArrowBurger as NutritionImage,
   ArrowDumbel as TrainingImage,
@@ -106,13 +104,10 @@ const TraineerUi = ({ userId }) => {
   };
 
   // Select appropriate image for each card
-  const nutritionImage = manageNutration || NutritionImage;
   const trainingImage = manageTraining || TrainingImage;
   const answerImage = cookImage || NutritionImage;
-  // 2 - masurmentTask, 3 - fitalGuide, 4 and 6 - manageTrainee (same image for 4 and 6)
   const mesurementImage = masurmentTask;
   const fitalGuideImage = fitalGuide;
-  const manageTraineeImage = manageTrainee;
   const customTaskImage = ArrowBurger;
   const defaultImage = ArrowBurger;
 
@@ -195,65 +190,30 @@ const TraineerUi = ({ userId }) => {
           <>
             <div className="w-[342px]">
               <AdminArrowCard
-                image={nutritionImage}
-                title="ניהול תפריטי תזונה אישיים"
-                link={`/admin-dashboard/nutrition-lists/${userId}`}
+                image={answerImage}
+                title="תשובות מתאמן"
+                link={`/admin-dashboard/answers-list/${userId}`}
               />
             </div>
             <div className="w-[342px]">
               <AdminArrowCard
                 image={mesurementImage}
-                title="ללוח מדדים אישי"
+                title="מעקב היקפים"
                 link={`/admin-dashboard/mesurements-watch?userId=${userId}`}
               />
             </div>
             <div className="w-[342px]">
               <AdminArrowCard
                 image={fitalGuideImage}
-                title="מסלול מדריך כושר אישי"
-                link={`/admin-dashboard/fital-guide/${userId}`}
+                title="ניהול תפריט אישי"
+                link={`/admin-dashboard/nutrition-lists/${userId}`}
               />
             </div>
             <div className="w-[342px]">
               <AdminArrowCard
-                image={manageTraineeImage}
-                title="ניהול מתאמנים"
-                link={`/admin-dashboard/manage-trainee/${userId}`}
-              />
-            </div>
-            <div className="w-[342px]">
-              <div
-                className="w-full h-[100px] flex gap-4 items-center justify-between px-4 py-2 bg-white border border-[#efefef] rounded-2xl shadow-lg cursor-pointer"
-                dir="ltr"
-                onClick={handleMeasurementReportDownload}
-              >
-                <Button className="rounded-2xl w-[25px] h-6 flex-shrink-0">
-                  <FaArrowLeftLong />
-                </Button>
-                <div className="flex items-center gap-4 flex-1 justify-between">
-                  <div className="flex-1">
-                    <h1
-                      className="text-sm sm:text-base font-bold leading-5 text-[#0A2533] text-right line-clamp-2"
-                      dir="rtl"
-                    >
-                      {measurementReportLoading ? "טוען..." : "הצגת מדדים קודמים"}
-                    </h1>
-                  </div>
-                  <div className="w-[95px] h-[90px] flex-shrink-0 overflow-hidden flex items-center justify-center bg-[#F7FAFC] rounded-lg">
-                    <img
-                      src={mesurementImage}
-                      alt=""
-                      className="w-full h-full object-cover rounded-md"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="w-[342px]">
-              <AdminArrowCard
-                image={manageTraineeImage}
-                title="מעקב מתאמנים"
-                link={`/admin-dashboard/trainee-tracking/${userId}`}
+                title="ניהול תכניות אימון"
+                image={newTrainee}
+                link={`/admin-dashboard/assigned-training-list/${userId}`}
               />
             </div>
           </>
@@ -296,9 +256,8 @@ const TraineerUi = ({ userId }) => {
         <div className="w-[342px]">
           <AdminArrowCard
             image={newThree}
-            // title="נהל משימות מותאמות אישית"
             title="משימות מותאמות אישית"
-            link={`/dashboard/add-custom-task?userId=${userId}`}
+            link={`/${userData?.userType === "admin" ? "admin-dashboard" : "dashboard"}/add-custom-task?userId=${userId}`}
           />
         </div>
         <div className="w-[342px]">

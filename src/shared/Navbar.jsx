@@ -12,10 +12,11 @@ import { useEffect, useRef, useState } from "react";
 import { CiMenuFries } from "react-icons/ci";
 import { MdOutlineClose } from "react-icons/md";
 import { UI_TEXT } from "@/constants/hebrewText";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const userData = JSON.parse(localStorage.getItem("userInfo"));
   const userType = userData?.userType;
   const menuRef = useRef(null);
@@ -76,6 +77,11 @@ const Navbar = () => {
 
   // Reverse traineeLink if userType is trainee
   const traineeLinks = userType === "trainee" ? [...traineeLink].reverse() : traineeLink;
+
+  const noNavbarPaths = ["/regulation", "/measurement-women"];
+  if (!userData?.is_question_answered && noNavbarPaths.includes(location.pathname)) {
+    return null;
+  }
 
   return (
     <nav className="bg-transparent md:bg-white shadow-md">

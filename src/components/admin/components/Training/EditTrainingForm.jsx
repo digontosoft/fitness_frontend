@@ -83,16 +83,27 @@ const EditTrainingForm = () => {
           axios.get(`${base_url}/training/${id}`),
         ]);
 
-        if (exerciseRes.status === 200) {
-          setAllExercises(exerciseRes.data.data);
-          setLoading(false);
-        }
         if (workoutRes.status === 200) {
           setWorkouts(workoutRes.data.data);
           setLoading(false);
         }
         if (trainingRes.status === 200) {
           setTraining(trainingRes.data.data);
+          setLoading(false);
+        }
+        if (exerciseRes.status === 200) {
+          const firstData = exerciseRes.data.data;
+          const totalPages = exerciseRes.data.pagination?.totalPages || 1;
+          if (totalPages <= 1) {
+            setAllExercises(firstData);
+          } else {
+            const pageRequests = [];
+            for (let page = 2; page <= totalPages; page++) {
+              pageRequests.push(axios.get(`${base_url}/exercise?page=${page}`));
+            }
+            const rest = await Promise.all(pageRequests);
+            setAllExercises([...firstData, ...rest.flatMap((r) => r.data.data)]);
+          }
           setLoading(false);
         }
       } catch (error) {
