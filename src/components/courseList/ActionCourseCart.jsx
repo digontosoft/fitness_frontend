@@ -43,7 +43,9 @@ const ActionCourseCart = () => {
   }, [fetchExercises]);
 
   const handleCourse = () => {
-    navigate("/startTraining", { state: { data: workoutData } });
+    navigate("/startTraining", {
+      state: { data: { ...workoutData, userTrainingExercise: exercises } },
+    });
     window.scrollTo(0, 0);
   };
 
