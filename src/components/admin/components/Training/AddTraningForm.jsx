@@ -741,8 +741,19 @@ const AddTrainingForm = () => {
 
     const fetchExercises = async () => {
       try {
-        const res = await axios.get(`${base_url}/exercise`);
-        setAllExercises(res.data.data);
+        const firstRes = await axios.get(`${base_url}/exercise`);
+        const firstData = firstRes.data.data;
+        const totalPages = firstRes.data.pagination?.totalPages || 1;
+        if (totalPages <= 1) {
+          setAllExercises(firstData);
+        } else {
+          const pageRequests = [];
+          for (let page = 2; page <= totalPages; page++) {
+            pageRequests.push(axios.get(`${base_url}/exercise?page=${page}`));
+          }
+          const rest = await Promise.all(pageRequests);
+          setAllExercises([...firstData, ...rest.flatMap((r) => r.data.data)]);
+        }
       } catch (err) {
         console.error("Error fetching exercises:", err);
       }

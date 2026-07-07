@@ -141,7 +141,7 @@ export function TrainingList() {
         return (
           <div className="flex space-x-2">
             <TrainingDetails trainingId={trainingId} />
-            <Link to={`/dashboard/edit-training/${row.original._id}`}>
+            <Link to={`/${user?.userType === "admin" ? "admin-dashboard" : "dashboard"}/edit-training/${row.original._id}`}>
               <Button className="bg-black" size="sm">
                 <Edit />
               </Button>
@@ -155,7 +155,7 @@ export function TrainingList() {
             </Button>
             {userId ? (
               <Link
-                to={`/dashboard/assign-training/${row.original._id}/${userId}`}
+                to={`/${user?.userType === "admin" ? "admin-dashboard" : "dashboard"}/assign-training/${row.original._id}/${userId}`}
               >
                 <Button className="bg-[#7994CB]" size="sm">
                   {/* שייך תוכנית אימון */}

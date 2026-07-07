@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const AssignTrainingForm = ({ trainingId, user_id }) => {
+  const userData = JSON.parse(localStorage.getItem("userInfo"));
   // const [selectedTraining, setSelectedTraining] = useState(null);
   const [trainingbyId, setTrainingById] = useState({});
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
@@ -116,8 +117,21 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
   useEffect(() => {
     const fetchExercises = async () => {
       try {
-        const response = await axios.get(`${base_url}/exercise`);
-        setAllExercises(response.data.data);
+        const firstRes = await axios.get(`${base_url}/exercise`);
+        const firstData = firstRes.data.data;
+        const totalPages = firstRes.data.pagination?.totalPages || 1;
+
+        if (totalPages <= 1) {
+          setAllExercises(firstData);
+          return;
+        }
+
+        const pageRequests = [];
+        for (let page = 2; page <= totalPages; page++) {
+          pageRequests.push(axios.get(`${base_url}/exercise?page=${page}`));
+        }
+        const rest = await Promise.all(pageRequests);
+        setAllExercises([...firstData, ...rest.flatMap((r) => r.data.data)]);
       } catch (error) {
         console.error("Error fetching exercises:", error);
       }
@@ -434,7 +448,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
       const response = await axios.post(`${base_url}/assign-training`, payload);
       if (response.status === 201) {
         toast.success(UI_TEXT.trainingUpdated);
-        navigate(`/dashboard/assigned-training-list/${user_id}`);
+        navigate(`/${userData?.userType === "admin" ? "admin-dashboard" : "dashboard"}/assigned-training-list/${user_id}`);
       }
     } catch (error) {
       console.error("Error updating training session:", error);

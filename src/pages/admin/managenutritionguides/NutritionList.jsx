@@ -90,15 +90,15 @@ export function NutritionList() {
       header: "פעולות",
       cell: ({ row }) => {
         const nutritionId = row.original._id;
+        const basePath = user?.userType === "admin" ? "admin-dashboard" : "dashboard";
         return (
           <div className="flex space-x-2">
-            <Link to={`/dashboard/nutrition-details/${nutritionId}`}>
-              {" "}
+            <Link to={`/${basePath}/nutrition-details/${nutritionId}`}>
               <Button className="bg-[#7994CB]" size="sm">
                 <Eye />
               </Button>
             </Link>
-            <Link to={`/dashboard/edit-nutrition/${nutritionId}`}>
+            <Link to={`/${basePath}/edit-nutrition/${nutritionId}`}>
               <Button className="bg-black" size="sm">
                 <Edit />
               </Button>
@@ -198,12 +198,12 @@ export function NutritionList() {
                 <GoSearch className="text-white" />
               </div>
             </div>
-            {user.userType === "supperadmin" && (
+            {(user.userType === "supperadmin" || user.userType === "admin") && (
               <Link
                 to={
                   user_id
-                    ? `/dashboard/add-nutrition-menu/${user_id}`
-                    : `/dashboard/add-nutrition-guide`
+                    ? `/${user.userType === "admin" ? "admin-dashboard" : "dashboard"}/add-nutrition-menu/${user_id}`
+                    : `/${user.userType === "admin" ? "admin-dashboard" : "dashboard"}/add-nutrition-guide`
                 }
               >
                 <Button className="bg-[#7994CB] uppercase font-medium" size="sm">

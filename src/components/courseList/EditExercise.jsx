@@ -1,11 +1,11 @@
 import { base_url } from "@/api/baseUrl";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Trash } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Select from "react-dropdown-select";
 import { useLocation, useNavigate } from "react-router-dom";
-import { UI_TEXT } from "@/constants/hebrewText";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 
@@ -17,12 +17,11 @@ const EditExercise = () => {
   const workoutId = workData?.user_training_workout_id;
 
   const [allExercises, setAllExercises] = useState([]);
-  const [workoutData, setWorkoutData] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   // States for filtering and selecting a new exercise
   const [selectedExerciseIdForAdd, setSelectedExerciseIdForAdd] = useState("");
-  const [selectedExerciseOptions, setSelectedExerciseOptions] = useState(null); // This will hold the filtered exercises for the dropdown
+  const [selectedExerciseOptions, setSelectedExerciseOptions] = useState(null);
   const [selectedBodyPart, setSelectedBodyPart] = useState(null);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
 
@@ -30,84 +29,72 @@ const EditExercise = () => {
   const [newExerciseSets, setNewExerciseSets] = useState("");
   const [newExerciseReps, setNewExerciseReps] = useState("");
   const [newExerciseManipulation, setNewExerciseManipulation] = useState("");
-  const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
-  const validateSuperset = (list) => {
-    const items = Array.isArray(list) ? list : [];
-    const last = items[items.length - 1];
-    const incomplete =
-      items.length > 0 &&
-      String(last?.manipulation ?? "").trim().toLowerCase() === "superset";
-    setIsSupersetIncomplete(incomplete);
+  // Prevent double-fetch (React StrictMode runs effects twice in dev)
+  const initializedRef = useRef(false);
+
+  // Source of truth for handleSubmit — only updated by applyList/initialize, never by render
+  const exerciseListRef = useRef([]);
+
+  const isSuperset = (val) =>
+    String(val ?? "").trim().toLowerCase() === "superset";
+
+  // Fetch all paginated exercise pages in parallel
+  const fetchAllExercises = async (url) => {
+    const firstRes = await axios.get(url);
+    const firstData = firstRes.data.data || [];
+    const totalPages = firstRes.data.pagination?.totalPages ?? 1;
+    if (totalPages <= 1) return firstData;
+    const rest = await Promise.all(
+      Array.from({ length: totalPages - 1 }, (_, i) => {
+        const sep = url.includes("?") ? "&" : "?";
+        return axios.get(`${url}${sep}page=${i + 2}`);
+      })
+    );
+    return [...firstData, ...rest.flatMap((r) => r.data.data || [])];
   };
 
-  const fetchWorkout = useCallback(async () => {
-    try {
-      const response = await axios.get(`${base_url}/get-user-task/${user._id}`);
-      // console.log("workout:", response.data.data);
-      setWorkoutData(response.data.data);
-    } catch (error) {
-      console.error("Error fetching exercises:", error);
-      toast.error("טעינת התרגילים נכשלה");
-    }
-  }, [user?._id]);
-
+  // Single combined init: fetch tasks + exercises in one effect, run once
   useEffect(() => {
-    fetchWorkout();
-  }, [fetchWorkout]);
+    if (initializedRef.current) return;
+    if (!user?._id || !workData?.task_id) return;
+    initializedRef.current = true;
 
-  const filteredExercises = workoutData?.filter(
-    (ex) => ex?._id === workData?.task_id
-  );
-  // console.log("filteredExercises:", filteredExercises);
-
-  const fetchExercises = async () => {
-    try {
-      const response = await axios.get(`${base_url}/exercise`);
-      setAllExercises(response.data.data);
-      setSelectedExerciseOptions(response.data.data); // Initially show all exercises
-    } catch (error) {
-      console.error("Error fetching exercises:", error);
-      toast.error("טעינת התרגילים נכשלה");
-    }
-  };
-
-  useEffect(() => {
-    fetchExercises();
-  }, []);
-
-  useEffect(() => {
-    const getWorkout = async () => {
-      const matchedExercise = workoutData.find(
-        (ex) => ex._id === workData?.task_id
-      );
-      if (!matchedExercise) return;
-
-      const requestBody = {
-        userId: user._id,
-        workoutId: matchedExercise?.workout_id,
-        taskId: matchedExercise?._id,
-      };
-
+    const initialize = async () => {
       try {
-        const response = await axios.post(
-          `${base_url}/get-user-workout-task`,
-          requestBody
-        );
-        setExerciseList(response.data.data.userTrainingExercise);
-        validateSuperset(response.data.data.userTrainingExercise);
-        // console.log("filteredWorkoutData:", response.data.data);
+        const [taskRes, allEx] = await Promise.all([
+          axios.get(`${base_url}/get-user-task/${user._id}`),
+          fetchAllExercises(`${base_url}/exercise`),
+        ]);
+
+        // Load exercise library for dropdown
+        setAllExercises(allEx);
+        setSelectedExerciseOptions(allEx);
+
+        // Find the matching task
+        const tasks = taskRes.data.data || [];
+        const matchedTask = tasks.find((t) => t._id === workData.task_id);
+        if (!matchedTask) return;
+
+        // Fetch exercises for this workout
+        const workoutRes = await axios.post(`${base_url}/get-user-workout-task`, {
+          userId: user._id,
+          workoutId: matchedTask.workout_id,
+          taskId: matchedTask._id,
+        });
+        const exercises = workoutRes.data.data.userTrainingExercise;
+        exerciseListRef.current = exercises;
+        setExerciseList(exercises);
       } catch (error) {
-        console.error("Error fetching exercises:", error);
+        console.error("Error initializing EditExercise:", error);
         toast.error("טעינת התרגילים נכשלה");
       }
     };
 
-    if (user._id && workoutData.length && workData?.task_id) {
-      getWorkout();
-    }
-  }, [user._id, workoutData, workData?.task_id]);
+    initialize();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     let filtered = allExercises;
@@ -123,139 +110,212 @@ const EditExercise = () => {
     setSelectedExerciseIdForAdd(""); // Reset selected exercise when filters change
   }, [selectedBodyPart, selectedEquipment, allExercises]);
 
+  // Helper: update both ref and state atomically
+  const applyList = (nextList) => {
+    exerciseListRef.current = nextList;
+    setExerciseList(nextList);
+  };
+
+  // "Effective list" = existing exercises + the pending new exercise (if dropdown is open
+  // and a valid exercise is selected). This makes the submit button react in real-time
+  // as the user fills in the add-exercise form.
+  const effectiveList = useMemo(() => {
+    if (!showDropdown || !selectedExerciseIdForAdd) return exerciseList;
+    const selected = allExercises.find((ex) => ex._id === selectedExerciseIdForAdd);
+    if (!selected) return exerciseList;
+    return [
+      ...exerciseList,
+      {
+        exercise_id: selected,
+        sets: Number(newExerciseSets) || 0,
+        reps: Number(newExerciseReps) || 0,
+        manipulation: newExerciseManipulation || "",
+      },
+    ];
+  }, [exerciseList, showDropdown, selectedExerciseIdForAdd, allExercises,
+      newExerciseSets, newExerciseReps, newExerciseManipulation]);
+
+  // Derived submit-disabled state — computed from effectiveList, fully reactive
+  const submitBlockerMsg = useMemo(() => {
+    const emptyItem = effectiveList.find(
+      (item) =>
+        !item.sets ||
+        Number(item.sets) <= 0 ||
+        !item.reps ||
+        Number(item.reps) <= 0 ||
+        !String(item.manipulation ?? "").trim()
+    );
+    if (emptyItem)
+      return `מלא את כל השדות (סטים, חזרות, מניפולציה) עבור "${emptyItem.exercise_id?.name || "תרגיל"}"`;
+
+    const last = effectiveList[effectiveList.length - 1];
+    if (effectiveList.length > 0 && isSuperset(last?.manipulation))
+      return 'אחרי "סופרסט" חייב לבוא תרגיל עם מניפולציה אחרת';
+
+    return null;
+  }, [effectiveList]);
+
+  const isSubmitDisabled = submitBlockerMsg !== null;
+
   const handleAddMoreExerciseClick = () => {
     setShowDropdown(true);
   };
 
-  const handleAddNewExercise = () => {
+  // Core add logic — returns true on success, false on validation failure
+  const commitPendingExercise = () => {
     if (!selectedExerciseIdForAdd) {
       toast.error("נא לבחור תרגיל להוספה");
-      return;
+      return false;
     }
     if (!newExerciseSets || Number(newExerciseSets) <= 0) {
       toast.error("נא להזין מספר סטים תקין לתרגיל החדש");
-      return;
+      return false;
     }
     if (!newExerciseReps || Number(newExerciseReps) <= 0) {
       toast.error("נא להזין מספר חזרות תקין לתרגיל החדש");
-      return;
+      return false;
     }
-
-    const selected = allExercises.find(
-      (ex) => ex._id === selectedExerciseIdForAdd
-    );
-
-    if (selected) {
-      setExerciseList((prevList) => [
-        ...prevList,
-        {
-          _id: selected._id + Date.now(), // Use a unique ID for new entries
-          exercise_id: selected,
-          sets: Number(newExerciseSets),
-          reps: Number(newExerciseReps),
-          manipulation: newExerciseManipulation,
-        },
-      ]);
-      // Superset validation after add
-      setTimeout(() => validateSuperset([...exerciseList, {
-        _id: selected._id + Date.now(),
-        exercise_id: selected,
-        sets: Number(newExerciseSets),
-        reps: Number(newExerciseReps),
-        manipulation: newExerciseManipulation,
-      }]), 0);
-      // Reset states for adding new exercise
-      setSelectedExerciseIdForAdd("");
-      setSelectedBodyPart(null);
-      setSelectedEquipment(null);
-      setNewExerciseSets("");
-      setNewExerciseReps("");
-      setNewExerciseManipulation("");
-      setShowDropdown(false); // Hide dropdowns after adding
-      toast.success("התרגיל נוסף בהצלחה!");
-    } else {
+    const selected = allExercises.find((ex) => ex._id === selectedExerciseIdForAdd);
+    if (!selected) {
       toast.error("התרגיל שנבחר לא נמצא");
+      return false;
+    }
+    const newItem = {
+      _id: selected._id + Date.now(),
+      exercise_id: selected,
+      sets: Number(newExerciseSets),
+      reps: Number(newExerciseReps),
+      manipulation: newExerciseManipulation,
+    };
+    applyList([...exerciseListRef.current, newItem]);
+    setSelectedExerciseIdForAdd("");
+    setSelectedBodyPart(null);
+    setSelectedEquipment(null);
+    setNewExerciseSets("");
+    setNewExerciseReps("");
+    setNewExerciseManipulation("");
+    setShowDropdown(false);
+    return true;
+  };
+
+  const handleAddNewExercise = () => {
+    if (commitPendingExercise()) {
+      toast.success("התרגיל נוסף בהצלחה!");
     }
   };
 
   const handleRemoveExercise = (idToRemove) => {
-    const next = exerciseList.filter((item) => item._id !== idToRemove);
-    setExerciseList(next);
-    validateSuperset(next);
+    applyList(exerciseListRef.current.filter((item) => item._id !== idToRemove));
     toast.info("התרגיל הוסר");
   };
 
   const handleChange = (index, field, value) => {
-    const updatedExercises = [...exerciseList];
-    // Basic validation for sets and reps
     if ((field === "sets" || field === "reps") && Number(value) < 0) {
       toast.error(`${field === "sets" ? "סטים" : "חזרות"} לא יכולים להיות שליליים`);
       return;
     }
-    updatedExercises[index][field] = value;
-    setExerciseList(updatedExercises);
-    validateSuperset(updatedExercises);
+
+    if (field === "manipulation") {
+      const currentList = exerciseListRef.current;
+      const exercise = currentList[index];
+      const isLastExercise = index === currentList.length - 1;
+
+      // Setting to "superset" when NOT last exercise: next must exist
+      if (isSuperset(value) && !isLastExercise) {
+        const nextExercise = currentList[index + 1];
+        if (!nextExercise) {
+          toast.error('אחרי "סופרסט" חייב לבוא תרגיל עם מניפולציה אחרת');
+          return;
+        }
+      }
+
+      // Removing "superset": previous exercise must NOT be "superset"
+      if (!isSuperset(value) && isSuperset(exercise?.manipulation)) {
+        const prevExercise = currentList[index - 1];
+        if (prevExercise && isSuperset(prevExercise?.manipulation)) {
+          toast.error('לא ניתן להסיר סופרסט מתרגיל זה כי התרגיל הקודם הוא סופרסט');
+          return;
+        }
+      }
+    }
+
+    const updated = exerciseListRef.current.map((item, i) =>
+      i === index ? { ...item, [field]: value } : item
+    );
+    applyList(updated);
   };
 
   const handleMoveUp = (index) => {
     if (index === 0) return;
-    const updated = [...exerciseList];
+    const updated = [...exerciseListRef.current];
     [updated[index - 1], updated[index]] = [updated[index], updated[index - 1]];
-    setExerciseList(updated);
-    validateSuperset(updated);
+    applyList(updated);
   };
 
   const handleMoveDown = (index) => {
-    if (index === exerciseList.length - 1) return;
-    const updated = [...exerciseList];
+    if (index === exerciseListRef.current.length - 1) return;
+    const updated = [...exerciseListRef.current];
     [updated[index], updated[index + 1]] = [updated[index + 1], updated[index]];
-    setExerciseList(updated);
-    validateSuperset(updated);
+    applyList(updated);
   };
 
   const handleSubmit = async () => {
-    // Validate existing exercises before submission
-    for (const item of exerciseList) {
+    // Auto-add pending exercise if user forgot to click "הוסף תרגיל"
+    if (showDropdown && selectedExerciseIdForAdd) {
+      if (!commitPendingExercise()) return;
+    }
+
+    const currentList = exerciseListRef.current;
+
+    // Validate directly from ref — do NOT rely on isSupersetIncomplete state
+    // because setIsSupersetIncomplete is async and may not have applied yet
+    for (const item of currentList) {
       if (!item.sets || Number(item.sets) <= 0) {
-        toast.error(
-          `נא להזין מספר סטים תקין עבור ${
-            item.exercise_id?.name || "תרגיל"
-          }.`
-        );
+        toast.error(`נא להזין מספר סטים תקין עבור ${item.exercise_id?.name || "תרגיל"}.`);
         return;
       }
       if (!item.reps || Number(item.reps) <= 0) {
-        toast.error(
-          `נא להזין מספר חזרות תקין עבור ${
-            item.exercise_id?.name || "תרגיל"
-          }.`
-        );
+        toast.error(`נא להזין מספר חזרות תקין עבור ${item.exercise_id?.name || "תרגיל"}.`);
+        return;
+      }
+      if (!String(item.manipulation ?? "").trim()) {
+        toast.error(`מלא מניפולציה עבור "${item.exercise_id?.name || "תרגיל"}"`);
         return;
       }
     }
 
-    const payload = {
-      user_training_workout_id: workoutId,
-      exercises: exerciseList.map((item) => ({
-        exercise_id: item.exercise_id._id || item.exercise_id,
-        sets: Number(item.sets),
-        reps: Number(item.reps),
-        manipulation: item.manipulation,
-      })),
-    };
+    // Superset rule: last exercise cannot have manipulation = "superset"
+    const last = currentList[currentList.length - 1];
+    if (currentList.length > 0 && isSuperset(last?.manipulation)) {
+      toast.error('אחרי "סופרסט" חייב לבוא תרגיל עם מניפולציה אחרת');
+      return;
+    }
 
     try {
+      const payload = {
+        user_training_workout_id: workoutId,
+        exercises: currentList.map((item) => ({
+          exercise_id: item.exercise_id?._id || item.exercise_id,
+          sets: Number(item.sets),
+          reps: Number(item.reps),
+          manipulation: item.manipulation,
+        })),
+      };
       const response = await axios.post(
         `${base_url}/customize-single-workout`,
         payload
       );
       if (response.status === 200) {
         toast.success(UI_TEXT.workoutUpdated);
-        setAllExercises((prevExercises) => [
-          ...prevExercises,
-          response?.data.data.userTrainingExercise,
-        ]);
-        navigate(-1);
+        const taskId = workData?.task_id;
+        if (taskId) {
+          navigate(`/action-course-cart/${taskId}`, {
+            state: location.state,
+            replace: true,
+          });
+        } else {
+          navigate(-1);
+        }
       }
     } catch (error) {
       console.error("Error updating workout:", error);
@@ -498,12 +558,26 @@ const EditExercise = () => {
               </div>
             )}
 
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center gap-3 mt-4">
               <Button
                 onClick={handleAddNewExercise}
                 className="bg-[#7994CB] rounded-lg text-white px-6 py-2 hover:bg-[#7994CB] mt-4"
               >
                 הוסף תרגיל
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowDropdown(false);
+                  setSelectedExerciseIdForAdd("");
+                  setSelectedBodyPart(null);
+                  setSelectedEquipment(null);
+                  setNewExerciseSets("");
+                  setNewExerciseReps("");
+                  setNewExerciseManipulation("");
+                }}
+                className="bg-gray-200 text-black rounded-lg px-6 py-2 hover:bg-gray-300 mt-4"
+              >
+                ביטול
               </Button>
             </div>
           </div>
@@ -511,15 +585,20 @@ const EditExercise = () => {
 
         <Button
           onClick={handleSubmit}
-          disabled={isSupersetIncomplete}
+          disabled={isSubmitDisabled}
           className={`rounded-lg text-white px-6 py-2 mt-4 ${
-            isSupersetIncomplete
+            isSubmitDisabled
               ? "bg-gray-200 text-black cursor-not-allowed"
               : "bg-[#7994CB] hover:bg-[#7994CB]"
           }`}
         >
           שמור שינויים
         </Button>
+        {submitBlockerMsg && (
+          <p className="text-red-500 text-sm mt-2 text-center" dir="rtl">
+            {submitBlockerMsg}
+          </p>
+        )}
       </div>
     </div>
   );

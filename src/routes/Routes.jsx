@@ -303,10 +303,10 @@ export const routes = createBrowserRouter([
             path: "/dashboard/exercise-library",
             element: <ExerciseLibrary />,
           },
-          {
-            path: "/dashboard/traineer",
-            element: <Trainer />,
-          },
+          // {
+          //   path: "/dashboard/traineer",
+          //   element: <Trainer />,
+          // },
           {
             path: "/dashboard/traineer/:id",
             element: <Trainer />,
@@ -453,10 +453,10 @@ export const routes = createBrowserRouter([
             path: "/admin-dashboard/exercise-library",
             element: <ExerciseLibrary />,
           },
-          {
-            path: "/admin-dashboard/traineer",
-            element: <Trainer />,
-          },
+          // {
+          //   path: "/admin-dashboard/traineer",
+          //   element: <Trainer />,
+          // },
           {
             path: "/admin-dashboard/traineer/:id",
             element: <Trainer />,
@@ -480,6 +480,10 @@ export const routes = createBrowserRouter([
           {
             path: "/admin-dashboard/assign-training/:trainingId/:userId",
             element: <AssignTraining />,
+          },
+          {
+            path: "/admin-dashboard/add-custom-task",
+            element: <AddCustomTask />,
           },
           {
             path: "/admin-dashboard/edit-training/:id",

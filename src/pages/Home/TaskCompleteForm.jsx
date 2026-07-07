@@ -88,8 +88,15 @@ const TaskCompleteForm = ({ data }) => {
   const onSubmit = async (data) => {
     const formData = new FormData();
 
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
+    const filteredData = { ...data };
+    if (Gender === "male") {
+      delete filteredData.butt;
+    } else {
+      delete filteredData.chest;
+    }
+
+    Object.keys(filteredData).forEach((key) => {
+      formData.append(key, filteredData[key]);
     });
 
     if (files && files.length > 0) {

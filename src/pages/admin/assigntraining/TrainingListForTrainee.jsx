@@ -117,7 +117,7 @@ export function TrainingListForTrainee({ userId }) {
         return (
           <div className="flex space-x-2">
             <TrainingForTraineeDetails trainingId={trainingId} />
-            <Link to={`/dashboard/edit-training/${trainingId}/${userId}`}>
+            <Link to={`/${userData?.userType === "admin" ? "admin-dashboard" : "dashboard"}/edit-training/${trainingId}/${userId}`}>
               <Button className="bg-black" size="sm">
                 <Edit />
               </Button>

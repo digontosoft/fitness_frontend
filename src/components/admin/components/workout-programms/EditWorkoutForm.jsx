@@ -517,10 +517,22 @@ const EditWorkoutForm = ({ workoutId }) => {
     const fetchExercise = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${base_url}/exercise`);
-        if (response.status === 200) {
+        const firstRes = await axios.get(`${base_url}/exercise`);
+        if (firstRes.status === 200) {
+          const firstData = firstRes.data.data;
+          const totalPages = firstRes.data.pagination?.totalPages || 1;
+
+          if (totalPages <= 1) {
+            setExercises(firstData);
+          } else {
+            const pageRequests = [];
+            for (let page = 2; page <= totalPages; page++) {
+              pageRequests.push(axios.get(`${base_url}/exercise?page=${page}`));
+            }
+            const rest = await Promise.all(pageRequests);
+            setExercises([...firstData, ...rest.flatMap((r) => r.data.data)]);
+          }
           setLoading(false);
-          setExercises(response.data.data);
         }
       } catch (error) {
         console.error("Error fetching exercises:", error);

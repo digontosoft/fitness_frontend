@@ -94,22 +94,27 @@ const CustomizeWorkoutForm = () => {
     setIsSupersetIncomplete(hasIncompleteSuperset);
   };
 
+  const fetchAllExercisePages = async (url) => {
+    const firstRes = await axios.get(url);
+    const firstData = firstRes.data.data || [];
+    const totalPages = firstRes.data.pagination?.totalPages ?? 1;
+    if (totalPages <= 1) return firstData;
+    const rest = await Promise.all(
+      Array.from({ length: totalPages - 1 }, (_, i) => {
+        const sep = url.includes("?") ? "&" : "?";
+        return axios.get(`${url}${sep}page=${i + 2}`);
+      })
+    );
+    return [...firstData, ...rest.flatMap((r) => r.data.data || [])];
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoadingExercises(true);
       try {
-        const [exerciseRes] = await Promise.all([
-          axios.get(`${base_url}/exercise`),
-          //   axios.get(`${base_url}/workout`),
-          //   axios.get(`${base_url}/get-training-by-id/${trainingId}`),
-        ]);
-
-        if (exerciseRes.status === 200) {
-          setAllExercises(exerciseRes.data.data);
-          setSelectedExercise(exerciseRes.data.data || []);
-        }
-        // if (workoutRes.status === 200) setWorkouts(workoutRes.data.data);
-        // if (trainingRes.status === 200) setTraining(trainingRes.data.data);
+        const allEx = await fetchAllExercisePages(`${base_url}/exercise`);
+        setAllExercises(allEx);
+        setSelectedExercise(allEx);
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("שגיאה בטעינת התרגילים. נסה שוב מאוחר יותר.");
@@ -125,19 +130,14 @@ const CustomizeWorkoutForm = () => {
     const fetchFilteredExercises = async () => {
       if (selectedBodyPart || selectedEquipment) {
         setIsLoadingExercises(true);
-        let url = `${base_url}/exercise?`;
-        if (selectedBodyPart) {
-          url += `body_part=${selectedBodyPart}&`;
-        }
-        if (selectedEquipment) {
-          url += `equipment=${selectedEquipment}&`;
-        }
-        url = url.slice(0, -1); // Remove trailing '&' or '?'
+        const params = new URLSearchParams();
+        if (selectedBodyPart) params.append("body_part", selectedBodyPart);
+        if (selectedEquipment) params.append("equipment", selectedEquipment);
+        const url = `${base_url}/exercise?${params.toString()}`;
 
         try {
-          const response = await axios.get(url);
-          setSelectedExercise(response.data.data || []);
-          // console.log("Filtered exercises for selection:", response.data.data);
+          const filtered = await fetchAllExercisePages(url);
+          setSelectedExercise(filtered);
         } catch (error) {
           console.error("Error fetching filtered exercises:", error);
           setSelectedExercise([]);
@@ -146,7 +146,6 @@ const CustomizeWorkoutForm = () => {
           setIsLoadingExercises(false);
         }
       } else {
-        // If no filters are selected, show all exercises again
         setSelectedExercise(allExercises);
       }
     };
@@ -183,7 +182,6 @@ const CustomizeWorkoutForm = () => {
       setAddMoreExerciseIndex(null);
       setSelectedBodyPart(null);
       setSelectedEquipment(null);
-      toast.success("תרגיל נוסף בהצלחה!");
     } catch (error) {
       console.error("Error adding exercise:", error);
       toast.error("שגיאה בהוספת התרגיל. נסה שוב.");
@@ -420,28 +418,22 @@ const CustomizeWorkoutForm = () => {
 
   const onSubmit = async () => {
     if (isSubmitting) return;
-    
-    setIsSubmitting(true);
-    // console.log("payload", training);
-    const payload = {
-      user_id: user_Id,
-      training_id: training.training_id._id,
-      workouts: (training.workouts || []).map((w) => ({
-        workout: w?.workout?._id,
-        exercises: (w.exercises || []).map((ex) =>
-          // console.log("exercise_id:", ex?.exercise_id._id),
-          ({
-            // _id: ex?._id,
 
-            exercise_id: ex?.exercise_id._id,
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        user_id: user_Id,
+        training_id: training.training_id._id,
+        workouts: (training.workouts || []).map((w) => ({
+          workout: w?.workout?._id,
+          exercises: (w.exercises || []).map((ex) => ({
+            exercise_id: ex?.exercise_id?._id || ex?.exercise_id || ex?._id,
             sets: Number(ex.sets),
             reps: Number(ex.reps),
             manipulation: ex.manipulation,
-          })
-        ),
-      })),
-    };
-    try {
+          })),
+        })),
+      };
       const response = await axios.put(
         `${base_url}/update-user-training/${trainingId}`,
         payload
@@ -669,6 +661,7 @@ const CustomizeWorkoutForm = () => {
                         </div>
                       )}
                       <Select
+                        key={`exercise-select-${workoutIndex}-${addMoreExerciseIndex}`}
                         className="rounded-lg h-12 w-auto"
                         direction="rtl"
                         options={selectedExercise}

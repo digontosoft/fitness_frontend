@@ -1,5 +1,7 @@
+import { base_url } from "@/api/baseUrl";
+import axios from "axios";
 import { Loader2 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Title from "../measurements/Tilte";
@@ -12,20 +14,44 @@ const ProgressCourseCart = () => {
   const navigate = useNavigate();
   const [isNavigating, setIsNavigating] = useState(false);
   const workout = location.state?.workout || {};
-  const training = location.state?.training || {};
+  const trainingFromState = location.state?.training || {};
+
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const [training, setTraining] = useState(trainingFromState);
+  const [isFetching, setIsFetching] = useState(false);
+
+  const fetchFreshTraining = useCallback(async () => {
+    if (!user?._id || !trainingFromState?._id) return;
+    setIsFetching(true);
+    try {
+      const response = await axios.get(
+        `${base_url}/get-training-by-user-id/${user._id}`
+      );
+      if (response.status === 200) {
+        const found = response.data.data.find(
+          (t) => t._id === trainingFromState._id
+        );
+        if (found) setTraining(found);
+      }
+    } catch (error) {
+      console.error("Error fetching fresh training:", error);
+    } finally {
+      setIsFetching(false);
+    }
+  }, [user?._id, trainingFromState?._id]);
+
+  useEffect(() => {
+    fetchFreshTraining();
+  }, [fetchFreshTraining]);
 
   // Find the matching workout from training.workouts array
   const selectedWorkout = useMemo(() => {
     if (!training?.workouts || !Array.isArray(training.workouts)) {
       return null;
     }
-    
-    // Try to find workout by matching workout._id
     const found = training.workouts.find(
       (w) => w.workout?._id === workout?._id || w._id === workout?._id
     );
-    
-    // If not found, use first workout as fallback
     return found || training.workouts[0] || null;
   }, [training, workout]);
 
@@ -36,13 +62,13 @@ const ProgressCourseCart = () => {
 
   // Validate data and handle missing state
   useEffect(() => {
-    if (!workout || !training) {
+    if (!workout || !trainingFromState) {
       toast.error("נתונים חסרים. מועבר לדף הבית...");
       setTimeout(() => {
         navigate("/", { replace: true });
       }, 2000);
     }
-  }, [workout, training, navigate]);
+  }, [workout, trainingFromState, navigate]);
   // console.log(exercises);
  
   // console.log("workoutdata:",workout);
@@ -99,12 +125,12 @@ const ProgressCourseCart = () => {
             }}
             onClick={() => setIsNavigating(true)}
           >
-            <Button 
+            <Button
               className="text-sm font-bold text-white bg-[#7994CB] hover:bg-[#6a84b8] px-8 py-4 rounded-full sm:my-10 my-0 w-52 md:w-40 h-12 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isNavigating || !selectedWorkout}
+              disabled={isNavigating || isFetching || !selectedWorkout}
               dir="rtl"
             >
-              {isNavigating ? (
+              {isNavigating || isFetching ? (
                 <>
                   <Loader2 className="w-4 h-4 ml-2 animate-spin" />
                   טוען...
@@ -119,12 +145,12 @@ const ProgressCourseCart = () => {
             state={{ workout: selectedWorkout || workout, training }}
             onClick={() => setIsNavigating(true)}
           >
-            <Button 
+            <Button
               className="text-sm font-bold text-black hover: bg-gray-100 hover:bg-gray-200 border border-gray-400 px-10 py-4 rounded-full sm:my-10 my-0 w-52 md:w-44 h-12 transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isNavigating || !selectedWorkout}
+              disabled={isNavigating || isFetching || !selectedWorkout}
               dir="rtl"
             >
-              {isNavigating ? (
+              {isNavigating || isFetching ? (
                 <>
                   <Loader2 className="w-4 h-4 ml-2 animate-spin" />
                   טוען...
