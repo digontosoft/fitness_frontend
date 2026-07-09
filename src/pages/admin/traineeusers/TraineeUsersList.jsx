@@ -51,8 +51,6 @@ export function TraineeUsersLists() {
   const [viewUserModalOpen, setViewUserModalOpen] = useState(false);
   const [viewUser, setViewUser] = useState(null);
   const userData = JSON.parse(localStorage.getItem("userInfo"));
-   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const fetchAdminUser = useCallback(async () => {
     setLoading(true);
     try {
@@ -406,9 +404,9 @@ export function TraineeUsersLists() {
 
       <div className="flex items-center justify-end space-x-2 py-4">
         <PaginationComp
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
+          currentPage={table.getState().pagination.pageIndex + 1}
+          totalPages={table.getPageCount()}
+          onPageChange={(p) => table.setPageIndex(p - 1)}
         />
       </div>
       {
