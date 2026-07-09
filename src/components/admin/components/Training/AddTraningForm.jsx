@@ -530,6 +530,21 @@ const AddTrainingForm = () => {
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
+  // Hebrew root search: if exact substring not found, try progressively shorter prefixes
+  // This handles morphological variants like כפיפות (nominal) vs כפיפת (construct)
+  const hebrewExerciseSearchFn = ({ props, state }) => {
+    const searchTerm = state.search.trim().toLowerCase();
+    if (!searchTerm) return props.options;
+    return props.options.filter((option) => {
+      const name = (option[props.labelField] || "").toLowerCase();
+      if (name.includes(searchTerm)) return true;
+      for (let len = searchTerm.length - 1; len >= 3; len--) {
+        if (name.includes(searchTerm.slice(0, len))) return true;
+      }
+      return false;
+    });
+  };
+
   const validateSupersetAndToggle = (workouts) => {
     const hasIncompleteSuperset = (workouts || []).some((w) => {
       const list = Array.isArray(w?.exercises) ? w.exercises : [];
@@ -877,6 +892,7 @@ const AddTrainingForm = () => {
             placeholder="בחר אימון..."
             onChange={handleWorkoutSelect}
             searchBy="name"
+            searchFn={hebrewExerciseSearchFn}
           />
         )}
 
@@ -1050,6 +1066,7 @@ const AddTrainingForm = () => {
                     placeholder="בחר תרגיל"
                     onChange={handleNewExerciseSelection}
                     searchBy="name"
+                    searchFn={hebrewExerciseSearchFn}
                   />
                 </div>
               )}
