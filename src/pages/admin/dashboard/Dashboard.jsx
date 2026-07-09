@@ -216,22 +216,19 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [usersResponse, traineeListsResponse] = await Promise.all([
-          axios.get(`${base_url}/getUsers`),
-          axios.get(`${base_url}/traineelistforadmin?adminId=${adminId}`),
-        ]);
-
+        const usersResponse = await axios.get(`${base_url}/getUsers`);
         const allUsers = usersResponse.data.data;
         setUsers(allUsers);
-        setAdminTraineeLists(traineeListsResponse.data.data);
 
-        // Filter and store user counts in localStorage
         const traineeUsers = allUsers?.filter((u) => u.userType === "trainee");
         const recipeUsers = allUsers?.filter((u) => u.userType === "recipe");
-
         localStorage.setItem("traineeUsers", JSON.stringify(traineeUsers.length));
         localStorage.setItem("recipeUsers", JSON.stringify(recipeUsers.length));
 
+        if (user.userType === "admin") {
+          const traineeListsResponse = await axios.get(`${base_url}/traineelistforadmin?adminId=${adminId}`);
+          setAdminTraineeLists(traineeListsResponse.data.data);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
