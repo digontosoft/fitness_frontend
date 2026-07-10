@@ -160,7 +160,7 @@ const TraineerUi = ({ userId }) => {
       <div className="flex flex-col items-center justify-center gap-4">
         <FormTitle title="ניהול מתאמנים" />
         <span className="flex items-center gap-2">
-          {user?.firstName} {user?.lastName}
+          {user?.full_name}
         </span>
       </div>
 

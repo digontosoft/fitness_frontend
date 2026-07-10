@@ -442,10 +442,18 @@ const MeasurementUpdate = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
+    const measurementFields = ["waist", "chest", "butt", "armr", "arml", "thighr", "thighl"];
+    const formattedData = { ...data };
+    measurementFields.forEach((field) => {
+      const val = parseFloat(formattedData[field]);
+      if (!isNaN(val)) {
+        formattedData[field] = parseFloat(val.toFixed(1));
+      }
+    });
     try {
       const response = await axios.post(
         `${base_url}/measurement`,
-        data,
+        formattedData,
         {
         headers: {
           Accept: "application/json",
@@ -536,6 +544,15 @@ const MeasurementUpdate = () => {
     setValue(`photo4`, "");
   };
   
+  const requiredValidation = { required: "שדה זה חובה" };
+
+  const formatToOneDecimal = (fieldId) => (e) => {
+    const val = parseFloat(e.target.value);
+    if (!isNaN(val)) {
+      setValue(fieldId, parseFloat(val.toFixed(1)));
+    }
+  };
+
   // Conditional rendering
   if (getMesurement === null) {
     return <div>{UI_TEXT.loadingMeasurementData}</div>;
@@ -555,22 +572,25 @@ const MeasurementUpdate = () => {
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal("waist")}
             errors={errors}
             watch={watch}
           />
-   <DynamicInputField
+          <DynamicInputField
             id={Gender === "male" ? "chest" : "butt"}
             type="number"
             label={Gender === "male" ? "חָזֶה" : "ישבן"}
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal(Gender === "male" ? "chest" : "butt")}
             errors={errors}
             watch={watch}
           />
-     
           <DynamicInputField
             id="armr"
             type="number"
@@ -578,42 +598,48 @@ const MeasurementUpdate = () => {
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal("armr")}
             errors={errors}
             watch={watch}
           />
-  <DynamicInputField
+          <DynamicInputField
             id="arml"
             type="number"
             label="זרוע שמאל"
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal("arml")}
             errors={errors}
             watch={watch}
           />
-
-  <DynamicInputField
+          <DynamicInputField
             id="thighr"
             type="number"
             label="ירך ימין"
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal("thighr")}
             errors={errors}
             watch={watch}
           />
-
-  <DynamicInputField
+          <DynamicInputField
             id="thighl"
             type="number"
             label="ירך שמאל"
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal("thighl")}
             errors={errors}
             watch={watch}
           />

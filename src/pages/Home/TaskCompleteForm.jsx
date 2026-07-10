@@ -44,6 +44,7 @@ const TaskCompleteForm = ({ data }) => {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -85,6 +86,15 @@ const TaskCompleteForm = ({ data }) => {
 
   // console.log("id", id);
 
+  const requiredValidation = { required: "שדה זה חובה" };
+
+  const formatToOneDecimal = (fieldId) => (e) => {
+    const val = parseFloat(e.target.value);
+    if (!isNaN(val)) {
+      setValue(fieldId, parseFloat(val.toFixed(1)));
+    }
+  };
+
   const onSubmit = async (data) => {
     const formData = new FormData();
 
@@ -94,6 +104,14 @@ const TaskCompleteForm = ({ data }) => {
     } else {
       delete filteredData.chest;
     }
+
+    const measurementFields = ["waist", "chest", "butt", "armr", "arml", "thighr", "thighl"];
+    measurementFields.forEach((field) => {
+      const val = parseFloat(filteredData[field]);
+      if (!isNaN(val)) {
+        filteredData[field] = parseFloat(val.toFixed(1));
+      }
+    });
 
     Object.keys(filteredData).forEach((key) => {
       formData.append(key, filteredData[key]);
@@ -276,26 +294,29 @@ const TaskCompleteForm = ({ data }) => {
           </div>
         </div> */}
          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-         <DynamicInputField
+          <DynamicInputField
             id="waist"
             type="number"
             label="היקף מותניים"
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal("waist")}
             errors={errors}
             watch={watch}
           />
-
-   <DynamicInputField
+          <DynamicInputField
             id={Gender === "male" ? "chest" : "butt"}
             type="number"
             label={Gender === "male" ? "חָזֶה" : "ישבן"}
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal(Gender === "male" ? "chest" : "butt")}
             errors={errors}
             watch={watch}
           />
@@ -306,47 +327,51 @@ const TaskCompleteForm = ({ data }) => {
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal("armr")}
             errors={errors}
             watch={watch}
           />
-  <DynamicInputField
+          <DynamicInputField
             id="arml"
             type="number"
             label="זרוע שמאל"
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal("arml")}
             errors={errors}
             watch={watch}
           />
-
-  <DynamicInputField
+          <DynamicInputField
             id="thighr"
             type="number"
             label="ירך ימין"
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal("thighr")}
             errors={errors}
             watch={watch}
           />
-
-  <DynamicInputField
+          <DynamicInputField
             id="thighl"
             type="number"
             label="ירך שמאל"
             placeholder="הזן נתונים כאן..."
             register={register}
             min={0}
-            validation={{ required: "שדה זה חובה" }}
+            step="0.1"
+            validation={requiredValidation}
+            onBlur={formatToOneDecimal("thighl")}
             errors={errors}
             watch={watch}
           />
-        
-        
         </div>
         <Link to="/mesurement-pdf">
           <button className="underline text-base font-bold text-[#7994CB] hover:text-blue-400">

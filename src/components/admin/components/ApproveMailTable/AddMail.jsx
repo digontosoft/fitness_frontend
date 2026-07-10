@@ -143,8 +143,8 @@ export default function AddMail({ onEmailAdded }) {
     try {
       setLoading(true);
       // console.log("Submitted email:", data);
-      const response = await axios.post(`${base_url}/approved-mail`, data);
-      toast.success(response.data.message);
+      await axios.post(`${base_url}/approved-mail`, data);
+      toast.success(UI_TEXT.approvedMailAdded);
       reset();
       if (onEmailAdded) {
         await onEmailAdded();

@@ -2,34 +2,21 @@ import { Link } from "react-router-dom";
 
 const SingleCart = ({ id, title, description, icon, type }) => {
   return (
-    <div
-      key={id}
-      className="bg-white shadow-md rounded-3xl w-full h-full flex flex-col items-center gap-3 px-3 py-4 sm:py-5"
-      dir="rtl"
-    >
-      <img className="w-full h-full object-cover rounded-xl" src={icon} alt="" />
-      {/* <div className="sm:w-full w-24 sm:h-full h-24 rounded-2xl border border-gray-200 shadow-sm overflow-hidden p-2 bg-white">
-        <img
-          className="w-full h-24 sm:h-full object-contain rounded-xl"
-          src={icon}
-          alt=""
-        />
-      </div> */}
-      <p className="text-center text-sm sm:text-base font-semibold text-[#0A2533]" dir="rtl">
-        {title}
-      </p>
-      <p className="text-center text-xs sm:text-sm text-[#4B6475]" dir="rtl">
-        {description}
-      </p>
-      <Link
-        className="flex justify-center items-center mt-auto"
-        to={`/nutration-pdf/${id}`}
-      >
-        <button className="text-[#000000] font-bold text-xs sm:text-sm text-center underline pb-2 hover:text-blue-500" dir="rtl">
-          {type === "guide" ? "לצפייה במדריך" : "  לצפיה בתפריט"}{" "}
-        </button>
-      </Link>
-    </div>
+    <Link to={`/nutration-pdf/${id}`}>
+      <div className="md:w-56 w-48 shadow-xl rounded-2xl p-3" dir="rtl">
+        <div className="w-full h-40 rounded-2xl flex justify-center items-center overflow-hidden bg-gray-50">
+          <img className="w-40 h-40 object-contain" src={icon} alt="" />
+        </div>
+        <div className="px-3 py-4">
+          <p className="text-[#0A2533] text-sm font-bold text-right">{title}</p>
+          <p className="text-gray-500 text-xs text-right mt-1 line-clamp-2">{description}</p>
+          <p className="text-[#000000] font-bold text-xs text-right underline mt-2 hover:text-blue-500">
+            {type === "guide" ? "לצפייה במדריך" : "לצפיה בתפריט"}
+          </p>
+        </div>
+      </div>
+    </Link>
   );
 };
+
 export default SingleCart;

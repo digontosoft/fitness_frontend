@@ -13,8 +13,11 @@ const DynamicInputField = ({
   defaultValue,
   disabled,
   min,
+  step,
+  onBlur: customOnBlur,
 }) => {
   const value = typeof watch === "function" ? watch(id) : null;
+  const { onBlur: rhfOnBlur, ...rhfRest } = register(id, validation);
   return (
     <div className="relative w-full mb-6">
       {/* Label */}
@@ -31,9 +34,14 @@ const DynamicInputField = ({
           type={type}
           id={id}
           defaultValue={defaultValue}
-          {...register(id, validation)}
+          {...rhfRest}
+          onBlur={(e) => {
+            rhfOnBlur(e);
+            customOnBlur?.(e);
+          }}
           placeholder={placeholder}
           min={min}
+          step={step}
           className={twMerge`w-full border ${
             errors[id] ? "border-[#7994CB]" : "border-gray-300"
           } rounded-lg p-3 text-right focus:outline-none focus:ring-2 ${
