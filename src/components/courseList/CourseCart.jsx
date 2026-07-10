@@ -49,6 +49,7 @@
 
 // export default CourseCart;
 
+import { maleChest } from "@/assets";
 import ReactPlayer from "react-player";
 import backHand from "../../assets/image/back-hand.svg";
 import back from "../../assets/image/back.svg";
@@ -68,11 +69,9 @@ import trx from "../../assets/image/trx.svg";
 import weights from "../../assets/image/weights.svg";
 import womenback from "../../assets/image/woman-back.svg";
 import womenbelly from "../../assets/image/woman-belly.svg";
-import { maleChest } from "@/assets";
 const CourseCart = ({ exercise, handleOpen }) => {
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  // console.log("user:", user);
 
   let customIcon = null;
   if (exercise?.body_part === "גב") {
@@ -91,8 +90,8 @@ const CourseCart = ({ exercise, handleOpen }) => {
     customIcon = lowerBack;
   }else if (exercise?.body_part === "רגליים") {
     customIcon = leg;
-  }else if (exercise?.body_part === "בטן") {
-    customIcon = user.gender === "male" ? menbelly : womenbelly;
+  } else if (exercise?.body_part === "בטן") {
+    customIcon = user?.gender === "male" ? menbelly : womenbelly;
   }
 
   let customEquipment = null;
