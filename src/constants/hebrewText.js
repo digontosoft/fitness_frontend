@@ -90,6 +90,9 @@ export const UI_TEXT = {
   validStepCount: "נא להזין מספר צעדים תקין.",
   submitStepsFailed: "שליחת הצעדים נכשלה.",
 
+  // Approved mail
+  approvedMailAdded: "מייל מאושר נוסף בהצלחה",
+
   // Delete API toasts
   emailDeleted: "הדואר האלקטרוני נמחק בהצלחה.",
   emailDeleteFailed: "מחיקת הדואר האלקטרוני נכשלה.",
