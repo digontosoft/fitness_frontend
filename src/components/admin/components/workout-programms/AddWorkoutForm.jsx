@@ -333,22 +333,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import { UI_TEXT } from "@/constants/hebrewText";
+import { useDebounce } from "@/hooks/useDebounce";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const AddWorkoutForm = () => {
-  const [allExercises, setAllExercises] = useState([]);
   const [workoutExercises, setWorkoutExercises] = useState([]);
   const [addMoreExercise, setAddMoreExercise] = useState(true);
   const [selectedBodyPart, setSelectedBodyPart] = useState(null);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [filteredExercisesForSelection, setFilteredExercisesForSelection] =
     useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedSearch = useDebounce(searchValue, 500);
+  const searchValueRef = useRef("");
+  const [isLoadingExercises, setIsLoadingExercises] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
@@ -359,42 +363,56 @@ const AddWorkoutForm = () => {
     formState: { errors },
   } = useForm();
 
+  // Server-side: search + body_part + equipment — fetch ALL matching pages
   useEffect(() => {
-    const fetchAllExercises = async () => {
+    const fetchExercises = async () => {
+      setIsLoadingExercises(true);
       try {
-        const response = await axios.get(
-          `${base_url}/exercise?page=1&limit=1000`
+        const pageSize = 100;
+        const buildParams = (page) => {
+          const params = new URLSearchParams({
+            page: String(page),
+            limit: String(pageSize),
+          });
+          const trimmedSearch = debouncedSearch.trim();
+          if (trimmedSearch) params.set("search", trimmedSearch);
+          if (selectedBodyPart) params.set("body_part", selectedBodyPart);
+          if (selectedEquipment) params.set("equipment", selectedEquipment);
+          return params;
+        };
+
+        const firstRes = await axios.get(
+          `${base_url}/exercise?${buildParams(1).toString()}`
         );
-        setAllExercises(response.data.data);
-        setFilteredExercisesForSelection(response.data.data);
-      } catch (error) {
-        console.error("Error fetching all exercises:", error);
-      }
-    };
-    fetchAllExercises();
-  }, []);
+        const firstData = firstRes.data.data || [];
+        const totalPages = firstRes.data.pagination?.totalPages ?? 1;
 
-  useEffect(() => {
-    const fetchFilteredExercises = async () => {
-      if (selectedBodyPart || selectedEquipment) {
-        let url = `${base_url}/exercise?page=1&limit=1000&`;
-        if (selectedBodyPart) url += `body_part=${selectedBodyPart}&`;
-        if (selectedEquipment) url += `equipment=${selectedEquipment}&`;
-        url = url.slice(0, -1);
-
-        try {
-          const response = await axios.get(url);
-          setFilteredExercisesForSelection(response.data.data || []);
-        } catch (error) {
-          console.error("Error fetching filtered exercises:", error);
-          setFilteredExercisesForSelection([]);
+        let allData = firstData;
+        if (totalPages > 1) {
+          const rest = await Promise.all(
+            Array.from({ length: totalPages - 1 }, (_, i) =>
+              axios.get(
+                `${base_url}/exercise?${buildParams(i + 2).toString()}`
+              )
+            )
+          );
+          allData = [
+            ...firstData,
+            ...rest.flatMap((r) => r.data.data || []),
+          ];
         }
-      } else {
-        setFilteredExercisesForSelection(allExercises);
+
+        setFilteredExercisesForSelection(allData);
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+        setFilteredExercisesForSelection([]);
+      } finally {
+        setIsLoadingExercises(false);
       }
     };
-    fetchFilteredExercises();
-  }, [selectedBodyPart, selectedEquipment, allExercises]);
+
+    fetchExercises();
+  }, [debouncedSearch, selectedBodyPart, selectedEquipment]);
 
   // ✅ Move exercise up (index কমাবে)
   const handleMoveUp = (index) => {
@@ -416,6 +434,13 @@ const AddWorkoutForm = () => {
     });
   };
 
+  const resetExerciseFilters = () => {
+    setSelectedBodyPart(null);
+    setSelectedEquipment(null);
+    setSearchValue("");
+    searchValueRef.current = "";
+  };
+
   const handleAddMoreExercise = (selected) => {
     if (selected && selected.length > 0) {
       const exercise = selected[0];
@@ -427,9 +452,18 @@ const AddWorkoutForm = () => {
       };
       setWorkoutExercises((prev) => [...prev, newExercise]);
       setAddMoreExercise(false);
-      setSelectedBodyPart(null);
-      setSelectedEquipment(null);
+      resetExerciseFilters();
     }
+  };
+
+  // Capture Select search → triggers debounced server-side search
+  const handleExerciseSearch = ({ state }) => {
+    if (state.search !== searchValueRef.current) {
+      searchValueRef.current = state.search;
+      setSearchValue(state.search);
+    }
+    // Don't client-filter — options come from server response
+    return filteredExercisesForSelection;
   };
 
   const handleRemoveExercise = (indexToRemove) => {
@@ -471,9 +505,7 @@ const AddWorkoutForm = () => {
         toast.success(UI_TEXT.workoutCreated);
         reset();
         setWorkoutExercises([]);
-        setSelectedBodyPart(null);
-        setSelectedEquipment(null);
-        setFilteredExercisesForSelection(allExercises);
+        resetExerciseFilters();
         navigate("/dashboard/workout-list");
       }
     } catch (error) {
@@ -617,6 +649,13 @@ const AddWorkoutForm = () => {
                   labelField="label"
                   options={bodyPartOptions}
                   placeholder="סנן לפי חלק בגוף"
+                  values={
+                    selectedBodyPart
+                      ? bodyPartOptions.filter(
+                          (opt) => opt.value === selectedBodyPart
+                        )
+                      : []
+                  }
                   onChange={(selected) =>
                     setSelectedBodyPart(selected[0]?.value || null)
                   }
@@ -631,6 +670,13 @@ const AddWorkoutForm = () => {
                   valueField="id"
                   labelField="label"
                   placeholder="סנן לפי ציוד"
+                  values={
+                    selectedEquipment
+                      ? equipmentOptions.filter(
+                          (opt) => opt.value === selectedEquipment
+                        )
+                      : []
+                  }
                   onChange={(selected) =>
                     setSelectedEquipment(selected[0]?.value || null)
                   }
@@ -646,9 +692,12 @@ const AddWorkoutForm = () => {
                   options={filteredExercisesForSelection}
                   valueField="_id"
                   labelField="name"
-                  placeholder="בחר תרגיל"
+                  placeholder={isLoadingExercises ? "טוען..." : "בחר תרגיל"}
                   onChange={(selected) => handleAddMoreExercise(selected)}
+                  searchable
                   searchBy="name"
+                  searchFn={handleExerciseSearch}
+                  loading={isLoadingExercises}
                 />
               </div>
             </div>
