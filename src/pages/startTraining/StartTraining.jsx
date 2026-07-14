@@ -66,6 +66,14 @@ const StartTraining = () => {
       return ex;
     });
 
+  // Always use Exercise library id — never UserTrainingExercise document _id
+  const getExerciseLibraryId = (ex) => {
+    if (!ex) return null;
+    if (typeof ex.exercise_id === "string") return ex.exercise_id;
+    if (ex.exercise_id?._id) return ex.exercise_id._id;
+    return null;
+  };
+
   // liveExercises: null = not yet fetched; [...] = fresh data from API
   const [liveExercises, setLiveExercises] = useState(null);
   const fetchedRef = useRef(false);
@@ -345,10 +353,7 @@ const StartTraining = () => {
         const exercise = exercisesToUse[idx];
         if (!exercise) return null;
 
-        const exerciseId =
-          (typeof exercise.exercise_id === "string"
-            ? exercise.exercise_id
-            : exercise.exercise_id?._id) || exercise._id;
+        const exerciseId = getExerciseLibraryId(exercise);
         if (!exerciseId) return null;
 
         return {
@@ -440,15 +445,12 @@ const StartTraining = () => {
       if (!userId || slotIndex < 0 || slotIndex >= exercisesToUse.length) return;
 
       const selectedExercise = exercisesToUse[slotIndex];
-      const exerciseId =
-        (typeof selectedExercise?.exercise_id === "string"
-          ? selectedExercise.exercise_id
-          : selectedExercise?.exercise_id?._id) || selectedExercise?._id;
+      const exerciseId = getExerciseLibraryId(selectedExercise);
       if (!exerciseId) return;
 
       try {
         const response = await axios.post(
-          `${base_url}/get-last-workout-exercisedata`,
+          `${base_url}/get-last-workout-excercisedata`,
           {
             user_id: userId,
             exercise_id: exerciseId,
