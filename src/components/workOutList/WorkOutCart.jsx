@@ -1,5 +1,5 @@
 import { base_url } from "@/api/baseUrl";
-import PaginationComp from "@/components/pagination";
+// import PaginationComp from "@/components/pagination";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
@@ -16,40 +16,57 @@ function sortTrainingsByStatus(trainings = []) {
 }
 
 const WorkOutCart = () => {
-  const [trainings, setTrainings] = useState([]);
-  // For select, default is all *active* trainings, not all trainings
+  // Dropdown select — default active trainings; user can pick any
   const [selectedTraining, setSelectedTraining] = useState([]);
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [totalPages, setTotalPages] = useState(1);
+  // const [page, setPage] = useState(1);
+  // const [totalPages, setTotalPages] = useState(1);
   const [exerciseReport, setExerciseReport] = useState(null);
   const [loading, setLoading] = useState(false);
   const [downloadingReport, setDownloadingReport] = useState(false);
-
-  // Store sorted trainings so we can reuse
   const [sortedTrainings, setSortedTrainings] = useState([]);
 
+  // Load ALL trainings for dropdown (no pagination UI)
   useEffect(() => {
+    if (!user?._id) return;
+
     const fetchExercise = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `${base_url}/get-training-by-user-id/${user?._id}?page=${page}&search=${search}`
+        const pageSize = 100;
+        const firstRes = await axios.get(
+          `${base_url}/get-training-by-user-id/${user._id}?page=1&limit=${pageSize}&search=`
         );
-        // Always sort so active is at top
-        const sorted = sortTrainingsByStatus(response.data.data || []);
+        const firstData = firstRes.data.data || [];
+        const pages =
+          firstRes.data.pagination?.pages ??
+          firstRes.data.pagination?.totalPages ??
+          1;
 
-        setSortedTrainings(sorted);
-        setTrainings(sorted);
-
-        // Default value for select and displayed list: all active trainings
-        if (!selectedTraining.length) {
-          const activeTrainings = sorted.filter((t) => t.status === "active");
-          setSelectedTraining(activeTrainings);
+        let allData = firstData;
+        if (pages > 1) {
+          const rest = await Promise.all(
+            Array.from({ length: pages - 1 }, (_, i) =>
+              axios.get(
+                `${base_url}/get-training-by-user-id/${user._id}?page=${i + 2}&limit=${pageSize}&search=`
+              )
+            )
+          );
+          allData = [
+            ...firstData,
+            ...rest.flatMap((r) => r.data.data || []),
+          ];
         }
-        setPage(response.data.pagination.page);
-        setTotalPages(response.data.pagination.pages);
+
+        const sorted = sortTrainingsByStatus(allData);
+        setSortedTrainings(sorted);
+
+        // Default: show active trainings
+        const activeTrainings = sorted.filter((t) => t.status === "active");
+        setSelectedTraining(
+          activeTrainings.length > 0 ? activeTrainings : sorted
+        );
+        // setTotalPages(pages);
       } catch (error) {
         console.error("Error fetching exercises:", error);
       } finally {
@@ -57,11 +74,9 @@ const WorkOutCart = () => {
       }
     };
     fetchExercise();
-    // eslint-disable-next-line
-  }, [user?._id, page, search]);
+  }, [user?._id]);
 
-  // rendered cards: if user selects (including manual clear), show what is selected,
-  // else (on initial mount), it's all active
+  // Show whatever user selects from dropdown
   const displayedTrainings =
     selectedTraining && selectedTraining.length > 0
       ? selectedTraining
@@ -106,9 +121,8 @@ const WorkOutCart = () => {
           } else {
             throw new Error("Fetch failed");
           }
-        } catch (fetchError) {
-          // console.log("Fetch method failed, using direct download:", fetchError);
-
+        } catch {
+          // Fallback: open report URL directly when blob download fails
           const form = document.createElement("form");
           form.method = "GET";
           form.action = reportUrl;
@@ -177,35 +191,35 @@ const WorkOutCart = () => {
       </div>
 
       {displayedTrainings.length > 0 && (
-        <>
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 px-2" dir="rtl">
-            {displayedTrainings.map((training) =>
-              (Array.isArray(training.workouts) ? training.workouts : []).map(
-                (w, idx) => {
-                  const workout = w.workout ? w.workout : w;
-                  return (
-                    <Cart
-                      key={workout._id || idx}
-                      workout={workout}
-                      training={training}
-                    />
-                  );
-                }
-              )
-            )}
-          </div>
-
-          {totalPages > 1 && (
-            <div className="w-full overflow-x-auto px-2 mt-4">
-              <PaginationComp
-                setPage={setPage}
-                totalPages={totalPages}
-                currentPage={page}
-              />
-            </div>
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 px-2" dir="rtl">
+          {displayedTrainings.map((training) =>
+            (Array.isArray(training.workouts) ? training.workouts : []).map(
+              (w, idx) => {
+                const workout = w.workout ? w.workout : w;
+                return (
+                  <Cart
+                    key={`${training._id}-${workout._id || idx}`}
+                    workout={workout}
+                    training={training}
+                  />
+                );
+              }
+            )
           )}
-        </>
+        </div>
       )}
+
+      {/* Pagination buttons disabled — dropdown select still works
+      {totalPages > 1 && (
+        <div className="w-full overflow-x-auto px-2 mt-4">
+          <PaginationComp
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
+      */}
     </div>
   );
 };

@@ -345,8 +345,9 @@ import { toast } from "sonner";
 const AddWorkoutForm = () => {
   const [workoutExercises, setWorkoutExercises] = useState([]);
   const [addMoreExercise, setAddMoreExercise] = useState(true);
-  const [selectedBodyPart, setSelectedBodyPart] = useState(null);
-  const [selectedEquipment, setSelectedEquipment] = useState(null);
+  // Same filter state shape as ExerciseTable
+  const [body_part, setBodyPart] = useState("");
+  const [equipment, setEquipment] = useState("");
   const [filteredExercisesForSelection, setFilteredExercisesForSelection] =
     useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -363,37 +364,27 @@ const AddWorkoutForm = () => {
     formState: { errors },
   } = useForm();
 
-  // Server-side: search + body_part + equipment — fetch ALL matching pages
+  // Server-side filter — same query style as ExerciseTable
+  // /exercise?search=&page=1&limit=10&body_part=&equipment=
   useEffect(() => {
     const fetchExercises = async () => {
       setIsLoadingExercises(true);
       try {
-        const pageSize = 100;
-        const buildParams = (page) => {
-          const params = new URLSearchParams({
-            page: String(page),
-            limit: String(pageSize),
-          });
-          const trimmedSearch = debouncedSearch.trim();
-          if (trimmedSearch) params.set("search", trimmedSearch);
-          if (selectedBodyPart) params.set("body_part", selectedBodyPart);
-          if (selectedEquipment) params.set("equipment", selectedEquipment);
-          return params;
-        };
+        const buildUrl = (pageNum) =>
+          `${base_url}/exercise?search=${debouncedSearch}&page=${pageNum}&limit=10&body_part=${body_part}&equipment=${equipment}`;
 
-        const firstRes = await axios.get(
-          `${base_url}/exercise?${buildParams(1).toString()}`
-        );
+        const firstRes = await axios.get(buildUrl(1));
+        if (firstRes.status !== 200) return;
+
         const firstData = firstRes.data.data || [];
         const totalPages = firstRes.data.pagination?.totalPages ?? 1;
 
+        // Load all matching pages so dropdown has full filtered list
         let allData = firstData;
         if (totalPages > 1) {
           const rest = await Promise.all(
             Array.from({ length: totalPages - 1 }, (_, i) =>
-              axios.get(
-                `${base_url}/exercise?${buildParams(i + 2).toString()}`
-              )
+              axios.get(buildUrl(i + 2))
             )
           );
           allData = [
@@ -412,7 +403,7 @@ const AddWorkoutForm = () => {
     };
 
     fetchExercises();
-  }, [debouncedSearch, selectedBodyPart, selectedEquipment]);
+  }, [debouncedSearch, body_part, equipment]);
 
   // ✅ Move exercise up (index কমাবে)
   const handleMoveUp = (index) => {
@@ -435,8 +426,8 @@ const AddWorkoutForm = () => {
   };
 
   const resetExerciseFilters = () => {
-    setSelectedBodyPart(null);
-    setSelectedEquipment(null);
+    setBodyPart("");
+    setEquipment("");
     setSearchValue("");
     searchValueRef.current = "";
   };
@@ -456,13 +447,13 @@ const AddWorkoutForm = () => {
     }
   };
 
-  // Capture Select search → triggers debounced server-side search
+  // Capture Select search → debounced server-side `search` query (like ExerciseTable)
   const handleExerciseSearch = ({ state }) => {
     if (state.search !== searchValueRef.current) {
       searchValueRef.current = state.search;
       setSearchValue(state.search);
     }
-    // Don't client-filter — options come from server response
+    // No client-side filter — options come from server
     return filteredExercisesForSelection;
   };
 
@@ -650,14 +641,12 @@ const AddWorkoutForm = () => {
                   options={bodyPartOptions}
                   placeholder="סנן לפי חלק בגוף"
                   values={
-                    selectedBodyPart
-                      ? bodyPartOptions.filter(
-                          (opt) => opt.value === selectedBodyPart
-                        )
+                    body_part
+                      ? bodyPartOptions.filter((opt) => opt.value === body_part)
                       : []
                   }
                   onChange={(selected) =>
-                    setSelectedBodyPart(selected[0]?.value || null)
+                    setBodyPart(selected[0]?.value || "")
                   }
                 />
               </div>
@@ -671,14 +660,12 @@ const AddWorkoutForm = () => {
                   labelField="label"
                   placeholder="סנן לפי ציוד"
                   values={
-                    selectedEquipment
-                      ? equipmentOptions.filter(
-                          (opt) => opt.value === selectedEquipment
-                        )
+                    equipment
+                      ? equipmentOptions.filter((opt) => opt.value === equipment)
                       : []
                   }
                   onChange={(selected) =>
-                    setSelectedEquipment(selected[0]?.value || null)
+                    setEquipment(selected[0]?.value || "")
                   }
                 />
               </div>
