@@ -501,6 +501,7 @@
 
 
 import { base_url } from "@/api/baseUrl";
+import CustomSearchableSelect from "@/components/common/CustomSearchableSelect";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 import { Button } from "@/components/ui/button";
@@ -516,22 +517,24 @@ import { toast } from "sonner";
 
 const AddTrainingForm = () => {
   const [trainingExercises, setTrainingExercises] = useState([]);
-  const [allExercises, setAllExercises] = useState([]);
   const [selectedTrainingExercises, setSelectedTrainingExercises] = useState([]);
   const [showWorkoutSelect, setShowWorkoutSelect] = useState(true);
   const [addMoreExercise, setAddMoreExercise] = useState(null);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [selectedBodyPart, setSelectedBodyPart] = useState(null);
-  const [selectedEquipment, setSelectedEquipment] = useState(null);
-  const [selectedExercise, setSelectedExercise] = useState([]);
+  // Same exercise filter state as AddWorkoutForm
+  const [body_part, setBodyPart] = useState("");
+  const [equipment, setEquipment] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredExercisesForSelection, setFilteredExercisesForSelection] =
+    useState([]);
+  const [isLoadingExercises, setIsLoadingExercises] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  // Hebrew root search: if exact substring not found, try progressively shorter prefixes
-  // This handles morphological variants like כפיפות (nominal) vs כפיפת (construct)
+  // Hebrew root search for workout Select only
   const hebrewExerciseSearchFn = ({ props, state }) => {
     const searchTerm = state.search.trim().toLowerCase();
     if (!searchTerm) return props.options;
@@ -543,6 +546,12 @@ const AddTrainingForm = () => {
       }
       return false;
     });
+  };
+
+  const resetExerciseFilters = () => {
+    setBodyPart("");
+    setEquipment("");
+    setSearchValue("");
   };
 
   const validateSupersetAndToggle = (workouts) => {
@@ -690,59 +699,89 @@ const AddTrainingForm = () => {
 
   const handleAddMoreExercise = (workoutIndex) => {
     setAddMoreExercise(workoutIndex);
+    resetExerciseFilters();
   };
 
-  // ✅ New Exercise Filter logic
+  // Same server-side filter as AddWorkoutForm — full matching list (all pages)
   useEffect(() => {
-    const fetchFilteredExercises = async () => {
-      if (selectedBodyPart || selectedEquipment) {
-        let url = `${base_url}/exercise?`;
-        if (selectedBodyPart) url += `body_part=${selectedBodyPart}&`;
-        if (selectedEquipment) url += `equipment=${selectedEquipment}&`;
-        url = url.slice(0, -1);
+    let ignore = false;
 
-        try {
-          const response = await axios.get(url);
-          setSelectedExercise(response.data.data || []);
-        } catch (error) {
-          console.error("Error fetching filtered exercises:", error);
-          setSelectedExercise([]);
+    const fetchExercises = async () => {
+      setIsLoadingExercises(true);
+      try {
+        const buildUrl = (pageNum) =>
+          `${base_url}/exercise?search=${searchValue}&page=${pageNum}&limit=10&body_part=${body_part}&equipment=${equipment}`;
+
+        const firstRes = await axios.get(buildUrl(1));
+        if (firstRes.status !== 200) return;
+
+        const firstData = firstRes.data.data || [];
+        const totalPages = firstRes.data.pagination?.totalPages ?? 1;
+
+        let allData = firstData;
+        if (totalPages > 1) {
+          const rest = await Promise.all(
+            Array.from({ length: totalPages - 1 }, (_, i) =>
+              axios.get(buildUrl(i + 2))
+            )
+          );
+          allData = [
+            ...firstData,
+            ...rest.flatMap((r) => r.data.data || []),
+          ];
         }
-      } else {
-        setSelectedExercise(allExercises);
+
+        if (!ignore) {
+          setFilteredExercisesForSelection(allData);
+        }
+      } catch (error) {
+        if (!ignore) {
+          console.error("Error fetching exercises:", error);
+          setFilteredExercisesForSelection([]);
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoadingExercises(false);
+        }
       }
     };
-    fetchFilteredExercises();
-  }, [selectedBodyPart, selectedEquipment, allExercises]);
 
-  const handleNewExerciseSelection = (selectedExercises) => {
-    if (addMoreExercise === null) return;
+    fetchExercises();
+
+    return () => {
+      ignore = true;
+    };
+  }, [searchValue, body_part, equipment]);
+
+  // CustomSearchableSelect passes the selected option object directly
+  const handleNewExerciseSelection = (exercise) => {
+    if (addMoreExercise === null || !exercise) return;
 
     setSelectedTrainingExercises((prev) => {
       const updated = [...prev];
       const workout = updated[addMoreExercise];
-      const newExercises = [];
+      if (!workout) return prev;
 
-      selectedExercises.forEach((exercise) => {
-        newExercises.push({
+      workout.exercises = [
+        ...(workout.exercises || []),
+        {
           exercise_id: exercise._id,
           name: exercise.name,
           sets: "",
           reps: "",
           manipulation: "",
-        });
-      });
-
-      workout.exercises.push(...newExercises);
+        },
+      ];
 
       validateSupersetAndToggle(updated);
       return updated;
     });
 
     setAddMoreExercise(null);
+    resetExerciseFilters();
   };
 
-  // ✅ Fetch workouts & exercises
+  // ✅ Fetch workouts
   useEffect(() => {
     const fetchWorkout = async () => {
       try {
@@ -753,27 +792,6 @@ const AddTrainingForm = () => {
       }
     };
     fetchWorkout();
-
-    const fetchExercises = async () => {
-      try {
-        const firstRes = await axios.get(`${base_url}/exercise`);
-        const firstData = firstRes.data.data;
-        const totalPages = firstRes.data.pagination?.totalPages || 1;
-        if (totalPages <= 1) {
-          setAllExercises(firstData);
-        } else {
-          const pageRequests = [];
-          for (let page = 2; page <= totalPages; page++) {
-            pageRequests.push(axios.get(`${base_url}/exercise?page=${page}`));
-          }
-          const rest = await Promise.all(pageRequests);
-          setAllExercises([...firstData, ...rest.flatMap((r) => r.data.data)]);
-        }
-      } catch (err) {
-        console.error("Error fetching exercises:", err);
-      }
-    };
-    fetchExercises();
   }, []);
 
   useEffect(() => {
@@ -1032,42 +1050,70 @@ const AddTrainingForm = () => {
                 ))}
               </div>
 
-              {/* Add Exercise Section */}
+              {/* Add Exercise Section — same as AddWorkoutForm */}
               {addMoreExercise === workoutIndex && (
-                <div className="mt-4 space-y-3">
-                  <Select
-                    className="rounded-lg h-12 w-auto"
-                    direction="rtl"
-                    options={bodyPartOptions}
-                    labelField="label"
-                    valueField="id"
-                    placeholder="סנן לפי חלק בגוף"
-                    onChange={(selected) =>
-                      setSelectedBodyPart(selected[0]?.value || null)
-                    }
-                  />
-                  <Select
-                    className="rounded-lg h-12 w-auto"
-                    direction="rtl"
-                    options={equipmentOptions}
-                    labelField="label"
-                    valueField="id"
-                    placeholder="סנן לפי ציוד"
-                    onChange={(selected) =>
-                      setSelectedEquipment(selected[0]?.value || null)
-                    }
-                  />
-                  <Select
-                    className="rounded-lg h-12 w-auto"
-                    direction="rtl"
-                    options={selectedExercise}
-                    labelField="name"
-                    valueField="_id"
-                    placeholder="בחר תרגיל"
-                    onChange={handleNewExerciseSelection}
-                    searchBy="name"
-                    searchFn={hebrewExerciseSearchFn}
-                  />
+                <div className="mt-4 space-y-3" dir="rtl">
+                  <div>
+                    <label className="block mb-2 text-sm font-medium">
+                      אזור בגוף
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      options={bodyPartOptions}
+                      labelField="label"
+                      valueField="id"
+                      placeholder="סנן לפי חלק בגוף"
+                      values={
+                        body_part
+                          ? bodyPartOptions.filter(
+                              (opt) => opt.value === body_part
+                            )
+                          : []
+                      }
+                      onChange={(selected) =>
+                        setBodyPart(selected[0]?.value || "")
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium">
+                      ציוד
+                    </label>
+                    <Select
+                      className="rounded-lg h-12 w-auto"
+                      direction="rtl"
+                      options={equipmentOptions}
+                      labelField="label"
+                      valueField="id"
+                      placeholder="סנן לפי ציוד"
+                      values={
+                        equipment
+                          ? equipmentOptions.filter(
+                              (opt) => opt.value === equipment
+                            )
+                          : []
+                      }
+                      onChange={(selected) =>
+                        setEquipment(selected[0]?.value || "")
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium">
+                      סנן לפי שם תרגיל
+                    </label>
+                    <CustomSearchableSelect
+                      options={filteredExercisesForSelection}
+                      valueField="_id"
+                      labelField="name"
+                      placeholder="בחר תרגיל"
+                      onChange={handleNewExerciseSelection}
+                      onSearchChange={setSearchValue}
+                      loading={isLoadingExercises}
+                      direction="rtl"
+                    />
+                  </div>
                 </div>
               )}
 
