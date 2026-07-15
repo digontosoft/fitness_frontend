@@ -1,4 +1,5 @@
 import { base_url } from "@/api/baseUrl";
+import CustomSearchableSelect from "@/components/common/CustomSearchableSelect";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
@@ -16,14 +17,15 @@ const EditExercise = () => {
   const [exerciseList, setExerciseList] = useState([]);
   const workoutId = workData?.user_training_workout_id;
 
-  const [allExercises, setAllExercises] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-
-  // States for filtering and selecting a new exercise
-  const [selectedExerciseIdForAdd, setSelectedExerciseIdForAdd] = useState("");
-  const [selectedExerciseOptions, setSelectedExerciseOptions] = useState(null);
-  const [selectedBodyPart, setSelectedBodyPart] = useState(null);
-  const [selectedEquipment, setSelectedEquipment] = useState(null);
+  // Same exercise filter state as AddWorkoutForm
+  const [body_part, setBodyPart] = useState("");
+  const [equipment, setEquipment] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredExercisesForSelection, setFilteredExercisesForSelection] =
+    useState([]);
+  const [isLoadingExercises, setIsLoadingExercises] = useState(false);
+  const [selectedExerciseForAdd, setSelectedExerciseForAdd] = useState(null);
 
   // States for the new exercise's sets, reps, manipulation
   const [newExerciseSets, setNewExerciseSets] = useState("");
@@ -31,31 +33,20 @@ const EditExercise = () => {
   const [newExerciseManipulation, setNewExerciseManipulation] = useState("");
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
-  // Prevent double-fetch (React StrictMode runs effects twice in dev)
   const initializedRef = useRef(false);
-
-  // Source of truth for handleSubmit — only updated by applyList/initialize, never by render
   const exerciseListRef = useRef([]);
 
   const isSuperset = (val) =>
     String(val ?? "").trim().toLowerCase() === "superset";
 
-  // Fetch all paginated exercise pages in parallel
-  const fetchAllExercises = async (url) => {
-    const firstRes = await axios.get(url);
-    const firstData = firstRes.data.data || [];
-    const totalPages = firstRes.data.pagination?.totalPages ?? 1;
-    if (totalPages <= 1) return firstData;
-    const rest = await Promise.all(
-      Array.from({ length: totalPages - 1 }, (_, i) => {
-        const sep = url.includes("?") ? "&" : "?";
-        return axios.get(`${url}${sep}page=${i + 2}`);
-      })
-    );
-    return [...firstData, ...rest.flatMap((r) => r.data.data || [])];
+  const resetExerciseFilters = () => {
+    setBodyPart("");
+    setEquipment("");
+    setSearchValue("");
+    setSelectedExerciseForAdd(null);
   };
 
-  // Single combined init: fetch tasks + exercises in one effect, run once
+  // Load workout exercises once
   useEffect(() => {
     if (initializedRef.current) return;
     if (!user?._id || !workData?.task_id) return;
@@ -63,21 +54,11 @@ const EditExercise = () => {
 
     const initialize = async () => {
       try {
-        const [taskRes, allEx] = await Promise.all([
-          axios.get(`${base_url}/get-user-task/${user._id}`),
-          fetchAllExercises(`${base_url}/exercise`),
-        ]);
-
-        // Load exercise library for dropdown
-        setAllExercises(allEx);
-        setSelectedExerciseOptions(allEx);
-
-        // Find the matching task
+        const taskRes = await axios.get(`${base_url}/get-user-task/${user._id}`);
         const tasks = taskRes.data.data || [];
         const matchedTask = tasks.find((t) => t._id === workData.task_id);
         if (!matchedTask) return;
 
-        // Fetch exercises for this workout
         const workoutRes = await axios.post(`${base_url}/get-user-workout-task`, {
           userId: user._id,
           workoutId: matchedTask.workout_id,
@@ -96,19 +77,56 @@ const EditExercise = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Same server-side filter as AddWorkoutForm
   useEffect(() => {
-    let filtered = allExercises;
+    let ignore = false;
 
-    if (selectedBodyPart) {
-      filtered = filtered.filter((ex) => ex.body_part === selectedBodyPart);
-    }
+    const fetchExercises = async () => {
+      setIsLoadingExercises(true);
+      try {
+        const buildUrl = (pageNum) =>
+          `${base_url}/exercise?search=${searchValue}&page=${pageNum}&limit=10&body_part=${body_part}&equipment=${equipment}`;
 
-    if (selectedEquipment) {
-      filtered = filtered.filter((ex) => ex.equipment === selectedEquipment);
-    }
-    setSelectedExerciseOptions(filtered);
-    setSelectedExerciseIdForAdd(""); // Reset selected exercise when filters change
-  }, [selectedBodyPart, selectedEquipment, allExercises]);
+        const firstRes = await axios.get(buildUrl(1));
+        if (firstRes.status !== 200) return;
+
+        const firstData = firstRes.data.data || [];
+        const totalPages = firstRes.data.pagination?.totalPages ?? 1;
+
+        let allData = firstData;
+        if (totalPages > 1) {
+          const rest = await Promise.all(
+            Array.from({ length: totalPages - 1 }, (_, i) =>
+              axios.get(buildUrl(i + 2))
+            )
+          );
+          allData = [
+            ...firstData,
+            ...rest.flatMap((r) => r.data.data || []),
+          ];
+        }
+
+        if (!ignore) {
+          setFilteredExercisesForSelection(allData);
+        }
+      } catch (error) {
+        if (!ignore) {
+          console.error("Error fetching exercises:", error);
+          setFilteredExercisesForSelection([]);
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoadingExercises(false);
+        }
+      }
+    };
+
+    fetchExercises();
+
+    return () => {
+      ignore = true;
+    };
+  }, [searchValue, body_part, equipment]);
 
   // Helper: update both ref and state atomically
   const applyList = (nextList) => {
@@ -120,20 +138,24 @@ const EditExercise = () => {
   // and a valid exercise is selected). This makes the submit button react in real-time
   // as the user fills in the add-exercise form.
   const effectiveList = useMemo(() => {
-    if (!showDropdown || !selectedExerciseIdForAdd) return exerciseList;
-    const selected = allExercises.find((ex) => ex._id === selectedExerciseIdForAdd);
-    if (!selected) return exerciseList;
+    if (!showDropdown || !selectedExerciseForAdd) return exerciseList;
     return [
       ...exerciseList,
       {
-        exercise_id: selected,
+        exercise_id: selectedExerciseForAdd,
         sets: Number(newExerciseSets) || 0,
         reps: Number(newExerciseReps) || 0,
         manipulation: newExerciseManipulation || "",
       },
     ];
-  }, [exerciseList, showDropdown, selectedExerciseIdForAdd, allExercises,
-      newExerciseSets, newExerciseReps, newExerciseManipulation]);
+  }, [
+    exerciseList,
+    showDropdown,
+    selectedExerciseForAdd,
+    newExerciseSets,
+    newExerciseReps,
+    newExerciseManipulation,
+  ]);
 
   // Derived submit-disabled state — computed from effectiveList, fully reactive
   const submitBlockerMsg = useMemo(() => {
@@ -158,12 +180,15 @@ const EditExercise = () => {
   const isSubmitDisabled = submitBlockerMsg !== null;
 
   const handleAddMoreExerciseClick = () => {
+    resetExerciseFilters();
+    setNewExerciseSets("");
+    setNewExerciseReps("");
+    setNewExerciseManipulation("");
     setShowDropdown(true);
   };
 
-  // Core add logic — returns true on success, false on validation failure
   const commitPendingExercise = () => {
-    if (!selectedExerciseIdForAdd) {
+    if (!selectedExerciseForAdd) {
       toast.error("נא לבחור תרגיל להוספה");
       return false;
     }
@@ -175,22 +200,15 @@ const EditExercise = () => {
       toast.error("נא להזין מספר חזרות תקין לתרגיל החדש");
       return false;
     }
-    const selected = allExercises.find((ex) => ex._id === selectedExerciseIdForAdd);
-    if (!selected) {
-      toast.error("התרגיל שנבחר לא נמצא");
-      return false;
-    }
     const newItem = {
-      _id: selected._id + Date.now(),
-      exercise_id: selected,
+      _id: selectedExerciseForAdd._id + Date.now(),
+      exercise_id: selectedExerciseForAdd,
       sets: Number(newExerciseSets),
       reps: Number(newExerciseReps),
       manipulation: newExerciseManipulation,
     };
     applyList([...exerciseListRef.current, newItem]);
-    setSelectedExerciseIdForAdd("");
-    setSelectedBodyPart(null);
-    setSelectedEquipment(null);
+    resetExerciseFilters();
     setNewExerciseSets("");
     setNewExerciseReps("");
     setNewExerciseManipulation("");
@@ -261,7 +279,7 @@ const EditExercise = () => {
 
   const handleSubmit = async () => {
     // Auto-add pending exercise if user forgot to click "הוסף תרגיל"
-    if (showDropdown && selectedExerciseIdForAdd) {
+    if (showDropdown && selectedExerciseForAdd) {
       if (!commitPendingExercise()) return;
     }
 
@@ -444,21 +462,13 @@ const EditExercise = () => {
                   labelField="label"
                   options={bodyPartOptions}
                   placeholder="סנן לפי חלק בגוף"
-                  onChange={(selectedOptions) => {
-                    setSelectedBodyPart(selectedOptions[0]?.value || null);
-                  }}
-                  searchBy="label"
                   values={
-                    selectedBodyPart
-                      ? [
-                          {
-                            id: selectedBodyPart,
-                            label: bodyPartOptions.find(
-                              (opt) => opt.id === selectedBodyPart
-                            )?.label,
-                          },
-                        ]
+                    body_part
+                      ? bodyPartOptions.filter((opt) => opt.value === body_part)
                       : []
+                  }
+                  onChange={(selected) =>
+                    setBodyPart(selected[0]?.value || "")
                   }
                 />
               </div>
@@ -473,21 +483,13 @@ const EditExercise = () => {
                   valueField="id"
                   labelField="label"
                   placeholder="סנן לפי ציוד"
-                  onChange={(selectedOptions) => {
-                    setSelectedEquipment(selectedOptions[0]?.value || null);
-                  }}
-                  searchBy="label"
                   values={
-                    selectedEquipment
-                      ? [
-                          {
-                            id: selectedEquipment,
-                            label: equipmentOptions.find(
-                              (opt) => opt.id === selectedEquipment
-                            )?.label,
-                          },
-                        ]
+                    equipment
+                      ? equipmentOptions.filter((opt) => opt.value === equipment)
                       : []
+                  }
+                  onChange={(selected) =>
+                    setEquipment(selected[0]?.value || "")
                   }
                 />
               </div>
@@ -495,34 +497,23 @@ const EditExercise = () => {
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   סנן לפי שם תרגיל
                 </label>
-                <Select
-                  className="rounded-lg h-12 w-full"
-                  direction="rtl"
-                  options={selectedExerciseOptions}
+                <CustomSearchableSelect
+                  options={filteredExercisesForSelection}
                   valueField="_id"
                   labelField="name"
-                  placeholder="בחר"
-                  onChange={(selected) => {
-                    setSelectedExerciseIdForAdd(selected[0]?._id || "");
-                  }}
-                  searchBy="name"
-                  values={
-                    selectedExerciseIdForAdd
-                      ? [
-                          {
-                            _id: selectedExerciseIdForAdd,
-                            name: allExercises.find(
-                              (ex) => ex._id === selectedExerciseIdForAdd
-                            )?.name,
-                          },
-                        ]
-                      : []
+                  value={selectedExerciseForAdd}
+                  placeholder="בחר תרגיל"
+                  onChange={(exercise) =>
+                    setSelectedExerciseForAdd(exercise || null)
                   }
+                  onSearchChange={setSearchValue}
+                  loading={isLoadingExercises}
+                  direction="rtl"
                 />
               </div>
             </div>
 
-            {selectedExerciseIdForAdd && ( // Show input fields only after an exercise is selected
+            {selectedExerciseForAdd && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-items-center mt-4">
                 <div className="flex flex-col items-center md:justify-center gap-3 w-full">
                   <label>סטים:</label>
@@ -568,9 +559,7 @@ const EditExercise = () => {
               <Button
                 onClick={() => {
                   setShowDropdown(false);
-                  setSelectedExerciseIdForAdd("");
-                  setSelectedBodyPart(null);
-                  setSelectedEquipment(null);
+                  resetExerciseFilters();
                   setNewExerciseSets("");
                   setNewExerciseReps("");
                   setNewExerciseManipulation("");

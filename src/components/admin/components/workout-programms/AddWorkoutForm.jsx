@@ -326,17 +326,419 @@
 
 
 
+// import { base_url } from "@/api/baseUrl";
+// import DynamicInputField from "@/components/measurements/DynamicInputField";
+// import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
+// import { UI_TEXT } from "@/constants/hebrewText";
+// import { useDebounce } from "@/hooks/useDebounce";
+// import axios from "axios";
+// import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
+// import { useEffect, useRef, useState } from "react";
+// import Select from "react-dropdown-select";
+// import { useForm } from "react-hook-form";
+// import { useNavigate } from "react-router-dom";
+// import { toast } from "sonner";
+
+// const AddWorkoutForm = () => {
+//   const [workoutExercises, setWorkoutExercises] = useState([]);
+//   const [addMoreExercise, setAddMoreExercise] = useState(true);
+//   // Same filter state shape as ExerciseTable
+//   const [body_part, setBodyPart] = useState("");
+//   const [equipment, setEquipment] = useState("");
+//   const [filteredExercisesForSelection, setFilteredExercisesForSelection] =
+//     useState([]);
+//   const [searchValue, setSearchValue] = useState("");
+//   const debouncedSearch = useDebounce(searchValue, 500);
+//   const searchValueRef = useRef("");
+//   const [isLoadingExercises, setIsLoadingExercises] = useState(false);
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+
+//   const navigate = useNavigate();
+//   const {
+//     register,
+//     handleSubmit,
+//     reset,
+//     formState: { errors },
+//   } = useForm();
+
+//   // Server-side filter — same query style as ExerciseTable
+//   // /exercise?search=&page=1&limit=10&body_part=&equipment=
+//   useEffect(() => {
+//     const fetchExercises = async () => {
+//       setIsLoadingExercises(true);
+//       try {
+//         const buildUrl = (pageNum) =>
+//           `${base_url}/exercise?search=${debouncedSearch}&page=${pageNum}&limit=10&body_part=${body_part}&equipment=${equipment}`;
+
+//         const firstRes = await axios.get(buildUrl(1));
+//         if (firstRes.status !== 200) return;
+
+//         const firstData = firstRes.data.data || [];
+//         const totalPages = firstRes.data.pagination?.totalPages ?? 1;
+
+//         // Load all matching pages so dropdown has full filtered list
+//         let allData = firstData;
+//         if (totalPages > 1) {
+//           const rest = await Promise.all(
+//             Array.from({ length: totalPages - 1 }, (_, i) =>
+//               axios.get(buildUrl(i + 2))
+//             )
+//           );
+//           allData = [
+//             ...firstData,
+//             ...rest.flatMap((r) => r.data.data || []),
+//           ];
+//         }
+
+//         setFilteredExercisesForSelection(allData);
+//       } catch (error) {
+//         console.error("Error fetching exercises:", error);
+//         setFilteredExercisesForSelection([]);
+//       } finally {
+//         setIsLoadingExercises(false);
+//       }
+//     };
+
+//     fetchExercises();
+//   }, [debouncedSearch, body_part, equipment]);
+
+//   // ✅ Move exercise up (index কমাবে)
+//   const handleMoveUp = (index) => {
+//     if (index === 0) return;
+//     setWorkoutExercises((prev) => {
+//       const updated = [...prev];
+//       [updated[index - 1], updated[index]] = [updated[index], updated[index - 1]];
+//       return updated;
+//     });
+//   };
+
+//   // ✅ Move exercise down (index বাড়াবে)
+//   const handleMoveDown = (index) => {
+//     if (index === workoutExercises.length - 1) return;
+//     setWorkoutExercises((prev) => {
+//       const updated = [...prev];
+//       [updated[index], updated[index + 1]] = [updated[index + 1], updated[index]];
+//       return updated;
+//     });
+//   };
+
+//   const resetExerciseFilters = () => {
+//     setBodyPart("");
+//     setEquipment("");
+//     setSearchValue("");
+//     searchValueRef.current = "";
+//   };
+
+//   const handleAddMoreExercise = (selected) => {
+//     if (selected && selected.length > 0) {
+//       const exercise = selected[0];
+//       const newExercise = {
+//         exercise_id: exercise,
+//         sets: "",
+//         reps: "",
+//         manipulation: "",
+//       };
+//       setWorkoutExercises((prev) => [...prev, newExercise]);
+//       setAddMoreExercise(false);
+//       resetExerciseFilters();
+//     }
+//   };
+
+//   // Capture Select search → debounced server-side `search` query (like ExerciseTable)
+//   const handleExerciseSearch = ({ state }) => {
+//     if (state.search !== searchValueRef.current) {
+//       searchValueRef.current = state.search;
+//       setSearchValue(state.search);
+//     }
+//     // No client-side filter — options come from server
+//     return filteredExercisesForSelection;
+//   };
+
+//   const handleRemoveExercise = (indexToRemove) => {
+//     setWorkoutExercises((prev) =>
+//       prev.filter((_, index) => index !== indexToRemove)
+//     );
+//   };
+
+//   const handleInputChange = (index, field, value) => {
+//     setWorkoutExercises((prev) => {
+//       const updated = [...prev];
+//       updated[index][field] = value;
+//       return updated;
+//     });
+//   };
+
+//   const onSubmit = async (data) => {
+//     if (isSubmitting) return;
+//     if (workoutExercises.length === 0) {
+//       toast.error("נא להוסיף לפחות תרגיל אחד לאימון.");
+//       return;
+//     }
+
+//     const workoutData = {
+//       name: data.name,
+//       description: data.description,
+//       exercises: workoutExercises.map((ex) => ({
+//         exercise_id: ex.exercise_id._id,
+//         sets: parseInt(ex.sets, 10),
+//         reps: parseInt(ex.reps, 10),
+//         manipulation: ex.manipulation || "",
+//       })),
+//     };
+
+//     setIsSubmitting(true);
+//     try {
+//       const response = await axios.post(`${base_url}/workout`, workoutData);
+//       if (response.status === 201) {
+//         toast.success(UI_TEXT.workoutCreated);
+//         reset();
+//         setWorkoutExercises([]);
+//         resetExerciseFilters();
+//         navigate("/dashboard/workout-list");
+//       }
+//     } catch (error) {
+//       toast.error(error.response?.data?.message || UI_TEXT.workoutCreateFailed);
+//       console.error(error);
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
+
+//   const isFormValid = workoutExercises.every(
+//     (ex, index, arr) =>
+//       ex.sets > 0 &&
+//       ex.reps > 0 &&
+//       (index === arr.length - 1
+//         ? ex.manipulation?.trim().toLowerCase() !== "superset"
+//         : true)
+//   );
+
+//   return (
+//     <div className="sm:py-20 py-6" dir="rtl">
+//       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+//         <div className="grid gap-4">
+//           <DynamicInputField
+//             className="sm:min-w-[400px]"
+//             id="name"
+//             type="text"
+//             label="שם תוכנית אימון"
+//             placeholder="הוסף שם תוכנית אימון ...."
+//             register={register}
+//             validation={{ required: "נדרש שם אימון" }}
+//             errors={errors}
+//           />
+
+//           <DynamicTextAreaField
+//             className="sm:min-w-[400px]"
+//             id="description"
+//             type="text"
+//             label=" תיאור האימון "
+//             placeholder="הוסף תיאור לאימון...."
+//             register={register}
+//             validation={{ required: "נדרש תיאור אימון" }}
+//             errors={errors}
+//           />
+
+//           {/* ✅ Exercise list with order arrows */}
+//           {workoutExercises.map((exercise, index) => (
+//             <div
+//               key={index}
+//               className="border p-4 rounded-md space-y-4"
+//             >
+//               <div className="flex items-center justify-between gap-2">
+//                 <p className="font-medium">{exercise.exercise_id?.name}</p>
+//                 <div className="flex items-center gap-1 flex-shrink-0">
+//                   {/* ✅ Up/Down arrow buttons */}
+//                   <button
+//                     type="button"
+//                     onClick={() => handleMoveUp(index)}
+//                     disabled={index === 0}
+//                     className={`p-2 rounded border border-gray-300 transition-opacity ${
+//                       index === 0
+//                         ? "opacity-30 cursor-not-allowed"
+//                         : "hover:bg-gray-100 cursor-pointer"
+//                     }`}
+//                     title="הזז למעלה"
+//                   >
+//                     <ChevronUp className="size-4" />
+//                   </button>
+//                   <button
+//                     type="button"
+//                     onClick={() => handleMoveDown(index)}
+//                     disabled={index === workoutExercises.length - 1}
+//                     className={`p-2 rounded border border-gray-300 transition-opacity ${
+//                       index === workoutExercises.length - 1
+//                         ? "opacity-30 cursor-not-allowed"
+//                         : "hover:bg-gray-100 cursor-pointer"
+//                     }`}
+//                     title="הזז למטה"
+//                   >
+//                     <ChevronDown className="size-4" />
+//                   </button>
+//                   <button
+//                     type="button"
+//                     onClick={() => handleRemoveExercise(index)}
+//                     title="הסר תרגיל"
+//                     className="p-2 rounded border border-[#7994CB] text-[#7994CB] hover:bg-[#7994CB] hover:text-white transition-colors flex-shrink-0"
+//                   >
+//                     <Trash className="size-4" />
+//                   </button>
+//                 </div>
+//               </div>
+
+//               <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:gap-x-2 gap-y-2">
+//                 <div className="flex flex-col space-y-2">
+//                   <label>סטים</label>
+//                   <Input
+//                     type="number"
+//                     min={0}
+//                     value={exercise.sets}
+//                     onChange={(e) =>
+//                       handleInputChange(index, "sets", e.target.value)
+//                     }
+//                   />
+//                 </div>
+//                 <div className="flex flex-col space-y-2">
+//                   <label>חזרות</label>
+//                   <Input
+//                     type="number"
+//                     min={0}
+//                     value={exercise.reps}
+//                     onChange={(e) =>
+//                       handleInputChange(index, "reps", e.target.value)
+//                     }
+//                   />
+//                 </div>
+//                 <div className="flex flex-col space-y-2">
+//                   <label>מניפולציה</label>
+//                   <Input
+//                     type="text"
+//                     value={exercise.manipulation}
+//                     onChange={(e) =>
+//                       handleInputChange(index, "manipulation", e.target.value)
+//                     }
+//                   />
+//                 </div>
+//               </div>
+//             </div>
+//           ))}
+
+//           {/* ✅ Add More Exercise Section */}
+//           {addMoreExercise && (
+//             <div dir="rtl" className="space-y-4">
+//               <div>
+//                 <label className="block mb-2 text-sm font-medium">
+//                   אזור בגוף
+//                 </label>
+//                 <Select
+//                   className="rounded-lg h-12 w-auto"
+//                   direction="rtl"
+//                   valueField="id"
+//                   labelField="label"
+//                   options={bodyPartOptions}
+//                   placeholder="סנן לפי חלק בגוף"
+//                   values={
+//                     body_part
+//                       ? bodyPartOptions.filter((opt) => opt.value === body_part)
+//                       : []
+//                   }
+//                   onChange={(selected) =>
+//                     setBodyPart(selected[0]?.value || "")
+//                   }
+//                 />
+//               </div>
+//               <div>
+//                 <label className="block mb-2 text-sm font-medium">ציוד</label>
+//                 <Select
+//                   className="rounded-lg h-12 w-auto"
+//                   direction="rtl"
+//                   options={equipmentOptions}
+//                   valueField="id"
+//                   labelField="label"
+//                   placeholder="סנן לפי ציוד"
+//                   values={
+//                     equipment
+//                       ? equipmentOptions.filter((opt) => opt.value === equipment)
+//                       : []
+//                   }
+//                   onChange={(selected) =>
+//                     setEquipment(selected[0]?.value || "")
+//                   }
+//                 />
+//               </div>
+//               <div>
+//                 <label className="block mb-2 text-sm font-medium">
+//                   סנן לפי שם תרגיל
+//                 </label>
+//                 <Select
+//                   className="rounded-lg h-12 w-auto"
+//                   direction="rtl"
+//                   options={filteredExercisesForSelection}
+//                   valueField="_id"
+//                   labelField="name"
+//                   placeholder={isLoadingExercises ? "טוען..." : "בחר תרגיל"}
+//                   onChange={(selected) => handleAddMoreExercise(selected)}
+//                   searchable
+//                   searchBy="name"
+//                   searchFn={handleExerciseSearch}
+//                   loading={isLoadingExercises}
+//                 />
+//               </div>
+//             </div>
+//           )}
+
+//           <div>
+//             <Button
+//               type="button"
+//               className="mt-2 bg-[#7994CB] flex mx-auto"
+//               onClick={() => setAddMoreExercise(!addMoreExercise)}
+//             >
+//               הוסף עוד פעילות גופנית
+//             </Button>
+//           </div>
+//         </div>
+
+//         <div className="flex justify-center mt-8">
+//           <Button
+//             type="submit"
+//             className="text-white px-4 md:px-8 py-3 text-base rounded-full bg-[#7994CB] hover:bg-[#7994CB]/90 focus:ring-2 focus:ring-customBg focus:ring-opacity-50"
+//             disabled={
+//               workoutExercises.length === 0 || !isFormValid || isSubmitting
+//             }
+//           >
+//             {isSubmitting ? (
+//               <span className="inline-flex items-center gap-2">
+//                 <Loader2 className="h-4 w-4 animate-spin" />
+//                 {UI_TEXT.saving}
+//               </span>
+//             ) : (
+//               "לשמור תוכנית אימון חדשה"
+//             )}
+//           </Button>
+//         </div>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default AddWorkoutForm;
+
+
+
 import { base_url } from "@/api/baseUrl";
+import CustomSearchableSelect from "@/components/common/CustomSearchableSelect";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
 import { UI_TEXT } from "@/constants/hebrewText";
-import { useDebounce } from "@/hooks/useDebounce";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Loader2, Trash } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -350,9 +752,9 @@ const AddWorkoutForm = () => {
   const [equipment, setEquipment] = useState("");
   const [filteredExercisesForSelection, setFilteredExercisesForSelection] =
     useState([]);
+  // Debounce now happens INSIDE CustomSearchableSelect, so this is
+  // already the debounced search value reported via onSearchChange.
   const [searchValue, setSearchValue] = useState("");
-  const debouncedSearch = useDebounce(searchValue, 500);
-  const searchValueRef = useRef("");
   const [isLoadingExercises, setIsLoadingExercises] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -366,12 +768,17 @@ const AddWorkoutForm = () => {
 
   // Server-side filter — same query style as ExerciseTable
   // /exercise?search=&page=1&limit=10&body_part=&equipment=
+  // Difference: no pagination UI here — we walk through every page for the
+  // current filter/search combo and merge results, so dropdown always has
+  // the FULL matching list (not just 10 items).
   useEffect(() => {
+    let ignore = false; // race-condition guard: ignore stale responses
+
     const fetchExercises = async () => {
       setIsLoadingExercises(true);
       try {
         const buildUrl = (pageNum) =>
-          `${base_url}/exercise?search=${debouncedSearch}&page=${pageNum}&limit=10&body_part=${body_part}&equipment=${equipment}`;
+          `${base_url}/exercise?search=${searchValue}&page=${pageNum}&limit=10&body_part=${body_part}&equipment=${equipment}`;
 
         const firstRes = await axios.get(buildUrl(1));
         if (firstRes.status !== 200) return;
@@ -393,17 +800,27 @@ const AddWorkoutForm = () => {
           ];
         }
 
-        setFilteredExercisesForSelection(allData);
+        if (!ignore) {
+          setFilteredExercisesForSelection(allData);
+        }
       } catch (error) {
-        console.error("Error fetching exercises:", error);
-        setFilteredExercisesForSelection([]);
+        if (!ignore) {
+          console.error("Error fetching exercises:", error);
+          setFilteredExercisesForSelection([]);
+        }
       } finally {
-        setIsLoadingExercises(false);
+        if (!ignore) {
+          setIsLoadingExercises(false);
+        }
       }
     };
 
     fetchExercises();
-  }, [debouncedSearch, body_part, equipment]);
+
+    return () => {
+      ignore = true;
+    };
+  }, [searchValue, body_part, equipment]);
 
   // ✅ Move exercise up (index কমাবে)
   const handleMoveUp = (index) => {
@@ -429,32 +846,21 @@ const AddWorkoutForm = () => {
     setBodyPart("");
     setEquipment("");
     setSearchValue("");
-    searchValueRef.current = "";
   };
 
-  const handleAddMoreExercise = (selected) => {
-    if (selected && selected.length > 0) {
-      const exercise = selected[0];
-      const newExercise = {
-        exercise_id: exercise,
-        sets: "",
-        reps: "",
-        manipulation: "",
-      };
-      setWorkoutExercises((prev) => [...prev, newExercise]);
-      setAddMoreExercise(false);
-      resetExerciseFilters();
-    }
-  };
-
-  // Capture Select search → debounced server-side `search` query (like ExerciseTable)
-  const handleExerciseSearch = ({ state }) => {
-    if (state.search !== searchValueRef.current) {
-      searchValueRef.current = state.search;
-      setSearchValue(state.search);
-    }
-    // No client-side filter — options come from server
-    return filteredExercisesForSelection;
+  // CustomSearchableSelect passes the selected option object directly
+  // (not wrapped in an array like react-dropdown-select does).
+  const handleAddMoreExercise = (exercise) => {
+    if (!exercise) return;
+    const newExercise = {
+      exercise_id: exercise,
+      sets: "",
+      reps: "",
+      manipulation: "",
+    };
+    setWorkoutExercises((prev) => [...prev, newExercise]);
+    setAddMoreExercise(false);
+    resetExerciseFilters();
   };
 
   const handleRemoveExercise = (indexToRemove) => {
@@ -673,18 +1079,15 @@ const AddWorkoutForm = () => {
                 <label className="block mb-2 text-sm font-medium">
                   סנן לפי שם תרגיל
                 </label>
-                <Select
-                  className="rounded-lg h-12 w-auto"
-                  direction="rtl"
+                <CustomSearchableSelect
                   options={filteredExercisesForSelection}
                   valueField="_id"
                   labelField="name"
-                  placeholder={isLoadingExercises ? "טוען..." : "בחר תרגיל"}
-                  onChange={(selected) => handleAddMoreExercise(selected)}
-                  searchable
-                  searchBy="name"
-                  searchFn={handleExerciseSearch}
+                  placeholder="בחר תרגיל"
+                  onChange={handleAddMoreExercise}
+                  onSearchChange={setSearchValue}
                   loading={isLoadingExercises}
+                  direction="rtl"
                 />
               </div>
             </div>

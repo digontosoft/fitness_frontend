@@ -1,4 +1,5 @@
 import { base_url } from "@/api/baseUrl";
+import CustomSearchableSelect from "@/components/common/CustomSearchableSelect";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import DynamicTextAreaField from "@/components/measurements/DynamicTextAreaField";
 import { Button } from "@/components/ui/button";
@@ -14,19 +15,20 @@ import { toast } from "sonner";
 
 const AssignTrainingForm = ({ trainingId, user_id }) => {
   const userData = JSON.parse(localStorage.getItem("userInfo"));
-  // const [selectedTraining, setSelectedTraining] = useState(null);
   const [trainingbyId, setTrainingById] = useState({});
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
   const [showWorkoutDropdown, setShowWorkoutDropdown] = useState(false);
-  // const [trainingList, setTrainingList] = useState([]);
-  const [allExercises, setAllExercises] = useState([]);
   const [workout, setWorkout] = useState([]);
   const [isSupersetIncomplete, setIsSupersetIncomplete] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedBodyPart, setSelectedBodyPart] = useState(null);
-  const [selectedEquipment, setSelectedEquipment] = useState(null);
-  const [selectedExercise, setSelectedExercise] = useState([]);
+  // Same exercise filter state as AddWorkoutForm
+  const [body_part, setBodyPart] = useState("");
+  const [equipment, setEquipment] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredExercisesForSelection, setFilteredExercisesForSelection] =
+    useState([]);
+  const [isLoadingExercises, setIsLoadingExercises] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -99,13 +101,18 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     fetchTraining();
   }, []);
 
+  const resetExerciseFilters = () => {
+    setBodyPart("");
+    setEquipment("");
+    setSearchValue("");
+  };
+
   // Fetch trainingbyId
   useEffect(() => {
     const fetchTraining = async () => {
       try {
       const res = await axios.get(`${base_url}/training/${trainingId}`);
       setTrainingById(res.data.data);
-      // console.log("trainingById:", res.data.data);
       } catch (error) {
         console.error("Error fetching training sessions:", error);
       }
@@ -113,31 +120,56 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     fetchTraining();
   }, [trainingId]);
 
-  // Fetch exercises
+  // Same server-side filter as AddWorkoutForm
   useEffect(() => {
+    let ignore = false;
+
     const fetchExercises = async () => {
+      setIsLoadingExercises(true);
       try {
-        const firstRes = await axios.get(`${base_url}/exercise`);
-        const firstData = firstRes.data.data;
-        const totalPages = firstRes.data.pagination?.totalPages || 1;
+        const buildUrl = (pageNum) =>
+          `${base_url}/exercise?search=${searchValue}&page=${pageNum}&limit=10&body_part=${body_part}&equipment=${equipment}`;
 
-        if (totalPages <= 1) {
-          setAllExercises(firstData);
-          return;
+        const firstRes = await axios.get(buildUrl(1));
+        if (firstRes.status !== 200) return;
+
+        const firstData = firstRes.data.data || [];
+        const totalPages = firstRes.data.pagination?.totalPages ?? 1;
+
+        let allData = firstData;
+        if (totalPages > 1) {
+          const rest = await Promise.all(
+            Array.from({ length: totalPages - 1 }, (_, i) =>
+              axios.get(buildUrl(i + 2))
+            )
+          );
+          allData = [
+            ...firstData,
+            ...rest.flatMap((r) => r.data.data || []),
+          ];
         }
 
-        const pageRequests = [];
-        for (let page = 2; page <= totalPages; page++) {
-          pageRequests.push(axios.get(`${base_url}/exercise?page=${page}`));
+        if (!ignore) {
+          setFilteredExercisesForSelection(allData);
         }
-        const rest = await Promise.all(pageRequests);
-        setAllExercises([...firstData, ...rest.flatMap((r) => r.data.data)]);
       } catch (error) {
-        console.error("Error fetching exercises:", error);
+        if (!ignore) {
+          console.error("Error fetching exercises:", error);
+          setFilteredExercisesForSelection([]);
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoadingExercises(false);
+        }
       }
     };
+
     fetchExercises();
-  }, []);
+
+    return () => {
+      ignore = true;
+    };
+  }, [searchValue, body_part, equipment]);
 
   // Fetch workouts
   useEffect(() => {
@@ -156,6 +188,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
   const handleMoreExercise = (workoutIndex, e) => {
     e.preventDefault();
     setAddMoreExerciseIndex(workoutIndex);
+    resetExerciseFilters();
   };
 
   // const handleTrainingChange = (values) => {
@@ -253,32 +286,27 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     validateSupersetAndToggle(updatedTraining);
   };
 
-  // When new exercises are selected (for "Add More Exercise")
-  const handleNewExerciseSelection = (selectedExercises, workoutIndex) => {
-    if (!trainingbyId) return;
+  // CustomSearchableSelect passes the selected option object directly
+  const handleNewExerciseSelection = (exercise, workoutIndex) => {
+    if (!trainingbyId || !exercise) return;
     const updatedTraining = { ...trainingbyId };
     const currentWorkout = updatedTraining.workouts[workoutIndex];
-    
-    if (!currentWorkout || !currentWorkout.exercises) return;
-    
-    const newExercises = [];
 
-    selectedExercises.forEach((exercise) => {
-      newExercises.push({
-        _id: exercise._id,
-        name: exercise.name,
-        exercise_id: exercise._id,
-        sets: "",
-        reps: "",
-        manipulation: "",
-      });
+    if (!currentWorkout || !currentWorkout.exercises) return;
+
+    currentWorkout.exercises.push({
+      _id: exercise._id,
+      name: exercise.name,
+      exercise_id: exercise._id,
+      sets: "",
+      reps: "",
+      manipulation: "",
     });
 
-    currentWorkout.exercises.push(...newExercises);
     setTrainingById(updatedTraining);
     validateSupersetAndToggle(updatedTraining);
-
     setAddMoreExerciseIndex(null);
+    resetExerciseFilters();
   };
 
   const handleMoveExerciseUp = (workoutIndex, exerciseIndex) => {
@@ -308,53 +336,6 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     setTrainingById(updatedTraining);
     validateSupersetAndToggle(updatedTraining);
   };
-
-  // useEffect(() => {
-  //   const fetchSelectedExercises = async () => {
-  //     if (selectedBodyPart && selectedEquipment) {
-  //       try {
-  //         const response = await axios.get(
-  //           `${base_url}/exercise?body_part=${selectedBodyPart}&equipment=${selectedEquipment}`
-  //         );
-  //         setSelectedExercise(response.data.data);
-  //         console.log("selectedExercises:", response.data.data);
-  //       } catch (error) {
-  //         console.error("Error fetching selected exercises:", error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchSelectedExercises();
-  // }, [selectedBodyPart, selectedEquipment]);
-
-  useEffect(() => {
-    const fetchFilteredExercises = async () => {
-      if (selectedBodyPart || selectedEquipment) {
-        let url = `${base_url}/exercise?`;
-        if (selectedBodyPart) {
-          url += `body_part=${selectedBodyPart}&`;
-        }
-        if (selectedEquipment) {
-          url += `equipment=${selectedEquipment}&`;
-        }
-        url = url.slice(0, -1); // Remove trailing '&' or '?'
-
-        try {
-          const response = await axios.get(url);
-          setSelectedExercise(response.data.data || []);
-          // console.log("Filtered exercises for selection:", response.data.data);
-        } catch (error) {
-          console.error("Error fetching filtered exercises:", error);
-          setSelectedExercise([]);
-        }
-      } else {
-        // If no filters are selected, show all exercises again
-        setSelectedExercise(allExercises);
-      }
-    };
-
-    fetchFilteredExercises();
-  }, [selectedBodyPart, selectedEquipment, allExercises]);
 
   const fetchWorkoutData = async (workoutId) => {
     try {
@@ -611,9 +592,9 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                 ))}
                 <div className="my-4">
                   {addMoreExerciseIndex === workoutIndex && (
-                    <div>
+                    <div dir="rtl" className="space-y-3">
                       <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        <label className="block mb-2 text-sm font-medium">
                           אזור בגוף
                         </label>
                         <Select
@@ -623,17 +604,20 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                           labelField="label"
                           options={bodyPartOptions}
                           placeholder="סנן לפי חלק בגוף"
-                          onChange={(selectedOptions) => {
-                            const values = selectedOptions.map(
-                              (option) => option.value
-                            );
-                            setSelectedBodyPart(values[0]);
-                          }}
-                          searchBy="label"
+                          values={
+                            body_part
+                              ? bodyPartOptions.filter(
+                                  (opt) => opt.value === body_part
+                                )
+                              : []
+                          }
+                          onChange={(selected) =>
+                            setBodyPart(selected[0]?.value || "")
+                          }
                         />
                       </div>
                       <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        <label className="block mb-2 text-sm font-medium">
                           ציוד
                         </label>
                         <Select
@@ -643,30 +627,33 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                           valueField="id"
                           labelField="label"
                           placeholder="סנן לפי ציוד"
-                          onChange={(selectedOptions) => {
-                            const values = selectedOptions.map(
-                              (option) => option.value
-                            );
-                            setSelectedEquipment(values[0]);
-                          }}
-                          searchBy="label"
+                          values={
+                            equipment
+                              ? equipmentOptions.filter(
+                                  (opt) => opt.value === equipment
+                                )
+                              : []
+                          }
+                          onChange={(selected) =>
+                            setEquipment(selected[0]?.value || "")
+                          }
                         />
                       </div>
-                      <div className="mt-6">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      <div>
+                        <label className="block mb-2 text-sm font-medium">
                           סנן לפי שם תרגיל
                         </label>
-                        <Select
-                          className="rounded-lg h-12 w-auto"
-                          direction="rtl"
-                          options={selectedExercise}
+                        <CustomSearchableSelect
+                          options={filteredExercisesForSelection}
                           valueField="_id"
                           labelField="name"
-                          placeholder="בחר"
-                          onChange={(selected) =>
-                            handleNewExerciseSelection(selected, workoutIndex)
+                          placeholder="בחר תרגיל"
+                          onChange={(exercise) =>
+                            handleNewExerciseSelection(exercise, workoutIndex)
                           }
-                          searchBy="name"
+                          onSearchChange={setSearchValue}
+                          loading={isLoadingExercises}
+                          direction="rtl"
                         />
                       </div>
                     </div>
