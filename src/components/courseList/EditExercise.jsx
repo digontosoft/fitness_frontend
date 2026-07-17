@@ -392,7 +392,7 @@ const EditExercise = () => {
                 {item.exercise_id?.name || "תרגיל"}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-items-center mt-2">
-                <div className="flex flex-col items-center md:justify-center gap-3">
+                <div className="flex flex-col items-center gap-2 w-52 max-w-[90%]">
                   <label>סטים:</label>
                   <input
                     type="number"
@@ -400,12 +400,12 @@ const EditExercise = () => {
                     onChange={(e) =>
                       handleChange(index, "sets", e.target.value)
                     }
-                    className="p-2 rounded-lg border mr-[30px] sm:mr-0"
+                    className="w-full p-2 rounded-lg border"
                     required
-                    min="1" // Ensure positive input
+                    min="1"
                   />
                 </div>
-                <div className="flex flex-col items-center md:justify-center gap-3">
+                <div className="flex flex-col items-center gap-2 w-52 max-w-[90%]">
                   <label>חזרות:</label>
                   <input
                     type="number"
@@ -413,12 +413,12 @@ const EditExercise = () => {
                     onChange={(e) =>
                       handleChange(index, "reps", e.target.value)
                     }
-                    className="p-2 rounded-lg border mr-6 sm:mr-0"
+                    className="w-full p-2 rounded-lg border"
                     required
-                    min="1" // Ensure positive input
+                    min="1"
                   />
                 </div>
-                <div className="flex flex-col items-center md:justify-center gap-3">
+                <div className="flex flex-col items-center gap-2 w-52 max-w-[90%]">
                   <label>מניפולציה:</label>
                   <input
                     type="text"
@@ -426,7 +426,7 @@ const EditExercise = () => {
                     onChange={(e) =>
                       handleChange(index, "manipulation", e.target.value)
                     }
-                    className="p-2 rounded border"
+                    className="w-full p-2 rounded-lg border"
                   />
                 </div>
               </div>
