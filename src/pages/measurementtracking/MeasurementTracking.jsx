@@ -139,7 +139,10 @@ const sortedData = [...data].sort(
           {sortedData.map((cart, index) => {
             const cardKey = cart._id ?? `${cart.cartTitle}-${index}`;
             let customImage = null;
-            const items = Array.isArray(cart?.item) ? cart.item : [];
+            // Oldest → newest so RTL flex shows oldest on the right
+            const items = (Array.isArray(cart?.item) ? [...cart.item] : []).sort(
+              (a, b) => new Date(a?.date) - new Date(b?.date)
+            );
 
             if (cart.cartTitle === "זרוע ימין") {
               customImage = rightArm;
@@ -182,7 +185,7 @@ const sortedData = [...data].sort(
                   <MeasurementSmallCart
                     data={{
                       ...cart,
-                      item: [...items].reverse(),
+                      item: items,
                     }}
                     setOpen={setOpen}
                     setId={setId}
