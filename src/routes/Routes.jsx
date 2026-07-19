@@ -54,6 +54,7 @@ import WorkoutList from "@/pages/admin/workout-programme/WorkoutList";
 import Complete from "@/pages/Home/mesurementForm/Complete";
 import MeasurementImage from "@/pages/Home/mesurementForm/MeasurementImage";
 import UpdateMesurement from "@/pages/Home/mesurementForm/UpdateMesurement";
+import AdminMeasurementsWatch from "@/pages/measurements/AdminMeasurementsWatch";
 import MeasurementsWatch from "@/pages/measurements/MeasurementsWatch";
 import MeasurementTracking from "@/pages/measurementtracking/MeasurementTracking";
 import MeasurementWomen from "@/pages/measurmentwomen/MeasurementWomen";
@@ -411,7 +412,7 @@ export const routes = createBrowserRouter([
           },
           {
             path: "/admin-dashboard/mesurements-watch",
-            element: <MeasurementsWatch />,
+            element: <AdminMeasurementsWatch />,
           },
           {
             path: "/admin-dashboard/nutrition-details/:id",

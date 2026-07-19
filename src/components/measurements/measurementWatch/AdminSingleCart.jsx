@@ -10,8 +10,8 @@ import rightLeg from "@/assets/image/right-thigh.svg";
 import womenHips from "@/assets/image/women-hips.svg";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import SmallCart from "./SmallCart";
-const SingleCart = ({ userId, setOpen, setId }) => {
+import AdminSmallCart from "./AdminSmallCart";
+const AdminSingleCart = ({ userId, setOpen, setId }) => {
   const [data, setData] = useState([]);
   const [user, setUser] = useState({});
   const [loadingCardKey, setLoadingCardKey] = useState(null);
@@ -131,7 +131,7 @@ const SingleCart = ({ userId, setOpen, setId }) => {
             <div className="flex justify-center items-start"></div>
 
             <div className="flex justify-center items-center">
-              <SmallCart
+              <AdminSmallCart
                 data={{
                   ...data,
                   item: items,
@@ -154,4 +154,4 @@ const SingleCart = ({ userId, setOpen, setId }) => {
   );
 };
 
-export default SingleCart;
+export default AdminSingleCart;

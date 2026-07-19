@@ -15,9 +15,9 @@ const months = [
   "דצמבר",
 ];
 
-const SmallCart = ({ data, setOpen, setId }) => {
+const AdminSmallCart = ({ data, setOpen, setId }) => {
   const items = Array.isArray(data?.item) ? data.item : [];
-  // Oldest → newest, displayed left → right
+  // Oldest → newest; RTL flex shows oldest on the right
   const visibleItems = items
     .filter((it) => it?.data !== 0 && it?.data !== "0")
     .sort((a, b) => new Date(a?.date) - new Date(b?.date));
@@ -26,7 +26,7 @@ const SmallCart = ({ data, setOpen, setId }) => {
 
   return (
     <div
-      dir="ltr"
+      dir="rtl"
       className="relative flex sm:flex-nowrap flex-wrap sm:justify-between justify-center items-center gap-4 px-2 md:px-10"
     >
       <div className="absolute -top-[77px] -right-[145px] sm:-right-[95px]">
@@ -58,5 +58,5 @@ const SmallCart = ({ data, setOpen, setId }) => {
   );
 };
 
-export default SmallCart;
+export default AdminSmallCart;
 
