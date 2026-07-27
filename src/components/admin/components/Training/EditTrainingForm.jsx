@@ -444,11 +444,11 @@ const EditTrainingForm = () => {
   };
 
   return (
-    <div className="py-10 sm:w-[500px]">
+    <div className="py-10 sm:w-[500px]" dir="rtl">
       {loading ? (
         <Loading />
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" dir="rtl">
           <DynamicInputField
             id="name"
             type="text"
@@ -473,11 +473,13 @@ const EditTrainingForm = () => {
 
           {showWorkoutSelect && (
             <Select
+              direction="rtl"
               options={workouts}
               valueField="_id"
               labelField="name"
               onChange={handleAddWorkout}
               searchBy="name"
+              placeholder="בחר אימון..."
             />
           )}
 

@@ -73,12 +73,12 @@ const ActionCourseCart = () => {
             עריכת האימון
           </Button>
         </div>
-        <p
-          dir="rtl"
-          className="text-[#0A2533] font-bold text-xl px-4 py-10 relative transform sm:-translate-x-0 sm:left-0 -translate-x-1/2 left-1/2"
-        >
-          תרגילים:
-        </p>
+        <div dir="rtl" className="w-full px-4 pt-8 pb-4 text-right sm:text-center">
+          <p className="text-[#0A2533] font-bold text-xl">תרגילים:</p>
+          <p className="text-[#0A2533] text-sm sm:text-base mt-2">
+            יש למלא את כל התרגילים מבלי לרענן/לצאת
+          </p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
           {exercises?.map((item, index) => (
             <VideoCourseCart key={item._id ?? index} exercise={item} index={index} />
