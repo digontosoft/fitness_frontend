@@ -164,12 +164,12 @@ const ProgressCourseCart = () => {
           
         </div>
 
-        <p
-          dir="rtl"
-          className="text-[#0A2533] font-bold text-xl py-10 text-center transition-all duration-300"
-        >
-          תרגילים:
-        </p>
+        <div dir="rtl" className="w-full px-4 pt-8 pb-4 text-right sm:text-center">
+          <p className="text-[#0A2533] font-bold text-xl">תרגילים:</p>
+          <p className="text-[#0A2533] text-sm sm:text-base mt-2">
+            יש למלא את כל התרגילים מבלי לרענן/לצאת
+          </p>
+        </div>
 
         {exercises.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 px-4">

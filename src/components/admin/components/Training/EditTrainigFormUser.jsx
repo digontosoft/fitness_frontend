@@ -454,8 +454,8 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   //console.log("training-Data", training);
 
   return (
-    <div className="py-10 sm:w-[500px] w-[280px]">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <div className="py-10 sm:w-[500px] w-[280px]" dir="rtl">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" dir="rtl">
         <DynamicInputField
           id="name"
           type="text"
@@ -479,11 +479,13 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
 
         {showWorkoutSelect && (
           <Select
+            direction="rtl"
             options={workouts}
             valueField="_id"
             labelField="name"
             searchBy="name"
             onChange={handleAddWorkout}
+            placeholder="בחר אימון..."
           />
         )}
 
@@ -701,7 +703,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                 {UI_TEXT.saving}
               </span>
             ) : (
-              "שמיר תוכנית אימון"
+              "שמור תוכנית אימון"
             )}
           </Button>
           <Button
