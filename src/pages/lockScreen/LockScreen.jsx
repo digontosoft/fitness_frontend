@@ -2,6 +2,7 @@ import { base_url } from "@/api/baseUrl";
 import femaleLockScreen from "@/assets/image/female-lock-screen.png";
 import maleLockScreen from "@/assets/image/male-lock-screen.png";
 import { Button } from "@/components/ui/button";
+import { useSessionGuard } from "@/hooks/useSessionGuard";
 import axios from "axios";
 import { LogOut } from "lucide-react";
 import { useCallback, useEffect } from "react";
@@ -12,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 // (screen: "unlock"), after which this page redirects to the home screen.
 const LockScreen = () => {
   const navigate = useNavigate();
+  useSessionGuard();
   const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
   const lockImage = userInfo?.gender === "male" ? maleLockScreen : femaleLockScreen;
 

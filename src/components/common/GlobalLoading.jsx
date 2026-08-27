@@ -11,6 +11,7 @@ const GlobalLoading = () => {
 
   localStorage.setItem("userInfo", JSON.stringify(id));
   localStorage.setItem("authToken", JSON.stringify(token));
+  localStorage.setItem("loginTime", Date.now().toString());
 
   useEffect(() => {
     if (id?.userType === "admin") {
