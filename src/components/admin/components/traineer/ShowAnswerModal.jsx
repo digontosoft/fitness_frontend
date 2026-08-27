@@ -4,6 +4,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+function AnswerRow({ label, value }) {
+  return (
+    <div dir="rtl" className="space-y-1 text-right">
+      <div className="font-bold text-[#0A2533]">{label}</div>
+      <div className="text-[#0A2533] whitespace-pre-wrap">{value || "N/A"}</div>
+    </div>
+  );
+}
+
+const locationLabel = {
+  gym: "בחדר הכושר",
+  home: "בבית",
+};
+
 function ShowAnswerModal() {
   const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -15,7 +29,7 @@ function ShowAnswerModal() {
       try {
         setLoading(true);
         const response = await axios.get(`${base_url}/userDetails/${Id}`);
-        setUserInfo(response.data.data);
+        setUserInfo(response.data.data || {});
       } catch (error) {
         // console.log(error);
       } finally {
@@ -25,7 +39,9 @@ function ShowAnswerModal() {
     getUserInfo();
   }, [Id]);
 
-  // console.log('user info:', userInfo);
+  const trainingLocation =
+    locationLabel[userInfo.preferred_training_location] ||
+    userInfo.preferred_training_location;
 
   return (
     <>
@@ -51,402 +67,193 @@ function ShowAnswerModal() {
             backgroundRepeat: "no-repeat",
           }}
         ></div>
+
         <div className="grid items-center justify-items-center max-w-3xl mx-auto text-center space-y-2 mb-16">
           <h1 className="text-[28px] font-bold text-[#0A2533]" dir="rtl">
-            שאלון פתיחה
+            שאלון פתיחה FITAL לגברים
           </h1>
           <span className="text-base font-normal text-[#0A2533]" dir="rtl">
-            היי אלוף! ברוך הבא למשפחת פיטל! הכנו שאלון היכרות מותאם אישית שיעזור
-            לי לבנות את התכנית המושלמת עבורך! כמה שאלות ומתחילים.
-          </span>
-          <span className="text-base font-normal text-[#0A2533]" dir="rtl">
-            שים לב: שאלות המסומנות בכוכבית הן שאלות חובה.
+            שאלון היכרות בשביל שאתאים אליך את התכנית האישית הטובה ביותר
           </span>
         </div>
 
+        {/* Section 1 — פרטים אישיים */}
         <div className="max-w-3xl mx-auto space-y-8">
-        <div className="space-y-4">
-                <h1
-                  className="text-right text-base font-normal text-[#0A2533]"
-                  dir="rtl"
-                >
-                  *אם נרשמת רק לתזונה לדלג על השאלות הרגלי כושר
-                </h1>
-                <h1
-                  className="text-right text-[28px] font-bold text-[#0A2533]"
-                  dir="rtl"
-                >
-                  פרטים אישיים
-                </h1>
-              </div>
-        <div
-          className="grid grid-cols-1 gap-5 max-w-3xl mx-auto"
-          dir="rtl"
-        >
-          <div dir="rtl">
-            <div className="font-bold">שם מלא</div>
-            <div>
-              {userInfo.full_name || "N/A"}
-            </div>
+          <h1
+            className="text-right text-[28px] font-bold text-[#0A2533]"
+            dir="rtl"
+          >
+            פרטים אישיים
+          </h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5" dir="rtl">
+            <AnswerRow
+              label="שם מלא: פרטי + משפחה*"
+              value={userInfo.full_name}
+            />
+            <AnswerRow
+              label="המייל שלך (מייל של גוגל)*"
+              value={userInfo.email}
+            />
+            <AnswerRow
+              label="מספר טלפון*"
+              value={userInfo.cell_phone_number}
+            />
+            <AnswerRow label="גיל" value={userInfo.age} />
+            <AnswerRow label="גובה" value={userInfo.height} />
+            <AnswerRow
+              label="משקל נוכחי - אם לא יודע לרשום בערך 5/10 קילו פלוס מינוס"
+              value={userInfo.weight}
+            />
+            <AnswerRow
+              label="המשקל הכי גבוה שהיית בו במהלך חייך (לא חובה לרשום)"
+              value={userInfo.highest_weight}
+            />
+            <AnswerRow
+              label="תרופות ומרשמים שאתה משתמש כרגע ובעבר? (אם לא חשוב לציין תרשום 'אין')"
+              value={userInfo.daily_nutrition}
+            />
           </div>
-          <div dir="rtl">
-            <div className="font-bold">מס׳ נייד</div>
-            <div>
-              {userInfo.cell_phone_number ? userInfo?.cell_phone_number : "N/A"}
-            </div>
-          </div>
-          
-          
-          <div dir="rtl">
-            <div className="font-bold"> גיל</div>
-            <div>{userInfo.age ? userInfo?.age : "N/A"}</div>
-          </div>
-          <div dir="rtl">
-            <div className="font-bold">גובה</div>
-            <div>{userInfo.height ? userInfo?.height : "N/A"}</div>
-          </div>
-          <div dir="rtl">
-            <div className="font-bold">משקל נוכחי - (גם בערך זה טוב)</div>
-            <div>{userInfo?.weight ? userInfo?.weight : "N/A"}</div>
-          </div>
-          <div dir="rtl">
-            <div className="font-bold">המשקל הגבוה שהגעת אליו במהלך חייך (לא חובה)</div>
-            <div>
-              {userInfo.highest_weight ? userInfo?.highest_weight : "N/A"}
-            </div>
-          </div>
-        
-          {/* <div dir="rtl">
-            <div>המייל שלך שנרשמת איתו לגוגל דרייב</div>
-            <div>{userInfo.email ? userInfo?.email : "N/A"}</div>
-          </div> */}
-          
         </div>
-        </div>
-        <hr className="max-w-3xl mx-auto my-10" />
-        <div className="max-w-3xl mx-auto space-y-8">
-        <div className="space-y-4">
-                <h1
-                  className="text-right text-[28px] font-bold text-[#0A2533]"
-                  dir="rtl"
-                >
-                  הרגלי כושר
-                </h1>
-                <h1
-                  className="text-right text-base font-normal text-[#0A2533]"
-                  dir="rtl"
-                >
-                  *אם נרשמת רק לתזונה לדלג עלזה
-                </h1>
-              </div>
-        <div
-          className="grid grid-cols-1 gap-5 max-w-3xl mx-auto"
-          dir="rtl"
-        >
-          <div>
-            <div className="font-bold">איפה אתה מעדיף להתאמן?</div>
-            <div>
-              {userInfo.preferred_training_location
-                ? userInfo?.preferred_training_location
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">
-              אם בחרת בבית - איזה אביזרים יש ברשותך או שתרצה לרכוש? למשל גומיות,
-              רצועות TRX, משקולות, מתח, ספת משקולות? מומלץ משקולות
-            </div>
-            <div>
-              {userInfo.home_equipment ? userInfo?.home_equipment : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">כמה פעמים בשבוע נתאמן?״/״</div>
-            <div>
-              {userInfo.how_many_times_want_training_in_week
-                ? userInfo?.how_many_times_want_training_in_week
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">מהם התרגילים האהובים עליך? במידה ולא יודע לרשום ׳לא יודע׳</div>
-            <div>
-              {userInfo.favorite_exercises
-                ? userInfo?.favorite_exercises
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">
-              תאר את אימוני הכח שלך כרגע (איזה תרגילים, טווחי חזרות, תדירות
-              וכו׳): אם לא עושה לרשום ׳לא עושה׳
-            </div>
-            <div>
-              {userInfo.strength_training_description
-                ? userInfo?.strength_training_description
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">מה האימון אירובי האהוב עליך?(אם יש)</div>
-            <div>
-              {userInfo.favorite_cardio ? userInfo?.favorite_cardio : "N/A"}
-            </div>
-          </div>
-          
-          <div>
-            <div className="font-bold">האם יש לך פציעות או מגבלות פיזיות?</div>
-            <div>
-              {userInfo.injuries_description
-                ? userInfo?.injuries_description
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">
-              איזה אזורים אתה מעדיף שיקבלו יותר דגש בתכנית האימונים האישית שלך?
-              חזה, ידיים, גב, רגליים, דגש ישבן, כתפיים, בטן ועוד.. אפשר לרשום גם
-              כל הגוף באותה המידה או כמה אזורים שעדיפים עלייך.
-            </div>
-            <div>
-              {userInfo.focused_body_areas
-                ? userInfo?.focused_body_areas
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div>
-            <div className="font-bold">כמה פעמים בשבוע נתאמן?״/״</div>
-            </div>
-            <div>
-              {userInfo.how_many_times_want_training_in_week
-               || "N/A"}
-            </div>
-          </div>
 
-          
-          
-          {/* <div>
-            <div>מהם המאכלים האהובים עליך?</div>
-            <div>
-              {userInfo.favorite_foods ? userInfo?.favorite_foods : "N/A"}
-            </div>
-          </div>
-        
-          <div>
-            <div>מהם המאכלים שלא תיגע בהם?</div>
-            <div>
-              {userInfo.disliked_foods ? userInfo?.disliked_foods : "N/A"}
-            </div>
-          </div> */}
-         
-          {/* <div>
-            <div>
-              תאר סדר יום מלא של התזונה שלך, איך נראה יום רגיל* מה אוכל כשקם,
-              בצהריים, בערב, נשנושים לפרט:
-            </div>
-            <div>{userInfo.daily_meds ? userInfo?.daily_meds : "N/A"}</div>
-          </div> */}
-          
-        </div>
-        </div>
-        <hr className="max-w-3xl mx-auto my-10" />
-        <div className="max-w-3xl mx-auto space-y-8">
-        <h1 className="text-right text-[28px] font-bold text-[#0A2533]"
-          dir="rtl">
-                הרגלי תזונה
-              </h1>
-        <div
-          className="grid grid-cols-1 gap-5 max-w-3xl mx-auto"
-          dir="rtl"
-        >
-
-          <div>
-            <div className="font-bold">מהם המאכלים האהובים עליך?*</div>
-            <div>
-              {userInfo?.favorite_foods
-                ? userInfo?.favorite_foods
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">מאכלים שלא תיגע בהם? (בין אם צמחוני/טבעוני/דברים שלא אוהב)</div>
-            <div>
-              {userInfo?.disliked_foods
-                ? userInfo?.disliked_foods
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold"> תאר סדר יום מלא של התזונה שלך, איך נראה יום רגיל* מה אוכל כשקם, בצהריים, בערב, נשנושים לפרט:</div>
-            <div>
-              {userInfo?.daily_meds
-                ? userInfo?.daily_meds
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">ועכשיו איך נראה סופש* אם יש ארוחה מיוחדת בשישי ושבת ומה הן מכילות לרוב</div>
-            <div>
-              {userInfo?.descripe_weekend
-                ? userInfo?.descripe_weekend
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">יש לך מתכונים שאתה אוהב להכין באופן תדיר (כאחת לשבוע)? אם כן, כתוב את המצרכים שלהם, כמויות וכמה יחידות יוצא. למשל מתכון לממולאים וכמה יחידות יוצא מתוך כל התכולה (אפשר לרשום כמה מתכונים)</div>
-            <div>
-              {userInfo?.favorite_recipes
-                ? userInfo?.favorite_recipes
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">האם אתה שותה אלכוהול? אם כן, באיזה כמויות ותדירות?</div>
-            <div>
-              {userInfo?.alcohol_consumption
-                ? userInfo?.alcohol_consumption
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div className="font-bold">תרופות ומרשמים שאתה משתמש כרגע ובעבר?</div>
-            <div>
-              {userInfo?.daily_nutrition
-                ? userInfo?.daily_nutrition
-                : "N/A"}
-            </div>
-          </div>
-
-
-
-
-
-          {/* <div>
-            <div>במה אתה עובד כרגע ומה השעות עבודה שלך? האם עבודה יושבנית?</div>
-            <div>
-              {userInfo.work_and_work_hours
-                ? userInfo?.work_and_work_hours
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div>
-              ועכשיו איך נראה סופש* אם יש ארוחה מיוחדת בשישי ושבת ומה הן מכילות
-              לרוב
-            </div>
-            <div>
-              {userInfo.descripe_weekend ? userInfo?.descripe_weekend : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div>כאשר אתה מסתכל במראה, מה אתה מרגיש?</div>
-            <div>
-              {userInfo.feel_about_your_look
-                ? userInfo?.feel_about_your_look
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div>
-              יש לך מתכונים שאתה אוהב להכין באופן תדיר (כאחת לשבוע)? אם כן, כתוב
-              את המצרכים שלהם, כמויות וכמה יחידות יוצא. למשל מתכון לממולאים וכמה
-              יחידות יוצא מתוך כל התכולה (אפשר לרשום כמה מתכונים)
-            </div>
-            <div>
-              {userInfo.favorite_recipes ? userInfo?.favorite_recipes : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div>מהן המטרות שלך לטווח הארוך ולמה?</div>
-            <div>
-              {userInfo.long_term_goals ? userInfo?.long_term_goals : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div>האם אתה שותה אלכוהול? אם כן, באיזה כמויות ותדירות? </div>
-            <div>
-              {userInfo.alcohol_consumption
-                ? userInfo?.alcohol_consumption
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div>מהי רמת המוטיבציה שלך להגיע למטרה?* (צייני מספר מ 1-10) </div>
-            <div>
-              {userInfo.motivation_level ? userInfo?.motivation_level : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div>תרופות ומרשמים שאתה משתמש כרגע ובעבר?</div>
-            <div>
-              {userInfo.daily_nutrition ? userInfo?.daily_nutrition : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div>
-              האם הנך מתחייב על הצהרה ושקיפות של כל שימוש בחומרים אסורים לפני
-              תחילת העבודה המשותפת ובמהלכה? הכוונה לחומרים כמו סטרואידים
-              אנאבוליים וכדומה. בתשובה פשוט תרשום - ׳מתחייב׳{" "}
-            </div>
-            <div>
-              {userInfo.supplements_will_use
-                ? userInfo?.supplements_will_use
-                : "N/A"}
-            </div>
-          </div>
-          <div>
-            <div>כמה שעות אתה ישן ביום לערך?</div>
-            <div>{userInfo.sleep_hours ? userInfo?.sleep_hours : "N/A"}</div>
-          </div>
-          <div>
-            <div>הערות ודברים נוספים שתרצה לציין?</div>
-            <div>
-              {userInfo.additional_notes ? userInfo?.additional_notes : "N/A"}
-            </div>
-          </div> */}
-        </div>
-        </div>
         <hr className="max-w-3xl mx-auto my-10" />
 
-            <div className="max-w-3xl mx-auto space-y-8">
-              <h1
-                className="text-right text-[28px] font-bold text-[#0A2533]"
-                dir="rtl"
-              >
-                פרטים נוספים
-              </h1>
-              <div className="grid grid-cols-1 gap-5" dir="rtl">
-                  <div>
-                    <div className="font-bold">במה אתה עובד כרגע ומה השעות עבודה שלך? האם עבודה יושבנית?</div>
-                    <div>{userInfo?.work_and_work_hours ? userInfo?.work_and_work_hours : "N/A"}</div>
-                  </div>
-                  <div>
-                    <div className="font-bold">מהי רמת המוטיבציה שלך להגיע למטרה?* (ציין מספר מ 1-10)</div>
-                    <div>{userInfo?.motivation_level ? userInfo?.motivation_level : "N/A"}</div>
-                  </div>
-                  <div>
-                    <div className="font-bold">כאשר אתה מסתכל במראה, מה אתה מרגיש?*</div>
-                    <div>{userInfo?.feel_about_your_look ? userInfo?.feel_about_your_look : "N/A"}</div>
-                  </div>
-                  <div>
-                    <div className="font-bold">מהן המטרות שלך לטווח הארוך ולמה?*</div>
-                    <div>{userInfo?.long_term_goals ? userInfo?.long_term_goals : "N/A"}</div>
-                  </div>
-                  <div>
-                    <div className="font-bold">כמה שעות אתה ישן ביום לערך?</div>
-                    <div>{userInfo?.sleep_hours ? userInfo?.sleep_hours : "N/A"}</div>
-                  </div>
-                  <div>
-                    <div className="font-bold">הערות ודברים נוספים שתרצה לציין?</div>
-                    <div>{userInfo?.additional_notes ? userInfo?.additional_notes : "N/A"}</div>
-                  </div>
-                <div>
-                    <div className="font-bold">האם הנך מתחייב על הצהרה ושקיפות של כל שימוש בחומרים אסורים לפני תחילת העבודה המשותפת ובמהלכה? הכוונה לחומרים כמו סטרואידים אנאבוליים וכדומה. בתשובה פשוט תרשום - ׳מתחייב׳</div>
-                    <div>{userInfo?.supplements_will_use ? userInfo?.supplements_will_use : "N/A"}</div>
-                  </div>
-              </div>
+        {/* Section 2 — תזונה ואורח חיים */}
+        <div className="max-w-3xl mx-auto space-y-8">
+          <h1
+            className="text-right text-[28px] font-bold text-[#0A2533]"
+            dir="rtl"
+          >
+            תזונה ואורח חיים
+          </h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5" dir="rtl">
+            <div className="space-y-5">
+              <AnswerRow
+                label="במה אתה עובד כרגע ומה שעות העבודה שלך? העבודה יושבנית?"
+                value={userInfo.work_and_work_hours}
+              />
+              <AnswerRow
+                label="מהם המאכלים האהובים עליך?"
+                value={userInfo.favorite_foods}
+              />
+              <AnswerRow
+                label="מהם המאכלים שלא תיגע בהם?"
+                value={userInfo.disliked_foods}
+              />
+              <AnswerRow
+                label="צמחוני/טבעוני/רגיש למשהו (לפרט) או אוכל הכל?"
+                value={userInfo.weekend_nutrition}
+              />
+              <AnswerRow
+                label="תאר סדר יום מלא של התזונה שלך כרגע! לפרט מה אוכל: בבוקר / בצהריים / בערב / נשנושים בין לבין או בלילה לפרט"
+                value={userInfo.daily_meds}
+              />
             </div>
+            <div className="space-y-5">
+              <AnswerRow
+                label='ועכשיו סופ"ש! לפרט שישי איך נראה בוקר צהריים ערב (אם יש קידוש וכו) מתוקים של אחרי שבת בוקר צהריים ערב ונשנושים'
+                value={userInfo.descripe_weekend}
+              />
+              <AnswerRow
+                label="מסעדות: באיזה תדירות הולך או מזמין אוכל מבחוץ ואם יש מסעדות/דברים קבועים שאוהב להזמין?"
+                value={userInfo.home_equipment}
+              />
+              <AnswerRow
+                label="יש לך מתכונים שאתה אוהב להכין נגיד אחת לשבוע? אם כן תרשום את כל המצרכים שלהם כמויות וכמה יחידות יוצא. למשל מתכון לממולאים וכמה יחידות ממולאים יוצא מתוך כל התכולה (אפשר לרשום כמה מתכונים)"
+                value={userInfo.favorite_recipes}
+              />
+              <AnswerRow
+                label="האם אתה שותה אלכוהול? אם כן, באיזה כמויות ותדירות?"
+                value={userInfo.alcohol_consumption}
+              />
+            </div>
+          </div>
+        </div>
+
+        <hr className="max-w-3xl mx-auto my-10" />
+
+        {/* Section 3 — מטרות ומיינדסט */}
+        <div className="max-w-3xl mx-auto space-y-8">
+          <h1
+            className="text-right text-[28px] font-bold text-[#0A2533]"
+            dir="rtl"
+          >
+            מטרות ומיינדסט
+          </h1>
+          <div className="grid grid-cols-1 gap-5" dir="rtl">
+            <AnswerRow
+              label="מהן המטרות שלך לטווח הארוך ולמה?"
+              value={userInfo.long_term_goals}
+            />
+            <AnswerRow
+              label="כאשר אתה מסתכל במראה מה אתה מרגיש?"
+              value={userInfo.feel_about_your_look}
+            />
+            <AnswerRow
+              label="דברים שתרצה להוסיף? (מאמין בך ובנו מלך)"
+              value={userInfo.additional_notes}
+            />
+          </div>
+        </div>
+
+        <hr className="max-w-3xl mx-auto my-10" />
+
+        {/* Section 4 — אימונים ופעילות גופנית */}
+        <div className="max-w-3xl mx-auto space-y-8">
+          <div className="space-y-4">
+            <h1
+              className="text-right text-[28px] font-bold text-[#0A2533]"
+              dir="rtl"
+            >
+              אימונים ופעילות גופנית
+            </h1>
+            <h1
+              className="text-right text-base font-normal text-[#0A2533]"
+              dir="rtl"
+            >
+              אם נרשמת רק לתזונה תדלג ותעשה שלח טופס
+            </h1>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5" dir="rtl">
+            <div className="space-y-5">
+              <AnswerRow
+                label="כמה פעמים היית מעדיף להתאמן בשבוע? תבחר מספר 1 עד 4"
+                value={userInfo.how_many_times_want_training_in_week}
+              />
+              <AnswerRow
+                label="איפה אתה מעדיף להתאמן בחדר כושר או בבית?"
+                value={trainingLocation}
+              />
+              <AnswerRow
+                label="האם יש לך פציעות או מגבלות פיזיות?"
+                value={userInfo.injuries_description}
+              />
+              <AnswerRow
+                label="תאר את אימוני הכח שלך כרגע (איזה תרגילים עושה אם יש תכנית מסודרת ואם כן מהי) אם לא עושה לרשום 'לא עושה'"
+                value={userInfo.strength_training_description}
+              />
+            </div>
+            <div className="space-y-5">
+              <AnswerRow
+                label="מהם התרגילים האהובים עליך? במידה ולא יודע לרשום 'לא יודע'"
+                value={userInfo.favorite_exercises}
+              />
+              <AnswerRow
+                label="איזה אזורים אתה מעדיף שיקבלו יותר דגש בתכנית האימונים האישית שלך? ישבן, ידיים, יריכיים, גב, בטן ועוד.. אפשר לרשום גם כל הגוף באותה המידה או כמה אזורים שעדיפים עליך."
+                value={userInfo.focused_body_areas}
+              />
+              <AnswerRow
+                label="מה האימון אירובי האהוב עליך? (יכול להיות גם הליכות ויכול לרשום גם כלום)"
+                value={userInfo.favorite_cardio}
+              />
+            </div>
+          </div>
+        </div>
+
+        {loading && (
+          <p className="text-center mt-6 text-[#0A2533]" dir="rtl">
+            טוען...
+          </p>
+        )}
       </div>
     </>
   );

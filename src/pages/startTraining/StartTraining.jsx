@@ -1,23 +1,49 @@
 import { base_url } from "@/api/baseUrl";
-import CourseContent from "@/components/courseList/CourseContent";
-import Title from "@/components/measurements/Tilte";
-import ButtonGroup from "@/components/startTraining/ButtonGroup";
 import CommonContainer from "@/components/startTraining/CommonContainer";
-import ExcersizeInput from "@/components/startTraining/ExcersizeInput";
-import HeroVideo from "@/components/startTraining/HeroVideo";
-import LastExercise from "@/components/startTraining/LastExercise";
+import ExerciseFormCard from "@/components/startTraining/ExerciseFormCard";
+import TaskActionBar from "@/components/startTraining/TaskActionBar";
+import TaskProgressSummary from "@/components/startTraining/TaskProgressSummary";
 import { UI_TEXT } from "@/constants/hebrewText";
+import { useTaskExerciseDraft } from "@/hooks/useTaskExerciseDraft";
+import {
+  buildExercisePayload,
+  countFilledExercises,
+  hasRequiredExerciseInput,
+  isSupersetManipulation,
+  validateTaskCompletion,
+} from "@/utils/taskCompletionValidation";
 import axios from "axios";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+
+const getExerciseLibraryId = (ex) => {
+  if (!ex) return null;
+  if (typeof ex.exercise_id === "string") return ex.exercise_id;
+  if (ex.exercise_id?._id) return ex.exercise_id._id;
+  return null;
+};
+
+const normalizeExercises = (list) =>
+  list.map((ex) => {
+    if (ex.exercise_id && typeof ex.exercise_id === "object") {
+      return {
+        ...ex,
+        sets: ex.sets || 0,
+        reps: ex.reps || 0,
+        manipulation: ex.manipulation || "",
+      };
+    }
+    return ex;
+  });
+
 const StartTraining = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const workData = location.state?.data || {};
   const training = location.state?.training || location.state?.trainings || {};
   const workout = location.state?.workout || {};
 
-  // Derive stable values from location.state once per navigation
   const stateData = useMemo(() => {
     let exercises = [];
     let taskId = null;
@@ -26,7 +52,9 @@ const StartTraining = () => {
 
     if (training?.workouts && training.workouts.length > 0) {
       const selectedWorkout = workout?._id
-        ? training.workouts.find(w => w.workout?._id === workout._id || w._id === workout._id)
+        ? training.workouts.find(
+            (w) => w.workout?._id === workout._id || w._id === workout._id
+          )
         : training.workouts[0];
       if (selectedWorkout?.exercises) {
         exercises = selectedWorkout.exercises;
@@ -52,33 +80,23 @@ const StartTraining = () => {
     }
 
     return { exercises, taskId, userTrainingWorkoutId, taskName };
-  // location.state is frozen at navigation time — intentionally run once
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // location.state is frozen at navigation time
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { exercises: allExercisesFromState, taskId, userTrainingWorkoutId, taskName } = stateData;
+  const {
+    exercises: allExercisesFromState,
+    taskId,
+    userTrainingWorkoutId,
+    taskName,
+  } = stateData;
 
-  const normalizeExercises = (list) =>
-    list.map((ex) => {
-      if (ex.exercise_id && typeof ex.exercise_id === "object") {
-        return { ...ex, sets: ex.sets || 0, reps: ex.reps || 0, manipulation: ex.manipulation || "" };
-      }
-      return ex;
-    });
-
-  // Always use Exercise library id — never UserTrainingExercise document _id
-  const getExerciseLibraryId = (ex) => {
-    if (!ex) return null;
-    if (typeof ex.exercise_id === "string") return ex.exercise_id;
-    if (ex.exercise_id?._id) return ex.exercise_id._id;
-    return null;
-  };
-
-  // liveExercises: null = not yet fetched; [...] = fresh data from API
   const [liveExercises, setLiveExercises] = useState(null);
   const fetchedRef = useRef(false);
+  const [lastWorkoutData, setLastWorkoutData] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [invalidSlots, setInvalidSlots] = useState([]);
 
-  // On mount: fetch fresh exercises so edits in EditExercise are always reflected
   useEffect(() => {
     if (fetchedRef.current || !taskId) return;
     fetchedRef.current = true;
@@ -92,8 +110,6 @@ const StartTraining = () => {
         const matchedTask = taskRes.data.data?.find((t) => t._id === taskId);
         if (!matchedTask) return;
 
-        // Fetch workout exercises (full details: video, description) AND
-        // training plan exercises (fresh sets/reps/manipulation) in parallel
         const [workoutRes, trainingRes] = await Promise.all([
           axios.post(`${base_url}/get-user-workout-task`, {
             userId: user._id,
@@ -104,9 +120,10 @@ const StartTraining = () => {
         ]);
 
         const workoutExercises = workoutRes.data.data?.userTrainingExercise;
-        if (!Array.isArray(workoutExercises) || workoutExercises.length === 0) return;
+        if (!Array.isArray(workoutExercises) || workoutExercises.length === 0) {
+          return;
+        }
 
-        // Find the matching workout in the training plan (updated by CustomizeWorkoutForm)
         const getExId = (ex) =>
           typeof ex?.exercise_id === "object"
             ? ex.exercise_id?._id
@@ -127,8 +144,6 @@ const StartTraining = () => {
         }
 
         if (planExercises) {
-          // Merge: keep workout exercises for display data (video_url, description),
-          // overlay fresh sets/reps/manipulation from the updated training plan
           const merged = workoutExercises.map((wEx) => {
             const wId = getExId(wEx);
             const planEx = planExercises.find((p) => getExId(p) === wId);
@@ -157,248 +172,165 @@ const StartTraining = () => {
     return source.length > 0 ? normalizeExercises(source) : [];
   }, [liveExercises, allExercisesFromState]);
 
-  // Update workData with extracted values
   const finalWorkData = {
     ...workData,
     task_id: taskId || workData.task_id,
-    user_training_workout_id: userTrainingWorkoutId || workData.user_training_workout_id,
+    user_training_workout_id:
+      userTrainingWorkoutId || workData.user_training_workout_id,
     task_name: taskName || workData.task_name,
     userTrainingExercise: exercisesToUse,
   };
 
-  const isSingleExercise = exercisesToUse.length === 1;
+  const {
+    exerciseData,
+    draftStatus,
+    updateExerciseSlot,
+    saveDraftNow,
+    clearDraft,
+  } = useTaskExerciseDraft({
+    userTrainingWorkoutId: finalWorkData.user_training_workout_id,
+    taskId: finalWorkData.task_id,
+    exercises: exercisesToUse,
+    getExerciseLibraryId,
+    enabled: exercisesToUse.length > 0,
+  });
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [showPrevious, setShowPrevious] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
-  const [exerciseData, setExerciseData] = useState({});
-  const [lastWorkoutData, setLastWorkoutData] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Sync isFinished when exercises load
-  useEffect(() => {
-    setIsFinished(exercisesToUse.length === 1);
-  }, [exercisesToUse.length]);
-  
-  // Track progress (keys are slot indices "0".."n-1")
-  const completedExercisesCount = exercisesToUse.reduce((acc, _, i) => {
-    const e = exerciseData[String(i)];
-    return (
-      acc +
-      (e?.sets_done && e?.reps_done && e?.last_set_weight ? 1 : 0)
-    );
-  }, 0);
+  const filledCount = countFilledExercises(exercisesToUse, exerciseData);
   const totalExercises = exercisesToUse.length;
-  const progressPercentage = totalExercises > 0 
-    ? Math.round((completedExercisesCount / totalExercises) * 100) 
-    : 0;
+  const canCompleteTask =
+    totalExercises > 0 &&
+    validateTaskCompletion(exercisesToUse, exerciseData).valid;
 
-  const navigate = useNavigate();
+  const handleInputChange = useCallback(
+    (slotIndex, value) => {
+      const exercise = exercisesToUse[slotIndex];
+      updateExerciseSlot(slotIndex, value, exercise);
+      setInvalidSlots((prev) => prev.filter((i) => i !== slotIndex));
+    },
+    [exercisesToUse, updateExerciseSlot]
+  );
 
-  const handleInputChange = (slotIndex, value) => {
-    const currentExercise = exercisesToUse[slotIndex];
-    const storageKey = String(slotIndex);
+  // Prefetch last-workout data for all exercises (stable ids)
+  useEffect(() => {
+    const userDetails = JSON.parse(localStorage.getItem("userInfo") || "{}");
+    const userId = userDetails?._id;
+    if (!userId || exercisesToUse.length === 0) return;
 
-    setExerciseData((prev) => ({
-      ...prev,
-      [storageKey]: {
-        ...prev[storageKey],
-        ...value,
-        target_sets: currentExercise?.sets || 0,
-        target_reps: currentExercise?.reps || 0,
-        // Keep user-entered manipulation; use exercise manipulation only as initial fallback.
-        manipulation:
-          value?.manipulation ??
-          prev[storageKey]?.manipulation ??
-          currentExercise?.manipulation ??
-          "",
-      },
-    }));
-  };
+    let cancelled = false;
 
-  const getNextIndex = () => {
-    let nextIndex = currentIndex + 1;
+    const fetchAll = async () => {
+      const results = await Promise.all(
+        exercisesToUse.map(async (selectedExercise, slotIndex) => {
+          const exerciseId = getExerciseLibraryId(selectedExercise);
+          if (!exerciseId) {
+            return [
+              String(slotIndex),
+              {
+                sets_done: 0,
+                reps_done: 0,
+                last_set_weight: 0,
+                manipulation: selectedExercise?.manipulation || "",
+              },
+            ];
+          }
 
-    if (nextIndex < exercisesToUse.length) {
-      return nextIndex;
-    }
+          try {
+            const response = await axios.post(
+              `${base_url}/get-last-workout-excercisedata`,
+              { user_id: userId, exercise_id: exerciseId }
+            );
+            const responseData = response?.data?.data || response?.data || {};
+            return [
+              String(slotIndex),
+              {
+                sets_done: Number(responseData?.sets_done) || 0,
+                reps_done: Number(responseData?.reps_done) || 0,
+                last_set_weight: Number(responseData?.last_set_weight) || 0,
+                manipulation:
+                  responseData?.manipulation ||
+                  selectedExercise?.manipulation ||
+                  "",
+              },
+            ];
+          } catch {
+            return [
+              String(slotIndex),
+              {
+                sets_done: 0,
+                reps_done: 0,
+                last_set_weight: 0,
+                manipulation: selectedExercise?.manipulation || "",
+              },
+            ];
+          }
+        })
+      );
 
-    return currentIndex;
-  };
+      if (cancelled) return;
+      setLastWorkoutData(Object.fromEntries(results));
+    };
 
-  const getPreviousIndex = () => {
-    let prevIndex = currentIndex - 1;
-
-    if (prevIndex >= 0) {
-      return prevIndex;
-    }
-
-    return currentIndex;
-  };
-
-  const handleNext = () => {
-    if (isSingleExercise) {
-      return;
-    }
-
-    const nextIndex = getNextIndex();
-
-    if (nextIndex !== currentIndex) {
-      setCurrentIndex(nextIndex);
-      setShowPrevious(true);
-
-      if (nextIndex === exercisesToUse.length - 1) {
-        setIsFinished(true);
-      }
-    }
-  };
-
-  const handlePrevious = () => {
-    const prevIndex = getPreviousIndex();
-
-    if (prevIndex !== currentIndex) {
-      setCurrentIndex(prevIndex);
-      setShowPrevious(prevIndex > 0);
-      setIsFinished(false);
-    }
-  };
-
-  // const handleFinish = async () => {
-  //   // Validation: Check if required data exists for API call
-  //   if (!finalWorkData.task_id || !finalWorkData.user_training_workout_id) {
-  //     toast.error("Missing required task information. Cannot complete workout.");
-  //     console.error("Missing data:", { 
-  //       task_id: finalWorkData.task_id, 
-  //       user_training_workout_id: finalWorkData.user_training_workout_id 
-  //     });
-  //     return;
-  //   }
-
-  //   // Map exercise data with proper exercise_id from exercisesToUse
-  //   const exerciseDataArray = Object.entries(exerciseData)
-  //     .map(([key, value]) => {
-  //       // Find the actual exercise_id from exercisesToUse
-  //       const exercise = exercisesToUse.find(
-  //         (ex) => (ex.exercise_id?._id || ex._id) === key
-  //       ) || exercisesToUse.find(
-  //         (ex, idx) => `course-${idx}` === key
-  //       );
-        
-  //       const exerciseId = exercise?.exercise_id?._id || exercise?._id || key;
-        
-  //       return {
-  //         exercise_id: exerciseId,
-  //         sets_done: Number(value.sets_done) || 0,
-  //         reps_done: Number(value.reps_done) || 0,
-  //         last_set_weight: Number(value.last_set_weight) || 0 
-  //       };
-  //     })
-  //     .filter((item) => item.sets_done > 0 || item.reps_done > 0);
-
-  //   if (exerciseDataArray.length === 0) {
-  //     toast.error("Please complete at least one exercise");
-  //     return;
-  //   }
-
-  //   const payload = {
-  //     task_id: finalWorkData.task_id,
-  //     user_training_workout_id: finalWorkData.user_training_workout_id,
-  //     excerciseData: exerciseDataArray,
-  //   };
-    
-  //   console.log("=== Final Workout Submission ===");
-  //   console.log("Total exercises:", totalExercises);
-  //   console.log("Completed exercises:", completedExercisesCount);
-  //   console.log("Progress:", `${progressPercentage}%`);
-  //   console.log("Final payload:", payload);
-  //   console.log("================================");
-    
-  //   setIsSubmitting(true);
-
-  //   try {
-  //     const response = await axios.post(
-  //       `${base_url}/complete-workout-task`,
-  //       payload
-  //     );
-  //     if (response.status === 200) {
-  //       toast.success("Workout completed successfully!");
-  //       navigate("/");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error completing workout:", error);
-  //     const errorMessage = error.response?.data?.message || error.message || "Failed to complete workout";
-  //     toast.error(errorMessage);
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
+    fetchAll();
+    return () => {
+      cancelled = true;
+    };
+  }, [exercisesToUse]);
 
   const handleFinish = async () => {
-    // Only user_training_workout_id is required, task_id is optional
     if (!finalWorkData?.user_training_workout_id) {
       toast.error(UI_TEXT.missingWorkoutInfo);
-      console.error("Missing data:", {
-        task_id: finalWorkData?.task_id,
-        user_training_workout_id: finalWorkData?.user_training_workout_id,
-      });
       return;
     }
-  
-    const exerciseDataArray = Object.entries(exerciseData)
-      .map(([key, value]) => {
-        const idx = Number(key);
-        if (Number.isNaN(idx) || idx < 0 || idx >= exercisesToUse.length) {
-          return null;
-        }
-        const exercise = exercisesToUse[idx];
-        if (!exercise) return null;
 
-        const exerciseId = getExerciseLibraryId(exercise);
-        if (!exerciseId) return null;
+    const validation = validateTaskCompletion(exercisesToUse, exerciseData);
+    if (!validation.valid) {
+      setInvalidSlots(validation.invalidSlots);
+      toast.error(validation.errors[0] || UI_TEXT.completeAllExercises);
+      const firstInvalid = validation.invalidSlots[0];
+      if (firstInvalid != null) {
+        document
+          .getElementById(`exercise-card-${firstInvalid}`)
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      // Keep draft — do not clear
+      saveDraftNow();
+      return;
+    }
 
-        return {
-          exercise_id: exerciseId,
-          sets_done: Number(value.sets_done) || 0,
-          reps_done: Number(value.reps_done) || 0,
-          last_set_weight: Number(value.last_set_weight) || 0,
-        };
-      })
-      .filter(
-        (item) =>
-          item &&
-          (item.sets_done > 0 || item.reps_done > 0 || item.last_set_weight > 0)
-      );
-  
+    const exerciseDataArray = buildExercisePayload(
+      exercisesToUse,
+      exerciseData,
+      getExerciseLibraryId
+    );
+
     if (!exerciseDataArray.length) {
       toast.error(UI_TEXT.completeAtLeastOneExercise);
       return;
     }
-  
-    // Build payload - task_id is optional
+
     const payload = {
       ...(finalWorkData.task_id && { task_id: finalWorkData.task_id }),
       user_training_workout_id: finalWorkData.user_training_workout_id,
       excerciseData: exerciseDataArray,
     };
-  
-    // console.log("=== Final Workout Submission ===");
-    // console.log(payload);
-    // console.log("================================");
-  
+
     setIsSubmitting(true);
-  
+
     try {
       const response = await axios.post(
         `${base_url}/complete-workout-task`,
         payload
       );
-  
+
       if (response.status === 200) {
+        clearDraft();
         toast.success(UI_TEXT.workoutCompleted);
         navigate("/");
       }
     } catch (error) {
       console.error("Error completing workout:", error);
+      // Preserve draft on failure
+      saveDraftNow();
       const errorMessage =
         error.response?.data?.message ||
         error.message ||
@@ -408,336 +340,77 @@ const StartTraining = () => {
       setIsSubmitting(false);
     }
   };
-  
-  const nextIndex = currentIndex + 1;
-  const currentExercise = exercisesToUse[currentIndex] || {};
-  const currentSlotKey = String(currentIndex);
-  const nextSlotKey = String(nextIndex);
-
-  const isSuperset =
-    exercisesToUse[currentIndex]?.manipulation?.toLowerCase() === "superset";
-
-  const hasRequiredInput = (entry) =>
-    Boolean(
-      entry?.sets_done && entry?.reps_done && entry?.last_set_weight
-    );
-
-  const currentEntry = exerciseData[currentSlotKey];
-  const nextEntry =
-    isSuperset && nextIndex < exercisesToUse.length
-      ? exerciseData[nextSlotKey]
-      : null;
-
-  const canProceed =
-    hasRequiredInput(currentEntry) &&
-    (nextEntry == null || hasRequiredInput(nextEntry));
-
-  const buttonDisabled = !canProceed || isSubmitting;
-
-  // console.log("current index data", currentIndex);
-  // console.log("workout", workData);
-
-  useEffect(() => {
-    const userDetails = JSON.parse(localStorage.getItem("userInfo") || "{}");
-    const userId = userDetails?._id;
-
-    const fetchLastWorkoutByIndex = async (slotIndex) => {
-      if (!userId || slotIndex < 0 || slotIndex >= exercisesToUse.length) return;
-
-      const selectedExercise = exercisesToUse[slotIndex];
-      const exerciseId = getExerciseLibraryId(selectedExercise);
-      if (!exerciseId) return;
-
-      try {
-        const response = await axios.post(
-          `${base_url}/get-last-workout-excercisedata`,
-          {
-            user_id: userId,
-            exercise_id: exerciseId,
-          }
-        );
-
-        const responseData = response?.data?.data || response?.data || {};
-        const normalizedData = {
-          sets_done: Number(responseData?.sets_done) || 0,
-          reps_done: Number(responseData?.reps_done) || 0,
-          last_set_weight: Number(responseData?.last_set_weight) || 0,
-          manipulation: responseData?.manipulation || selectedExercise?.manipulation || "",
-        };
-
-        setLastWorkoutData((prev) => ({
-          ...prev,
-          [String(slotIndex)]: normalizedData,
-        }));
-      } catch {
-        setLastWorkoutData((prev) => ({
-          ...prev,
-          [String(slotIndex)]: {
-            sets_done: 0,
-            reps_done: 0,
-            last_set_weight: 0,
-            manipulation: selectedExercise?.manipulation || "",
-          },
-        }));
-      }
-    };
-
-    fetchLastWorkoutByIndex(currentIndex);
-    if (isSuperset && nextIndex < exercisesToUse.length) {
-      fetchLastWorkoutByIndex(nextIndex);
-    }
-  }, [currentIndex, exercisesToUse, isSuperset, nextIndex]);
 
   return (
-    <div className="px-2">
+    <div>
       <CommonContainer>
-        <>
-          {/* Progress Indicator */}
-          {totalExercises > 0 && (
-            <div className="mb-4 mt-10" dir="rtl">
-              <div className="flex justify-between items-center mb-2 gap-2">
-                <span className="text-sm font-semibold text-[#0A2533]">
-                  התקדמות: {currentIndex + 1} מתוך {totalExercises} תרגילים
-                </span>
-                <span className="text-sm font-semibold text-[#7994CB]">
-                  {progressPercentage}%
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div
-                  className="bg-[#7994CB] h-2.5 rounded-full transition-all duration-300"
-                  style={{ width: `${progressPercentage}%` }}
-                ></div>
-              </div>
+        {/* Header */}
+        <div className="w-full mb-6 sm:mb-8" dir="rtl">
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#7994CB] hover:text-[#6a84bb] self-start"
+            >
+              <span aria-hidden>→</span>
+              חזרה לדשבורד
+            </button>
+            <div className="self-start sm:self-auto">
+              <TaskProgressSummary
+                filledCount={filledCount}
+                totalCount={totalExercises}
+              />
             </div>
-          )}
-          
-          <Title title={finalWorkData?.task_name || taskName} />
-          <Title
-            title={currentExercise?.exercise_id?.name || currentExercise?.name}
-          />
-          <HeroVideo
-            videoUrl={
-              currentExercise?.exercise_id?.video_url || currentExercise?.video_url
-            }
-          />
-          <CourseContent
-            description={
-              currentExercise?.exercise_id?.description || currentExercise?.description
-            }
-          />
-          <LastExercise
-            exerciseData={lastWorkoutData}
-            slotIndex={currentIndex}
-          />
-          <ExcersizeInput
-            key={currentSlotKey}
-            exerciseData={currentExercise}
-            value={exerciseData[currentSlotKey]}
-            onChange={(value) => handleInputChange(currentIndex, value)}
-          />
+          </div>
 
-          {isSuperset && nextIndex < exercisesToUse.length && (
-            <>
-              <Title
-                title={exercisesToUse[nextIndex]?.exercise_id?.name || exercisesToUse[nextIndex]?.name}
-              />
-              <HeroVideo
-                videoUrl={
-                  exercisesToUse[nextIndex]?.exercise_id?.video_url || exercisesToUse[nextIndex]?.video_url
-                }
-              />
-              <CourseContent
-                description={
-                  exercisesToUse[nextIndex]?.exercise_id?.description || exercisesToUse[nextIndex]?.description
-                }
-              />
-              <LastExercise
-                exerciseData={lastWorkoutData}
-                slotIndex={nextIndex}
-                pairFirstSlotIndex={currentIndex}
-              />
-              <ExcersizeInput
-                key={nextSlotKey}
-                exerciseData={exercisesToUse[nextIndex] || {}}
-                value={exerciseData[nextSlotKey]}
-                onChange={(value) => handleInputChange(nextIndex, value)}
-              />
-            </>
-          )}
-        </>
-        <ButtonGroup
-          onNext={isSingleExercise || isFinished ? handleFinish : handleNext}
-          onPrevious={handlePrevious}
-          showPrevious={!isSingleExercise && showPrevious}
-          isFinished={isSingleExercise || isFinished}
-          disabled={buttonDisabled || isSubmitting}
-        />
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0A2533] text-center">
+            {finalWorkData?.task_name || taskName || "אימון"}
+          </h1>
+          <p className="text-sm sm:text-base text-[#7F7F7F] text-center mt-2 max-w-2xl mx-auto">
+            מלאו את הביצוע לכל תרגיל והשלימו את האימון
+          </p>
+        </div>
+
+        {/* Exercises */}
+        <div className="flex flex-col gap-5 sm:gap-6">
+          {exercisesToUse.map((exercise, index) => {
+            const prevIsSuperset =
+              index > 0 &&
+              isSupersetManipulation(exercisesToUse[index - 1]?.manipulation);
+
+            return (
+              <div
+                key={`${getExerciseLibraryId(exercise) || "ex"}-${index}`}
+                id={`exercise-card-${index}`}
+              >
+                <ExerciseFormCard
+                  exercise={exercise}
+                  slotIndex={index}
+                  value={exerciseData[String(index)]}
+                  lastWorkoutEntry={lastWorkoutData[String(index)]}
+                  onChange={handleInputChange}
+                  showError={invalidSlots.includes(index)}
+                  isPairedSupersetChild={prevIsSuperset}
+                  isComplete={hasRequiredExerciseInput(
+                    exerciseData[String(index)]
+                  )}
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        {totalExercises > 0 && (
+          <TaskActionBar
+            onComplete={handleFinish}
+            isSubmitting={isSubmitting}
+            disabled={!canCompleteTask}
+            draftStatus={draftStatus}
+          />
+        )}
       </CommonContainer>
     </div>
   );
 };
 
 export default StartTraining;
-
-// import CommonContainer from "@/components/startTraining/CommonContainer";
-// import CourseContent from "@/components/courseList/CourseContent";
-// import HeroVideo from "@/components/startTraining/HeroVideo";
-// import LastExercise from "@/components/startTraining/LastExercise";
-// import ExcersizeInput from "@/components/startTraining/ExcersizeInput";
-// import { useLocation, useNavigate } from "react-router-dom";
-// import { useEffect, useState } from "react";
-// import ButtonGroup from "@/components/startTraining/ButtonGroup";
-// import Title from "@/components/measurements/Tilte";
-// import axios from "axios";
-// import { toast } from "sonner";
-// import { base_url } from "@/api/baseUrl";
-
-// const StartTraining = () => {
-//   const location = useLocation();
-//   const navigate = useNavigate();
-//   const workData = location.state?.data || {};
-//   console.log("workout data from start", workData);
-//   const { userTrainingExercise = [], exercises = [] } = workData;
-//   const allExercises = userTrainingExercise.length
-//     ? userTrainingExercise
-//     : exercises;
-
-//   const [currentIndex, setCurrentIndex] = useState(0);
-//   const [showPrevious, setShowPrevious] = useState(false);
-//   const [isFinished, setIsFinished] = useState(false);
-//   const [exerciseData, setExerciseData] = useState({});
-//   const [buttonDisabled, setButtonDisabled] = useState(true);
-
-//   const currentExercise = allExercises[currentIndex] || {};
-//   const nextExercise = allExercises[currentIndex + 1];
-//   const courseId =
-//     currentExercise?.exercise_id?._id || `course-${currentIndex}`;
-//   const isSuperset =
-//     currentExercise?.manipulation?.toLowerCase() === "superset";
-
-//   // Enable next only if all required fields are present
-//   useEffect(() => {
-//     const value = exerciseData[courseId] || {};
-//     const isValid = value.sets_done && value.reps_done && value.lastSet;
-//     setButtonDisabled(!isValid);
-//   }, [exerciseData, currentIndex, courseId]);
-
-//   const handleInputChange = (courseId, value) => {
-//     setExerciseData((prev) => ({
-//       ...prev,
-//       [courseId]: { ...prev[courseId], ...value },
-//     }));
-//   };
-
-//   const handleNext = () => {
-//     const nextIndex = currentIndex + 1;
-
-//     if (nextIndex < allExercises.length) {
-//       setCurrentIndex(nextIndex);
-//       setShowPrevious(true);
-//       setIsFinished(nextIndex === allExercises.length - 1);
-//       window.scrollTo(0, 0);
-//     }
-//   };
-
-//   const handlePrevious = () => {
-//     const prevIndex = currentIndex - 1;
-
-//     if (prevIndex >= 0) {
-//       setCurrentIndex(prevIndex);
-//       setShowPrevious(prevIndex > 0);
-//       setIsFinished(false);
-//       window.scrollTo(0, 0);
-//     }
-//   };
-
-//   const handleFinish = async () => {
-//     const payload = {
-//       task_id: workData.task_id,
-//       user_training_workout_id: workData.user_training_workout_id,
-//       excerciseData: Object.entries(exerciseData).map(([key, value]) => ({
-//         exercise_id: key,
-//         sets_done: Number(value.sets_done),
-//         reps_done: Number(value.reps_done),
-//       })),
-//     };
-//     // console.log("payload", payload);
-//     // const payload = {
-//     //   task_id: workData.task_id,
-//     //   user_training_workout_id: workData.user_training_workout_id,
-//     //   excerciseData: allExercises.map((exercise, index) => {
-//     //     const id = exercise?.exercise_id?._id;
-//     //     const data = exerciseData[id] || exerciseData[`course-${index}`] || {};
-
-//     //     return {
-//     //       exercise_id: id,
-//     //       sets_done: Number(data.sets_done || 0),
-//     //       reps_done: Number(data.reps_done || 0),
-//     //     };
-//     //   }),
-//     // };
-
-//     try {
-//       const response = await axios.post(
-//         `${base_url}/complete-workout-task`,
-//         payload
-//       );
-//       if (response.status === 200) {
-//         toast.success("Workout completed successfully!");
-//         navigate("/");
-//       }
-//     } catch (error) {
-//       console.log(error);
-//       toast.error("Something went wrong while completing the workout.");
-//     }
-//   };
-
-//   return (
-//     <div className="sm:px-0 px-2">
-//       <CommonContainer>
-//         <>
-//           <Title title={currentExercise?.exercise_id?.name} />
-//           <HeroVideo
-//             videoUrl={currentExercise?.exercise_id?.video_url}
-//             className="mt-0 sm:mt-10"
-//           />
-//           <CourseContent
-//             description={currentExercise?.exercise_id?.description}
-//           />
-//           <LastExercise currentExercise={currentExercise} />
-//           <ExcersizeInput
-//             exerciseData={currentExercise}
-//             value={exerciseData[courseId] || {}}
-//             onChange={(value) => handleInputChange(courseId, value)}
-//             onNext={handleNext}
-//             onPrevious={handlePrevious}
-//             isFirst={currentIndex === 0}
-//             isLast={currentIndex === allExercises.length - 1}
-//           />
-
-//           {isSuperset && nextExercise && (
-//             <>
-//               <Title title={nextExercise?.exercise_id?.name} />
-//               <HeroVideo videoUrl={nextExercise?.exercise_id?.video_url} />
-//               <CourseContent
-//                 description={nextExercise?.exercise_id?.description}
-//               />
-//               <LastExercise currentExercise={nextExercise} />
-//             </>
-//           )}
-//         </>
-//         <ButtonGroup
-//           onNext={isFinished ? handleFinish : handleNext}
-//           onPrevious={handlePrevious}
-//           showPrevious={showPrevious}
-//           isFinished={isFinished}
-//           disabled={buttonDisabled}
-//         />
-//       </CommonContainer>
-//     </div>
-//   );
-// };
-
-// export default StartTraining;
-
