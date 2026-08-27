@@ -16,7 +16,6 @@ const LastExercise = ({
   })();
 
   const hasPrev = sessionInput != null;
-  const sets = hasPrev ? sessionInput.sets_done ?? sessionInput.sets ?? 0 : 0;
   const reps = hasPrev ? sessionInput.reps_done ?? sessionInput.reps ?? 0 : 0;
   const weightRaw = hasPrev
     ? sessionInput.lastSet ?? sessionInput.last_set_weight
@@ -44,9 +43,6 @@ const LastExercise = ({
           </p>
           <p className="text-[#0A2533]">
             <span className="font-bold">{reps}</span> חזרות שבוצעו
-          </p>
-          <p className="text-[#0A2533]">
-            <span className="font-bold">{sets}</span> סטים שבוצעו
           </p>
           <p className="text-[#0A2533]">
             הערות: <span className="font-bold">{notesText}</span>

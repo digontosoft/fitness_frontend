@@ -85,9 +85,9 @@ function ExerciseFormCard({
           </div>
           {!exerciseOpen && (
             <p className="text-xs text-[#7F7F7F] mt-0.5">
-              יעד: {exercise?.sets || 0} סטים · {exercise?.reps || 0} חזרות
+              יעד: {exercise?.reps || 0} חזרות
               {isComplete
-                ? ` · בוצע: ${value?.last_set_weight || 0} / ${value?.reps_done || 0} / ${value?.sets_done || 0}`
+                ? ` · בוצע: ${value?.last_set_weight || 0} / ${value?.reps_done || 0}`
                 : ""}
             </p>
           )}
@@ -172,7 +172,7 @@ function ExerciseFormCard({
                 />
                 {showError && (
                   <p className="text-sm text-red-500 font-medium">
-                    יש למלא סטים, חזרות ומשקל
+                    יש למלא חזרות ומשקל
                   </p>
                 )}
               </div>

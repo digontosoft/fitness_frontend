@@ -23,7 +23,6 @@ const ExcersizeInput = ({
 
   useEffect(() => {
     reset({
-      sets_done: value?.sets_done ?? "",
       reps_done:
         value?.reps_done === "" || value?.reps_done == null
           ? ""
@@ -33,7 +32,7 @@ const ExcersizeInput = ({
           ? ""
           : formatFloat2(value.last_set_weight) || value.last_set_weight,
     });
-  }, [value?.sets_done, value?.reps_done, value?.last_set_weight, reset]);
+  }, [value?.reps_done, value?.last_set_weight, reset]);
 
   const emitChange = (fieldName, val) => {
     onChange({ ...getValues(), [fieldName]: val });
@@ -56,7 +55,7 @@ const ExcersizeInput = ({
   const inputClass =
     "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-[#0A2533] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] bg-white text-right";
 
-  // Client order: Weight → Reps → Sets
+  // Client order: Weight → Reps
   const rows = [
     {
       label: "משקל",
@@ -71,13 +70,6 @@ const ExcersizeInput = ({
       placeholder: "0.00",
       target: `${exerciseData?.reps ?? 0} חזרות`,
       isFloat: true,
-    },
-    {
-      label: "סטים",
-      name: "sets_done",
-      placeholder: "הזן סטים",
-      target: `${exerciseData?.sets ?? 0} סטים`,
-      isFloat: false,
     },
   ];
 

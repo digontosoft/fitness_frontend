@@ -1,10 +1,10 @@
 /**
- * Shared task-completion validation (sets / reps / weight + superset rule).
- * Keep API field names: sets_done, reps_done, last_set_weight, manipulation.
+ * Shared task-completion validation (reps / weight + superset rule).
+ * Keep API field names: reps_done, last_set_weight, manipulation.
  */
 
 export const hasRequiredExerciseInput = (entry) =>
-  Boolean(entry?.sets_done && entry?.reps_done && entry?.last_set_weight);
+  Boolean(entry?.reps_done && entry?.last_set_weight);
 
 export const isSupersetManipulation = (manipulation) =>
   String(manipulation || "").toLowerCase() === "superset";
@@ -32,7 +32,7 @@ export const validateTaskCompletion = (exercises, exerciseDataBySlot) => {
 
     if (!hasRequiredExerciseInput(entry)) {
       invalidSlots.add(i);
-      errors.push(`תרגיל ${i + 1}: יש למלא סטים, חזרות ומשקל`);
+      errors.push(`תרגיל ${i + 1}: יש למלא חזרות ומשקל`);
     }
 
     if (isSupersetManipulation(manipulation)) {
