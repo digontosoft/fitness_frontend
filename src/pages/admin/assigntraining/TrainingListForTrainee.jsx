@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dialog";
 import TrainingForTraineeDetails from "./TrainingForTraineeDetails";
 import { UI_TEXT } from "@/constants/hebrewText";
+import { toast } from "sonner";
 // import TrainingDetails from "./TrainingDetails";
 
 export function TrainingListForTrainee({ userId }) {
@@ -44,6 +45,7 @@ export function TrainingListForTrainee({ userId }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedTraining, setSelectedTraining] = useState(null);
   const [user, setUser] = useState({});
+  const [activatingId, setActivatingId] = useState(null);
   const userData = JSON.parse(localStorage.getItem("userInfo"));
 
   useEffect(() => {
@@ -70,6 +72,26 @@ export function TrainingListForTrainee({ userId }) {
       }));
     } catch (error) {
       error;
+    }
+  };
+
+  const handleActivateTraining = async (trainingId) => {
+    if (activatingId) return;
+    setActivatingId(trainingId);
+    try {
+      await axios.patch(`${base_url}/user-training/${trainingId}/activate`);
+      setTraining((prevTraining) =>
+        prevTraining.map((t) => ({
+          ...t,
+          status: t._id === trainingId ? "active" : "deactive",
+        }))
+      );
+      toast.success("תוכנית האימון הופעלה בהצלחה");
+    } catch (error) {
+      console.error("Error activating training:", error);
+      toast.error("הפעלת תוכנית האימון נכשלה");
+    } finally {
+      setActivatingId(null);
     }
   };
 
@@ -114,6 +136,7 @@ export function TrainingListForTrainee({ userId }) {
       header: "פעולות",
       cell: ({ row }) => {
         const trainingId = row.original._id;
+        const isActive = row.original.status === "active";
         return (
           <div className="flex space-x-2">
             <TrainingForTraineeDetails trainingId={trainingId} />
@@ -129,14 +152,26 @@ export function TrainingListForTrainee({ userId }) {
             >
               <Trash />
             </Button>
-            <Button
-              className="bg-green-100 hover:bg-green-100 text-green-500 font-bold uppercase tracking-wide"
-              size="sm"
-            >
-              {row.original.status === "active"
-                ? "תוכנית אימון פעילה"
-                : "תוכנית אימון לא פעילה"}
-            </Button>
+            {isActive ? (
+              <Button
+                className="bg-green-100 hover:bg-green-100 text-green-500 font-bold uppercase tracking-wide"
+                size="sm"
+                disabled
+              >
+                {UI_TEXT.trainingActive || "תוכנית אימון פעילה"}
+              </Button>
+            ) : (
+              <Button
+                className="bg-gray-100 hover:bg-[#7994CB] hover:text-white text-gray-600 font-bold uppercase tracking-wide"
+                size="sm"
+                disabled={activatingId === trainingId}
+                onClick={() => handleActivateTraining(trainingId)}
+              >
+                {activatingId === trainingId
+                  ? UI_TEXT.activating || "מפעיל..."
+                  : UI_TEXT.makeTrainingActive || "הפוך לפעילה"}
+              </Button>
+            )}
           </div>
         );
       },
