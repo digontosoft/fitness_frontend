@@ -61,6 +61,12 @@ export const traineeLink = [
     icon:pic,
   },
   {
+    _id: 10,
+    title: "הדרכה",
+    link: "/tutorial",
+    icon: course,
+  },
+  {
     _id:9,
     title:"דף הבית",
     link:"/",
@@ -196,6 +202,12 @@ export const recipeLink = [
     title: "מתכונים",
     link: "/recipe",
     icon: recipe,
+  },
+  {
+    _id: 4,
+    title: "הדרכה",
+    link: "/tutorial",
+    icon: course,
   },
 ];
 

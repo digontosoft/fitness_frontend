@@ -14,6 +14,7 @@ import Course from "@/pages/courseList/Course";
 import GenderSelection from "@/pages/genderSelection/GenderSelection";
 import Home from "@/pages/Home/Home";
 import LoginPage from "@/pages/Login/LoginPage";
+import LockScreen from "@/pages/lockScreen/LockScreen";
 import Measurements from "@/pages/measurements/Measurements";
 import NutritionGuides from "@/pages/nutritionGuides/NutritionGuides";
 import PdfNutration from "@/pages/personalNutrationMenu/PdfNutration";
@@ -62,6 +63,7 @@ import Regulation from "@/pages/regulation/Regulation";
 import SideNavSupperShop from "@/pages/supermarket/SideNavSupperShop";
 import SuperMarketTwo from "@/pages/supermarket/SuperMarketTwo";
 import ThankYou from "@/pages/thankyou/Thankyou";
+import Tutorial from "@/pages/tutorial/Tutorial";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import ProtectedRoutes from "./ProtectedRoutes";
 import UserRoleProtectedRoutes from "./UserRoleProtectedRoutes";
@@ -529,6 +531,10 @@ export const routes = createBrowserRouter([
         path: "/recipe-exercise-library",
         element: <TraineeExerciseLibrary />,
       },
+      {
+        path: "/tutorial",
+        element: <Tutorial />,
+      },
     ],
   },
   {
@@ -538,6 +544,10 @@ export const routes = createBrowserRouter([
   {
     path: "/gender",
     element: <GenderSelection />,
+  },
+  {
+    path: "/lock-screen",
+    element: <LockScreen />,
   },
   {
     path: "*",
