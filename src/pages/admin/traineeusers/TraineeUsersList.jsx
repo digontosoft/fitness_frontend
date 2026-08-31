@@ -176,15 +176,29 @@ export function TraineeUsersLists() {
               size="sm"
               onClick={() =>
                 updateStatus(
-                
+
                   userId
                 )
               }
-             
+
             >
-            
+
                הפוך למאמן
-            
+
+            </Button>
+
+            <Button
+              className={
+                row.original.screen === "unlock"
+                  ? "bg-red-500 hover:bg-red-600 font-bold"
+                  : "bg-green-500 hover:bg-green-600 font-bold"
+              }
+              size="sm"
+              onClick={() =>
+                updateScreenStatus(userId, row.original.screen)
+              }
+            >
+              {row.original.screen === "unlock" ? "נעל משתמש" : "שחרר משתמש"}
             </Button>
 
             {/* {
@@ -287,6 +301,27 @@ export function TraineeUsersLists() {
     } catch (error) {
       toast.error("עדכון סוג המשתמש נכשל");
       // console.log("error:", error);
+    }
+  };
+
+  const updateScreenStatus = async (userId, currentScreen) => {
+    const nextScreen = currentScreen === "unlock" ? "lock" : "unlock";
+    try {
+      const response = await axios.post(`${base_url}/updateUserInfo`, {
+        user_id: userId,
+        screen: nextScreen,
+      });
+
+      if (response.status === 200) {
+        toast.success(
+          nextScreen === "unlock"
+            ? "המשתמש שוחרר בהצלחה"
+            : "המשתמש ננעל בהצלחה"
+        );
+        fetchAdminUser();
+      }
+    } catch (error) {
+      toast.error("עדכון סטטוס הנעילה נכשל");
     }
   };
 

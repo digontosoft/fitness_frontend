@@ -1,6 +1,5 @@
-import React from "react";
+import { IoSettingsOutline } from "react-icons/io5";
 import { twMerge } from "tailwind-merge";
-
 const SuperTitle = ({ title, description, className }) => {
   return (
     <div
@@ -15,6 +14,18 @@ const SuperTitle = ({ title, description, className }) => {
         dir="rtl"
       >
         {description}
+      </p>
+      <p
+        dir="rtl"
+        className="w-full px-[10%] sm:w-3/4 text-center text-base sm:text-lg font-bold text-[#0A2533]"
+      >
+        תלחצו על הגלגל שיניים{" "}
+        {/* <Settings
+          className="inline-block size-5 sm:size-6 align-middle mx-1"
+          aria-label="settings"
+        />{" "} */}
+        <IoSettingsOutline className="inline-block size-5 sm:size-6 align-middle mx-1 bg-red-600 text-white" aria-label="settings" />
+        בסרטון לשנות לאיכות צפייה HD
       </p>
     </div>
   );

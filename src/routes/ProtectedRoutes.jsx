@@ -23,6 +23,17 @@ const ProtectedRoutes = ({ children }) => {
     return <Navigate to="/gender" replace />;
   }
 
+  // Once onboarding is complete, a trainee stays on the lock screen until
+  // an admin/superadmin unlocks the account from their dashboard
+  if (
+    userType === "trainee" &&
+    isQuestionAnswered === true &&
+    userData?.screen !== "unlock" &&
+    location.pathname !== "/lock-screen"
+  ) {
+    return <Navigate to="/lock-screen" replace />;
+  }
+
   // Redirect admin to admin dashboard when they land on root
   if (userType === "admin" && location.pathname === "/") {
     return <Navigate to="/admin-dashboard" replace />;

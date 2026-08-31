@@ -1,9 +1,11 @@
+import { useSessionGuard } from "@/hooks/useSessionGuard";
 import Footer from "@/shared/Footer";
 import Navbar from "@/shared/Navbar";
 import ScrollTop from "@/shared/ScrollTop";
 import { Outlet } from "react-router-dom";
 
 const Main = () => {
+  useSessionGuard();
   return (
     <div className="font-hebbo">
       <ScrollTop />  
