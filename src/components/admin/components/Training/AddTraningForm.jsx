@@ -386,7 +386,7 @@
 //                         />
 //                       </div>
 //                       <div>
-//                         <label htmlFor="manipulation">מניפולציה </label>
+//                         <label htmlFor="manipulation">הערות </label>
 //                         <input
 //                           type="text"
 //                           className="border rounded p-1 w-full  text-center placeholder:text-sm  "
@@ -1028,7 +1028,7 @@ const AddTrainingForm = () => {
                           htmlFor={`manipulation-${workoutIndex}-${exerciseIndex}`}
                           className="block text-xs text-gray-500 mb-1 text-center"
                         >
-                          מניפולציה
+                          הערות
                         </label>
                         <input
                           id={`manipulation-${workoutIndex}-${exerciseIndex}`}

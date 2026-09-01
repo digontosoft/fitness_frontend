@@ -228,7 +228,7 @@ const StartTraining = () => {
               {
                 sets_done: 0,
                 reps_done: 0,
-                last_set_weight: 0,
+                last_set_weight: "",
                 manipulation: selectedExercise?.manipulation || "",
               },
             ];
@@ -245,7 +245,11 @@ const StartTraining = () => {
               {
                 sets_done: Number(responseData?.sets_done) || 0,
                 reps_done: Number(responseData?.reps_done) || 0,
-                last_set_weight: Number(responseData?.last_set_weight) || 0,
+                last_set_weight:
+                  responseData?.last_set_weight != null &&
+                  responseData?.last_set_weight !== ""
+                    ? String(responseData.last_set_weight)
+                    : "",
                 manipulation:
                   responseData?.manipulation ||
                   selectedExercise?.manipulation ||
@@ -258,7 +262,7 @@ const StartTraining = () => {
               {
                 sets_done: 0,
                 reps_done: 0,
-                last_set_weight: 0,
+                last_set_weight: "",
                 manipulation: selectedExercise?.manipulation || "",
               },
             ];

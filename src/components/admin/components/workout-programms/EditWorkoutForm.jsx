@@ -305,7 +305,7 @@
 //                   </div>
 //                   <div className="flex flex-col space-y-2">
 //                     <label htmlFor={`manipulation-${exercise._id}`}>
-//                       מניפולציה
+//                       הערות
 //                     </label>
 //                     <Input
 //                       type="text"
@@ -313,7 +313,7 @@
 //                       onChange={(e) =>
 //                         handleManipulationChange(e, index, exercise)
 //                       }
-//                       placeholder="הזן מניפולציה"
+//                       placeholder="הזן הערות"
 //                       className="w-full  p-2 rounded"
 //                     />
 //                   </div>
@@ -422,7 +422,7 @@
 //                       />
 //                     </div>
 //                     <div className="flex flex-col space-y-2">
-//                       <label htmlFor="manipulation">מניפולציה</label>
+//                       <label htmlFor="manipulation">הערות</label>
 //                       <Input
 //                         type="text"
 //                         id="manipulation"
@@ -807,7 +807,7 @@ const isFormValid = exercisesForm?.every(
                   </div>
                   <div className="flex flex-col space-y-2">
                     <label htmlFor={`manipulation-${exercise._id}`}>
-                      מניפולציה
+                      הערות
                     </label>
                     <Input
                       type="text"
@@ -815,7 +815,7 @@ const isFormValid = exercisesForm?.every(
                       onChange={(e) =>
                         handleManipulationChange(e, index, exercise)
                       }
-                      placeholder="הזן מניפולציה"
+                      placeholder="הזן הערות"
                     />
                   </div>
                 </div>

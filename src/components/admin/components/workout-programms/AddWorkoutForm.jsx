@@ -218,14 +218,14 @@
 //                     />
 //                   </div>
 //                   <div className="flex flex-col space-y-2">
-//                     <label>מניפולציה</label>
+//                     <label>הערות</label>
 //                     <Input
 //                       type="text"
 //                       value={exercise.manipulation}
 //                       onChange={(e) =>
 //                         handleInputChange(index, "manipulation", e.target.value)
 //                       }
-//                       placeholder="Enter manipulation"
+//                       placeholder="Enter notes"
 //                     />
 //                   </div>
 //                 </div>
@@ -613,7 +613,7 @@
 //                   />
 //                 </div>
 //                 <div className="flex flex-col space-y-2">
-//                   <label>מניפולציה</label>
+//                   <label>הערות</label>
 //                   <Input
 //                     type="text"
 //                     value={exercise.manipulation}
@@ -1019,7 +1019,7 @@ const AddWorkoutForm = () => {
                   />
                 </div>
                 <div className="flex flex-col space-y-2">
-                  <label>מניפולציה</label>
+                  <label>הערות</label>
                   <Input
                     type="text"
                     value={exercise.manipulation}

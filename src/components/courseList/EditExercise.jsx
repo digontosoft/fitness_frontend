@@ -168,11 +168,11 @@ const EditExercise = () => {
         !String(item.manipulation ?? "").trim()
     );
     if (emptyItem)
-      return `מלא את כל השדות (סטים, חזרות, מניפולציה) עבור "${emptyItem.exercise_id?.name || "תרגיל"}"`;
+      return `מלא את כל השדות (סטים, חזרות, הערות) עבור "${emptyItem.exercise_id?.name || "תרגיל"}"`;
 
     const last = effectiveList[effectiveList.length - 1];
     if (effectiveList.length > 0 && isSuperset(last?.manipulation))
-      return 'אחרי "סופרסט" חייב לבוא תרגיל עם מניפולציה אחרת';
+      return 'אחרי "סופרסט" חייב לבוא תרגיל עם הערות אחרות';
 
     return null;
   }, [effectiveList]);
@@ -242,7 +242,7 @@ const EditExercise = () => {
       if (isSuperset(value) && !isLastExercise) {
         const nextExercise = currentList[index + 1];
         if (!nextExercise) {
-          toast.error('אחרי "סופרסט" חייב לבוא תרגיל עם מניפולציה אחרת');
+          toast.error('אחרי "סופרסט" חייב לבוא תרגיל עם הערות אחרות');
           return;
         }
       }
@@ -297,7 +297,7 @@ const EditExercise = () => {
         return;
       }
       if (!String(item.manipulation ?? "").trim()) {
-        toast.error(`מלא מניפולציה עבור "${item.exercise_id?.name || "תרגיל"}"`);
+        toast.error(`מלא הערות עבור "${item.exercise_id?.name || "תרגיל"}"`);
         return;
       }
     }
@@ -305,7 +305,7 @@ const EditExercise = () => {
     // Superset rule: last exercise cannot have manipulation = "superset"
     const last = currentList[currentList.length - 1];
     if (currentList.length > 0 && isSuperset(last?.manipulation)) {
-      toast.error('אחרי "סופרסט" חייב לבוא תרגיל עם מניפולציה אחרת');
+      toast.error('אחרי "סופרסט" חייב לבוא תרגיל עם הערות אחרות');
       return;
     }
 
@@ -419,7 +419,7 @@ const EditExercise = () => {
                   />
                 </div>
                 <div className="flex flex-col items-center gap-2 w-52 max-w-[90%]">
-                  <label>מניפולציה:</label>
+                  <label>הערות:</label>
                   <input
                     type="text"
                     value={item.manipulation || ""}
@@ -538,7 +538,7 @@ const EditExercise = () => {
                   />
                 </div>
                 <div className="flex flex-col items-center md:justify-center gap-3 w-full">
-                  <label>מניפולציה:</label>
+                  <label>הערות:</label>
                   <input
                     type="text"
                     value={newExerciseManipulation}

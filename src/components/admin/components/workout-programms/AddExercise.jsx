@@ -102,7 +102,7 @@ const AddExercise = ({
             />
           </div>
           <div className="flex flex-col space-y-2">
-            <label htmlFor={`manipulation-${exercise?.name}`}>מניפולציה</label>
+            <label htmlFor={`manipulation-${exercise?.name}`}>הערות</label>
             <input
               id={`manipulation-${exercise?.name}`}
               type="text"

@@ -21,7 +21,6 @@ function ExerciseFormCard({
   const description =
     exercise?.exercise_id?.description || exercise?.description;
   const isSuperset = isSupersetManipulation(exercise?.manipulation);
-  const notes = exercise?.manipulation || "";
 
   // Default: exercise + video both minimized
   const [exerciseOpen, setExerciseOpen] = useState(false);
@@ -84,11 +83,30 @@ function ExerciseFormCard({
             )}
           </div>
           {!exerciseOpen && (
-            <p className="text-xs text-[#7F7F7F] mt-0.5">
-              יעד: {exercise?.reps || 0} חזרות
-              {isComplete
-                ? ` · בוצע: ${value?.last_set_weight || 0} / ${value?.reps_done || 0}`
-                : ""}
+            <p className="text-xs text-[#7F7F7F] mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+              <span>יעד: {exercise?.reps || 0} חזרות</span>
+              <span aria-hidden className="text-[#C5C5C5]">
+                ·
+              </span>
+              <span>יעד: {exercise?.sets || 0} סטים</span>
+              {exercise?.manipulation ? (
+                <>
+                  <span aria-hidden className="text-[#C5C5C5]">
+                    ·
+                  </span>
+                  <span>הערות: {exercise.manipulation}</span>
+                </>
+              ) : null}
+              {isComplete ? (
+                <>
+                  <span aria-hidden className="text-[#C5C5C5]">
+                    ·
+                  </span>
+                  <span>
+                    בוצע: {value?.last_set_weight || 0} / {value?.reps_done || 0}
+                  </span>
+                </>
+              ) : null}
             </p>
           )}
         </div>
@@ -161,7 +179,6 @@ function ExerciseFormCard({
                   exerciseData={{ [String(slotIndex)]: lastWorkoutEntry }}
                   slotIndex={slotIndex}
                   compact
-                  notes={notes}
                 />
                 <ExcersizeInput
                   exerciseData={exercise}
