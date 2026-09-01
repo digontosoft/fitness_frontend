@@ -582,7 +582,7 @@ const EditTrainingForm = () => {
                           />
                         </div>
                         <div className="flex flex-col items-center space-y-4">
-                          <p>מניפולציה</p>
+                          <p>הערות</p>
                           <Input
                             type="text"
                             defaultValue={ex?.manipulation}

@@ -3,8 +3,11 @@
  * Keep API field names: reps_done, last_set_weight, manipulation.
  */
 
-export const hasRequiredExerciseInput = (entry) =>
-  Boolean(entry?.reps_done && entry?.last_set_weight);
+export const hasRequiredExerciseInput = (entry) => {
+  const weight = String(entry?.last_set_weight ?? "").trim();
+  const reps = String(entry?.reps_done ?? "").trim();
+  return Boolean(weight && reps);
+};
 
 export const isSupersetManipulation = (manipulation) =>
   String(manipulation || "").toLowerCase() === "superset";
@@ -80,7 +83,7 @@ export const buildExercisePayload = (exercises, exerciseDataBySlot, getExerciseL
         exercise_id: exerciseId,
         sets_done: Number(value.sets_done) || 0,
         reps_done: Number(value.reps_done) || 0,
-        last_set_weight: Number(value.last_set_weight) || 0,
+        last_set_weight: String(value.last_set_weight ?? "").trim(),
       };
     })
     .filter(Boolean);

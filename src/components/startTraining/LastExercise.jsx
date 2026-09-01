@@ -3,7 +3,6 @@ const LastExercise = ({
   slotIndex,
   pairFirstSlotIndex,
   compact = false,
-  notes,
 }) => {
   const sessionInput = (() => {
     const currentSlotInput = exerciseData[String(slotIndex)];
@@ -16,6 +15,7 @@ const LastExercise = ({
   })();
 
   const hasPrev = sessionInput != null;
+  const setsDone = hasPrev ? sessionInput.sets_done ?? sessionInput.sets ?? 0 : 0;
   const reps = hasPrev ? sessionInput.reps_done ?? sessionInput.reps ?? 0 : 0;
   const weightRaw = hasPrev
     ? sessionInput.lastSet ?? sessionInput.last_set_weight
@@ -25,16 +25,10 @@ const LastExercise = ({
       ? 0
       : weightRaw;
 
-  // הערות: exercise notes (manipulation field) — shown only in this upper section
-  const notesText =
-    notes ||
-    (hasPrev ? sessionInput.manipulation : null) ||
-    "—";
-
   return (
     <div className="w-full" dir="rtl">
       <div className="rounded-xl bg-[#F3F5F9] border border-gray-200 p-4">
-        <p className="text-[#0A2533] text-base font-bold mb-3">
+        <p className="text-[#0A2533] text-base font-bold mb-3 text-right">
           מה עשית פעם שעברה
         </p>
         <div className={`space-y-1.5 ${compact ? "text-sm" : "text-base"}`}>
@@ -45,7 +39,7 @@ const LastExercise = ({
             <span className="font-bold">{reps}</span> חזרות שבוצעו
           </p>
           <p className="text-[#0A2533]">
-            הערות: <span className="font-bold">{notesText}</span>
+            <span className="font-bold">{setsDone}</span> סטים שבוצעו
           </p>
         </div>
       </div>

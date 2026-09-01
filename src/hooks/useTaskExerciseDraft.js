@@ -67,6 +67,7 @@ export function useTaskExerciseDraft({
           value.sets_done ||
           value.reps_done ||
           value.last_set_weight ||
+          value.user_notes ||
           value.manipulation;
         if (!hasAny) return;
         exercisesBySlot[slotKey] = value;

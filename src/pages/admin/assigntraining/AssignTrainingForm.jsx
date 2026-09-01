@@ -572,7 +572,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         />
                       </div>
                       <div className="flex flex-col gap-y-4">
-                        <label htmlFor="manipulation">מניפולציה</label>
+                        <label htmlFor="manipulation">הערות</label>
                         <input
                           type="text"
                           value={exercise.manipulation}
