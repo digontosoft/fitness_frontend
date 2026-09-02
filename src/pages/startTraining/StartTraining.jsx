@@ -24,6 +24,16 @@ const getExerciseLibraryId = (ex) => {
   return null;
 };
 
+/** Last-session notes; fall back to plan notes when API has none. */
+const resolveLastSessionNotes = (apiNotes, planNotes) => {
+  const candidates = [apiNotes, planNotes];
+  for (const candidate of candidates) {
+    const text = String(candidate ?? "").trim();
+    if (text && text.toLowerCase() !== "superset") return text;
+  }
+  return "";
+};
+
 const normalizeExercises = (list) =>
   list.map((ex) => {
     if (ex.exercise_id && typeof ex.exercise_id === "object") {
@@ -229,7 +239,10 @@ const StartTraining = () => {
                 sets_done: 0,
                 reps_done: 0,
                 last_set_weight: "",
-                manipulation: selectedExercise?.manipulation || "",
+                manipulation: resolveLastSessionNotes(
+                  "",
+                  selectedExercise?.manipulation
+                ),
               },
             ];
           }
@@ -250,10 +263,10 @@ const StartTraining = () => {
                   responseData?.last_set_weight !== ""
                     ? String(responseData.last_set_weight)
                     : "",
-                manipulation:
-                  responseData?.manipulation ||
-                  selectedExercise?.manipulation ||
-                  "",
+                manipulation: resolveLastSessionNotes(
+                  responseData?.manipulation,
+                  selectedExercise?.manipulation
+                ),
               },
             ];
           } catch {
@@ -263,7 +276,10 @@ const StartTraining = () => {
                 sets_done: 0,
                 reps_done: 0,
                 last_set_weight: "",
-                manipulation: selectedExercise?.manipulation || "",
+                manipulation: resolveLastSessionNotes(
+                  "",
+                  selectedExercise?.manipulation
+                ),
               },
             ];
           }
