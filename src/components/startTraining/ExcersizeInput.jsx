@@ -1,12 +1,33 @@
 import { useEffect, useId } from "react";
 import { useForm } from "react-hook-form";
 
-/** Reps: normalize decimals to 2 places on blur. */
+const DASH = "—";
+const dashClass = "text-[#0A2533] font-bold text-lg leading-none";
+
+/** Reps: normalize decimals to 2 places on blur (non-empty values only). */
 const formatFloat2 = (val) => {
   if (val === "" || val == null) return "";
   const n = Number(val);
   if (Number.isNaN(n)) return "";
   return n.toFixed(2);
+};
+
+const toRepsFormValue = (val) => {
+  if (val === "" || val == null || val === 0 || val === "0") return "";
+  const formatted = formatFloat2(val);
+  return formatted === "0.00" ? "" : formatted;
+};
+
+const DashCell = () => (
+  <div className={`flex h-[42px] items-center justify-center ${dashClass}`}>
+    {DASH}
+  </div>
+);
+
+const formatPlanNotes = (val) => {
+  const text = String(val ?? "").trim();
+  if (!text || text.toLowerCase() === "superset") return DASH;
+  return text;
 };
 
 const ExcersizeInput = ({
@@ -23,15 +44,11 @@ const ExcersizeInput = ({
 
   useEffect(() => {
     reset({
-      reps_done:
-        value?.reps_done === "" || value?.reps_done == null
-          ? ""
-          : formatFloat2(value.reps_done) || value.reps_done,
+      reps_done: toRepsFormValue(value?.reps_done),
       last_set_weight:
         value?.last_set_weight == null ? "" : String(value.last_set_weight),
-      user_notes: value?.user_notes == null ? "" : String(value.user_notes),
     });
-  }, [value?.reps_done, value?.last_set_weight, value?.user_notes, reset]);
+  }, [value?.reps_done, value?.last_set_weight, reset]);
 
   const emitChange = (fieldName, val) => {
     onChange({ ...getValues(), [fieldName]: val });
@@ -42,9 +59,16 @@ const ExcersizeInput = ({
   };
 
   const handleRepsBlur = (raw) => {
-    const formatted = formatFloat2(raw);
-    setValue("reps_done", formatted);
-    emitChange("reps_done", formatted);
+    const trimmed = String(raw ?? "").trim();
+    if (!trimmed) {
+      setValue("reps_done", "");
+      emitChange("reps_done", "");
+      return;
+    }
+    const formatted = formatFloat2(trimmed);
+    const next = formatted === "0.00" ? "" : formatted;
+    setValue("reps_done", next);
+    emitChange("reps_done", next);
   };
 
   useEffect(() => {
@@ -54,36 +78,37 @@ const ExcersizeInput = ({
   const inputClass =
     "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-[#0A2533] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] bg-white text-right";
 
+  const planNotes = formatPlanNotes(exerciseData?.manipulation);
+
   const rows = [
     {
       label: "משקל",
       name: "last_set_weight",
       placeholder: "הזן משקל",
-      target: "—",
+      target: DASH,
+      targetIsDash: true,
       inputType: "text",
       inputMode: "text",
     },
     {
       label: "חזרות",
       name: "reps_done",
-      placeholder: "0.00",
+      placeholder: "הזן חזרות",
       target: `${exerciseData?.reps ?? 0} חזרות`,
       inputType: "number",
       inputMode: "decimal",
       isReps: true,
     },
     {
-      label: "הערות",
-      name: "user_notes",
-      placeholder: "הזן הערות",
-      target: exerciseData?.manipulation || "—",
-      inputType: "text",
-      inputMode: "text",
+      label: "סטים",
+      dashMiddle: true,
+      target: `${exerciseData?.sets ?? 0} סטים`,
     },
     {
-      label: "סטים",
-      readOnly: true,
-      target: `${exerciseData?.sets ?? 0} סטים`,
+      label: "הערות",
+      dashMiddle: true,
+      target: planNotes,
+      targetIsDash: planNotes === DASH,
     },
   ];
 
@@ -105,8 +130,8 @@ const ExcersizeInput = ({
               {row.label}
             </div>
             <div>
-              {row.readOnly ? (
-                <div className="h-[42px]" aria-hidden />
+              {row.dashMiddle ? (
+                <DashCell />
               ) : (
                 <input
                   id={field(row.name)}
@@ -127,7 +152,11 @@ const ExcersizeInput = ({
                 />
               )}
             </div>
-            <div className="text-sm font-bold text-[#0A2533] text-center truncate">
+            <div
+              className={`flex min-h-[42px] items-center justify-center text-center truncate ${
+                row.targetIsDash ? dashClass : "text-sm font-bold text-[#0A2533]"
+              }`}
+            >
               {row.target}
             </div>
           </div>

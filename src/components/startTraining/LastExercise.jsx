@@ -1,8 +1,18 @@
+const formatNotesDisplay = (val, fallback) => {
+  const candidates = [val, fallback];
+  for (const candidate of candidates) {
+    const text = String(candidate ?? "").trim();
+    if (text && text.toLowerCase() !== "superset") return text;
+  }
+  return "—";
+};
+
 const LastExercise = ({
   exerciseData = {},
   slotIndex,
   pairFirstSlotIndex,
   compact = false,
+  planNotes = "",
 }) => {
   const sessionInput = (() => {
     const currentSlotInput = exerciseData[String(slotIndex)];
@@ -15,8 +25,8 @@ const LastExercise = ({
   })();
 
   const hasPrev = sessionInput != null;
-  const setsDone = hasPrev ? sessionInput.sets_done ?? sessionInput.sets ?? 0 : 0;
-  const reps = hasPrev ? sessionInput.reps_done ?? sessionInput.reps ?? 0 : 0;
+  const setsDone = hasPrev ? sessionInput.sets_done ?? 0 : 0;
+  const reps = hasPrev ? sessionInput.reps_done ?? 0 : 0;
   const weightRaw = hasPrev
     ? sessionInput.lastSet ?? sessionInput.last_set_weight
     : 0;
@@ -24,6 +34,11 @@ const LastExercise = ({
     weightRaw === "" || weightRaw === undefined || weightRaw === null
       ? 0
       : weightRaw;
+  const notesDisplay = formatNotesDisplay(sessionInput?.manipulation, planNotes);
+
+  const cellClass = `text-[#0A2533] text-right ${
+    compact ? "text-sm" : "text-base"
+  }`;
 
   return (
     <div className="w-full" dir="rtl">
@@ -31,15 +46,18 @@ const LastExercise = ({
         <p className="text-[#0A2533] text-base font-bold mb-3 text-right">
           מה עשית פעם שעברה
         </p>
-        <div className={`space-y-1.5 ${compact ? "text-sm" : "text-base"}`}>
-          <p className="text-[#0A2533]">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+          <p className={cellClass}>
             <span className="font-bold">{weight}</span> ק״ג משקל
           </p>
-          <p className="text-[#0A2533]">
-            <span className="font-bold">{reps}</span> חזרות שבוצעו
+          <p className={cellClass}>
+            <span className="font-bold">{setsDone}</span> סטים
           </p>
-          <p className="text-[#0A2533]">
-            <span className="font-bold">{setsDone}</span> סטים שבוצעו
+          <p className={cellClass}>
+            <span className="font-bold">{reps}</span> חזרות
+          </p>
+          <p className={cellClass}>
+            הערות: <span className="font-bold">{notesDisplay}</span>
           </p>
         </div>
       </div>

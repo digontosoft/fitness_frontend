@@ -178,6 +178,7 @@ function ExerciseFormCard({
                 <LastExercise
                   exerciseData={{ [String(slotIndex)]: lastWorkoutEntry }}
                   slotIndex={slotIndex}
+                  planNotes={exercise?.manipulation}
                   compact
                 />
                 <ExcersizeInput
