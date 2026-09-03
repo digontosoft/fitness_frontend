@@ -576,6 +576,7 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
                         <input
                           type="text"
                           value={exercise.manipulation}
+                          placeholder="הזן הערות"
                           onChange={(e) =>
                             handleExerciseChange(
                               workoutIndex,

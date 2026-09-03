@@ -127,6 +127,8 @@ export const UI_TEXT = {
   area: "אזור",
   equipment: "ציוד",
   description: "תיאור",
+  notes: "הערות",
+  notesPlaceholder: "הזן הערות",
   selectEquipment: "בחר ציוד",
   uploadFileHint: "לחץ כאן להעלאת הקובץ",
   userSearch: "חיפוש משתמש",

@@ -427,6 +427,7 @@ const EditExercise = () => {
                       handleChange(index, "manipulation", e.target.value)
                     }
                     className="w-full p-2 rounded-lg border"
+                    placeholder="הזן הערות"
                   />
                 </div>
               </div>
@@ -544,6 +545,7 @@ const EditExercise = () => {
                     value={newExerciseManipulation}
                     onChange={(e) => setNewExerciseManipulation(e.target.value)}
                     className="p-2 rounded border w-full"
+                    placeholder="הזן הערות"
                   />
                 </div>
               </div>

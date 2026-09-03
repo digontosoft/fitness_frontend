@@ -110,6 +110,7 @@ const AddExercise = ({
               value={manipulation}
               onChange={handleManipulationChange}
               onBlur={handleInputChange}
+              placeholder="הזן הערות"
               required
             />
           </div>

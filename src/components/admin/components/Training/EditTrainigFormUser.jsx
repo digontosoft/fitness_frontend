@@ -593,6 +593,7 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
                         <Input
                           type="text"
                           defaultValue={ex?.manipulation}
+                          placeholder="הזן הערות"
                           onChange={(e) =>
                             handleExerciseChange(
                               workoutIndex,

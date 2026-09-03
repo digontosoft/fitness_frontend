@@ -4,18 +4,14 @@ import { useForm } from "react-hook-form";
 const DASH = "—";
 const dashClass = "text-[#0A2533] font-bold text-lg leading-none";
 
-/** Reps: normalize decimals to 2 places on blur (non-empty values only). */
-const formatFloat2 = (val) => {
-  if (val === "" || val == null) return "";
-  const n = Number(val);
-  if (Number.isNaN(n)) return "";
-  return n.toFixed(2);
-};
-
+/** Reps: keep plain number string — no 0.00 template. */
 const toRepsFormValue = (val) => {
   if (val === "" || val == null || val === 0 || val === "0") return "";
-  const formatted = formatFloat2(val);
-  return formatted === "0.00" ? "" : formatted;
+  const text = String(val).trim();
+  if (!text) return "";
+  const n = Number(text);
+  if (Number.isNaN(n) || n === 0) return "";
+  return String(n);
 };
 
 const DashCell = () => (
@@ -59,14 +55,7 @@ const ExcersizeInput = ({
   };
 
   const handleRepsBlur = (raw) => {
-    const trimmed = String(raw ?? "").trim();
-    if (!trimmed) {
-      setValue("reps_done", "");
-      emitChange("reps_done", "");
-      return;
-    }
-    const formatted = formatFloat2(trimmed);
-    const next = formatted === "0.00" ? "" : formatted;
+    const next = toRepsFormValue(raw);
     setValue("reps_done", next);
     emitChange("reps_done", next);
   };
@@ -96,7 +85,8 @@ const ExcersizeInput = ({
       placeholder: "הזן חזרות",
       target: `${exerciseData?.reps ?? 0} חזרות`,
       inputType: "number",
-      inputMode: "decimal",
+      inputMode: "numeric",
+      step: "1",
       isReps: true,
     },
     {
@@ -104,12 +94,12 @@ const ExcersizeInput = ({
       dashMiddle: true,
       target: `${exerciseData?.sets ?? 0} סטים`,
     },
-    {
-      label: "הערות",
-      dashMiddle: true,
-      target: planNotes,
-      targetIsDash: planNotes === DASH,
-    },
+    // {
+    //   label: "הערות",
+    //   dashMiddle: true,
+    //   target: planNotes,
+    //   targetIsDash: planNotes === DASH,
+    // },
   ];
 
   return (
@@ -137,7 +127,7 @@ const ExcersizeInput = ({
                   id={field(row.name)}
                   type={row.inputType}
                   {...(row.inputType === "number"
-                    ? { min: "0", step: "0.01" }
+                    ? { min: "0", step: row.step || "1" }
                     : {})}
                   inputMode={row.inputMode}
                   placeholder={row.placeholder}

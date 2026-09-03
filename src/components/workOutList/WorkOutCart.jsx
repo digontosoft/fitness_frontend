@@ -21,7 +21,6 @@ const WorkOutCart = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   // const [page, setPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
-  const [exerciseReport, setExerciseReport] = useState(null);
   const [loading, setLoading] = useState(false);
   const [downloadingReport, setDownloadingReport] = useState(false);
   const [sortedTrainings, setSortedTrainings] = useState([]);
@@ -82,71 +81,40 @@ const WorkOutCart = () => {
       ? selectedTraining
       : sortedTrainings.filter((t) => t.status === "active");
 
+  const triggerBlobDownload = (blob, fileName) => {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const handleDownloadReport = async (e) => {
     e.preventDefault();
+    if (!user?._id || downloadingReport) return;
 
-    if (downloadingReport) return;
     setDownloadingReport(true);
     try {
-      const response = await axios.get(
-        `${base_url}/report/excercise/${user?._id}`
+      // Backend returns the .xlsx file directly (binary), not a JSON report_link
+      const { data } = await axios.get(
+        `${base_url}/report/excercise/${user._id}`,
+        { responseType: "blob" }
       );
-      const reportUrl = response.data.data.report_link;
-      if (reportUrl) {
-        setExerciseReport(reportUrl);
-        const urlParts = reportUrl.split('/');
-        const filename = urlParts[urlParts.length - 1] || 'exercise_report.xlsx';
-        try {
-          const token = localStorage.getItem("authToken");
-          const fetchResponse = await fetch(reportUrl, {
-            method: "GET",
-            headers: token ? { Authorization: `Bearer ${token}` } : {},
-            credentials: "include",
-          });
-          if (fetchResponse.ok) {
-            const blob = await fetchResponse.blob();
-            const blobUrl = window.URL.createObjectURL(blob);
 
-            const link = document.createElement("a");
-            link.href = blobUrl;
-            link.download = filename;
-            link.style.display = "none";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            setTimeout(() => {
-              window.URL.revokeObjectURL(blobUrl);
-            }, 100);
-          } else {
-            throw new Error("Fetch failed");
-          }
-        } catch {
-          // Fallback: open report URL directly when blob download fails
-          const form = document.createElement("form");
-          form.method = "GET";
-          form.action = reportUrl;
-          form.target = "_blank";
-          form.style.display = "none";
-          document.body.appendChild(form);
-          form.submit();
-          document.body.removeChild(form);
-
-          const link = document.createElement("a");
-          link.href = reportUrl;
-          link.download = filename;
-          link.target = "_blank";
-          link.style.display = "none";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
+      const contentType = data?.type || "";
+      if (contentType.includes("application/json")) {
+        const text = await data.text();
+        const parsed = JSON.parse(text);
+        throw new Error(parsed?.message || "Download failed");
       }
+
+      triggerBlobDownload(data, "exercise-report.xlsx");
     } catch (error) {
       console.error("Error downloading report:", error);
-      if (exerciseReport) {
-        window.open(exerciseReport, "_blank");
-      }
     } finally {
       setDownloadingReport(false);
     }
@@ -161,7 +129,7 @@ const WorkOutCart = () => {
     <div className="max-w-6xl mx-auto px-2 sm:px-4 pb-6 sm:pb-10 w-full">
       <a
         onClick={handleDownloadReport}
-        href={exerciseReport || "#"}
+        href="#"
         className={`text-base sm:text-lg font-semibold flex items-center justify-center underline px-2 ${
           downloadingReport ? "cursor-wait opacity-50" : "cursor-pointer"
         }`}
