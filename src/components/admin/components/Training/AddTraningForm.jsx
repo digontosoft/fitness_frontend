@@ -1035,6 +1035,7 @@ const AddTrainingForm = () => {
                           type="text"
                           className="border rounded p-2 w-full text-center text-sm"
                           value={exercise.manipulation}
+                          placeholder="הזן הערות"
                           onChange={(e) =>
                             handleExerciseChange(
                               workoutIndex,

@@ -1026,6 +1026,7 @@ const AddWorkoutForm = () => {
                     onChange={(e) =>
                       handleInputChange(index, "manipulation", e.target.value)
                     }
+                    placeholder="הזן הערות"
                   />
                 </div>
               </div>
