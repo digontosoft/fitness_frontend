@@ -82,7 +82,7 @@ export const buildExercisePayload = (exercises, exerciseDataBySlot, getExerciseL
       return {
         exercise_id: exerciseId,
         sets_done: Number(value.sets_done) || 0,
-        reps_done: Number(value.reps_done) || 0,
+        reps_done: String(value.reps_done ?? "").trim(),
         last_set_weight: String(value.last_set_weight ?? "").trim(),
       };
     })
