@@ -237,6 +237,7 @@ const StartTraining = () => {
               String(slotIndex),
               {
                 sets_done: 0,
+                sets_target: Number(selectedExercise?.sets) || 0,
                 reps_done: 0,
                 last_set_weight: "",
                 manipulation: resolveLastSessionNotes(
@@ -257,6 +258,12 @@ const StartTraining = () => {
               String(slotIndex),
               {
                 sets_done: Number(responseData?.sets_done) || 0,
+                sets_target:
+                  Number(
+                    responseData?.sets ??
+                      responseData?.sets_target ??
+                      selectedExercise?.sets
+                  ) || 0,
                 reps_done: Number(responseData?.reps_done) || 0,
                 last_set_weight:
                   responseData?.last_set_weight != null &&
@@ -274,6 +281,7 @@ const StartTraining = () => {
               String(slotIndex),
               {
                 sets_done: 0,
+                sets_target: Number(selectedExercise?.sets) || 0,
                 reps_done: 0,
                 last_set_weight: "",
                 manipulation: resolveLastSessionNotes(

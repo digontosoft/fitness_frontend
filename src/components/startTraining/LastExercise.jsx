@@ -13,6 +13,7 @@ const LastExercise = ({
   pairFirstSlotIndex,
   compact = false,
   planNotes = "",
+  planSets = 0,
 }) => {
   const sessionInput = (() => {
     const currentSlotInput = exerciseData[String(slotIndex)];
@@ -25,7 +26,12 @@ const LastExercise = ({
   })();
 
   const hasPrev = sessionInput != null;
-  const setsDone = hasPrev ? sessionInput.sets_done ?? 0 : 0;
+  // Sets: show last-execution / plan target (admin sets), not sets_done
+  const setsTarget =
+    sessionInput?.sets_target ??
+    sessionInput?.sets ??
+    planSets ??
+    0;
   const reps = hasPrev ? sessionInput.reps_done ?? 0 : 0;
   const weightRaw = hasPrev
     ? sessionInput.lastSet ?? sessionInput.last_set_weight
@@ -51,7 +57,7 @@ const LastExercise = ({
             <span className="font-bold">{weight}</span> ק״ג משקל
           </p>
           <p className={cellClass}>
-            <span className="font-bold">{setsDone}</span> סטים
+            <span className="font-bold">{setsTarget}</span> סטים
           </p>
           <p className={cellClass}>
             <span className="font-bold">{reps}</span> חזרות

@@ -4,27 +4,11 @@ import { useForm } from "react-hook-form";
 const DASH = "—";
 const dashClass = "text-[#0A2533] font-bold text-lg leading-none";
 
-/** Reps: keep plain number string — no 0.00 template. */
-const toRepsFormValue = (val) => {
-  if (val === "" || val == null || val === 0 || val === "0") return "";
-  const text = String(val).trim();
-  if (!text) return "";
-  const n = Number(text);
-  if (Number.isNaN(n) || n === 0) return "";
-  return String(n);
-};
-
 const DashCell = () => (
   <div className={`flex h-[42px] items-center justify-center ${dashClass}`}>
     {DASH}
   </div>
 );
-
-const formatPlanNotes = (val) => {
-  const text = String(val ?? "").trim();
-  if (!text || text.toLowerCase() === "superset") return DASH;
-  return text;
-};
 
 const ExcersizeInput = ({
   exerciseData,
@@ -36,11 +20,11 @@ const ExcersizeInput = ({
   const uid = useId();
   const field = (name) => `${uid}-${name}`;
 
-  const { register, reset, getValues, setValue } = useForm();
+  const { register, reset, getValues } = useForm();
 
   useEffect(() => {
     reset({
-      reps_done: toRepsFormValue(value?.reps_done),
+      reps_done: value?.reps_done == null ? "" : String(value.reps_done),
       last_set_weight:
         value?.last_set_weight == null ? "" : String(value.last_set_weight),
     });
@@ -54,20 +38,12 @@ const ExcersizeInput = ({
     emitChange(fieldName, val);
   };
 
-  const handleRepsBlur = (raw) => {
-    const next = toRepsFormValue(raw);
-    setValue("reps_done", next);
-    emitChange("reps_done", next);
-  };
-
   useEffect(() => {
     if (scrollOnMount) window.scrollTo(0, 0);
   }, [scrollOnMount]);
 
   const inputClass =
     "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm text-[#0A2533] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7994CB] focus:border-[#7994CB] bg-white text-right";
-
-  const planNotes = formatPlanNotes(exerciseData?.manipulation);
 
   const rows = [
     {
@@ -84,22 +60,14 @@ const ExcersizeInput = ({
       name: "reps_done",
       placeholder: "הזן חזרות",
       target: `${exerciseData?.reps ?? 0} חזרות`,
-      inputType: "number",
-      inputMode: "numeric",
-      step: "1",
-      isReps: true,
+      inputType: "text",
+      inputMode: "text",
     },
     {
       label: "סטים",
       dashMiddle: true,
       target: `${exerciseData?.sets ?? 0} סטים`,
     },
-    // {
-    //   label: "הערות",
-    //   dashMiddle: true,
-    //   target: planNotes,
-    //   targetIsDash: planNotes === DASH,
-    // },
   ];
 
   return (
@@ -126,18 +94,12 @@ const ExcersizeInput = ({
                 <input
                   id={field(row.name)}
                   type={row.inputType}
-                  {...(row.inputType === "number"
-                    ? { min: "0", step: row.step || "1" }
-                    : {})}
                   inputMode={row.inputMode}
                   placeholder={row.placeholder}
                   className={inputClass}
                   {...register(row.name, {
                     onChange: (e) =>
                       handleInputChange(row.name, e.target.value),
-                    onBlur: row.isReps
-                      ? (e) => handleRepsBlur(e.target.value)
-                      : undefined,
                   })}
                 />
               )}
