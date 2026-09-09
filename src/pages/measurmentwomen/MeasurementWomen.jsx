@@ -4,6 +4,16 @@ import FTForm from "@/components/admin/components/FTForm/FTForm";
 import FInput from "@/components/admin/components/ui/FInput";
 import FRadioInput from "@/components/admin/components/ui/FRadioIntput";
 import FTextarea from "@/components/admin/components/ui/FTextarea";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { questionnaries } from "@/constants/ValidationSchema";
 import { verifyToken } from "@/constants/verifyToken";
@@ -24,6 +34,8 @@ const trainingTimesOptions = [
 const MeasurementWomen = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingData, setPendingData] = useState(null);
   const token = localStorage.getItem("authToken");
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const { id } = verifyToken(token);
@@ -33,7 +45,13 @@ const MeasurementWomen = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleFormSubmit = async (data) => {
+  // After validation succeeds — ask before sending
+  const handleFormSubmit = (data) => {
+    setPendingData(data);
+    setConfirmOpen(true);
+  };
+
+  const submitQuestionnaire = async (data) => {
     setLoading(true);
     try {
       const payload = { user_id: id, ...data };
@@ -68,7 +86,20 @@ const MeasurementWomen = () => {
       toast.error("שגיאה בשליחת השאלון. נסה שוב.");
     } finally {
       setLoading(false);
+      setPendingData(null);
     }
+  };
+
+  const handleConfirmSend = () => {
+    setConfirmOpen(false);
+    if (pendingData) {
+      submitQuestionnaire(pendingData);
+    }
+  };
+
+  const handleCancelSend = () => {
+    setConfirmOpen(false);
+    setPendingData(null);
   };
 
   return (
@@ -81,6 +112,28 @@ const MeasurementWomen = () => {
           </p>
         </div>
       )}
+
+      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <AlertDialogContent dir="rtl" className="text-right">
+          <AlertDialogHeader className="sm:text-right">
+            <AlertDialogTitle className="text-right">
+              האם לשלוח את השאלון לטל?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-right">
+              לאחר האישור השאלון יישלח ולא ניתן יהיה לערוך אותו.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="sm:justify-start gap-2 flex-row-reverse sm:flex-row-reverse">
+            <AlertDialogCancel onClick={handleCancelSend}>לא</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmSend}
+              className="bg-[#7994CB] hover:bg-[#6a84bb]"
+            >
+              כן
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <div className="py-12 relative overflow-hidden sm:px-0 px-4">
         <div

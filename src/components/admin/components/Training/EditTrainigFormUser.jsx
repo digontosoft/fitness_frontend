@@ -36,8 +36,14 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: "",
+      description: "",
+    },
+  });
 
   const validateSupersetAndToggle = (nextTraining) => {
     const workouts = nextTraining?.workouts ?? [];
@@ -84,14 +90,27 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         ]);
 
         if (workoutRes.status === 200) setWorkouts(workoutRes.data.data);
-        if (trainingRes.status === 200) setTraining(trainingRes.data.data);
+        if (trainingRes.status === 200) {
+          const trainingData = trainingRes.data.data || {};
+          setTraining(trainingData);
+          reset({
+            name:
+              trainingData.name ||
+              trainingData.training_id?.name ||
+              "",
+            description:
+              trainingData.description ||
+              trainingData.training_id?.description ||
+              "",
+          });
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [trainingId]);
+  }, [trainingId, reset]);
 
   // Same server-side filter as AddWorkoutForm
   useEffect(() => {
@@ -417,12 +436,13 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
     });
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     if (isSubmitting) return;
-    // console.log("payload", training);
     const payload = {
       user_id: user_Id,
-      training_id: training.training_id._id,
+      training_id: training.training_id?._id || training.training_id,
+      name: data.name,
+      description: data.description,
       workouts: (training.workouts || []).map((w) => ({
         workout: w?.workout?._id,
         exercises: (w.exercises || []).map((ex) => ({
@@ -434,7 +454,6 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
         })),
       })),
     };
-    // console.log("edited payload", payload);
     setIsSubmitting(true);
     try {
       const response = await axios.put(
@@ -462,9 +481,8 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           label="שם תוכנית אימון "
           placeholder="הזן שם תוכנית אימון..."
           register={register}
-          validation={{ required: !user_Id && UI_TEXT.nameRequired }}
+          validation={{ required: UI_TEXT.nameRequired }}
           errors={errors}
-          defaultValue={training?.name}
         />
         <DynamicTextAreaField
           id="description"
@@ -472,9 +490,8 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
           label="תיאור"
           placeholder="הזן תיאור..."
           register={register}
-          validation={{ required: !user_Id && UI_TEXT.descriptionRequired }}
+          validation={{ required: UI_TEXT.descriptionRequired }}
           errors={errors}
-          defaultValue={training?.description}
         />
 
         {showWorkoutSelect && (
