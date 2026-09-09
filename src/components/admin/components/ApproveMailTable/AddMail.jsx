@@ -223,7 +223,7 @@ export default function AddMail({ onEmailAdded }) {
                             value="recipe"
                             className="hover:bg-gray-50"
                           >
-                             משתמש תזונה
+                             משתמש קהילה
                           </SelectItem>
                         </>
                       ) : (
@@ -238,7 +238,7 @@ export default function AddMail({ onEmailAdded }) {
                             value="recipe"
                             className="hover:bg-gray-50"
                           >
-                            משתמש תזונה
+                            משתמש קהילה
                           </SelectItem>
                           <SelectItem
                             value="admin"

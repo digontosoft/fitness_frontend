@@ -110,6 +110,10 @@ export const UI_TEXT = {
   nutritionGuideDeleted: "מדריך התזונה נמחק בהצלחה.",
   nutritionGuideDeleteFailed: "מחיקת מדריך התזונה נכשלה.",
 
+  // User type labels
+  communityUser: "משתמש קהילה",
+  traineeUser: "משתמש מתאמן",
+
   // Admin form labels
   editAdmin: "עריכת מנהל",
   firstName: "שם פרטי",

@@ -93,7 +93,7 @@
 //                 {recipeUsersLength}
 //               </span>
 //             </div>
-//             <span className="text-sm md:text-base">משתמשי מתכונים</span>
+//             <span className="text-sm md:text-base">משתמשי קהילה</span>
 //           </div>
 //         </div>
 //         {
@@ -286,7 +286,7 @@ const customSearchFn = ({ props, state }) => {
                 {recipeUsersLength}
               </span>
             </div>
-            <span className="text-sm md:text-base">משתמשי מתכונים</span>
+            <span className="text-sm md:text-base">משתמשי קהילה</span>
           </div>
         </div>
         {user.userType === "admin" ? (

@@ -441,12 +441,23 @@ const AssignTraineeToAdmin = ({ adminId, isOpen, onClose }) => {
     }
   };
 
-  // Filter trainees by email or name
-  const filteredUsers = users.filter((user) =>
-    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (user.firstName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (user.lastName || "").toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Prefer Hebrew full_name; fall back to first/last name
+  const getTraineeDisplayName = (user) => {
+    const full = String(user?.full_name || "").trim();
+    if (full) return full;
+    return `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "—";
+  };
+
+  // Filter trainees by email or name (full_name / first / last)
+  const filteredUsers = users.filter((user) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      (user.email || "").toLowerCase().includes(term) ||
+      (user.full_name || "").toLowerCase().includes(term) ||
+      (user.firstName || "").toLowerCase().includes(term) ||
+      (user.lastName || "").toLowerCase().includes(term)
+    );
+  });
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -493,7 +504,7 @@ const AssignTraineeToAdmin = ({ adminId, isOpen, onClose }) => {
                       {user?.email}
                     </TableCell>
                     <TableCell className="truncate max-w-[250px]">
-                      {user?.firstName} {user?.lastName}
+                      {getTraineeDisplayName(user)}
                     </TableCell>
                     <TableCell className="truncate max-w-[250px]">
                       {user?.admin_id?.email}

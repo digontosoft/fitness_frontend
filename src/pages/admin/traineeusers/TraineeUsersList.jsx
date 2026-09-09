@@ -12,14 +12,13 @@ import {
 import {
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import axios from "axios";
 import { ArrowUpDown, Eye, Trash } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 // import ExerciseDetails from "./ExerciseDetails";
 import EditApproveMail from "@/components/admin/components/ApproveMailTable/EditApproveMail";
@@ -37,34 +36,71 @@ import { toast } from "sonner";
 import { UI_TEXT } from "@/constants/hebrewText";
 import UserDetails from "./UserDetails";
 
+const PAGE_SIZE = 10;
+
 export function TraineeUsersLists() {
-  const [users, setUsers] = useState([]);
   const [adminUsers, setAdminUsers] = useState([]);
   const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [viewUserModalOpen, setViewUserModalOpen] = useState(false);
   const [viewUser, setViewUser] = useState(null);
   const userData = JSON.parse(localStorage.getItem("userInfo"));
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
   const fetchAdminUser = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${base_url}/traineelistforadmin?adminId=${userData?._id}`);
-      setAdminUsers(response.data.data);
+      const response = await axios.get(
+        `${base_url}/traineelistforadmin?adminId=${userData?._id}`
+      );
+      setAdminUsers(response.data.data ?? []);
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
       setLoading(false);
     }
-  },[userData?._id]);
+  }, [userData?._id]);
+
   useEffect(() => {
     fetchAdminUser();
   }, [fetchAdminUser]);
+
+  const filteredUsers = useMemo(() => {
+    const term = debouncedSearch.toLowerCase();
+    if (!term) return adminUsers;
+
+    return adminUsers.filter((user) => {
+      const fullName = (
+        user.full_name ||
+        `${user.firstName || ""} ${user.lastName || ""}`
+      )
+        .trim()
+        .toLowerCase();
+      const email = (user.email || "").toLowerCase();
+      return fullName.includes(term) || email.includes(term);
+    });
+  }, [adminUsers, debouncedSearch]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / PAGE_SIZE));
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
 
   const columns = [
     {
@@ -167,7 +203,7 @@ export function TraineeUsersLists() {
               {row.original.userType === "trainee"
                 ? "משתמש מתאמן"
                 : row.original.userType === "recipe"
-                ? "משתמש ספר מתכונים"
+                ? "משתמש קהילה"
                 :"מנהל"}
             </Button>
 
@@ -251,7 +287,9 @@ export function TraineeUsersLists() {
       if (response.status === 200) {
         toast.success("המשתמש נמחק בהצלחה.");
       }
-      setUsers((prevUsers) => prevUsers.filter((e) => e._id !== selectedUser));
+      setAdminUsers((prevUsers) =>
+        prevUsers.filter((e) => e._id !== selectedUser)
+      );
       setDeleteModalOpen(false);
       setSelectedUser(null);
     } catch (error) {
@@ -326,17 +364,25 @@ export function TraineeUsersLists() {
   };
 
   const table = useReactTable({
-    data: adminUsers,
+    data: filteredUsers,
     columns,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    state: { sorting, columnFilters, columnVisibility, rowSelection },
+    onPaginationChange: (updater) => {
+      const prev = { pageIndex: page - 1, pageSize: PAGE_SIZE };
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      setPage((next.pageIndex ?? 0) + 1);
+    },
+    state: {
+      sorting,
+      columnVisibility,
+      rowSelection,
+      pagination: { pageIndex: page - 1, pageSize: PAGE_SIZE },
+    },
   });
 
   if (loading) {
@@ -356,13 +402,9 @@ export function TraineeUsersLists() {
         >
           <input
             type="search"
-            name=""
-            id=""
-            placeholder="סנן לפי שם..."
-            value={(table.getColumn("full_name")?.getFilterValue()) ?? ""}
-            onChange={(event) =>
-              table.getColumn("full_name")?.setFilterValue(event.target.value)
-            }
+            placeholder="סנן לפי שם או אימייל..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
             className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
           />
           <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
@@ -439,9 +481,9 @@ export function TraineeUsersLists() {
 
       <div className="flex items-center justify-end space-x-2 py-4">
         <PaginationComp
-          currentPage={table.getState().pagination.pageIndex + 1}
-          totalPages={table.getPageCount()}
-          onPageChange={(p) => table.setPageIndex(p - 1)}
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
         />
       </div>
       {

@@ -71,7 +71,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
                 {userData?.userType === "trainee"
                   ? "משתמש מתאמן"
                   : userData?.userType === "recipe"
-                  ? "משתמש ספר מתכונים"
+                  ? "משתמש קהילה"
                   : "Admin"}
               </span>
             </div>

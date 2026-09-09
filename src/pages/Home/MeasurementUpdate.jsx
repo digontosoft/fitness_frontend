@@ -357,19 +357,16 @@
 
 // export default MeasurementUpdate;
 
-
-
-
 import { base_url } from "@/api/baseUrl";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
 import { Button } from "@/components/ui/button";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { UI_TEXT } from "@/constants/hebrewText";
 import { upload } from "../../assets/index";
 
 // Helper function to convert a file to a Base64 string
@@ -442,7 +439,15 @@ const MeasurementUpdate = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    const measurementFields = ["waist", "chest", "butt", "armr", "arml", "thighr", "thighl"];
+    const measurementFields = [
+      "waist",
+      "chest",
+      "butt",
+      "armr",
+      "arml",
+      "thighr",
+      "thighl",
+    ];
     const formattedData = { ...data };
     measurementFields.forEach((field) => {
       const val = parseFloat(formattedData[field]);
@@ -455,11 +460,11 @@ const MeasurementUpdate = () => {
         `${base_url}/measurement`,
         formattedData,
         {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
         },
-      }
       );
 
       if (response.status === 201) {
@@ -507,10 +512,10 @@ const MeasurementUpdate = () => {
       newFiles.map(async (file) => {
         const base64 = await convertToBase64(file);
         return { file, base64 };
-      })
+      }),
     );
 
-    setFiles((prevFiles) => [...prevFiles, ...base64Files.map(f => f.file)]);
+    setFiles((prevFiles) => [...prevFiles, ...base64Files.map((f) => f.file)]);
 
     let photoIndex = files.length;
     base64Files.forEach((item) => {
@@ -539,11 +544,11 @@ const MeasurementUpdate = () => {
     setFiles(updatedFiles);
 
     for (let i = indexToRemove; i < 3; i++) {
-        setValue(`photo${i + 1}`, watch(`photo${i + 2}`) || "");
+      setValue(`photo${i + 1}`, watch(`photo${i + 2}`) || "");
     }
     setValue(`photo4`, "");
   };
-  
+
   const requiredValidation = { required: "שדה זה חובה" };
 
   const formatToOneDecimal = (fieldId) => (e) => {
@@ -565,7 +570,7 @@ const MeasurementUpdate = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <DynamicInputField
+          <DynamicInputField
             id="waist"
             type="number"
             label="היקף מותניים"
@@ -643,8 +648,6 @@ const MeasurementUpdate = () => {
             errors={errors}
             watch={watch}
           />
-        
-        
         </div>
 
         <Link to="/mesurement-pdf">
@@ -724,14 +727,21 @@ const MeasurementUpdate = () => {
             ))}
           </div>
         )}
-        
+
         <div className="flex justify-center">
           <Button
             type="submit"
-            className=" text-white px-4 md:px-8 py-2 rounded-full mb-5 sm:mb-0 bg-[#7994CB] hover:bg-black"
+            className=" text-white px-4 md:px-8 py-2 rounded-full mb-5 bg-[#7994CB] hover:bg-black"
             disabled={isLoading}
           >
-           {isLoading ? <span className="flex gap-2"><Loader className="w-6 h-6 animate-spin text-white" />  שמירת מדדים</span> : " שמירת מדדים"}
+            {isLoading ? (
+              <span className="flex gap-2">
+                <Loader className="w-6 h-6 animate-spin text-white" /> שמירת
+                מדדים
+              </span>
+            ) : (
+              " שמירת מדדים"
+            )}
           </Button>
         </div>
       </form>
