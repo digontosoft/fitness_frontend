@@ -31,9 +31,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { UI_TEXT } from "@/constants/hebrewText";
 import { GoSearch } from "react-icons/go";
 import { toast } from "sonner";
-import { UI_TEXT } from "@/constants/hebrewText";
 import UserDetails from "./UserDetails";
 
 const PAGE_SIZE = 10;
@@ -65,16 +65,26 @@ export function TraineeUsersLists() {
   const fetchAdminUser = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `${base_url}/traineelistforadmin?adminId=${userData?._id}`
-      );
-      setAdminUsers(response.data.data ?? []);
+      if (userData?.userType === "supperadmin") {
+        const response = await axios.get(
+          `${base_url}/getUsers?limit=1000&page=1`
+        );
+        const allTrainees = (response.data.data ?? []).filter(
+          (u) => u.userType === "trainee"
+        );
+        setAdminUsers(allTrainees);
+      } else {
+        const response = await axios.get(
+          `${base_url}/traineelistforadmin?adminId=${userData?._id}`
+        );
+        setAdminUsers(response.data.data ?? []);
+      }
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
       setLoading(false);
     }
-  }, [userData?._id]);
+  }, [userData?._id, userData?.userType]);
 
   useEffect(() => {
     fetchAdminUser();
@@ -86,8 +96,7 @@ export function TraineeUsersLists() {
 
     return adminUsers.filter((user) => {
       const fullName = (
-        user.full_name ||
-        `${user.firstName || ""} ${user.lastName || ""}`
+        user.full_name || `${user.firstName || ""} ${user.lastName || ""}`
       )
         .trim()
         .toLowerCase();
@@ -140,10 +149,16 @@ export function TraineeUsersLists() {
         const userId = row.original._id;
         return (
           <div className="flex space-x-2">
-             <Button className="bg-[#7994CB] hover:bg-[#7994CB]-dark" size="sm" onClick={() => {setViewUser(userId), setViewUserModalOpen(true)}}>
-          <Eye className="w-4 h-4" />
-        </Button>
-           
+            <Button
+              className="bg-[#7994CB] hover:bg-[#7994CB]-dark"
+              size="sm"
+              onClick={() => {
+                (setViewUser(userId), setViewUserModalOpen(true));
+              }}
+            >
+              <Eye className="w-4 h-4" />
+            </Button>
+
             <EditApproveMail
               id={userId}
               email={row.original.email}
@@ -157,9 +172,7 @@ export function TraineeUsersLists() {
             >
               <Trash />
             </Button>
-            {
-              userData?.userType === "admin" ?(
-
+            {userData?.userType === "admin" ? (
               <Link to={`/admin-dashboard/traineer/${userId}`}>
                 <Button
                   className="bg-[#7994CB]"
@@ -169,19 +182,17 @@ export function TraineeUsersLists() {
                   נהל מתאמן
                 </Button>
               </Link>
-              ):
-              (
-            <Link to={`/dashboard/traineer/${userId}`}>
-              <Button
-                className="bg-[#7994CB]"
-                size="sm"
-                onClick={() => handleOpenDeleteModal(row.original)}
-              >
-                נהל מתאמן
-              </Button>
-            </Link>
-              )
-            }
+            ) : (
+              <Link to={`/dashboard/traineer/${userId}`}>
+                <Button
+                  className="bg-[#7994CB]"
+                  size="sm"
+                  onClick={() => handleOpenDeleteModal(row.original)}
+                >
+                  נהל מתאמן
+                </Button>
+              </Link>
+            )}
             {/* <Button
               className="bg-[#7994CB]"
               size="sm"
@@ -198,29 +209,21 @@ export function TraineeUsersLists() {
             </Button> */}
             <Button
               className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
-              size="sm"             
+              size="sm"
             >
               {row.original.userType === "trainee"
                 ? "משתמש מתאמן"
                 : row.original.userType === "recipe"
-                ? "משתמש קהילה"
-                :"מנהל"}
+                  ? "משתמש קהילה"
+                  : "מנהל"}
             </Button>
 
             <Button
               className="bg-[#7994CB] font-bold"
               size="sm"
-              onClick={() =>
-                updateStatus(
-
-                  userId
-                )
-              }
-
+              onClick={() => updateStatus(userId)}
             >
-
-               הפוך למאמן
-
+              הפוך למאמן
             </Button>
 
             <Button
@@ -230,9 +233,7 @@ export function TraineeUsersLists() {
                   : "bg-green-500 hover:bg-green-600 font-bold"
               }
               size="sm"
-              onClick={() =>
-                updateScreenStatus(userId, row.original.screen)
-              }
+              onClick={() => updateScreenStatus(userId, row.original.screen)}
             >
               {row.original.screen === "unlock" ? "נעל משתמש" : "שחרר משתמש"}
             </Button>
@@ -281,14 +282,14 @@ export function TraineeUsersLists() {
       };
       // await deleteUser(data);
       const response = await axios.delete(
-        `${base_url}/deleteUser/${selectedUser}`
+        `${base_url}/deleteUser/${selectedUser}`,
       );
       // console.log("delete:", data.user_id);
       if (response.status === 200) {
         toast.success("המשתמש נמחק בהצלחה.");
       }
       setAdminUsers((prevUsers) =>
-        prevUsers.filter((e) => e._id !== selectedUser)
+        prevUsers.filter((e) => e._id !== selectedUser),
       );
       setDeleteModalOpen(false);
       setSelectedUser(null);
@@ -297,7 +298,7 @@ export function TraineeUsersLists() {
     }
   };
 
-   const updateDate = async (data) => {
+  const updateDate = async (data) => {
     if (!data?.email) {
       toast.error("נדרש דואר אלקטרוני לעדכון תאריך התפוגה.");
       throw new Error("Missing email");
@@ -313,23 +314,21 @@ export function TraineeUsersLists() {
           prevUsers.map((user) =>
             user.email === data.email
               ? { ...user, expiry_date: data.expiry_date }
-              : user
-          )
+              : user,
+          ),
         );
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "עדכון התאריך נכשל."
-      );
+      toast.error(error.response?.data?.message || "עדכון התאריך נכשל.");
       throw error;
     }
   };
 
-    const updateStatus = async ( userId) => {
+  const updateStatus = async (userId) => {
     try {
       const response = await axios.post(`${base_url}/updateUserInfo`, {
         user_id: userId,
-        userType:"admin",
+        userType: "admin",
       });
 
       if (response.status === 200) {
@@ -354,7 +353,7 @@ export function TraineeUsersLists() {
         toast.success(
           nextScreen === "unlock"
             ? "המשתמש שוחרר בהצלחה"
-            : "המשתמש ננעל בהצלחה"
+            : "המשתמש ננעל בהצלחה",
         );
         fetchAdminUser();
       }
@@ -423,7 +422,7 @@ export function TraineeUsersLists() {
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -441,7 +440,7 @@ export function TraineeUsersLists() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -486,11 +485,13 @@ export function TraineeUsersLists() {
           onPageChange={setPage}
         />
       </div>
-      {
-        viewUserModalOpen && (
-          <UserDetails userId={viewUser} isOpen={viewUserModalOpen} onClose={() => setViewUserModalOpen(false)} />
-        )
-      }
+      {viewUserModalOpen && (
+        <UserDetails
+          userId={viewUser}
+          isOpen={viewUserModalOpen}
+          onClose={() => setViewUserModalOpen(false)}
+        />
+      )}
     </div>
   );
 }
