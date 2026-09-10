@@ -385,8 +385,10 @@ const AssignTraineeToAdmin = ({ adminId, isOpen, onClose }) => {
 
   const fetchUsers = useCallback(async () => {
     try {
-      const response = await axios.get(`${base_url}/getUsers`);
-      const trainees = response.data.data.filter(
+      const response = await axios.get(
+        `${base_url}/getUsers?limit=1000&page=1`
+      );
+      const trainees = (response.data.data ?? []).filter(
         (user) => user?.userType === "trainee"
       );
       setUsers(trainees);
