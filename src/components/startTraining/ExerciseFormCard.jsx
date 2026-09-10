@@ -97,7 +97,7 @@ function ExerciseFormCard({
                   <span>הערות: {exercise.manipulation}</span>
                 </>
               ) : null}
-              {isComplete ? (
+              {/* {isComplete ? (
                 <>
                   <span aria-hidden className="text-[#C5C5C5]">
                     ·
@@ -106,7 +106,7 @@ function ExerciseFormCard({
                     בוצע: {value?.last_set_weight || 0} / {value?.reps_done || 0}
                   </span>
                 </>
-              ) : null}
+              ) : null} */}
             </p>
           )}
         </div>
