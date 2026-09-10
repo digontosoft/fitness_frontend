@@ -15,7 +15,8 @@ const LockScreen = () => {
   const navigate = useNavigate();
   useSessionGuard();
   const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
-  const lockImage = userInfo?.gender === "male" ? maleLockScreen : femaleLockScreen;
+  const lockImage =
+    userInfo?.gender === "male" ? maleLockScreen : femaleLockScreen;
 
   const checkUnlockStatus = useCallback(async () => {
     const userId = userInfo?._id;
@@ -57,13 +58,13 @@ const LockScreen = () => {
         alt="מסך נעילה"
         className="absolute inset-0 w-full h-full object-contain"
       />
-      <div className="relative z-10 flex flex-col items-center justify-end gap-2 h-full px-4 pb-24 md:pb-16 text-center">
+      <div className="relative z-10 flex flex-col items-center justify-end gap-2 h-full px-4 pb-16 md:pb-16 text-center">
         <h1 className="text-2xl md:text-3xl font-bold text-white" dir="rtl">
           החשבון שלך נעול
         </h1>
         <p className="max-w-md text-sm text-white/90" dir="rtl">
-          יש להמתין לאישור והפעלת החשבון על ידי המנהל. ברגע שהחשבון שלך
-          יופעל תועבר אוטומטית לדף הבית.
+          יש להמתין לאישור והפעלת החשבון על ידי המנהל. ברגע שהחשבון שלך יופעל
+          תועבר אוטומטית לדף הבית.
         </p>
         <Button
           type="button"

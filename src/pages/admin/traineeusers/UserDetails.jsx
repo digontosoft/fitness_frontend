@@ -63,7 +63,7 @@ export default function UserDetails({ userId, isOpen, onClose }) {
             </div>
             <div className="px-4 py-2 bg-green-200 rounded-lg shadow-sm">
               <span className="font-medium text-green-600 uppercase">
-                {userData?.userStatus === "active" ? "פעיל" : "לא פעיל"}
+                {userData?.userStatus === "Active" ? "פעיל" : "לא פעיל"}
               </span>
             </div>
             <div className="px-4 py-2 bg-green-200 rounded-lg shadow-sm">
@@ -71,19 +71,19 @@ export default function UserDetails({ userId, isOpen, onClose }) {
                 {userData?.userType === "trainee"
                   ? "משתמש מתאמן"
                   : userData?.userType === "recipe"
-                  ? "משתמש קהילה"
-                  : "Admin"}
+                    ? "משתמש קהילה"
+                    : "Admin"}
               </span>
             </div>
           </div>
-           <span className="font-medium text-blue-600">
-      תוקף עד:{" "}
-      {new Date(userData?.expiry_date).toLocaleDateString("he-IL", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      })}
-    </span>
+          <span className="font-medium text-blue-600">
+            תוקף עד:{" "}
+            {new Date(userData?.expiry_date).toLocaleDateString("he-IL", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            })}
+          </span>
         </div>
 
         <DialogFooter>

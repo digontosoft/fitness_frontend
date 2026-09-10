@@ -123,14 +123,19 @@ const MeasurementWomen = () => {
               לאחר האישור השאלון יישלח ולא ניתן יהיה לערוך אותו.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="sm:justify-start gap-2 flex-row-reverse sm:flex-row-reverse">
-            <AlertDialogCancel onClick={handleCancelSend}>לא</AlertDialogCancel>
+          <AlertDialogFooter className="grid grid-cols-2 gap-2 sm:space-x-0">
             <AlertDialogAction
               onClick={handleConfirmSend}
-              className="bg-[#7994CB] hover:bg-[#6a84bb]"
+              className="h-11 w-full whitespace-normal px-2 bg-[#7994CB] hover:bg-[#6a84bb]"
             >
-              כן
+              כן, סיימתי
             </AlertDialogAction>
+            <AlertDialogCancel
+              onClick={handleCancelSend}
+              className="mt-0 h-11 w-full whitespace-normal px-2"
+            >
+              לא, חזור לשאלון
+            </AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -18,8 +18,6 @@
 //   const user = JSON.parse(localStorage.getItem("userInfo"));
 //   const adminId = user?._id;
 //   console.log('adminId',adminId)
-  
-  
 
 //   useEffect(() => {
 //       const fetchAdminTraineeLists = async () => {
@@ -139,7 +137,7 @@
 //             />
 //           </div>
 //         ) : (
-//           <div 
+//           <div
 //           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full"
 //           >
 //             <AdminArrowCard
@@ -191,19 +189,23 @@
 
 // export default Dashboard;
 
-
-
 import { base_url } from "@/api/baseUrl";
-import { aceptNewTrainee, admin, recipebook, trainee, worklist, masurmentTask, kitchenImage ,suppermarket,newOne, newTwo, newThree} from "@/assets/index";
+import {
+  admin,
+  kitchenImage,
+  masurmentTask,
+  newOne,
+  newThree,
+  newTwo,
+  trainee,
+  worklist,
+} from "@/assets/index";
 import AdminArrowCard from "@/components/admin/components/ui/AdminArrowCard";
 import Container from "@/shared/Container";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Select from "react-dropdown-select";
 import { useNavigate } from "react-router-dom";
-
-
-
 
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
@@ -216,18 +218,29 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const usersResponse = await axios.get(`${base_url}/getUsers`);
-        const allUsers = usersResponse.data.data;
+        const usersResponse = await axios.get(
+          `${base_url}/getUsers?limit=1000&page=1`,
+        );
+        const allUsers = usersResponse.data.data ?? [];
         setUsers(allUsers);
 
-        const traineeUsers = allUsers?.filter((u) => u.userType === "trainee");
-        const recipeUsers = allUsers?.filter((u) => u.userType === "recipe");
-        localStorage.setItem("traineeUsers", JSON.stringify(traineeUsers.length));
+        const traineeUsers = allUsers.filter((u) => u.userType === "trainee");
+        const recipeUsers = allUsers.filter((u) => u.userType === "recipe");
+        localStorage.setItem(
+          "traineeUsers",
+          JSON.stringify(traineeUsers.length),
+        );
         localStorage.setItem("recipeUsers", JSON.stringify(recipeUsers.length));
 
+        // Admin: only assigned trainees
+        // Superadmin: access to all trainee users
         if (user.userType === "admin") {
-          const traineeListsResponse = await axios.get(`${base_url}/traineelistforadmin?adminId=${adminId}`);
-          setAdminTraineeLists(traineeListsResponse.data.data);
+          const traineeListsResponse = await axios.get(
+            `${base_url}/traineelistforadmin?adminId=${adminId}`,
+          );
+          setAdminTraineeLists(traineeListsResponse.data.data ?? []);
+        } else if (user.userType === "supperadmin") {
+          setAdminTraineeLists(traineeUsers);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -237,11 +250,14 @@ const Dashboard = () => {
     if (adminId) {
       fetchData();
     }
-  }, [adminId]);
+  }, [adminId, user.userType]);
 
   const handleSelectUser = (selectedUser) => {
     if (selectedUser.length > 0) {
-      const path = user.userType === "admin" ? `/admin-dashboard/traineer/${selectedUser[0]._id}` : `/dashboard/traineer/${selectedUser[0]._id}`;
+      const path =
+        user.userType === "admin"
+          ? `/admin-dashboard/traineer/${selectedUser[0]._id}`
+          : `/dashboard/traineer/${selectedUser[0]._id}`;
       navigate(path);
     }
   };
@@ -249,20 +265,17 @@ const Dashboard = () => {
   const traineeUsersLength = JSON.parse(localStorage.getItem("traineeUsers"));
   const recipeUsersLength = JSON.parse(localStorage.getItem("recipeUsers"));
 
-
   // Custom search function - work with space and full name
-const customSearchFn = ({ props, state }) => {
-  const searchTerm = state.search.toLowerCase().trim();
-  if (!searchTerm) return props.options;
+  const customSearchFn = ({ props, state }) => {
+    const searchTerm = state.search.toLowerCase().trim();
+    if (!searchTerm) return props.options;
 
-  return props.options.filter((option) => {
-    const fullName = option[props.labelField]?.toLowerCase() || "";
-    const searchWords = searchTerm.split(/\s+/);
-    return searchWords.every((word) => fullName.includes(word));
-  });
-};
-
-
+    return props.options.filter((option) => {
+      const fullName = option[props.labelField]?.toLowerCase() || "";
+      const searchWords = searchTerm.split(/\s+/);
+      return searchWords.every((word) => fullName.includes(word));
+    });
+  };
 
   // console.log("users:", users);
   // console.log("adminTraineeLists", adminTraineeLists);
@@ -275,7 +288,9 @@ const customSearchFn = ({ props, state }) => {
           <div className="flex  items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 bg-[#7994CB] rounded-full">
               <span className="text-sm font-bold text-white">
-                {traineeUsersLength}
+                {user.userType === "admin"
+                  ? adminTraineeLists.length
+                  : traineeUsersLength}
               </span>
             </div>
             <span className="text-sm md:text-base">משתמשים מתאמנים</span>
@@ -283,37 +298,25 @@ const customSearchFn = ({ props, state }) => {
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 bg-[#7994CB] rounded-full">
               <span className="text-sm font-bold text-white">
-                {recipeUsersLength}
+                {user.userType === "admin"
+                  ? recipeUsersLength
+                  : recipeUsersLength}
               </span>
             </div>
             <span className="text-sm md:text-base">משתמשי קהילה</span>
           </div>
         </div>
-        {user.userType === "admin" ? (
-          <Select
-            className="rounded-lg h-12 w-full min-w-[368px]"
-            direction="rtl"
-            valueField="_id"
-            labelField="full_name"
-            options={adminTraineeLists}
-            searchBy="full_name"
-            searchFn={customSearchFn}
-            placeholder="בחר מתאמן"
-            onChange={handleSelectUser}
-          />
-        ) : (
-          <Select
-            className="rounded-lg h-12 w-full min-w-[368px]"
-            direction="rtl"
-            valueField="_id"
-            labelField="full_name"
-            options={users?.filter((u) => u.userType === "trainee")}
-            searchBy="full_name"
-            searchFn={customSearchFn}
-            placeholder="בחר מתאמן"
-            onChange={handleSelectUser}
-          />
-        )}
+        <Select
+          className="rounded-lg h-12 w-full min-w-[368px]"
+          direction="rtl"
+          valueField="_id"
+          labelField="full_name"
+          options={adminTraineeLists}
+          searchBy="full_name"
+          searchFn={customSearchFn}
+          placeholder="בחר מתאמן"
+          onChange={handleSelectUser}
+        />
         <span className="text-lg md:text-xl font-bold text-textColor">
           משימות
         </span>
@@ -380,79 +383,79 @@ const customSearchFn = ({ props, state }) => {
           </div>
         )} */}
 
-{user.userType === "admin" ? (
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:w-2/3 w-full">
-    <AdminArrowCard
-      image={trainee}
-      title="ניהול מתאמנים קיימים"
-      link="/admin-dashboard/trainee-users-list"
-      imgClassName="object-contain w-full aspect-square max-h-32" // Ensures full image in card, same size all
-    />
-    <AdminArrowCard
-      image={masurmentTask}
-      title="אישור מתאמנים חדשים"
-      link="/admin-dashboard/approve-email"
-      imgClassName="object-contain w-full aspect-square max-h-32"
-    />
-  </div>
-) : (
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
-    <AdminArrowCard
-      image={newOne}
-      title="אישור מתאמנים חדשים"
-      link="/dashboard/approve-email"
-      imgClassName="object-contain w-full aspect-square max-h-32"
-    />
-    <AdminArrowCard
-      image={masurmentTask}
-      title="ניהול מתאמנים קיימים"
-      link="/dashboard/trainee-users-list"
-      imgClassName="object-contain w-full aspect-square max-h-32"
-    />
-    <AdminArrowCard
-      image={worklist}
-      title="נהל תוכניות אימון"
-      link="/dashboard/training-list"
-      imgClassName="object-contain w-full aspect-square max-h-32"
-    />
-    <AdminArrowCard
-      image={worklist}
-      title="נהל אימונים"
-      link="/dashboard/workout-list"
-      imgClassName="object-contain w-full aspect-square max-h-32"
-    />
-    <AdminArrowCard
-      image={worklist}
-      title="נהל תרגילים"
-      link="/dashboard/exercise-list"
-      imgClassName="object-contain w-full aspect-square max-h-32"
-    />
-    <AdminArrowCard
-      image={newThree}
-      title="ניהול מדריכי תזונה"
-      link="/dashboard/nutrition-lists"
-      imgClassName="object-contain w-full aspect-square max-h-32"
-    />
-    <AdminArrowCard
-      image={kitchenImage}
-      title="ניהול ספר מתכונים"
-      link="/dashboard/manage-recipe-book"
-      imgClassName="object-contain w-full aspect-square max-h-32"
-    />
-    <AdminArrowCard
-      image={newTwo}
-      title="ניהול חברי קהילה"
-      link="/dashboard/recipe-book-users"
-      imgClassName="object-contain w-full aspect-square max-h-32"
-    />
-    <AdminArrowCard
-      image={admin}
-      title="רשימת מנהלים"
-      link="/dashboard/admin-list"
-      imgClassName="object-contain w-full aspect-square max-h-32"
-    />
-  </div>
-)}
+        {user.userType === "admin" ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:w-2/3 w-full">
+            <AdminArrowCard
+              image={trainee}
+              title="ניהול מתאמנים קיימים"
+              link="/admin-dashboard/trainee-users-list"
+              imgClassName="object-contain w-full aspect-square max-h-32" // Ensures full image in card, same size all
+            />
+            <AdminArrowCard
+              image={masurmentTask}
+              title="אישור מתאמנים חדשים"
+              link="/admin-dashboard/approve-email"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+            <AdminArrowCard
+              image={newOne}
+              title="אישור מתאמנים חדשים"
+              link="/dashboard/approve-email"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+            <AdminArrowCard
+              image={masurmentTask}
+              title="ניהול מתאמנים קיימים"
+              link="/dashboard/trainee-users-list"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+            <AdminArrowCard
+              image={worklist}
+              title="נהל תוכניות אימון"
+              link="/dashboard/training-list"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+            <AdminArrowCard
+              image={worklist}
+              title="נהל אימונים"
+              link="/dashboard/workout-list"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+            <AdminArrowCard
+              image={worklist}
+              title="נהל תרגילים"
+              link="/dashboard/exercise-list"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+            <AdminArrowCard
+              image={newThree}
+              title="ניהול מדריכי תזונה"
+              link="/dashboard/nutrition-lists"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+            <AdminArrowCard
+              image={kitchenImage}
+              title="ניהול ספר מתכונים"
+              link="/dashboard/manage-recipe-book"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+            <AdminArrowCard
+              image={newTwo}
+              title="ניהול חברי קהילה"
+              link="/dashboard/recipe-book-users"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+            <AdminArrowCard
+              image={admin}
+              title="רשימת מנהלים"
+              link="/dashboard/admin-list"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+          </div>
+        )}
       </div>
     </Container>
   );
