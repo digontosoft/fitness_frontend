@@ -219,6 +219,8 @@ const MeasurementWomen = () => {
                 <FInput
                   type="number"
                   min={0}
+                  step="0.01"
+                  inputMode="decimal"
                   label="גובה"
                   placeholder="התשובה שלך"
                   name="height"
@@ -227,6 +229,8 @@ const MeasurementWomen = () => {
                 <FInput
                   type="number"
                   min={0}
+                  step="0.01"
+                  inputMode="decimal"
                   label="משקל נוכחי - אם לא יודע לרשום בערך 5/10 קילו פלוס מינוס"
                   placeholder="התשובה שלך"
                   name="weight"
@@ -235,6 +239,8 @@ const MeasurementWomen = () => {
                 <FInput
                   type="number"
                   min={0}
+                  step="0.01"
+                  inputMode="decimal"
                   label="המשקל הכי גבוה שהיית בו במהלך חייך (לא חובה לרשום)"
                   placeholder="התשובה שלך"
                   name="highest_weight"
@@ -480,6 +486,8 @@ const MeasurementWomen = () => {
                 <FInput
                   type="number"
                   min={0}
+                  step="0.01"
+                  inputMode="decimal"
                   label="גובה"
                   placeholder="התשובה שלך"
                   name="height"
@@ -488,6 +496,8 @@ const MeasurementWomen = () => {
                 <FInput
                   type="number"
                   min={0}
+                  step="0.01"
+                  inputMode="decimal"
                   label="משקל נוכחי - אם לא יודעת לרשום בערך 5/10 קילו פלוס מינוס"
                   placeholder="התשובה שלך"
                   name="weight"
@@ -496,6 +506,8 @@ const MeasurementWomen = () => {
                 <FInput
                   type="number"
                   min={0}
+                  step="0.01"
+                  inputMode="decimal"
                   label="המשקל הכי גבוה שהיית בו במהלך חייך (לא חובה לרשום)"
                   placeholder="התשובה שלך"
                   name="highest_weight"
