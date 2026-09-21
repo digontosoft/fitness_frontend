@@ -1,5 +1,6 @@
 import logo from "@/assets/image/logo.svg";
 import { Button } from "@/components/ui/button";
+import { UI_TEXT } from "@/constants/hebrewText";
 import {
   adminLink,
   recipeLink,
@@ -11,7 +12,6 @@ import { LogOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { CiMenuFries } from "react-icons/ci";
 import { MdOutlineClose } from "react-icons/md";
-import { UI_TEXT } from "@/constants/hebrewText";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,21 +75,24 @@ const Navbar = () => {
     };
   }, [isOpen]);
 
-  // Reverse traineeLink if userType is trainee
-  const traineeLinks = userType === "trainee" ? [...traineeLink].reverse() : traineeLink;
+  // Keep NavLink array order (home last), same serial pattern as supperadmin
+  const traineeLinks = traineeLink;
 
   const noNavbarPaths = ["/regulation", "/measurement-women"];
-  if (!userData?.is_question_answered && noNavbarPaths.includes(location.pathname)) {
+  if (
+    !userData?.is_question_answered &&
+    noNavbarPaths.includes(location.pathname)
+  ) {
     return null;
   }
 
   return (
     <nav className="bg-transparent md:bg-white shadow-md">
-      <div className="container mx-auto relative flex min-h-[8rem] items-center justify-between px-3 py-0 sm:justify-between md:min-h-0 md:p-4">
+      <div className="container mx-auto relative flex min-h-[8rem] items-center justify-between gap-3 px-3 py-0 sm:justify-between md:min-h-0 md:gap-4 md:p-4">
         {/* Logout */}
         <a
           href="#"
-          className="hidden sm:flex items-center space-x-2"
+          className="hidden sm:flex shrink-0 items-center gap-2"
           onClick={logout}
         >
           <span className="font-bold text-black" dir="rtl">
@@ -99,66 +102,93 @@ const Navbar = () => {
         </a>
 
         {userType === "admin" ? (
-          <div className="hidden md:flex justify-between items-center space-x-9">
+          <div
+            className="hidden md:flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-x-3 overflow-x-auto lg:gap-x-4"
+            dir="rtl"
+          >
             {adminLink.map(({ _id, title, link, icon: Icon }) => (
               <NavLink
                 key={_id}
                 to={link}
                 end={link === "/admin-dashboard"}
                 className={({ isActive }) =>
-                  `flex items-center font-bold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
+                  `flex shrink-0 items-center gap-x-1.5 whitespace-nowrap text-sm font-bold lg:text-base ${isActive ? "text-[#7994CB]" : "text-black"}`
                 }
                 dir="rtl"
               >
-                <span dir="rtl">{title}</span>
+                <span className="whitespace-nowrap" dir="rtl">
+                  {title}
+                </span>
               </NavLink>
             ))}
           </div>
         ) : userType === "trainee" ? (
-          <div className="hidden md:flex justify-between items-center space-x-9">
+          <div
+            className="hidden md:flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-x-2 overflow-x-auto lg:gap-x-3 xl:gap-x-4"
+            dir="rtl"
+          >
             {traineeLinks.map(({ _id, title, link, icon: Icon }) => (
               <NavLink
                 key={_id}
                 to={link}
+                end={link === "/"}
                 className={({ isActive }) =>
-                  `flex items-center font-bold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
+                  `flex shrink-0 items-center gap-x-3 whitespace-nowrap text-sm font-bold lg:text-base ${isActive ? "text-[#7994CB]" : "text-black"}`
                 }
                 dir="rtl"
               >
-                <img src={Icon} alt={`סמל ${title}`} className="w-5 h-5" />
-                <span>{title}</span>
+                <img
+                  src={Icon}
+                  alt={`סמל ${title}`}
+                  className="h-4 w-4 shrink-0 lg:h-5 lg:w-5"
+                />
+                <span className="whitespace-nowrap">{title}</span>
               </NavLink>
             ))}
           </div>
         ) : userType === "recipe" ? (
-          <div className="hidden md:flex justify-between items-center space-x-9">
+          <div
+            className="hidden md:flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-x-3 overflow-x-auto lg:gap-x-4"
+            dir="rtl"
+          >
             {recipeLink.map(({ _id, title, link, icon: Icon }) => (
               <NavLink
                 key={_id}
                 to={link}
                 className={({ isActive }) =>
-                  `flex items-center font-bold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
+                  `flex shrink-0 items-center gap-x-1.5 whitespace-nowrap text-sm font-bold lg:text-base ${isActive ? "text-[#7994CB]" : "text-black"}`
                 }
                 dir="rtl"
               >
-                <img src={Icon} alt={`סמל ${title}`} className="w-5 h-5" />
-                <span dir="rtl">{title}</span>
+                <img
+                  src={Icon}
+                  alt={`סמל ${title}`}
+                  className="h-4 w-4 shrink-0 lg:h-5 lg:w-5"
+                />
+                <span className="whitespace-nowrap" dir="rtl">
+                  {title}
+                </span>
               </NavLink>
             ))}
           </div>
         ) : userType === "supperadmin" ? (
-          <div className="hidden md:flex justify-between items-center space-x-9" dir="rtl">
+          <div
+            className="hidden md:flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-x-2 overflow-x-auto lg:gap-x-3 xl:gap-x-4"
+            dir="rtl"
+          >
             {supperAdminLink.map(({ _id, title, link, icon: Icon }) => (
               <NavLink
                 key={_id}
                 to={link}
                 end={link === "/dashboard"}
                 className={({ isActive }) =>
-                  `flex items-center font-bold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
+                  `flex shrink-0 items-center gap-x-1.5 whitespace-nowrap text-sm font-bold lg:text-base ${isActive ? "text-[#7994CB]" : "text-black"}`
                 }
                 dir="rtl"
               >
-                <span dir="rtl">{title}</span>
+                <span className="whitespace-nowrap" dir="rtl">
+                  {title}
+                </span>
               </NavLink>
             ))}
           </div>
@@ -168,12 +198,12 @@ const Navbar = () => {
 
         <Link
           to={getHomeRoute()}
-          className="pointer-events-auto absolute left-1/2 top-1/2 z-[2] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:mx-0 md:static md:left-auto md:top-auto md:z-auto md:translate-x-0 md:translate-y-0"
+          className="pointer-events-auto absolute left-1/2 top-1/2 z-[2] flex shrink-0 -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:mx-0 md:static md:left-auto md:top-auto md:z-auto md:translate-x-0 md:translate-y-0"
         >
           <img
             src={logo}
             alt="לוגו"
-            className="h-32 w-32 object-cover md:h-24 md:w-24"
+            className="h-32 w-32 object-cover md:h-16 md:w-16 lg:h-20 lg:w-20"
           />
         </Link>
 
@@ -201,40 +231,41 @@ const Navbar = () => {
             {userType === "admin" ? (
               <div className="flex flex-col space-y-2">
                 {adminLink.map(({ _id, title, link, icon: Icon }) => (
-                    <NavLink
-                      key={_id}
-                      to={link}
-                      end="/admin-dashboard"
-                      className={({ isActive }) =>
-                        `flex items-center font-semibold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
-                      }
-                      onClick={() => setIsOpen(false)}
-                      dir="rtl"
-                    >
-                      <span dir="rtl">{title}</span>
-                    </NavLink>
-                  ))}
+                  <NavLink
+                    key={_id}
+                    to={link}
+                    end="/admin-dashboard"
+                    className={({ isActive }) =>
+                      `flex items-center font-semibold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
+                    }
+                    onClick={() => setIsOpen(false)}
+                    dir="rtl"
+                  >
+                    <span dir="rtl">{title}</span>
+                  </NavLink>
+                ))}
               </div>
             ) : userType === "trainee" ? (
               <div className="flex flex-col space-y-2">
                 {traineeLinks.map(({ _id, title, link, icon: Icon }) => (
-                    <NavLink
-                      key={_id}
-                      to={link}
-                      className={({ isActive }) =>
-                        `flex items-center font-semibold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
-                      }
-                      onClick={() => setIsOpen(false)}
-                      dir="rtl"
-                    >
-                      <img src={Icon} alt={`סמל ${title}`} className="w-5 h-5" />
-                      <span>{title}</span>
-                    </NavLink>
-                  ))}
+                  <NavLink
+                    key={_id}
+                    to={link}
+                    className={({ isActive }) =>
+                      `flex items-center font-semibold gap-x-4 ${isActive ? "text-[#7994CB]" : "text-black"}`
+                    }
+                    onClick={() => setIsOpen(false)}
+                    dir="rtl"
+                  >
+                    <img src={Icon} alt={`סמל ${title}`} className="w-5 h-5" />
+                    <span>{title}</span>
+                  </NavLink>
+                ))}
               </div>
             ) : userType === "recipe" ? (
               <div className="flex flex-col space-y-2">
-                {recipeLinkMobileOrder.map(({ _id, title, link, icon: Icon }) => (
+                {recipeLinkMobileOrder.map(
+                  ({ _id, title, link, icon: Icon }) => (
                     <NavLink
                       key={_id}
                       to={link}
@@ -244,10 +275,15 @@ const Navbar = () => {
                       onClick={() => setIsOpen(false)}
                       dir="rtl"
                     >
-                      <img src={Icon} alt={`סמל ${title}`} className="w-5 h-5" />
+                      <img
+                        src={Icon}
+                        alt={`סמל ${title}`}
+                        className="w-5 h-5"
+                      />
                       <span dir="rtl">{title}</span>
                     </NavLink>
-                  ))}
+                  ),
+                )}
               </div>
             ) : userType === "supperadmin" ? (
               <div className="flex flex-col space-y-2">

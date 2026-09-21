@@ -15,7 +15,7 @@ const ActionCourseCart = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
   const [exercises, setExercises] = useState(
-    workoutData?.userTrainingExercise || []
+    workoutData?.userTrainingExercise || [],
   );
 
   const fetchExercises = useCallback(async () => {
@@ -73,15 +73,22 @@ const ActionCourseCart = () => {
             עריכת האימון
           </Button>
         </div>
-        <div dir="rtl" className="w-full px-4 pt-8 pb-4 text-right sm:text-center">
+        <div
+          dir="rtl"
+          className="w-full px-4 pt-8 pb-4 text-right sm:text-center"
+        >
           <p className="text-[#0A2533] font-bold text-xl">תרגילים:</p>
-          <p className="text-[#0A2533] text-sm sm:text-base mt-2">
+          {/* <p className="text-[#0A2533] text-sm sm:text-base mt-2">
             יש למלא את כל התרגילים מבלי לרענן/לצאת
-          </p>
+          </p> */}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
           {exercises?.map((item, index) => (
-            <VideoCourseCart key={item._id ?? index} exercise={item} index={index} />
+            <VideoCourseCart
+              key={item._id ?? index}
+              exercise={item}
+              index={index}
+            />
           ))}
         </div>
       </div>

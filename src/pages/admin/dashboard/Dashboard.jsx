@@ -386,15 +386,15 @@ const Dashboard = () => {
         {user.userType === "admin" ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:w-2/3 w-full">
             <AdminArrowCard
-              image={trainee}
-              title="ניהול מתאמנים קיימים"
-              link="/admin-dashboard/trainee-users-list"
-              imgClassName="object-contain w-full aspect-square max-h-32" // Ensures full image in card, same size all
-            />
-            <AdminArrowCard
               image={masurmentTask}
               title="אישור מתאמנים חדשים"
               link="/admin-dashboard/approve-email"
+              imgClassName="object-contain w-full aspect-square max-h-32"
+            />
+            <AdminArrowCard
+              image={trainee}
+              title="ניהול מתאמנים קיימים"
+              link="/admin-dashboard/trainee-users-list"
               imgClassName="object-contain w-full aspect-square max-h-32"
             />
           </div>
