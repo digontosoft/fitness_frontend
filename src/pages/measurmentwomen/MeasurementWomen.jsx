@@ -55,7 +55,10 @@ const MeasurementWomen = () => {
     setLoading(true);
     try {
       const payload = { user_id: id, ...data };
-      const response = await axios.post(`${base_url}/upsertUserDetails`, payload);
+      const response = await axios.post(
+        `${base_url}/upsertUserDetails`,
+        payload,
+      );
 
       if (response.status === 200) {
         const userType = user?.userType;
@@ -64,10 +67,9 @@ const MeasurementWomen = () => {
           const updatedUser = { ...user, is_question_answered: true };
           localStorage.setItem("userInfo", JSON.stringify(updatedUser));
           toast.success("השאלון נשלח בהצלחה!");
-          navigate(
-            userType === "admin" ? "/admin-dashboard" : "/dashboard",
-            { replace: true }
-          );
+          navigate(userType === "admin" ? "/admin-dashboard" : "/dashboard", {
+            replace: true,
+          });
         } else {
           // Trainee: onboarding is complete, but the account goes back to
           // locked until an admin/superadmin unlocks it again.
@@ -209,38 +211,28 @@ const MeasurementWomen = () => {
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
+                  type="text"
                   label="גיל"
                   placeholder="התשובה שלך"
                   name="age"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
-                  step="0.01"
-                  inputMode="decimal"
+                  type="text"
                   label="גובה"
                   placeholder="התשובה שלך"
                   name="height"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
-                  step="0.01"
-                  inputMode="decimal"
+                  type="text"
                   label="משקל נוכחי - אם לא יודע לרשום בערך 5/10 קילו פלוס מינוס"
                   placeholder="התשובה שלך"
                   name="weight"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
-                  step="0.01"
-                  inputMode="decimal"
+                  type="text"
                   label="המשקל הכי גבוה שהיית בו במהלך חייך (לא חובה לרשום)"
                   placeholder="התשובה שלך"
                   name="highest_weight"
@@ -476,38 +468,28 @@ const MeasurementWomen = () => {
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
+                  type="text"
                   label="גיל"
                   placeholder="התשובה שלך"
                   name="age"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
-                  step="0.01"
-                  inputMode="decimal"
+                  type="text"
                   label="גובה"
                   placeholder="התשובה שלך"
                   name="height"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
-                  step="0.01"
-                  inputMode="decimal"
+                  type="text"
                   label="משקל נוכחי - אם לא יודעת לרשום בערך 5/10 קילו פלוס מינוס"
                   placeholder="התשובה שלך"
                   name="weight"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
-                  step="0.01"
-                  inputMode="decimal"
+                  type="text"
                   label="המשקל הכי גבוה שהיית בו במהלך חייך (לא חובה לרשום)"
                   placeholder="התשובה שלך"
                   name="highest_weight"
