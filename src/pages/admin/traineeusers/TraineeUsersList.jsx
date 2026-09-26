@@ -45,6 +45,8 @@ export function TraineeUsersLists() {
   const [rowSelection, setRowSelection] = useState({});
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [confirmActionOpen, setConfirmActionOpen] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null); // { type, userId, currentScreen? }
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -67,15 +69,15 @@ export function TraineeUsersLists() {
     try {
       if (userData?.userType === "supperadmin") {
         const response = await axios.get(
-          `${base_url}/getUsers?limit=1000&page=1`
+          `${base_url}/getUsers?limit=1000&page=1`,
         );
         const allTrainees = (response.data.data ?? []).filter(
-          (u) => u.userType === "trainee"
+          (u) => u.userType === "trainee",
         );
         setAdminUsers(allTrainees);
       } else {
         const response = await axios.get(
-          `${base_url}/traineelistforadmin?adminId=${userData?._id}`
+          `${base_url}/traineelistforadmin?adminId=${userData?._id}`,
         );
         setAdminUsers(response.data.data ?? []);
       }
@@ -221,7 +223,7 @@ export function TraineeUsersLists() {
             <Button
               className="bg-[#7994CB] font-bold"
               size="sm"
-              onClick={() => updateStatus(userId)}
+              onClick={() => openConfirmAction({ type: "makeTrainer", userId })}
             >
               הפוך למאמן
             </Button>
@@ -233,7 +235,13 @@ export function TraineeUsersLists() {
                   : "bg-green-500 hover:bg-green-600 font-bold"
               }
               size="sm"
-              onClick={() => updateScreenStatus(userId, row.original.screen)}
+              onClick={() =>
+                openConfirmAction({
+                  type: row.original.screen === "unlock" ? "lock" : "unlock",
+                  userId,
+                  currentScreen: row.original.screen,
+                })
+              }
             >
               {row.original.screen === "unlock" ? "נעל משתמש" : "שחרר משתמש"}
             </Button>
@@ -271,6 +279,59 @@ export function TraineeUsersLists() {
   const handleOpenDeleteModal = (userId) => {
     setSelectedUser(userId);
     setDeleteModalOpen(true);
+  };
+
+  const openConfirmAction = (action) => {
+    setConfirmAction(action);
+    setConfirmActionOpen(true);
+  };
+
+  const closeConfirmAction = () => {
+    setConfirmActionOpen(false);
+    setConfirmAction(null);
+  };
+
+  const getConfirmActionCopy = () => {
+    switch (confirmAction?.type) {
+      case "lock":
+        return {
+          title: "אישור נעילת משתמש",
+          message: "האם אתה בטוח שברצונך לנעול את המשתמש?",
+          confirmLabel: "נעל משתמש",
+        };
+      case "unlock":
+        return {
+          title: "אישור שחרור משתמש",
+          message: "האם אתה בטוח שברצונך לשחרר את המשתמש?",
+          confirmLabel: "שחרר משתמש",
+        };
+      case "makeTrainer":
+        return {
+          title: "אישור הפיכה למאמן",
+          message: "האם אתה בטוח שברצונך להפוך את המשתמש למאמן?",
+          confirmLabel: "הפוך למאמן",
+        };
+      default:
+        return {
+          title: "אישור פעולה",
+          message: "האם אתה בטוח?",
+          confirmLabel: "אישור",
+        };
+    }
+  };
+
+  const handleConfirmAction = async () => {
+    if (!confirmAction?.userId) return;
+    const { type, userId, currentScreen } = confirmAction;
+    closeConfirmAction();
+
+    if (type === "makeTrainer") {
+      await updateStatus(userId);
+      return;
+    }
+    if (type === "lock" || type === "unlock") {
+      await updateScreenStatus(userId, currentScreen);
+    }
   };
 
   const handleDelete = async () => {
@@ -473,6 +534,35 @@ export function TraineeUsersLists() {
             </Button>
             <Button className="bg-[#7994CB] text-white" onClick={handleDelete}>
               {UI_TEXT.delete}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Lock / Unlock / Make trainer confirmation */}
+      <Dialog
+        open={confirmActionOpen}
+        onOpenChange={(open) => {
+          if (!open) closeConfirmAction();
+          else setConfirmActionOpen(true);
+        }}
+      >
+        <DialogContent dir="rtl">
+          <DialogHeader>
+            <DialogTitle className="text-right">
+              {getConfirmActionCopy().title}
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-right">{getConfirmActionCopy().message}</p>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={closeConfirmAction}>
+              {UI_TEXT.cancel}
+            </Button>
+            <Button
+              className="bg-[#7994CB] text-white"
+              onClick={handleConfirmAction}
+            >
+              {getConfirmActionCopy().confirmLabel}
             </Button>
           </DialogFooter>
         </DialogContent>

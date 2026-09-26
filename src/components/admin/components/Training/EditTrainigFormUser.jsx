@@ -64,14 +64,15 @@ const EditTrainingFormUser = ({ trainingId, user_Id }) => {
       return;
     }
 
+    // sets/reps required; manipulation optional (superset incomplete handled separately)
     const isAnyFieldEmpty = training.workouts?.some((workout) =>
       workout.exercises.some(
         (exercise) =>
-          exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+          !(Number(exercise.sets) > 0) || !(Number(exercise.reps) > 0)
       )
     );
 
-    setIsButtonDisabled(isAnyFieldEmpty);
+    setIsButtonDisabled(!!isAnyFieldEmpty);
     validateSupersetAndToggle(training);
   }, [training]);
 
