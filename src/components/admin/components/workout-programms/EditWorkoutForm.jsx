@@ -490,7 +490,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const EditWorkoutForm = ({ workoutId }) => {
-  const [disableUpdateButton, setDisableUpdateButton] = useState(false);
   const [addMoreExercise, setAddMoreExercise] = useState(false);
   // Same filter state as AddWorkoutForm / ExerciseTable
   const [body_part, setBodyPart] = useState("");
@@ -584,21 +583,9 @@ const EditWorkoutForm = ({ workoutId }) => {
   }, [searchValue, body_part, equipment]);
 
   const handleManipulationChange = (e, index) => {
-    const value = e.target.value.toLowerCase();
-    const exercises = getValues("exercises"); // Get all exercises
-    const lastIndex = exercises.length - 1;
-
-    // Update the manipulation value for the specific exercise
-    setValue(`exercises.${index}.manipulation`, value);
-
-    // Recalculate if there's still a "superset"
-    // const hasPureSuperset = exercises.some(
-    //   (ex) => ex.manipulation === "superset"
-    // );
-    // setHasSuperset(hasPureSuperset);
-
-    // Disable the update button only if the last exercise is exactly "superset"
-    setDisableUpdateButton(exercises[lastIndex]?.manipulation === "superset");
+    setValue(`exercises.${index}.manipulation`, e.target.value, {
+      shouldDirty: true,
+    });
   };
 
   // ✅ Move exercise up/down (exercise order)
@@ -699,14 +686,19 @@ const EditWorkoutForm = ({ workoutId }) => {
   //       newExerciseData.reps > 0 &&
   //       newExerciseData.manipulation?.trim() !== ""));
 
-const isFormValid = exercisesForm?.every(
-  (exercise, index, array) =>
-    exercise.sets > 0 &&
-    exercise.reps > 0 &&
-    (index === array.length - 1
-      ? exercise.manipulation?.trim().toLowerCase() !== "superset"
-      : true)
-);
+  // manipulation optional, except last exercise cannot be incomplete "superset"
+  const isIncompleteSuperset = (exercises = []) => {
+    if (!exercises.length) return false;
+    const last = exercises[exercises.length - 1];
+    return last?.manipulation?.trim().toLowerCase() === "superset";
+  };
+
+  const isFormValid =
+    !!exercisesForm?.length &&
+    exercisesForm.every(
+      (exercise) => Number(exercise.sets) > 0 && Number(exercise.reps) > 0
+    ) &&
+    !isIncompleteSuperset(exercisesForm);
 
 
   return (
@@ -898,12 +890,7 @@ const isFormValid = exercisesForm?.every(
             <Button
               type="submit"
               className="text-white px-4 md:px-8 py-2 rounded-full bg-[#7994CB]"
-              disabled={
-                disableUpdateButton ||
-                !isFormValid ||
-                exercisesForm.length === 0 ||
-                isSubmitting
-              }
+              disabled={!isFormValid || exercisesForm.length === 0 || isSubmitting}
             >
               {isSubmitting ? (
                 <span className="inline-flex items-center gap-2">

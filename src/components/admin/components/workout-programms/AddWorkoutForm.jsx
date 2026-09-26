@@ -913,14 +913,17 @@ const AddWorkoutForm = () => {
     }
   };
 
-  const isFormValid = workoutExercises.every(
-    (ex, index, arr) =>
-      ex.sets > 0 &&
-      ex.reps > 0 &&
-      (index === arr.length - 1
-        ? ex.manipulation?.trim().toLowerCase() !== "superset"
-        : true)
-  );
+  // manipulation optional, except last exercise cannot be incomplete "superset"
+  const isIncompleteSuperset = (exercises = []) => {
+    if (!exercises.length) return false;
+    const last = exercises[exercises.length - 1];
+    return last?.manipulation?.trim().toLowerCase() === "superset";
+  };
+
+  const isFormValid =
+    workoutExercises.every(
+      (ex) => Number(ex.sets) > 0 && Number(ex.reps) > 0
+    ) && !isIncompleteSuperset(workoutExercises);
 
   return (
     <div className="sm:py-20 py-6" dir="rtl">

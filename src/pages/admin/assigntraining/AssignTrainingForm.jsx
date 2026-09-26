@@ -72,11 +72,11 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
     // Check if name and description are filled
     if (!trainingbyId.name || !trainingbyId.description) return false;
 
-    // Check all workouts and exercises
+    // sets/reps required; manipulation optional (superset incomplete handled separately)
     return trainingbyId.workouts.every((workout) =>
       workout.exercises.every(
         (exercise) =>
-          exercise.sets > 0 && exercise.reps > 0 && exercise.manipulation
+          Number(exercise.sets) > 0 && Number(exercise.reps) > 0
       )
     );
   };
