@@ -363,7 +363,7 @@ import { Button } from "@/components/ui/button";
 import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { Loader } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -383,6 +383,52 @@ const convertToBase64 = (file) => {
   });
 };
 
+const DRAFT_FIELDS = [
+  "user_id",
+  "date",
+  "thighl",
+  "thighr",
+  "armr",
+  "arml",
+  "butt",
+  "chest",
+  "waist",
+];
+
+const getDraftKey = (userId) => `measurement-update-draft:${userId}`;
+
+const loadMeasurementDraft = (key) => {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+};
+
+const saveMeasurementDraft = (key, values) => {
+  try {
+    const payload = {};
+    DRAFT_FIELDS.forEach((field) => {
+      payload[field] = values?.[field] ?? "";
+    });
+    localStorage.setItem(key, JSON.stringify(payload));
+  } catch (error) {
+    console.error("Failed to save measurement draft:", error);
+  }
+};
+
+const clearMeasurementDraft = (key) => {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    /* ignore */
+  }
+};
+
 const MeasurementUpdate = () => {
   const [files, setFiles] = useState([]);
   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
@@ -390,7 +436,9 @@ const MeasurementUpdate = () => {
   const Id = userDetails._id;
   const [getMesurement, setMesurement] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [draftReady, setDraftReady] = useState(false);
   const navigate = useNavigate();
+  const draftKey = useMemo(() => getDraftKey(Id), [Id]);
 
   useEffect(() => {
     const fetchMeasurement = async () => {
@@ -412,15 +460,8 @@ const MeasurementUpdate = () => {
 
   const id = getMesurement?._id;
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
+  const emptyForm = useMemo(
+    () => ({
       user_id: Id,
       date: "",
       thighl: "",
@@ -434,8 +475,41 @@ const MeasurementUpdate = () => {
       photo2: "",
       photo3: "",
       photo4: "",
-    },
+    }),
+    [Id]
+  );
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    defaultValues: emptyForm,
   });
+
+  // Restore draft immediately (reload / route change)
+  useEffect(() => {
+    if (!Id || !draftKey) return;
+    setDraftReady(false);
+    const draft = loadMeasurementDraft(draftKey);
+    if (draft) {
+      reset({ ...emptyForm, ...draft, user_id: Id });
+    }
+    setDraftReady(true);
+  }, [Id, draftKey, reset, emptyForm]);
+
+  // Persist only after hydrate — avoids empty form wiping stored draft
+  const watchedValues = watch();
+  useEffect(() => {
+    if (!draftReady || !Id || !draftKey) return;
+    const timer = setTimeout(() => {
+      saveMeasurementDraft(draftKey, { ...watchedValues, user_id: Id });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [watchedValues, Id, draftKey, draftReady]);
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -468,6 +542,7 @@ const MeasurementUpdate = () => {
       );
 
       if (response.status === 201) {
+        clearMeasurementDraft(draftKey);
         toast.success(UI_TEXT.measurementUpdated);
         reset();
         setIsLoading(false);
@@ -476,6 +551,7 @@ const MeasurementUpdate = () => {
     } catch (error) {
       toast.error(UI_TEXT.measurementUpdateFailed);
       console.error("Error updating measurement:", error);
+      setIsLoading(false);
     }
   };
 
