@@ -75,8 +75,7 @@ const CustomizeWorkoutForm = () => {
 
     const isAnyFieldEmpty = training.workouts?.some((workout) =>
       workout.exercises.some(
-        (exercise) =>
-          exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+        (exercise) => exercise.sets === 0 || exercise.reps === 0
       )
     );
 

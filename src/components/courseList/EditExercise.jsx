@@ -164,11 +164,10 @@ const EditExercise = () => {
         !item.sets ||
         Number(item.sets) <= 0 ||
         !item.reps ||
-        Number(item.reps) <= 0 ||
-        !String(item.manipulation ?? "").trim()
+        Number(item.reps) <= 0
     );
     if (emptyItem)
-      return `מלא את כל השדות (סטים, חזרות, הערות) עבור "${emptyItem.exercise_id?.name || "תרגיל"}"`;
+      return `מלא את כל השדות (סטים, חזרות) עבור "${emptyItem.exercise_id?.name || "תרגיל"}"`;
 
     const last = effectiveList[effectiveList.length - 1];
     if (effectiveList.length > 0 && isSuperset(last?.manipulation))
@@ -294,10 +293,6 @@ const EditExercise = () => {
       }
       if (!item.reps || Number(item.reps) <= 0) {
         toast.error(`נא להזין מספר חזרות תקין עבור ${item.exercise_id?.name || "תרגיל"}.`);
-        return;
-      }
-      if (!String(item.manipulation ?? "").trim()) {
-        toast.error(`מלא הערות עבור "${item.exercise_id?.name || "תרגיל"}"`);
         return;
       }
     }
