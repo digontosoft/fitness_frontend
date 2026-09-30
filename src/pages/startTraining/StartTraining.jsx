@@ -154,9 +154,19 @@ const StartTraining = () => {
         }
 
         if (planExercises) {
+          // Same exercise can appear more than once. Match the nth copy
+          // to the nth plan row so notes/sets/reps are not all taken from the first.
+          const planQueues = new Map();
+          for (const planEx of planExercises) {
+            const id = getExId(planEx);
+            if (!id) continue;
+            if (!planQueues.has(id)) planQueues.set(id, []);
+            planQueues.get(id).push(planEx);
+          }
+
           const merged = workoutExercises.map((wEx) => {
             const wId = getExId(wEx);
-            const planEx = planExercises.find((p) => getExId(p) === wId);
+            const planEx = planQueues.get(wId)?.shift();
             if (!planEx) return wEx;
             return {
               ...wEx,
