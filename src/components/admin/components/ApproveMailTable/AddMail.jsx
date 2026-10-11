@@ -143,7 +143,10 @@ export default function AddMail({ onEmailAdded }) {
     try {
       setLoading(true);
       // console.log("Submitted email:", data);
-      await axios.post(`${base_url}/approved-mail`, data);
+      const token = JSON.parse(localStorage.getItem("authToken"));
+      await axios.post(`${base_url}/approved-mail`, data, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       toast.success(UI_TEXT.approvedMailAdded);
       reset();
       if (onEmailAdded) {
