@@ -63,7 +63,7 @@ const StartTraining = () => {
     if (training?.workouts && training.workouts.length > 0) {
       const selectedWorkout = workout?._id
         ? training.workouts.find(
-            (w) => w.workout?._id === workout._id || w._id === workout._id
+            (w) => w.workout?._id === workout._id || w._id === workout._id,
           )
         : training.workouts[0];
       if (selectedWorkout?.exercises) {
@@ -116,7 +116,9 @@ const StartTraining = () => {
         const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
         if (!user?._id) return;
 
-        const taskRes = await axios.get(`${base_url}/get-user-task/${user._id}`);
+        const taskRes = await axios.get(
+          `${base_url}/get-user-task/${user._id}`,
+        );
         const matchedTask = taskRes.data.data?.find((t) => t._id === taskId);
         if (!matchedTask) return;
 
@@ -145,7 +147,7 @@ const StartTraining = () => {
           const mw = t.workouts?.find(
             (w) =>
               w.workout?._id === matchedTask.workout_id ||
-              w._id === matchedTask.workout_id
+              w._id === matchedTask.workout_id,
           );
           if (Array.isArray(mw?.exercises) && mw.exercises.length > 0) {
             planExercises = mw.exercises;
@@ -227,7 +229,7 @@ const StartTraining = () => {
       updateExerciseSlot(slotIndex, value, exercise);
       setInvalidSlots((prev) => prev.filter((i) => i !== slotIndex));
     },
-    [exercisesToUse, updateExerciseSlot]
+    [exercisesToUse, updateExerciseSlot],
   );
 
   // Prefetch last-workout data for all exercises (stable ids)
@@ -252,7 +254,7 @@ const StartTraining = () => {
                 last_set_weight: "",
                 manipulation: resolveLastSessionNotes(
                   "",
-                  selectedExercise?.manipulation
+                  selectedExercise?.manipulation,
                 ),
               },
             ];
@@ -261,7 +263,7 @@ const StartTraining = () => {
           try {
             const response = await axios.post(
               `${base_url}/get-last-workout-excercisedata`,
-              { user_id: userId, exercise_id: exerciseId }
+              { user_id: userId, exercise_id: exerciseId },
             );
             const responseData = response?.data?.data || response?.data || {};
             return [
@@ -272,7 +274,7 @@ const StartTraining = () => {
                   Number(
                     responseData?.sets ??
                       responseData?.sets_target ??
-                      selectedExercise?.sets
+                      selectedExercise?.sets,
                   ) || 0,
                 reps_done: Number(responseData?.reps_done) || 0,
                 last_set_weight:
@@ -282,7 +284,7 @@ const StartTraining = () => {
                     : "",
                 manipulation: resolveLastSessionNotes(
                   responseData?.manipulation,
-                  selectedExercise?.manipulation
+                  selectedExercise?.manipulation,
                 ),
               },
             ];
@@ -296,12 +298,12 @@ const StartTraining = () => {
                 last_set_weight: "",
                 manipulation: resolveLastSessionNotes(
                   "",
-                  selectedExercise?.manipulation
+                  selectedExercise?.manipulation,
                 ),
               },
             ];
           }
-        })
+        }),
       );
 
       if (cancelled) return;
@@ -338,7 +340,7 @@ const StartTraining = () => {
     const exerciseDataArray = buildExercisePayload(
       exercisesToUse,
       exerciseData,
-      getExerciseLibraryId
+      getExerciseLibraryId,
     );
 
     if (!exerciseDataArray.length) {
@@ -355,16 +357,17 @@ const StartTraining = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post(
-        `${base_url}/complete-workout-task`,
-        payload
-      );
+      // const response = await axios.post(
+      //   `${base_url}/complete-workout-task`,
+      //   payload
+      // );
 
-      if (response.status === 200) {
-        clearDraft();
-        toast.success(UI_TEXT.workoutCompleted);
-        navigate("/");
-      }
+      // if (response.status === 200) {
+      //   clearDraft();
+      //   toast.success(UI_TEXT.workoutCompleted);
+      //   navigate("/");
+      // }
+      console.log("payload:", payload);
     } catch (error) {
       console.error("Error completing workout:", error);
       // Preserve draft on failure
@@ -430,7 +433,7 @@ const StartTraining = () => {
                   showError={invalidSlots.includes(index)}
                   isPairedSupersetChild={prevIsSuperset}
                   isComplete={hasRequiredExerciseInput(
-                    exerciseData[String(index)]
+                    exerciseData[String(index)],
                   )}
                 />
               </div>

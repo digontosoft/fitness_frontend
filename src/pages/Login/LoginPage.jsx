@@ -10,6 +10,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const handleLoginWithGoogle = (role) => {
     // console.log("base_url", base_url);
+    // console.log("role", role);
     setLoading(true);
     window.location.href = `${base_url}/auth/google?role=${role}`;
   };
