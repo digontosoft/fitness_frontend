@@ -12,14 +12,13 @@ import {
 import {
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import axios from "axios";
 import { ArrowUpDown, Eye, Trash } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 // import ExerciseDetails from "./ExerciseDetails";
 import EditApproveMail from "@/components/admin/components/ApproveMailTable/EditApproveMail";
@@ -32,39 +31,87 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { UI_TEXT } from "@/constants/hebrewText";
 import { GoSearch } from "react-icons/go";
 import { toast } from "sonner";
-import { UI_TEXT } from "@/constants/hebrewText";
 import UserDetails from "./UserDetails";
 
+const PAGE_SIZE = 10;
+
 export function TraineeUsersLists() {
-  const [users, setUsers] = useState([]);
   const [adminUsers, setAdminUsers] = useState([]);
   const [sorting, setSorting] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [confirmActionOpen, setConfirmActionOpen] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null); // { type, userId, currentScreen? }
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [viewUserModalOpen, setViewUserModalOpen] = useState(false);
   const [viewUser, setViewUser] = useState(null);
   const userData = JSON.parse(localStorage.getItem("userInfo"));
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
   const fetchAdminUser = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${base_url}/traineelistforadmin?adminId=${userData?._id}`);
-      setAdminUsers(response.data.data);
+      if (userData?.userType === "supperadmin") {
+        const response = await axios.get(
+          `${base_url}/getUsers?limit=1000&page=1`,
+        );
+        const allTrainees = (response.data.data ?? []).filter(
+          (u) => u.userType === "trainee",
+        );
+        setAdminUsers(allTrainees);
+      } else {
+        const response = await axios.get(
+          `${base_url}/traineelistforadmin?adminId=${userData?._id}`,
+        );
+        setAdminUsers(response.data.data ?? []);
+      }
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
       setLoading(false);
     }
-  },[userData?._id]);
+  }, [userData?._id, userData?.userType]);
+
   useEffect(() => {
     fetchAdminUser();
   }, [fetchAdminUser]);
+
+  const filteredUsers = useMemo(() => {
+    const term = debouncedSearch.toLowerCase();
+    if (!term) return adminUsers;
+
+    return adminUsers.filter((user) => {
+      const fullName = (
+        user.full_name || `${user.firstName || ""} ${user.lastName || ""}`
+      )
+        .trim()
+        .toLowerCase();
+      const email = (user.email || "").toLowerCase();
+      return fullName.includes(term) || email.includes(term);
+    });
+  }, [adminUsers, debouncedSearch]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / PAGE_SIZE));
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
 
   const columns = [
     {
@@ -104,10 +151,16 @@ export function TraineeUsersLists() {
         const userId = row.original._id;
         return (
           <div className="flex space-x-2">
-             <Button className="bg-[#7994CB] hover:bg-[#7994CB]-dark" size="sm" onClick={() => {setViewUser(userId), setViewUserModalOpen(true)}}>
-          <Eye className="w-4 h-4" />
-        </Button>
-           
+            <Button
+              className="bg-[#7994CB] hover:bg-[#7994CB]-dark"
+              size="sm"
+              onClick={() => {
+                (setViewUser(userId), setViewUserModalOpen(true));
+              }}
+            >
+              <Eye className="w-4 h-4" />
+            </Button>
+
             <EditApproveMail
               id={userId}
               email={row.original.email}
@@ -121,9 +174,7 @@ export function TraineeUsersLists() {
             >
               <Trash />
             </Button>
-            {
-              userData?.userType === "admin" ?(
-
+            {userData?.userType === "admin" ? (
               <Link to={`/admin-dashboard/traineer/${userId}`}>
                 <Button
                   className="bg-[#7994CB]"
@@ -133,19 +184,17 @@ export function TraineeUsersLists() {
                   נהל מתאמן
                 </Button>
               </Link>
-              ):
-              (
-            <Link to={`/dashboard/traineer/${userId}`}>
-              <Button
-                className="bg-[#7994CB]"
-                size="sm"
-                onClick={() => handleOpenDeleteModal(row.original)}
-              >
-                נהל מתאמן
-              </Button>
-            </Link>
-              )
-            }
+            ) : (
+              <Link to={`/dashboard/traineer/${userId}`}>
+                <Button
+                  className="bg-[#7994CB]"
+                  size="sm"
+                  onClick={() => handleOpenDeleteModal(row.original)}
+                >
+                  נהל מתאמן
+                </Button>
+              </Link>
+            )}
             {/* <Button
               className="bg-[#7994CB]"
               size="sm"
@@ -162,29 +211,21 @@ export function TraineeUsersLists() {
             </Button> */}
             <Button
               className="bg-green-100 hover:bg-green-200 text-green-500 font-bold uppercase"
-              size="sm"             
+              size="sm"
             >
               {row.original.userType === "trainee"
                 ? "משתמש מתאמן"
                 : row.original.userType === "recipe"
-                ? "משתמש ספר מתכונים"
-                :"מנהל"}
+                  ? "משתמש קהילה"
+                  : "מנהל"}
             </Button>
 
             <Button
               className="bg-[#7994CB] font-bold"
               size="sm"
-              onClick={() =>
-                updateStatus(
-
-                  userId
-                )
-              }
-
+              onClick={() => openConfirmAction({ type: "makeTrainer", userId })}
             >
-
-               הפוך למאמן
-
+              הפוך למאמן
             </Button>
 
             <Button
@@ -195,7 +236,11 @@ export function TraineeUsersLists() {
               }
               size="sm"
               onClick={() =>
-                updateScreenStatus(userId, row.original.screen)
+                openConfirmAction({
+                  type: row.original.screen === "unlock" ? "lock" : "unlock",
+                  userId,
+                  currentScreen: row.original.screen,
+                })
               }
             >
               {row.original.screen === "unlock" ? "נעל משתמש" : "שחרר משתמש"}
@@ -236,6 +281,59 @@ export function TraineeUsersLists() {
     setDeleteModalOpen(true);
   };
 
+  const openConfirmAction = (action) => {
+    setConfirmAction(action);
+    setConfirmActionOpen(true);
+  };
+
+  const closeConfirmAction = () => {
+    setConfirmActionOpen(false);
+    setConfirmAction(null);
+  };
+
+  const getConfirmActionCopy = () => {
+    switch (confirmAction?.type) {
+      case "lock":
+        return {
+          title: "אישור נעילת משתמש",
+          message: "האם אתה בטוח שברצונך לנעול את המשתמש?",
+          confirmLabel: "נעל משתמש",
+        };
+      case "unlock":
+        return {
+          title: "אישור שחרור משתמש",
+          message: "האם אתה בטוח שברצונך לשחרר את המשתמש?",
+          confirmLabel: "שחרר משתמש",
+        };
+      case "makeTrainer":
+        return {
+          title: "אישור הפיכה למאמן",
+          message: "האם אתה בטוח שברצונך להפוך את המשתמש למאמן?",
+          confirmLabel: "הפוך למאמן",
+        };
+      default:
+        return {
+          title: "אישור פעולה",
+          message: "האם אתה בטוח?",
+          confirmLabel: "אישור",
+        };
+    }
+  };
+
+  const handleConfirmAction = async () => {
+    if (!confirmAction?.userId) return;
+    const { type, userId, currentScreen } = confirmAction;
+    closeConfirmAction();
+
+    if (type === "makeTrainer") {
+      await updateStatus(userId);
+      return;
+    }
+    if (type === "lock" || type === "unlock") {
+      await updateScreenStatus(userId, currentScreen);
+    }
+  };
+
   const handleDelete = async () => {
     if (!selectedUser) return;
     try {
@@ -245,13 +343,15 @@ export function TraineeUsersLists() {
       };
       // await deleteUser(data);
       const response = await axios.delete(
-        `${base_url}/deleteUser/${selectedUser}`
+        `${base_url}/deleteUser/${selectedUser}`,
       );
       // console.log("delete:", data.user_id);
       if (response.status === 200) {
         toast.success("המשתמש נמחק בהצלחה.");
       }
-      setUsers((prevUsers) => prevUsers.filter((e) => e._id !== selectedUser));
+      setAdminUsers((prevUsers) =>
+        prevUsers.filter((e) => e._id !== selectedUser),
+      );
       setDeleteModalOpen(false);
       setSelectedUser(null);
     } catch (error) {
@@ -259,7 +359,7 @@ export function TraineeUsersLists() {
     }
   };
 
-   const updateDate = async (data) => {
+  const updateDate = async (data) => {
     if (!data?.email) {
       toast.error("נדרש דואר אלקטרוני לעדכון תאריך התפוגה.");
       throw new Error("Missing email");
@@ -275,23 +375,21 @@ export function TraineeUsersLists() {
           prevUsers.map((user) =>
             user.email === data.email
               ? { ...user, expiry_date: data.expiry_date }
-              : user
-          )
+              : user,
+          ),
         );
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "עדכון התאריך נכשל."
-      );
+      toast.error(error.response?.data?.message || "עדכון התאריך נכשל.");
       throw error;
     }
   };
 
-    const updateStatus = async ( userId) => {
+  const updateStatus = async (userId) => {
     try {
       const response = await axios.post(`${base_url}/updateUserInfo`, {
         user_id: userId,
-        userType:"admin",
+        userType: "admin",
       });
 
       if (response.status === 200) {
@@ -316,7 +414,7 @@ export function TraineeUsersLists() {
         toast.success(
           nextScreen === "unlock"
             ? "המשתמש שוחרר בהצלחה"
-            : "המשתמש ננעל בהצלחה"
+            : "המשתמש ננעל בהצלחה",
         );
         fetchAdminUser();
       }
@@ -326,17 +424,25 @@ export function TraineeUsersLists() {
   };
 
   const table = useReactTable({
-    data: adminUsers,
+    data: filteredUsers,
     columns,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    state: { sorting, columnFilters, columnVisibility, rowSelection },
+    onPaginationChange: (updater) => {
+      const prev = { pageIndex: page - 1, pageSize: PAGE_SIZE };
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      setPage((next.pageIndex ?? 0) + 1);
+    },
+    state: {
+      sorting,
+      columnVisibility,
+      rowSelection,
+      pagination: { pageIndex: page - 1, pageSize: PAGE_SIZE },
+    },
   });
 
   if (loading) {
@@ -356,13 +462,9 @@ export function TraineeUsersLists() {
         >
           <input
             type="search"
-            name=""
-            id=""
-            placeholder="סנן לפי שם..."
-            value={(table.getColumn("full_name")?.getFilterValue()) ?? ""}
-            onChange={(event) =>
-              table.getColumn("full_name")?.setFilterValue(event.target.value)
-            }
+            placeholder="סנן לפי שם או אימייל..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
             className="border border-gray-200 bg-white py-3 px-2 rounded-xl text-sm min-w-[310px] h-12"
           />
           <div className="absolute bg-[#7994CB] w-8 h-8 rounded-full flex justify-center items-center left-2">
@@ -381,7 +483,7 @@ export function TraineeUsersLists() {
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -399,7 +501,7 @@ export function TraineeUsersLists() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -437,18 +539,49 @@ export function TraineeUsersLists() {
         </DialogContent>
       </Dialog>
 
+      {/* Lock / Unlock / Make trainer confirmation */}
+      <Dialog
+        open={confirmActionOpen}
+        onOpenChange={(open) => {
+          if (!open) closeConfirmAction();
+          else setConfirmActionOpen(true);
+        }}
+      >
+        <DialogContent dir="rtl">
+          <DialogHeader>
+            <DialogTitle className="text-right">
+              {getConfirmActionCopy().title}
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-right">{getConfirmActionCopy().message}</p>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={closeConfirmAction}>
+              {UI_TEXT.cancel}
+            </Button>
+            <Button
+              className="bg-[#7994CB] text-white"
+              onClick={handleConfirmAction}
+            >
+              {getConfirmActionCopy().confirmLabel}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <PaginationComp
-          currentPage={table.getState().pagination.pageIndex + 1}
-          totalPages={table.getPageCount()}
-          onPageChange={(p) => table.setPageIndex(p - 1)}
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
         />
       </div>
-      {
-        viewUserModalOpen && (
-          <UserDetails userId={viewUser} isOpen={viewUserModalOpen} onClose={() => setViewUserModalOpen(false)} />
-        )
-      }
+      {viewUserModalOpen && (
+        <UserDetails
+          userId={viewUser}
+          isOpen={viewUserModalOpen}
+          onClose={() => setViewUserModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

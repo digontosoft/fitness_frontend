@@ -105,7 +105,7 @@ export default function TrainingForTraineeDetails({ trainingId }) {
                                 className="text-sm  px-3 py-1 rounded-md  uppercase font-bold"
                                 dir="rtl"
                               >
-                                מניפולציה:{" "}
+                                הערות:{" "}
                                 <span className="font-normal">
                                   {exercise.manipulation || "לא זמין"}
                                 </span>

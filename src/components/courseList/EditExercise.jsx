@@ -164,15 +164,14 @@ const EditExercise = () => {
         !item.sets ||
         Number(item.sets) <= 0 ||
         !item.reps ||
-        Number(item.reps) <= 0 ||
-        !String(item.manipulation ?? "").trim()
+        Number(item.reps) <= 0
     );
     if (emptyItem)
-      return `מלא את כל השדות (סטים, חזרות, מניפולציה) עבור "${emptyItem.exercise_id?.name || "תרגיל"}"`;
+      return `מלא את כל השדות (סטים, חזרות) עבור "${emptyItem.exercise_id?.name || "תרגיל"}"`;
 
     const last = effectiveList[effectiveList.length - 1];
     if (effectiveList.length > 0 && isSuperset(last?.manipulation))
-      return 'אחרי "סופרסט" חייב לבוא תרגיל עם מניפולציה אחרת';
+      return 'אחרי "סופרסט" חייב לבוא תרגיל עם הערות אחרות';
 
     return null;
   }, [effectiveList]);
@@ -242,7 +241,7 @@ const EditExercise = () => {
       if (isSuperset(value) && !isLastExercise) {
         const nextExercise = currentList[index + 1];
         if (!nextExercise) {
-          toast.error('אחרי "סופרסט" חייב לבוא תרגיל עם מניפולציה אחרת');
+          toast.error('אחרי "סופרסט" חייב לבוא תרגיל עם הערות אחרות');
           return;
         }
       }
@@ -296,16 +295,12 @@ const EditExercise = () => {
         toast.error(`נא להזין מספר חזרות תקין עבור ${item.exercise_id?.name || "תרגיל"}.`);
         return;
       }
-      if (!String(item.manipulation ?? "").trim()) {
-        toast.error(`מלא מניפולציה עבור "${item.exercise_id?.name || "תרגיל"}"`);
-        return;
-      }
     }
 
     // Superset rule: last exercise cannot have manipulation = "superset"
     const last = currentList[currentList.length - 1];
     if (currentList.length > 0 && isSuperset(last?.manipulation)) {
-      toast.error('אחרי "סופרסט" חייב לבוא תרגיל עם מניפולציה אחרת');
+      toast.error('אחרי "סופרסט" חייב לבוא תרגיל עם הערות אחרות');
       return;
     }
 
@@ -419,7 +414,7 @@ const EditExercise = () => {
                   />
                 </div>
                 <div className="flex flex-col items-center gap-2 w-52 max-w-[90%]">
-                  <label>מניפולציה:</label>
+                  <label>הערות:</label>
                   <input
                     type="text"
                     value={item.manipulation || ""}
@@ -427,6 +422,7 @@ const EditExercise = () => {
                       handleChange(index, "manipulation", e.target.value)
                     }
                     className="w-full p-2 rounded-lg border"
+                    placeholder="הזן הערות"
                   />
                 </div>
               </div>
@@ -538,12 +534,13 @@ const EditExercise = () => {
                   />
                 </div>
                 <div className="flex flex-col items-center md:justify-center gap-3 w-full">
-                  <label>מניפולציה:</label>
+                  <label>הערות:</label>
                   <input
                     type="text"
                     value={newExerciseManipulation}
                     onChange={(e) => setNewExerciseManipulation(e.target.value)}
                     className="p-2 rounded border w-full"
+                    placeholder="הזן הערות"
                   />
                 </div>
               </div>

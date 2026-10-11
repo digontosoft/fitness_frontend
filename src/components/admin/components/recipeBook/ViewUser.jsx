@@ -91,7 +91,7 @@ const ViewUser = ({ user, onClose }) => {
                 סוג משתמש
               </label>
               <span className="inline-block px-3 py-1 rounded text-sm font-semibold bg-blue-100 text-blue-700">
-                {user.userType === "recipe" ? "חבר קהילה" : user.userType || "N/A"}
+                {user.userType === "recipe" ? "משתמש קהילה" : user.userType || "N/A"}
               </span>
             </div>
 

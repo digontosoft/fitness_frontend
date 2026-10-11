@@ -44,7 +44,7 @@ const TraineeExerciseLibrary = () => {
     <div className="bg-[#FDFDFD] min-h-[75vh] h-auto">
         <WorkOutListBaground bgImg={exerciseLibrary} />
       <Title title={"ספריית תרגילים"} />
-      <div className="flex justify-center px-4">
+      {/* <div className="flex justify-center px-4">
         <button
           type="button"
           onClick={handleExerciseReportDownload}
@@ -55,7 +55,7 @@ const TraineeExerciseLibrary = () => {
         >
           {reportLoading ? "טוען..." : "הצגת דוח ביצועי אימונים"}
         </button>
-      </div>
+      </div> */}
       <TraineeExerciseLibraryCard />
     </div>
   );

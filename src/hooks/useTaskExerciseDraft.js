@@ -1,9 +1,9 @@
 import {
-  clearTaskDraft,
-  getTaskDraftKey,
-  loadTaskDraft,
-  mergeDraftWithExercises,
-  saveTaskDraft,
+    clearTaskDraft,
+    getTaskDraftKey,
+    loadTaskDraft,
+    mergeDraftWithExercises,
+    saveTaskDraft,
 } from "@/utils/taskDraftStorage";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -67,6 +67,7 @@ export function useTaskExerciseDraft({
           value.sets_done ||
           value.reps_done ||
           value.last_set_weight ||
+          value.user_notes ||
           value.manipulation;
         if (!hasAny) return;
         exercisesBySlot[slotKey] = value;

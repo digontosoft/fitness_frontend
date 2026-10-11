@@ -218,14 +218,14 @@
 //                     />
 //                   </div>
 //                   <div className="flex flex-col space-y-2">
-//                     <label>מניפולציה</label>
+//                     <label>הערות</label>
 //                     <Input
 //                       type="text"
 //                       value={exercise.manipulation}
 //                       onChange={(e) =>
 //                         handleInputChange(index, "manipulation", e.target.value)
 //                       }
-//                       placeholder="Enter manipulation"
+//                       placeholder="Enter notes"
 //                     />
 //                   </div>
 //                 </div>
@@ -613,7 +613,7 @@
 //                   />
 //                 </div>
 //                 <div className="flex flex-col space-y-2">
-//                   <label>מניפולציה</label>
+//                   <label>הערות</label>
 //                   <Input
 //                     type="text"
 //                     value={exercise.manipulation}
@@ -913,14 +913,17 @@ const AddWorkoutForm = () => {
     }
   };
 
-  const isFormValid = workoutExercises.every(
-    (ex, index, arr) =>
-      ex.sets > 0 &&
-      ex.reps > 0 &&
-      (index === arr.length - 1
-        ? ex.manipulation?.trim().toLowerCase() !== "superset"
-        : true)
-  );
+  // manipulation optional, except last exercise cannot be incomplete "superset"
+  const isIncompleteSuperset = (exercises = []) => {
+    if (!exercises.length) return false;
+    const last = exercises[exercises.length - 1];
+    return last?.manipulation?.trim().toLowerCase() === "superset";
+  };
+
+  const isFormValid =
+    workoutExercises.every(
+      (ex) => Number(ex.sets) > 0 && Number(ex.reps) > 0
+    ) && !isIncompleteSuperset(workoutExercises);
 
   return (
     <div className="sm:py-20 py-6" dir="rtl">
@@ -1019,13 +1022,14 @@ const AddWorkoutForm = () => {
                   />
                 </div>
                 <div className="flex flex-col space-y-2">
-                  <label>מניפולציה</label>
+                  <label>הערות</label>
                   <Input
                     type="text"
                     value={exercise.manipulation}
                     onChange={(e) =>
                       handleInputChange(index, "manipulation", e.target.value)
                     }
+                    placeholder="הזן הערות"
                   />
                 </div>
               </div>

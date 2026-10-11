@@ -25,11 +25,11 @@ const ProgressCourseCart = () => {
     setIsFetching(true);
     try {
       const response = await axios.get(
-        `${base_url}/get-training-by-user-id/${user._id}`
+        `${base_url}/get-training-by-user-id/${user._id}`,
       );
       if (response.status === 200) {
         const found = response.data.data.find(
-          (t) => t._id === trainingFromState._id
+          (t) => t._id === trainingFromState._id,
         );
         if (found) setTraining(found);
       }
@@ -50,7 +50,7 @@ const ProgressCourseCart = () => {
       return null;
     }
     const found = training.workouts.find(
-      (w) => w.workout?._id === workout?._id || w._id === workout?._id
+      (w) => w.workout?._id === workout?._id || w._id === workout?._id,
     );
     return found || training.workouts[0] || null;
   }, [training, workout]);
@@ -70,7 +70,7 @@ const ProgressCourseCart = () => {
     }
   }, [workout, trainingFromState, navigate]);
   // console.log(exercises);
- 
+
   // console.log("workoutdata:",workout);
   // console.log(training);
 
@@ -80,7 +80,9 @@ const ProgressCourseCart = () => {
       <div className="bg-[#7994CB] min-h-screen border-b-8 border-white py-12 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 animate-spin text-white" />
-          <p className="text-white font-semibold" dir="rtl">טוען...</p>
+          <p className="text-white font-semibold" dir="rtl">
+            טוען...
+          </p>
         </div>
       </div>
     );
@@ -91,7 +93,9 @@ const ProgressCourseCart = () => {
       <div className="bg-[#7994CB] min-h-screen border-b-8 border-white py-12 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 animate-spin text-white" />
-          <p className="text-white font-semibold" dir="rtl">טוען נתונים...</p>
+          <p className="text-white font-semibold" dir="rtl">
+            טוען נתונים...
+          </p>
         </div>
       </div>
     );
@@ -104,9 +108,9 @@ const ProgressCourseCart = () => {
         <RecipeParagraph trainingDesc={workout?.description} />
 
         <div className="flex flex-col md:flex-row-reverse gap-4">
-        <Link 
-            to={"/startTraining"} 
-            state={{ 
+          <Link
+            to={"/startTraining"}
+            state={{
               workout: selectedWorkout || workout,
               training: training,
               // Also pass as data for compatibility with task-based flow
@@ -117,11 +121,17 @@ const ProgressCourseCart = () => {
                   training?.training_id?.name,
                 exercises: exercises,
                 userTrainingExercise: exercises,
-                name: selectedWorkout?.workout?.name || workout?.name || training?.training_id?.name,
+                name:
+                  selectedWorkout?.workout?.name ||
+                  workout?.name ||
+                  training?.training_id?.name,
                 workout_id: selectedWorkout?.workout?._id || workout?._id,
                 task_id: selectedWorkout?.task_id || workout?.task_id || null,
-                user_training_workout_id: selectedWorkout?.user_training_workout_id || workout?.user_training_workout_id || null,
-              }
+                user_training_workout_id:
+                  selectedWorkout?.user_training_workout_id ||
+                  workout?.user_training_workout_id ||
+                  null,
+              },
             }}
             onClick={() => setIsNavigating(true)}
           >
@@ -140,8 +150,8 @@ const ProgressCourseCart = () => {
               )}
             </Button>
           </Link>
-        <Link 
-            to="/customize-workout" 
+          <Link
+            to="/customize-workout"
             state={{ workout: selectedWorkout || workout, training }}
             onClick={() => setIsNavigating(true)}
           >
@@ -160,15 +170,16 @@ const ProgressCourseCart = () => {
               )}
             </Button>
           </Link>
-        
-          
         </div>
 
-        <div dir="rtl" className="w-full px-4 pt-8 pb-4 text-right sm:text-center">
+        <div
+          dir="rtl"
+          className="w-full px-4 pt-8 sm:pt-4 pb-4 text-right sm:text-center"
+        >
           <p className="text-[#0A2533] font-bold text-xl">תרגילים:</p>
-          <p className="text-[#0A2533] text-sm sm:text-base mt-2">
+          {/* <p className="text-[#0A2533] text-sm sm:text-base mt-2">
             יש למלא את כל התרגילים מבלי לרענן/לצאת
-          </p>
+          </p> */}
         </div>
 
         {exercises.length === 0 ? (
@@ -180,8 +191,8 @@ const ProgressCourseCart = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2 w-full">
             {exercises.map((exercise, index) => (
-              <div 
-                key={exercise._id || index} 
+              <div
+                key={exercise._id || index}
                 className="transition-all duration-300 hover:scale-[1.02]"
               >
                 <PersonalExercise exercise={exercise} />
@@ -195,7 +206,6 @@ const ProgressCourseCart = () => {
 };
 
 export default ProgressCourseCart;
-
 
 // import Title from "../measurements/Tilte";
 // import RecipeParagraph from "../recipe/RecipeParagraph";

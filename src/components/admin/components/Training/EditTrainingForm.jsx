@@ -71,14 +71,15 @@ const EditTrainingForm = () => {
       return;
     }
 
-    const isAnyFieldEmpty = training.workouts?.some((workout) =>
+    // sets/reps required; manipulation optional (superset incomplete handled separately)
+    const hasEmptyRequired = training.workouts?.some((workout) =>
       workout.exercises.some(
         (exercise) =>
-          exercise.sets === "" || exercise.reps === "" || !exercise.manipulation
+          !(Number(exercise.sets) > 0) || !(Number(exercise.reps) > 0)
       )
     );
 
-    setIsButtonDisabled(isAnyFieldEmpty);
+    setIsButtonDisabled(!!hasEmptyRequired);
     validateSupersetAndToggle(training);
   }, [training]);
 
@@ -582,10 +583,11 @@ const EditTrainingForm = () => {
                           />
                         </div>
                         <div className="flex flex-col items-center space-y-4">
-                          <p>מניפולציה</p>
+                          <p>הערות</p>
                           <Input
                             type="text"
                             defaultValue={ex?.manipulation}
+                            placeholder="הזן הערות"
                             onChange={(e) =>
                               handleExerciseChange(
                                 workoutIndex,

@@ -45,7 +45,9 @@ const ViewAdmin = ({ admin, onClose }) => {
             adminDetails.map((trainee) => (
               <TableRow key={trainee._id}>
                 <TableCell>
-                  {trainee.firstName} {trainee.lastName}
+                  {trainee.full_name?.trim() ||
+                    `${trainee.firstName || ""} ${trainee.lastName || ""}`.trim() ||
+                    "—"}
                 </TableCell>
                 <TableCell className="break-all">{trainee.email}</TableCell>
               </TableRow>

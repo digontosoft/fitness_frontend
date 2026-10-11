@@ -4,6 +4,16 @@ import FTForm from "@/components/admin/components/FTForm/FTForm";
 import FInput from "@/components/admin/components/ui/FInput";
 import FRadioInput from "@/components/admin/components/ui/FRadioIntput";
 import FTextarea from "@/components/admin/components/ui/FTextarea";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { questionnaries } from "@/constants/ValidationSchema";
 import { verifyToken } from "@/constants/verifyToken";
@@ -24,6 +34,8 @@ const trainingTimesOptions = [
 const MeasurementWomen = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingData, setPendingData] = useState(null);
   const token = localStorage.getItem("authToken");
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const { id } = verifyToken(token);
@@ -33,11 +45,20 @@ const MeasurementWomen = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleFormSubmit = async (data) => {
+  // After validation succeeds — ask before sending
+  const handleFormSubmit = (data) => {
+    setPendingData(data);
+    setConfirmOpen(true);
+  };
+
+  const submitQuestionnaire = async (data) => {
     setLoading(true);
     try {
       const payload = { user_id: id, ...data };
-      const response = await axios.post(`${base_url}/upsertUserDetails`, payload);
+      const response = await axios.post(
+        `${base_url}/upsertUserDetails`,
+        payload,
+      );
 
       if (response.status === 200) {
         const userType = user?.userType;
@@ -46,10 +67,9 @@ const MeasurementWomen = () => {
           const updatedUser = { ...user, is_question_answered: true };
           localStorage.setItem("userInfo", JSON.stringify(updatedUser));
           toast.success("השאלון נשלח בהצלחה!");
-          navigate(
-            userType === "admin" ? "/admin-dashboard" : "/dashboard",
-            { replace: true }
-          );
+          navigate(userType === "admin" ? "/admin-dashboard" : "/dashboard", {
+            replace: true,
+          });
         } else {
           // Trainee: onboarding is complete, but the account goes back to
           // locked until an admin/superadmin unlocks it again.
@@ -68,7 +88,20 @@ const MeasurementWomen = () => {
       toast.error("שגיאה בשליחת השאלון. נסה שוב.");
     } finally {
       setLoading(false);
+      setPendingData(null);
     }
+  };
+
+  const handleConfirmSend = () => {
+    setConfirmOpen(false);
+    if (pendingData) {
+      submitQuestionnaire(pendingData);
+    }
+  };
+
+  const handleCancelSend = () => {
+    setConfirmOpen(false);
+    setPendingData(null);
   };
 
   return (
@@ -81,6 +114,33 @@ const MeasurementWomen = () => {
           </p>
         </div>
       )}
+
+      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <AlertDialogContent dir="rtl" className="text-right">
+          <AlertDialogHeader className="sm:text-right">
+            <AlertDialogTitle className="text-right">
+              האם לשלוח את השאלון לטל?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-right">
+              לאחר האישור השאלון יישלח ולא ניתן יהיה לערוך אותו.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="grid grid-cols-2 gap-2 sm:space-x-0">
+            <AlertDialogAction
+              onClick={handleConfirmSend}
+              className="h-11 w-full whitespace-normal px-2 bg-[#7994CB] hover:bg-[#6a84bb]"
+            >
+              כן, סיימתי
+            </AlertDialogAction>
+            <AlertDialogCancel
+              onClick={handleCancelSend}
+              className="mt-0 h-11 w-full whitespace-normal px-2"
+            >
+              לא, חזור לשאלון
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <div className="py-12 relative overflow-hidden sm:px-0 px-4">
         <div
@@ -151,32 +211,28 @@ const MeasurementWomen = () => {
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
+                  type="text"
                   label="גיל"
                   placeholder="התשובה שלך"
                   name="age"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
+                  type="text"
                   label="גובה"
                   placeholder="התשובה שלך"
                   name="height"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
+                  type="text"
                   label="משקל נוכחי - אם לא יודע לרשום בערך 5/10 קילו פלוס מינוס"
                   placeholder="התשובה שלך"
                   name="weight"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
+                  type="text"
                   label="המשקל הכי גבוה שהיית בו במהלך חייך (לא חובה לרשום)"
                   placeholder="התשובה שלך"
                   name="highest_weight"
@@ -412,32 +468,28 @@ const MeasurementWomen = () => {
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
+                  type="text"
                   label="גיל"
                   placeholder="התשובה שלך"
                   name="age"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
+                  type="text"
                   label="גובה"
                   placeholder="התשובה שלך"
                   name="height"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
+                  type="text"
                   label="משקל נוכחי - אם לא יודעת לרשום בערך 5/10 קילו פלוס מינוס"
                   placeholder="התשובה שלך"
                   name="weight"
                   dir="rtl"
                 />
                 <FInput
-                  type="number"
-                  min={0}
+                  type="text"
                   label="המשקל הכי גבוה שהיית בו במהלך חייך (לא חובה לרשום)"
                   placeholder="התשובה שלך"
                   name="highest_weight"

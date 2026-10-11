@@ -20,7 +20,7 @@ const MeasurementsWatch = () => {
   const userId = queryParams.get("userId");
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState(null);
-  const [measurements, setMeasurements] = React.useState([]);
+  const [measurements, setMeasurements] = React.useState({});
 
   useEffect(() => {
     if (!id) return;
@@ -30,15 +30,13 @@ const MeasurementsWatch = () => {
         const response = await axios.get(
           `${base_url}/get-measurement-by-id/${id}`
         );
-        setMeasurements(response?.data?.data);
+        setMeasurements(response?.data?.data || {});
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
   }, [id]);
-
-  // console.log("measurements:", measurements);
 
   return (
     <div className="overflow-x-hidden">
@@ -50,8 +48,20 @@ const MeasurementsWatch = () => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <div className="min-h-44 px-6" dir="rtl">
+            {measurements?.date && (
+              <div className="flex justify-center mb-4">
+                <span className="text-md font-semibold text-gray-700" dir="rtl">
+                  תאריך מדידה:{" "}
+                  {new Date(measurements.date).toLocaleDateString("he-IL")}
+                </span>
+              </div>
+            )}
             {!measurements.photo1 && (
-              <span dir="rtl">לא הוספת תמונות למדידה״</span>
+              <div className="text-center py-8">
+                <span dir="rtl" className="text-gray-600">
+                  לא הוספת תמונות למדידה
+                </span>
+              </div>
             )}
             {measurements.photo1 && (
               <div className="grid justify-center gap-3">

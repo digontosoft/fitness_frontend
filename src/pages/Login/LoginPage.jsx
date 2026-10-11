@@ -1,9 +1,8 @@
 import { base_url } from "@/api/baseUrl";
-import { blackLogo, bodyBuilder } from "../../assets";
+import Loading from "@/components/common/Loading";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import Loading from "@/components/common/Loading";
-import googleIcon from "../../assets/image/google.svg";
+import { blackLogo, bodyBuilder } from "../../assets";
 // import { whiteLogo } from "../../assets/index";
 import whiteLogo from "@/assets/image/white-logo.svg";
 

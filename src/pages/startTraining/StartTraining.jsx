@@ -24,6 +24,16 @@ const getExerciseLibraryId = (ex) => {
   return null;
 };
 
+/** Last-session notes; fall back to plan notes when API has none. */
+const resolveLastSessionNotes = (apiNotes, planNotes) => {
+  const candidates = [apiNotes, planNotes];
+  for (const candidate of candidates) {
+    const text = String(candidate ?? "").trim();
+    if (text && text.toLowerCase() !== "superset") return text;
+  }
+  return "";
+};
+
 const normalizeExercises = (list) =>
   list.map((ex) => {
     if (ex.exercise_id && typeof ex.exercise_id === "object") {
@@ -144,9 +154,19 @@ const StartTraining = () => {
         }
 
         if (planExercises) {
+          // Same exercise can appear more than once. Match the nth copy
+          // to the nth plan row so notes/sets/reps are not all taken from the first.
+          const planQueues = new Map();
+          for (const planEx of planExercises) {
+            const id = getExId(planEx);
+            if (!id) continue;
+            if (!planQueues.has(id)) planQueues.set(id, []);
+            planQueues.get(id).push(planEx);
+          }
+
           const merged = workoutExercises.map((wEx) => {
             const wId = getExId(wEx);
-            const planEx = planExercises.find((p) => getExId(p) === wId);
+            const planEx = planQueues.get(wId)?.shift();
             if (!planEx) return wEx;
             return {
               ...wEx,
@@ -227,9 +247,13 @@ const StartTraining = () => {
               String(slotIndex),
               {
                 sets_done: 0,
+                sets_target: Number(selectedExercise?.sets) || 0,
                 reps_done: 0,
-                last_set_weight: 0,
-                manipulation: selectedExercise?.manipulation || "",
+                last_set_weight: "",
+                manipulation: resolveLastSessionNotes(
+                  "",
+                  selectedExercise?.manipulation
+                ),
               },
             ];
           }
@@ -244,12 +268,22 @@ const StartTraining = () => {
               String(slotIndex),
               {
                 sets_done: Number(responseData?.sets_done) || 0,
+                sets_target:
+                  Number(
+                    responseData?.sets ??
+                      responseData?.sets_target ??
+                      selectedExercise?.sets
+                  ) || 0,
                 reps_done: Number(responseData?.reps_done) || 0,
-                last_set_weight: Number(responseData?.last_set_weight) || 0,
-                manipulation:
-                  responseData?.manipulation ||
-                  selectedExercise?.manipulation ||
-                  "",
+                last_set_weight:
+                  responseData?.last_set_weight != null &&
+                  responseData?.last_set_weight !== ""
+                    ? String(responseData.last_set_weight)
+                    : "",
+                manipulation: resolveLastSessionNotes(
+                  responseData?.manipulation,
+                  selectedExercise?.manipulation
+                ),
               },
             ];
           } catch {
@@ -257,9 +291,13 @@ const StartTraining = () => {
               String(slotIndex),
               {
                 sets_done: 0,
+                sets_target: Number(selectedExercise?.sets) || 0,
                 reps_done: 0,
-                last_set_weight: 0,
-                manipulation: selectedExercise?.manipulation || "",
+                last_set_weight: "",
+                manipulation: resolveLastSessionNotes(
+                  "",
+                  selectedExercise?.manipulation
+                ),
               },
             ];
           }

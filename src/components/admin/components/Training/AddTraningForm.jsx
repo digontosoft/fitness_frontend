@@ -386,7 +386,7 @@
 //                         />
 //                       </div>
 //                       <div>
-//                         <label htmlFor="manipulation">מניפולציה </label>
+//                         <label htmlFor="manipulation">הערות </label>
 //                         <input
 //                           type="text"
 //                           className="border rounded p-1 w-full  text-center placeholder:text-sm  "
@@ -555,17 +555,27 @@ const AddTrainingForm = () => {
   };
 
   const validateSupersetAndToggle = (workouts) => {
-    const hasIncompleteSuperset = (workouts || []).some((w) => {
-      const list = Array.isArray(w?.exercises) ? w.exercises : [];
-      const last = list[list.length - 1];
+    const list = workouts || [];
+    const hasIncompleteSuperset = list.some((w) => {
+      const exercises = Array.isArray(w?.exercises) ? w.exercises : [];
+      const last = exercises[exercises.length - 1];
       return (
-        list.length > 0 &&
+        exercises.length > 0 &&
         String(last?.manipulation ?? "").trim().toLowerCase() === "superset"
       );
     });
 
+    // sets/reps required; manipulation optional except incomplete last-superset
+    const hasEmptyRequired = list.some((w) =>
+      (Array.isArray(w?.exercises) ? w.exercises : []).some(
+        (ex) => !(Number(ex.sets) > 0) || !(Number(ex.reps) > 0)
+      )
+    );
+
     setIsSupersetIncomplete(hasIncompleteSuperset);
-    setIsButtonDisabled(hasIncompleteSuperset || (workouts || []).length === 0);
+    setIsButtonDisabled(
+      list.length === 0 || hasIncompleteSuperset || hasEmptyRequired
+    );
   };
 
   // ✅ Workout select handler (single add at a time)
@@ -1028,13 +1038,14 @@ const AddTrainingForm = () => {
                           htmlFor={`manipulation-${workoutIndex}-${exerciseIndex}`}
                           className="block text-xs text-gray-500 mb-1 text-center"
                         >
-                          מניפולציה
+                          הערות
                         </label>
                         <input
                           id={`manipulation-${workoutIndex}-${exerciseIndex}`}
                           type="text"
                           className="border rounded p-2 w-full text-center text-sm"
                           value={exercise.manipulation}
+                          placeholder="הזן הערות"
                           onChange={(e) =>
                             handleExerciseChange(
                               workoutIndex,

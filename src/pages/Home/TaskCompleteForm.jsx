@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { upload } from "../../assets/index";
@@ -11,6 +11,65 @@ import { UI_TEXT } from "@/constants/hebrewText";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+const DRAFT_FIELDS = [
+  "mode",
+  "date",
+  "thighl",
+  "thighr",
+  "armr",
+  "arml",
+  "butt",
+  "chest",
+  "waist",
+];
+
+const getDraftKey = (userId) => `measurement-task-draft:${userId}`;
+
+const loadMeasurementDraft = (key) => {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+};
+
+const saveMeasurementDraft = (key, values) => {
+  try {
+    const payload = {};
+    DRAFT_FIELDS.forEach((field) => {
+      payload[field] = values?.[field] ?? "";
+    });
+    payload.mode = payload.mode || "task";
+    localStorage.setItem(key, JSON.stringify(payload));
+  } catch (error) {
+    console.error("Failed to save measurement draft:", error);
+  }
+};
+
+const clearMeasurementDraft = (key) => {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    /* ignore */
+  }
+};
+
+const EMPTY_FORM = {
+  mode: "task",
+  date: "",
+  thighl: "",
+  thighr: "",
+  armr: "",
+  arml: "",
+  butt: "",
+  chest: "",
+  waist: "",
+};
+
 const TaskCompleteForm = ({ data }) => {
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
@@ -18,6 +77,7 @@ const TaskCompleteForm = ({ data }) => {
   const Gender = userDetails?.gender;
   const Id = userDetails._id;
   const [getMesurement, setMesurement] = useState([]);
+  const [draftReady, setDraftReady] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,6 +98,8 @@ const TaskCompleteForm = ({ data }) => {
   // console.log("getMesurement", getMesurement);
 
   const id = data?.measurement_id;
+  // Stable per-user key so reload (no location.state) still finds the draft
+  const draftKey = useMemo(() => getDraftKey(Id), [Id]);
 
   const {
     register,
@@ -47,36 +109,50 @@ const TaskCompleteForm = ({ data }) => {
     setValue,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      mode: "task",
-      date: "",
-      thighl: "",
-      thighr: "",
-      armr: "",
-      arml: "",
-      butt: "",
-      chest: "",
-      waist: "",
-    },
+    defaultValues: EMPTY_FORM,
   });
 
+  // Restore draft immediately on mount / user change (before or without API)
   useEffect(() => {
-    if (getMesurement) {
-      // console.log(getMesurement.waist);
-      reset({
-        mode: "task",
-        date: getMesurement.date || "",
-        thighl: getMesurement.thighl || "",
-        thighr: getMesurement.thighr || "",
-        armr: getMesurement.armr || "",
-        arml: getMesurement.arml || "",
-        chest: getMesurement.chest || "",
-        butt:
-          Gender === "male" ? getMesurement.chest : getMesurement.butt || "",
-        waist: getMesurement.waist || "",
-      });
+    if (!Id || !draftKey) return;
+    setDraftReady(false);
+    const draft = loadMeasurementDraft(draftKey);
+    if (draft) {
+      reset({ ...EMPTY_FORM, ...draft, mode: "task" });
     }
-  }, [getMesurement, reset, Gender]);
+    setDraftReady(true);
+  }, [Id, draftKey, reset]);
+
+  // When API measurement loads, keep draft values over API defaults
+  useEffect(() => {
+    if (!getMesurement || Array.isArray(getMesurement)) return;
+
+    const fromApi = {
+      mode: "task",
+      date: getMesurement.date || "",
+      thighl: getMesurement.thighl || "",
+      thighr: getMesurement.thighr || "",
+      armr: getMesurement.armr || "",
+      arml: getMesurement.arml || "",
+      chest: getMesurement.chest || "",
+      butt:
+        Gender === "male" ? getMesurement.chest : getMesurement.butt || "",
+      waist: getMesurement.waist || "",
+    };
+
+    const draft = loadMeasurementDraft(draftKey);
+    reset(draft ? { ...fromApi, ...draft, mode: "task" } : fromApi);
+  }, [getMesurement, reset, Gender, draftKey]);
+
+  // Persist only after draft hydrate — avoids empty form wiping stored draft
+  const watchedValues = watch();
+  useEffect(() => {
+    if (!draftReady || !Id || !draftKey) return;
+    const timer = setTimeout(() => {
+      saveMeasurementDraft(draftKey, watchedValues);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [watchedValues, Id, draftKey, draftReady]);
 
   useEffect(() => {
     if (getMesurement?.photo1 || getMesurement?.photo2) {
@@ -138,6 +214,7 @@ const TaskCompleteForm = ({ data }) => {
         }
       );
       if (response.status === 200) {
+        clearMeasurementDraft(draftKey);
         toast.success(UI_TEXT.measurementTaskComplete);
         navigate("/");
       }

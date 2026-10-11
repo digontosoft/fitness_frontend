@@ -169,7 +169,7 @@ export default function RecipeBookUserList() {
         const userType = row.getValue("userType");
         return (
           <span className="px-2 py-1 rounded text-xs font-semibold bg-blue-100 text-blue-700">
-            {userType === "recipe" ? "חבר קהילה" : userType}
+            {userType === "recipe" ? "משתמש קהילה" : userType}
           </span>
         );
       },

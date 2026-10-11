@@ -65,7 +65,7 @@
 //                             </span>
 //                           </p>
 //                           <p className="text-sm  py-2 px-4 rounded-md text-black uppercase font-bold tracking-wide">
-//                             Manipulation:{" "}
+//                             Notes:{" "}
 //                             <span className="font-normal">
 //                               {exercise?.manipulation}
 //                             </span>
@@ -182,7 +182,7 @@ export default function WorkoutDetails({ workoutId }) {
                             </span>
                           </p>
                           <p className="text-sm py-2 px-4 rounded-md text-black uppercase font-bold tracking-wide">
-                            מניפולציה:{" "}
+                            הערות:{" "}
                             <span className="font-normal">
                               {exercise?.manipulation}
                             </span>

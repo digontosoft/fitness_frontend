@@ -75,8 +75,7 @@ const CustomizeWorkoutForm = () => {
 
     const isAnyFieldEmpty = training.workouts?.some((workout) =>
       workout.exercises.some(
-        (exercise) =>
-          exercise.sets === 0 || exercise.reps === 0 || !exercise.manipulation
+        (exercise) => exercise.sets === 0 || exercise.reps === 0
       )
     );
 
@@ -573,10 +572,11 @@ const CustomizeWorkoutForm = () => {
                         />
                       </div>
                       <div className="flex flex-col items-center space-y-4">
-                        <p>מניפולציה</p>
+                        <p>הערות</p>
                         <Input
                           type="text"
                           defaultValue={ex?.manipulation}
+                          placeholder="הזן הערות"
                           onChange={(e) =>
                             handleExerciseChange(
                               workoutIndex,
