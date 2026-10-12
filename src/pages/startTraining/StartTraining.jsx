@@ -142,22 +142,33 @@ const StartTraining = () => {
             : ex?.exercise_id || ex?._id;
 
         const allTrainings = trainingRes.data.data || [];
+        const activeTraining =
+          allTrainings.find((t) => t.status === "active") || null;
         let planExercises = null;
-        for (const t of allTrainings) {
-          const mw = t.workouts?.find(
+        if (activeTraining) {
+          const mw = activeTraining.workouts?.find(
             (w) =>
               w.workout?._id === matchedTask.workout_id ||
               w._id === matchedTask.workout_id,
           );
           if (Array.isArray(mw?.exercises) && mw.exercises.length > 0) {
             planExercises = mw.exercises;
-            break;
           }
         }
 
+        // Saved workout-task values are the target the trainer set.
+        // Plan data only fills a field the workout row does not have.
+        // An older training in the list must not replace those targets.
+        const preferWorkout = (workoutValue, planValue) =>
+          workoutValue !== undefined &&
+          workoutValue !== null &&
+          workoutValue !== ""
+            ? workoutValue
+            : planValue;
+
         if (planExercises) {
           // Same exercise can appear more than once. Match the nth copy
-          // to the nth plan row so notes/sets/reps are not all taken from the first.
+          // to the nth plan row so a missing note is not taken from the first.
           const planQueues = new Map();
           for (const planEx of planExercises) {
             const id = getExId(planEx);
@@ -172,9 +183,9 @@ const StartTraining = () => {
             if (!planEx) return wEx;
             return {
               ...wEx,
-              sets: planEx.sets ?? wEx.sets,
-              reps: planEx.reps ?? wEx.reps,
-              manipulation: planEx.manipulation ?? wEx.manipulation,
+              sets: preferWorkout(wEx.sets, planEx.sets),
+              reps: preferWorkout(wEx.reps, planEx.reps),
+              manipulation: preferWorkout(wEx.manipulation, planEx.manipulation),
             };
           });
           setLiveExercises(merged);
