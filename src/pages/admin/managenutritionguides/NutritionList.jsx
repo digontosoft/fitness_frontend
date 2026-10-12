@@ -42,10 +42,7 @@ export function NutritionList() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedNutrition, setSelectedNutrition] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { id } = useParams();
-  if (!id) {
-    localStorage.removeItem("selectedUserId");
-  }
+  const { id: routeUserId } = useParams();
 
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -136,27 +133,46 @@ export function NutritionList() {
       console.error("Error deleting exercise:", error);
     }
   };
-  const userId = localStorage.getItem("selectedUserId");
-  const user_id = JSON.parse(userId);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const url = userId
-        ? `${base_url}/nutritionGuide/user/${user_id}`
-        : `${base_url}/nutritionGuide`;
-
-      const response = await axios.get(url);
-      setNutritionGuide(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching exercises:", error);
+  useEffect(() => {
+    if (!routeUserId) {
+      localStorage.removeItem("selectedUserId");
+      return;
     }
-  };
+    localStorage.setItem("selectedUserId", JSON.stringify(routeUserId));
+  }, [routeUserId]);
 
   useEffect(() => {
+    let ignore = false;
+
+    const fetchData = async () => {
+      setLoading(true);
+      setNutritionGuide([]);
+      try {
+        const url = routeUserId
+          ? `${base_url}/nutritionGuide/user/${routeUserId}`
+          : `${base_url}/nutritionGuide`;
+
+        const response = await axios.get(url);
+        if (!ignore) {
+          setNutritionGuide(response.data.data || []);
+        }
+      } catch (error) {
+        if (!ignore) {
+          setNutritionGuide([]);
+        }
+        console.error("Error fetching exercises:", error);
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    };
+
     fetchData();
-  }, []);
+    return () => {
+      ignore = true;
+    };
+  }, [routeUserId]);
 
   const table = useReactTable({
     data: nutritionGuide,
@@ -201,13 +217,13 @@ export function NutritionList() {
             {(user.userType === "supperadmin" || user.userType === "admin") && (
               <Link
                 to={
-                  user_id
-                    ? `/${user.userType === "admin" ? "admin-dashboard" : "dashboard"}/add-nutrition-menu/${user_id}`
+                  routeUserId
+                    ? `/${user.userType === "admin" ? "admin-dashboard" : "dashboard"}/add-nutrition-menu/${routeUserId}`
                     : `/${user.userType === "admin" ? "admin-dashboard" : "dashboard"}/add-nutrition-guide`
                 }
               >
                 <Button className="bg-[#7994CB] uppercase font-medium" size="sm">
-                  {user_id ? "הוסף תפריט תזונה" : " הוסף מדריך תזונה"}
+                  {routeUserId ? "הוסף תפריט תזונה" : " הוסף מדריך תזונה"}
                 </Button>
               </Link>
             )}
