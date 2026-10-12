@@ -357,17 +357,17 @@ const StartTraining = () => {
     setIsSubmitting(true);
 
     try {
-      // const response = await axios.post(
-      //   `${base_url}/complete-workout-task`,
-      //   payload
-      // );
+      const response = await axios.post(
+        `${base_url}/complete-workout-task`,
+        payload,
+      );
 
-      // if (response.status === 200) {
-      //   clearDraft();
-      //   toast.success(UI_TEXT.workoutCompleted);
-      //   navigate("/");
-      // }
-      console.log("payload:", payload);
+      if (response.status === 200) {
+        clearDraft();
+        toast.success(UI_TEXT.workoutCompleted);
+        navigate("/");
+      }
+      // console.log("payload:", payload);
     } catch (error) {
       console.error("Error completing workout:", error);
       // Preserve draft on failure
