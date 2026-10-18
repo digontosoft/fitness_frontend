@@ -261,7 +261,7 @@ const StartTraining = () => {
               {
                 sets_done: 0,
                 sets_target: Number(selectedExercise?.sets) || 0,
-                reps_done: 0,
+                reps_done: "",
                 last_set_weight: "",
                 manipulation: resolveLastSessionNotes(
                   "",
@@ -287,7 +287,11 @@ const StartTraining = () => {
                       responseData?.sets_target ??
                       selectedExercise?.sets,
                   ) || 0,
-                reps_done: Number(responseData?.reps_done) || 0,
+                reps_done:
+                  responseData?.reps_done != null &&
+                  String(responseData.reps_done).trim() !== ""
+                    ? String(responseData.reps_done).trim()
+                    : "",
                 last_set_weight:
                   responseData?.last_set_weight != null &&
                   responseData?.last_set_weight !== ""
@@ -305,7 +309,7 @@ const StartTraining = () => {
               {
                 sets_done: 0,
                 sets_target: Number(selectedExercise?.sets) || 0,
-                reps_done: 0,
+                reps_done: "",
                 last_set_weight: "",
                 manipulation: resolveLastSessionNotes(
                   "",
