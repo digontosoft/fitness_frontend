@@ -10,6 +10,9 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { bodyBuilder, female, man } from "../../assets/index";
 
+const avatarClass =
+  "h-32 w-32 rounded-full bg-white object-cover object-center shrink-0";
+
 const GenderSelection = () => {
   const [gender, setGender] = useState("");
   const [loading, setLoading] = useState(false);
@@ -62,13 +65,18 @@ const GenderSelection = () => {
       <div className="flex-1 md:bg-[#FFFFFF] bg-transparent flex justify-center items-center pt-52 md:pt-0 py-4">
         <div className="flex flex-col justify-center gap-12 items-center ">
           <div className="flex justify-center items-center">
-            <p className="text-xl  md:text-[#000000] text-white">
+            {/* RTL so the trailing colon sits on the right */}
+            <p
+              dir="rtl"
+              className="text-xl text-right md:text-[#000000] text-white"
+            >
               בחר/י כיצד תרצה/י שנפנה אלייך:
             </p>
           </div>
-          <div className="flex  gap-3 justify-start items-center my-8">
-            <div className="flex flex-col gap-4">
-              <img src={female} alt="" />
+          {/* Both avatars share one fixed size so the PNGs cannot render unevenly */}
+          <div className="flex gap-4 justify-center items-start my-8">
+            <div className="flex flex-col gap-4 w-32">
+              <img src={female} alt="נקבה" className={avatarClass} />
               <Button
                 type="button"
                 variant="ghost"
@@ -84,8 +92,8 @@ const GenderSelection = () => {
                 <p>נקבה</p>
               </Button>
             </div>
-            <div className="flex flex-col gap-4">
-              <img src={man} alt="" />
+            <div className="flex flex-col gap-4 w-32">
+              <img src={man} alt="זכר" className={avatarClass} />
               <Button
                 type="button"
                 variant="ghost"
