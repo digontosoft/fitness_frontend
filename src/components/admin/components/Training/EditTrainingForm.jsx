@@ -164,7 +164,10 @@ const EditTrainingForm = () => {
     if (!selected.length) return;
     const newWorkout = selected[0];
 
-    if (training.workouts?.some((w) => w.workout?._id === newWorkout?._id)) {
+    // Existing workouts from GET /training/:id are flattened to
+    // { _id, name, exercises: [{ _id, exercise_id, name, ... }] }, so a newly
+    // added workout must use the same shape or its name never renders.
+    if (training.workouts?.some((w) => w._id === newWorkout?._id)) {
       return;
     }
     const updatedTraining = {
@@ -173,8 +176,18 @@ const EditTrainingForm = () => {
         ...(training.workouts || []),
         {
           _id: newWorkout._id,
-          workout: newWorkout,
-          exercises: newWorkout.exercises || [],
+          name: newWorkout.name,
+          exercises: (newWorkout.exercises || []).map((ex) => {
+            const library =
+              ex.exercise_id && typeof ex.exercise_id === "object"
+                ? ex.exercise_id
+                : null;
+            return {
+              ...ex,
+              exercise_id: library?._id || ex.exercise_id,
+              name: library?.name || ex.name || "",
+            };
+          }),
         },
       ],
     };
