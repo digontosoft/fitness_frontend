@@ -323,7 +323,12 @@ const EditExercise = () => {
         const taskId = workData?.task_id;
         if (taskId) {
           navigate(`/action-course-cart/${taskId}`, {
-            state: location.state,
+            state: {
+              data: {
+                ...workData,
+                userTrainingExercise: currentList,
+              },
+            },
             replace: true,
           });
         } else {

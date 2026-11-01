@@ -32,14 +32,16 @@ const LastExercise = ({
     sessionInput?.sets ??
     planSets ??
     0;
-  const reps = hasPrev ? sessionInput.reps_done ?? 0 : 0;
-  const weightRaw = hasPrev
-    ? sessionInput.lastSet ?? sessionInput.last_set_weight
+  // Reps and weight are free text ("8,8,8" or "10.10.20"), so never coerce
+  // them with Number(): a comma-separated value would become NaN -> 0.
+  const displayValue = (raw) => {
+    const text = String(raw ?? "").trim();
+    return text === "" ? 0 : text;
+  };
+  const reps = hasPrev ? displayValue(sessionInput.reps_done) : 0;
+  const weight = hasPrev
+    ? displayValue(sessionInput.lastSet ?? sessionInput.last_set_weight)
     : 0;
-  const weight =
-    weightRaw === "" || weightRaw === undefined || weightRaw === null
-      ? 0
-      : weightRaw;
   const notesDisplay = formatNotesDisplay(sessionInput?.manipulation, planNotes);
 
   const cellClass = `text-[#0A2533] text-right ${

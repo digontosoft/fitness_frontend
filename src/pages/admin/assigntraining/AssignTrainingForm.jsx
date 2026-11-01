@@ -358,19 +358,23 @@ const AssignTrainingForm = ({ trainingId, user_id }) => {
         updatedTraining.workouts.push({
           _id: fullWorkoutData._id,
           name: fullWorkoutData.name,
-          exercises: fullWorkoutData.exercises.map(
-            (exercise) => (
-              // console.log("exercise_id:", exercise.exercise_id._id),
-              {
-                _id: exercise.exercise_id._id,
-                exercise_id: exercise.exercise_id._id,
-                name: exercise.name,
-                sets: exercise.sets || 3,
-                reps: exercise.reps || 10,
-                manipulation: exercise.manipulation || "normal",
-              }
-            )
-          ),
+          exercises: (fullWorkoutData.exercises || []).map((exercise) => {
+            // GET /workout/:id populates exercise_id, so the library name
+            // lives on exercise.exercise_id.name, not on the row itself.
+            const library =
+              exercise.exercise_id && typeof exercise.exercise_id === "object"
+                ? exercise.exercise_id
+                : null;
+            const exerciseId = library?._id || exercise.exercise_id;
+            return {
+              _id: exerciseId,
+              exercise_id: exerciseId,
+              name: library?.name || exercise.name || "",
+              sets: exercise.sets || 3,
+              reps: exercise.reps || 10,
+              manipulation: exercise.manipulation || "",
+            };
+          }),
         });
       }
     }

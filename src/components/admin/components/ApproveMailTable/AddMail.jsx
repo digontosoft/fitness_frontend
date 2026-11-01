@@ -119,11 +119,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UI_TEXT } from "@/constants/hebrewText";
 import axios from "axios";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { UI_TEXT } from "@/constants/hebrewText";
 import BasicButton from "../ui/BasicButton";
 
 export default function AddMail({ onEmailAdded }) {
@@ -226,7 +226,7 @@ export default function AddMail({ onEmailAdded }) {
                             value="recipe"
                             className="hover:bg-gray-50"
                           >
-                             משתמש קהילה
+                            משתמש קהילה
                           </SelectItem>
                         </>
                       ) : (

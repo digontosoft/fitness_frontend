@@ -63,7 +63,7 @@ const StartTraining = () => {
     if (training?.workouts && training.workouts.length > 0) {
       const selectedWorkout = workout?._id
         ? training.workouts.find(
-            (w) => w.workout?._id === workout._id || w._id === workout._id
+            (w) => w.workout?._id === workout._id || w._id === workout._id,
           )
         : training.workouts[0];
       if (selectedWorkout?.exercises) {
@@ -116,7 +116,9 @@ const StartTraining = () => {
         const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
         if (!user?._id) return;
 
-        const taskRes = await axios.get(`${base_url}/get-user-task/${user._id}`);
+        const taskRes = await axios.get(
+          `${base_url}/get-user-task/${user._id}`,
+        );
         const matchedTask = taskRes.data.data?.find((t) => t._id === taskId);
         if (!matchedTask) return;
 
@@ -140,22 +142,33 @@ const StartTraining = () => {
             : ex?.exercise_id || ex?._id;
 
         const allTrainings = trainingRes.data.data || [];
+        const activeTraining =
+          allTrainings.find((t) => t.status === "active") || null;
         let planExercises = null;
-        for (const t of allTrainings) {
-          const mw = t.workouts?.find(
+        if (activeTraining) {
+          const mw = activeTraining.workouts?.find(
             (w) =>
               w.workout?._id === matchedTask.workout_id ||
-              w._id === matchedTask.workout_id
+              w._id === matchedTask.workout_id,
           );
           if (Array.isArray(mw?.exercises) && mw.exercises.length > 0) {
             planExercises = mw.exercises;
-            break;
           }
         }
 
+        // Saved workout-task values are the target the trainer set.
+        // Plan data only fills a field the workout row does not have.
+        // An older training in the list must not replace those targets.
+        const preferWorkout = (workoutValue, planValue) =>
+          workoutValue !== undefined &&
+          workoutValue !== null &&
+          workoutValue !== ""
+            ? workoutValue
+            : planValue;
+
         if (planExercises) {
           // Same exercise can appear more than once. Match the nth copy
-          // to the nth plan row so notes/sets/reps are not all taken from the first.
+          // to the nth plan row so a missing note is not taken from the first.
           const planQueues = new Map();
           for (const planEx of planExercises) {
             const id = getExId(planEx);
@@ -170,9 +183,9 @@ const StartTraining = () => {
             if (!planEx) return wEx;
             return {
               ...wEx,
-              sets: planEx.sets ?? wEx.sets,
-              reps: planEx.reps ?? wEx.reps,
-              manipulation: planEx.manipulation ?? wEx.manipulation,
+              sets: preferWorkout(wEx.sets, planEx.sets),
+              reps: preferWorkout(wEx.reps, planEx.reps),
+              manipulation: preferWorkout(wEx.manipulation, planEx.manipulation),
             };
           });
           setLiveExercises(merged);
@@ -227,7 +240,7 @@ const StartTraining = () => {
       updateExerciseSlot(slotIndex, value, exercise);
       setInvalidSlots((prev) => prev.filter((i) => i !== slotIndex));
     },
-    [exercisesToUse, updateExerciseSlot]
+    [exercisesToUse, updateExerciseSlot],
   );
 
   // Prefetch last-workout data for all exercises (stable ids)
@@ -248,11 +261,11 @@ const StartTraining = () => {
               {
                 sets_done: 0,
                 sets_target: Number(selectedExercise?.sets) || 0,
-                reps_done: 0,
+                reps_done: "",
                 last_set_weight: "",
                 manipulation: resolveLastSessionNotes(
                   "",
-                  selectedExercise?.manipulation
+                  selectedExercise?.manipulation,
                 ),
               },
             ];
@@ -261,7 +274,7 @@ const StartTraining = () => {
           try {
             const response = await axios.post(
               `${base_url}/get-last-workout-excercisedata`,
-              { user_id: userId, exercise_id: exerciseId }
+              { user_id: userId, exercise_id: exerciseId },
             );
             const responseData = response?.data?.data || response?.data || {};
             return [
@@ -272,9 +285,13 @@ const StartTraining = () => {
                   Number(
                     responseData?.sets ??
                       responseData?.sets_target ??
-                      selectedExercise?.sets
+                      selectedExercise?.sets,
                   ) || 0,
-                reps_done: Number(responseData?.reps_done) || 0,
+                reps_done:
+                  responseData?.reps_done != null &&
+                  String(responseData.reps_done).trim() !== ""
+                    ? String(responseData.reps_done).trim()
+                    : "",
                 last_set_weight:
                   responseData?.last_set_weight != null &&
                   responseData?.last_set_weight !== ""
@@ -282,7 +299,7 @@ const StartTraining = () => {
                     : "",
                 manipulation: resolveLastSessionNotes(
                   responseData?.manipulation,
-                  selectedExercise?.manipulation
+                  selectedExercise?.manipulation,
                 ),
               },
             ];
@@ -292,16 +309,16 @@ const StartTraining = () => {
               {
                 sets_done: 0,
                 sets_target: Number(selectedExercise?.sets) || 0,
-                reps_done: 0,
+                reps_done: "",
                 last_set_weight: "",
                 manipulation: resolveLastSessionNotes(
                   "",
-                  selectedExercise?.manipulation
+                  selectedExercise?.manipulation,
                 ),
               },
             ];
           }
-        })
+        }),
       );
 
       if (cancelled) return;
@@ -338,7 +355,7 @@ const StartTraining = () => {
     const exerciseDataArray = buildExercisePayload(
       exercisesToUse,
       exerciseData,
-      getExerciseLibraryId
+      getExerciseLibraryId,
     );
 
     if (!exerciseDataArray.length) {
@@ -357,7 +374,7 @@ const StartTraining = () => {
     try {
       const response = await axios.post(
         `${base_url}/complete-workout-task`,
-        payload
+        payload,
       );
 
       if (response.status === 200) {
@@ -365,6 +382,7 @@ const StartTraining = () => {
         toast.success(UI_TEXT.workoutCompleted);
         navigate("/");
       }
+      // console.log("payload:", payload);
     } catch (error) {
       console.error("Error completing workout:", error);
       // Preserve draft on failure
@@ -430,7 +448,7 @@ const StartTraining = () => {
                   showError={invalidSlots.includes(index)}
                   isPairedSupersetChild={prevIsSuperset}
                   isComplete={hasRequiredExerciseInput(
-                    exerciseData[String(index)]
+                    exerciseData[String(index)],
                   )}
                 />
               </div>
