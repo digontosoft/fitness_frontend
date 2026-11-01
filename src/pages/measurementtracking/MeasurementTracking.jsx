@@ -109,18 +109,25 @@ const MeasurementTracking = () => {
   // );
 
 
+  // Waist first, then chest (male) or butt (female)
   const sortOrder = [
   "מותן",
   "חזה",
+  "ישבן",
   "ירך ימין",
   "ירך שמאל",
   "זרוע ימין",
   "זרוע שמאל",
 ];
 
-// sort the carts according to the order
+// sort the carts according to the order; a title missing from the list goes
+// last instead of first (indexOf would return -1)
+const sortRank = (title) => {
+  const index = sortOrder.indexOf(title);
+  return index === -1 ? sortOrder.length : index;
+};
 const sortedData = [...data].sort(
-  (a, b) => sortOrder.indexOf(a.cartTitle) - sortOrder.indexOf(b.cartTitle)
+  (a, b) => sortRank(a.cartTitle) - sortRank(b.cartTitle)
 );
 
 

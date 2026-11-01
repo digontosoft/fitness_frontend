@@ -498,7 +498,9 @@ export default function AdminTable() {
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => row.getValue("name"),
+      // Wrapped in a span: a bare text node gets replaced by page translation,
+      // and these cells remount on every render of this table
+      cell: ({ row }) => <span>{row.getValue("name")}</span>,
     },
     {
       accessorKey: "email",
@@ -511,7 +513,7 @@ export default function AdminTable() {
           <ArrowUpDown />
         </Button>
       ),
-      cell: ({ row }) => row.getValue("email"),
+      cell: ({ row }) => <span>{row.getValue("email")}</span>,
     },
     {
       id: "actions",
