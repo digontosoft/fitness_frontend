@@ -42,9 +42,25 @@ export const useSessionGuard = () => {
       if (!userId) return;
       try {
         const response = await axios.get(`${base_url}/getUser/${userId}`);
-        const forceLogoutAt = response?.data?.data?.forceLogoutAt;
+        const serverUser = response?.data?.data;
+        const forceLogoutAt = serverUser?.forceLogoutAt;
         if (forceLogoutAt && new Date(forceLogoutAt).getTime() > loginTime) {
           forceLogout();
+          return;
+        }
+        // An admin locked this trainee again: the routes only read the stored
+        // userInfo, so update it and send them back to the lock screen.
+        if (
+          serverUser?.userType === "trainee" &&
+          serverUser?.is_question_answered === true &&
+          serverUser?.screen !== "unlock" &&
+          userInfo?.screen === "unlock"
+        ) {
+          localStorage.setItem(
+            "userInfo",
+            JSON.stringify({ ...userInfo, screen: serverUser.screen || "lock" }),
+          );
+          navigate("/lock-screen", { replace: true });
         }
       } catch (error) {
         console.error("Failed to check session status:", error);

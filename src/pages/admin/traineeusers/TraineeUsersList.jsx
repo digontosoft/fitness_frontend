@@ -405,10 +405,13 @@ export function TraineeUsersLists() {
   const updateScreenStatus = async (userId, currentScreen) => {
     const nextScreen = currentScreen === "unlock" ? "lock" : "unlock";
     try {
-      const response = await axios.post(`${base_url}/updateUserInfo`, {
-        user_id: userId,
-        screen: nextScreen,
-      });
+      // Lock/unlock is admin-only on the server, so it needs the admin's token
+      const token = JSON.parse(localStorage.getItem("authToken"));
+      const response = await axios.post(
+        `${base_url}/updateUserInfo`,
+        { user_id: userId, screen: nextScreen },
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} },
+      );
 
       if (response.status === 200) {
         toast.success(
