@@ -1,10 +1,11 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import ParsonalPdf from "@/components/nutritionGuides/personalNutration/ParsonalPdf";
 import axios from "axios";
 import { useEffect, useState } from "react";
 const RecipeBook = () => {
   const [recipeBook, setRecipeBook] = useState([]);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   useEffect(() => {
     const fetchRecipeBook = async () => {
       try {

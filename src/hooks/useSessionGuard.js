@@ -1,65 +1,65 @@
 import { base_url } from "@/api/baseUrl";
+import {
+  getCurrentUser,
+  getSessionExpiresAt,
+  getSessionStartedAt,
+  logout,
+  setCurrentUser,
+} from "@/utils/authSession";
 import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SESSION_DURATION_MS = 3 * 60 * 60 * 1000; // 3 hours
 const CHECK_INTERVAL_MS = 30000; // 30 seconds
 
-// Logs the user out automatically after 3 hours of being logged in, or as
-// soon as an admin assigns them a new training (userModel.forceLogoutAt is
-// bumped by createUserTraining and picked up here via polling).
+// Logs the user out when the server session expires (3 hours after login), or
+// as soon as an admin assigns them a new training (userModel.forceLogoutAt is
+// bumped by createUserTraining and picked up here via polling). The server
+// also rejects expired sessions on its own, so this only keeps the UI in step.
 export const useSessionGuard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (!token) return;
+    if (!getCurrentUser()) return;
 
-    const forceLogout = () => {
-      localStorage.removeItem("userInfo");
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("loginTime");
+    const forceLogout = async () => {
+      await logout();
       navigate("/login", { replace: true });
     };
 
-    let loginTime = Number(localStorage.getItem("loginTime"));
-    if (!loginTime) {
-      loginTime = Date.now();
-      localStorage.setItem("loginTime", String(loginTime));
+    const sessionStartedAt = getSessionStartedAt()?.getTime() || Date.now();
+    const expiresAt = getSessionExpiresAt()?.getTime();
+    let timeoutId = null;
+    if (expiresAt) {
+      const remainingMs = expiresAt - Date.now();
+      if (remainingMs <= 0) {
+        forceLogout();
+        return;
+      }
+      timeoutId = setTimeout(forceLogout, remainingMs);
     }
-
-    const remainingMs = loginTime + SESSION_DURATION_MS - Date.now();
-    if (remainingMs <= 0) {
-      forceLogout();
-      return;
-    }
-    const timeoutId = setTimeout(forceLogout, remainingMs);
 
     const checkForcedLogout = async () => {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+      const userInfo = getCurrentUser() || {};
       const userId = userInfo?._id;
       if (!userId) return;
       try {
         const response = await axios.get(`${base_url}/getUser/${userId}`);
         const serverUser = response?.data?.data;
         const forceLogoutAt = serverUser?.forceLogoutAt;
-        if (forceLogoutAt && new Date(forceLogoutAt).getTime() > loginTime) {
+        if (forceLogoutAt && new Date(forceLogoutAt).getTime() > sessionStartedAt) {
           forceLogout();
           return;
         }
-        // An admin locked this trainee again: the routes only read the stored
-        // userInfo, so update it and send them back to the lock screen.
+        // An admin locked this trainee again: the routes read the in-memory
+        // user, so update it and send them back to the lock screen.
         if (
           serverUser?.userType === "trainee" &&
           serverUser?.is_question_answered === true &&
           serverUser?.screen !== "unlock" &&
           userInfo?.screen === "unlock"
         ) {
-          localStorage.setItem(
-            "userInfo",
-            JSON.stringify({ ...userInfo, screen: serverUser.screen || "lock" }),
-          );
+          setCurrentUser({ ...userInfo, screen: serverUser.screen || "lock" });
           navigate("/lock-screen", { replace: true });
         }
       } catch (error) {
@@ -71,7 +71,7 @@ export const useSessionGuard = () => {
     const intervalId = setInterval(checkForcedLogout, CHECK_INTERVAL_MS);
 
     return () => {
-      clearTimeout(timeoutId);
+      if (timeoutId) clearTimeout(timeoutId);
       clearInterval(intervalId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

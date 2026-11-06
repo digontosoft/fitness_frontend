@@ -1,9 +1,10 @@
+import { getCurrentUser } from "@/utils/authSession";
 import Title from "@/components/measurements/Tilte";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 import MeasurementUpdate from "../MeasurementUpdate";
 
 const UpdateMesurement = () => {
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const userInfo = getCurrentUser();
   return (
     <div>
       <div className="px-4 sm:px-0">

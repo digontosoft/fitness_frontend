@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
@@ -16,7 +17,7 @@ const ProgressCourseCart = () => {
   const workout = location.state?.workout || {};
   const trainingFromState = location.state?.training || {};
 
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   const [training, setTraining] = useState(trainingFromState);
   const [isFetching, setIsFetching] = useState(false);
 

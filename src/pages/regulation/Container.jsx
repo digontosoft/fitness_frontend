@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import { termfile } from "@/assets";
 import axios from "axios";
@@ -8,7 +9,7 @@ import { toast } from "sonner";
 const Container = () => {
   const [loading, setLoading] = useState(false);
 
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  const userDetails = getCurrentUser();
 
   const navigate = useNavigate();
 

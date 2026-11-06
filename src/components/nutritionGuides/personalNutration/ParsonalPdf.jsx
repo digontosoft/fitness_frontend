@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import Loading from "@/components/common/Loading";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
@@ -11,7 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 const ParsonalPdf = ({ data }) => {
   // const pdfUrl = `${base_url}/${data?.pdf_link}`;
   // console.log("pdf data:", data);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   const pdfUrl = data?.pdf_link;
 
   if (!data) {

@@ -3,7 +3,7 @@
 // import { useEffect, useState } from "react";
 // const SupperAdminRecipeBook = () => {
 //   const [recipeBook, setRecipeBook] = useState([]);
-//   const user = JSON.parse(localStorage.getItem("userInfo"));
+//   const user = getCurrentUser();
 //   useEffect(() => {
 //     const fetchRecipeBook = async () => {
 //       try {

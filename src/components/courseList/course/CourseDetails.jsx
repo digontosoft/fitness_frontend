@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 
 import { base_url } from "@/api/baseUrl";
 import HeroVideo from "@/components/startTraining/HeroVideo";
@@ -53,7 +54,7 @@ export default function CourseDetails({ open, setOpen, exerciseId }) {
       .finally(() => setLoading(false));
   }, [exerciseId]);
 
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
 
   let customIcon = null;
   if (exerciseData?.body_part === "גב") {

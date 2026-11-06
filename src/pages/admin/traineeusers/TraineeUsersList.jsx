@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { updateApprovedMail } from "@/api/approvedMail";
 import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
@@ -53,7 +54,7 @@ export function TraineeUsersLists() {
   const [loading, setLoading] = useState(false);
   const [viewUserModalOpen, setViewUserModalOpen] = useState(false);
   const [viewUser, setViewUser] = useState(null);
-  const userData = JSON.parse(localStorage.getItem("userInfo"));
+  const userData = getCurrentUser();
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search.trim()), 300);
@@ -405,13 +406,11 @@ export function TraineeUsersLists() {
   const updateScreenStatus = async (userId, currentScreen) => {
     const nextScreen = currentScreen === "unlock" ? "lock" : "unlock";
     try {
-      // Lock/unlock is admin-only on the server, so it needs the admin's token
-      const token = JSON.parse(localStorage.getItem("authToken"));
-      const response = await axios.post(
-        `${base_url}/updateUserInfo`,
-        { user_id: userId, screen: nextScreen },
-        { headers: token ? { Authorization: `Bearer ${token}` } : {} },
-      );
+      // Lock/unlock is admin-only on the server; the session cookie proves who we are
+      const response = await axios.post(`${base_url}/updateUserInfo`, {
+        user_id: userId,
+        screen: nextScreen,
+      });
 
       if (response.status === 200) {
         toast.success(

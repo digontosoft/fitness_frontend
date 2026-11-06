@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 // import cartBg from "../../assets/image/workoutList/Bg.png";
 // import whiteLogo from "../../assets/image/whiteLogo.png";
 // import icon from "../../assets/image/right-arm.svg";
@@ -71,7 +72,7 @@ import womenback from "../../assets/image/woman-back.svg";
 import womenbelly from "../../assets/image/woman-belly.svg";
 const CourseCart = ({ exercise, handleOpen }) => {
 
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
 
   let customIcon = null;
   if (exercise?.body_part === "גב") {

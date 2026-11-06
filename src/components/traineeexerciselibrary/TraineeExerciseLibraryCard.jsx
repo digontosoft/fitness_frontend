@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import PaginationComp from "@/components/pagination";
 import axios from "axios";
@@ -49,7 +50,7 @@ export const TraineeExerciseLibraryCard = () => {
   const [equipment, setEquipment] = useState("");
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(10);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
 
   useEffect(() => {
     const fetchExercise = async () => {

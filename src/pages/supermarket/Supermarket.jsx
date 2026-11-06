@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import WorkOutListBaground from "@/components/workOutList/WorkOutListBaground";
 import { useEffect, useState } from "react";
 import SuperTitle from "@/components/supermarket/SuperTitle";
@@ -8,7 +9,7 @@ import { base_url } from "@/api/baseUrl";
 const Supermarket = () => {
   const { id } = useParams();
   const [course, setCourse] = useState([]);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   const gender = user?.gender;
   useEffect(() => {
     const fetchCourse = async () => {

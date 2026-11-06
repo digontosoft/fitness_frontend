@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -73,7 +74,7 @@ const EMPTY_FORM = {
 const TaskCompleteForm = ({ data }) => {
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  const userDetails = getCurrentUser();
   const Gender = userDetails?.gender;
   const Id = userDetails._id;
   const [getMesurement, setMesurement] = useState([]);

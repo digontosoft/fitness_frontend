@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
@@ -12,7 +13,7 @@ const ActionCourseCart = () => {
   const navigate = useNavigate();
   const { id: routeTaskId } = useParams();
   const workoutData = location.state?.data;
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
 
   const [exercises, setExercises] = useState(
     workoutData?.userTrainingExercise || [],

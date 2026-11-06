@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { questionnaries } from "@/constants/ValidationSchema";
-import { verifyToken } from "@/constants/verifyToken";
+import { getCurrentUser, setCurrentUser } from "@/utils/authSession";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
@@ -36,9 +36,8 @@ const MeasurementWomen = () => {
   const [loading, setLoading] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingData, setPendingData] = useState(null);
-  const token = localStorage.getItem("authToken");
-  const user = JSON.parse(localStorage.getItem("userInfo"));
-  const { id } = verifyToken(token);
+  const user = getCurrentUser();
+  const id = user?._id;
   const isMale = user?.gender === "male";
 
   useEffect(() => {
@@ -65,7 +64,7 @@ const MeasurementWomen = () => {
 
         if (userType === "admin" || userType === "supperadmin") {
           const updatedUser = { ...user, is_question_answered: true };
-          localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+          setCurrentUser(updatedUser);
           toast.success("השאלון נשלח בהצלחה!");
           navigate(userType === "admin" ? "/admin-dashboard" : "/dashboard", {
             replace: true,
@@ -78,7 +77,7 @@ const MeasurementWomen = () => {
             is_question_answered: true,
             screen: "lock",
           };
-          localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+          setCurrentUser(updatedUser);
           toast.success("השאלון נשלח בהצלחה!");
           navigate("/lock-screen", { replace: true });
         }

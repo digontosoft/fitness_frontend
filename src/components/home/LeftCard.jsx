@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 // import { Button } from "../ui/button";
 // // import { icon, iconOne, iconThree, iconTwo, pixelCartImg } from "@assets/index";
 // import butt from "@/assets/image/butt.svg";
@@ -12,7 +13,7 @@
 // import { Link } from "react-router-dom";
 
 // const LeftCard = ({ data }) => {
-//   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+//   const userDetails = getCurrentUser();
 //   const leftArm = Number(data?.arml) || 0;
 //   const rightArm = Number(data?.armr) || 0;
 //   const total = leftArm + rightArm;
@@ -127,7 +128,7 @@ import womanWaist from "@/assets/image/women-hips.svg";
 import { Link } from "react-router-dom";
 
 const LeftCard = ({ data }) => {
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  const userDetails = getCurrentUser();
   const leftArm = Number(data?.arml) || 0;
   const rightArm = Number(data?.armr) || 0;
   const total = leftArm + rightArm;

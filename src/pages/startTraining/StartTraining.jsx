@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import CommonContainer from "@/components/startTraining/CommonContainer";
 import ExerciseFormCard from "@/components/startTraining/ExerciseFormCard";
@@ -113,7 +114,7 @@ const StartTraining = () => {
 
     const fetchFresh = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
+        const user = (getCurrentUser() || {});
         if (!user?._id) return;
 
         const taskRes = await axios.get(
@@ -245,7 +246,7 @@ const StartTraining = () => {
 
   // Prefetch last-workout data for all exercises (stable ids)
   useEffect(() => {
-    const userDetails = JSON.parse(localStorage.getItem("userInfo") || "{}");
+    const userDetails = (getCurrentUser() || {});
     const userId = userDetails?._id;
     if (!userId || exercisesToUse.length === 0) return;
 

@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import {
   flexRender,
   getCoreRowModel,
@@ -44,7 +45,7 @@ export function NutritionList() {
   const [loading, setLoading] = useState(false);
   const { id: routeUserId } = useParams();
 
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
 
   const columns = [
     {

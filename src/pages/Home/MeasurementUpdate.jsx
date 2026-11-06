@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 // import { useEffect, useState } from "react";
 // import { useForm } from "react-hook-form";
 
@@ -12,7 +13,7 @@
 // const MeasurementUpdate = () => {
 //   const [files, setFiles] = useState([]);
 //   const [previews, setPreviews] = useState([]);
-//   const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+//   const userDetails = getCurrentUser();
 //   const Gender = userDetails?.gender;
 //   const Id = userDetails._id;
 //   const [getMesurement, setMesurement] = useState([]);
@@ -431,7 +432,7 @@ const clearMeasurementDraft = (key) => {
 
 const MeasurementUpdate = () => {
   const [files, setFiles] = useState([]);
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  const userDetails = getCurrentUser();
   const Gender = userDetails?.gender;
   const Id = userDetails._id;
   const [getMesurement, setMesurement] = useState(null);

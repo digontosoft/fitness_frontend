@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 // import { base_url } from "@/api/baseUrl";
 // import { Button } from "@/components/ui/button";
 // import DynamicInputField from "@/components/measurements/DynamicInputField";
@@ -149,7 +150,7 @@ const AddNutritionForm = () => {
     formState: { errors },
   } = useForm();
 
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  const userDetails = getCurrentUser();
 
   const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {

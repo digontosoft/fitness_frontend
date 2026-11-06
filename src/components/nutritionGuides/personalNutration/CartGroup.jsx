@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl.js";
 import personalNutrationBg from "@/assets/image/personal-nutrition-menu.svg";
 import Loading from "@/components/common/Loading";
@@ -9,8 +10,7 @@ const CartGroup = () => {
   const [nutrationData, setNutrationData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const auth = localStorage.getItem("userInfo");
-  const data = JSON.parse(auth);
+  const data = getCurrentUser();
 
   useEffect(() => {
     const fetchData = async () => {

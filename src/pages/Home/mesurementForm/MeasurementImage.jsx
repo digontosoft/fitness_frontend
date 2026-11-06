@@ -1,10 +1,11 @@
+import { getCurrentUser } from "@/utils/authSession";
 // import { base_url } from "@/api/baseUrl";
 // import Loading from "@/components/common/Loading";
 // import axios from "axios";
 // import { useEffect, useState } from "react";
 
 // const MeasurementImage = () => {
-//   const user = JSON.parse(localStorage.getItem("userInfo"));
+//   const user = getCurrentUser();
 //   const Id = user?._id;
 //   const [measurements, setMeasurements] = useState([]);
 //   const [loading, setLoading] = useState(true);
@@ -97,7 +98,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const MeasurementImage = () => {
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   const Id = user?._id;
   const [measurements, setMeasurements] = useState([]);
   const [loading, setLoading] = useState(true);

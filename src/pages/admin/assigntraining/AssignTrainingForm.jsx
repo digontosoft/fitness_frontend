@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import CustomSearchableSelect from "@/components/common/CustomSearchableSelect";
 import DynamicInputField from "@/components/measurements/DynamicInputField";
@@ -14,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const AssignTrainingForm = ({ trainingId, user_id }) => {
-  const userData = JSON.parse(localStorage.getItem("userInfo"));
+  const userData = getCurrentUser();
   const [trainingbyId, setTrainingById] = useState({});
   const [addMoreExerciseIndex, setAddMoreExerciseIndex] = useState(null);
   const [showWorkoutDropdown, setShowWorkoutDropdown] = useState(false);

@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 // import PaginationComp from "@/components/pagination";
 import axios from "axios";
@@ -18,7 +19,7 @@ function sortTrainingsByStatus(trainings = []) {
 const WorkOutCart = () => {
   // Dropdown select — default active trainings; user can pick any
   const [selectedTraining, setSelectedTraining] = useState([]);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   // const [page, setPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -224,7 +225,7 @@ export default WorkOutCart;
 //   const [loading, setLoading] = useState(false);
 //   const [downloadingReport, setDownloadingReport] = useState(false);
 
-//   const user = JSON.parse(localStorage.getItem("userInfo"));
+//   const user = getCurrentUser();
 
 //   useEffect(() => {
 //     if (!user?._id) return; // 🛑 stop if user missing

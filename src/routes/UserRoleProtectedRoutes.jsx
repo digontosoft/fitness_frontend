@@ -1,11 +1,12 @@
 import { Navigate } from "react-router-dom";
+import { getCurrentUser } from "@/utils/authSession";
 
+// UI routing only: the API enforces the same roles on every request.
 const UserRoleProtectedRoutes = ({ children, allowedRoles }) => {
-  const token = localStorage.getItem("authToken");
-  const userData = JSON.parse(localStorage.getItem("userInfo") || "{}");
+  const userData = getCurrentUser();
   const userType = userData?.userType;
 
-  if (!token) {
+  if (!userData) {
     return <Navigate to="/login" />;
   }
 
