@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 // import { trainingandexercisebanner } from "@/assets/index";
 import { base_url } from "@/api/baseUrl";
 import { exerciseLibrary } from "@/assets/index";
@@ -20,7 +21,7 @@ const triggerBlobDownload = (blob, fileName) => {
 };
 
 const TraineeExerciseLibrary = () => {
-  const user = JSON.parse(localStorage.getItem("userInfo") || "{}");
+  const user = (getCurrentUser() || {});
   const [reportLoading, setReportLoading] = useState(false);
 
   const handleExerciseReportDownload = async () => {

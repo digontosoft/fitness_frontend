@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import circle from "@/assets/image/circle.svg";
 import bgCard from "@/assets/image/image.svg";
 import men from "@/assets/image/men.svg";
@@ -11,7 +12,7 @@ const RightCard = ({ userSteps }) => {
   const circumference = 2 * Math.PI * radius;
   const percentage = Math.min(Math.round((progress / target) * 100), 100);
   const offset = circumference - (percentage / 100) * circumference;
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  const userDetails = getCurrentUser();
   const gender = userDetails?.gender;
 
   return (

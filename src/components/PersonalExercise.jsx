@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -51,7 +52,7 @@ const PersonalExercise = ({ exercise }) => {
     });
   }, [exerciseId]);
 
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
 
   let customIcon = null;
   if (exerciseData?.body_part === "גב") {

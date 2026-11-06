@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 
 import { base_url } from "@/api/baseUrl";
 import { ArrowBurger, newThree, newTrainee } from "@/assets";
@@ -35,7 +36,7 @@ const TraineerUi = ({ userId }) => {
   const [openAnswer, setOpenAnswer] = useState(false);
   const [exerciseReportLoading, setExerciseReportLoading] = useState(false);
   const [measurementReportLoading, setMeasurementReportLoading] = useState(false);
-  const userData = JSON.parse(localStorage.getItem("userInfo"));
+  const userData = getCurrentUser();
 
   useEffect(() => {
     const getUser = async () => {

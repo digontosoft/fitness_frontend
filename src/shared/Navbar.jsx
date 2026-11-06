@@ -1,3 +1,4 @@
+import { getCurrentUser, logout as endSession } from "@/utils/authSession";
 import logo from "@/assets/image/logo.svg";
 import { Button } from "@/components/ui/button";
 import { UI_TEXT } from "@/constants/hebrewText";
@@ -17,7 +18,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const userData = JSON.parse(localStorage.getItem("userInfo"));
+  const userData = getCurrentUser();
   const userType = userData?.userType;
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
@@ -26,11 +27,11 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
-  const logout = (e) => {
+  const logout = async (e) => {
     e?.preventDefault();
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("authToken");
     setIsOpen(false);
+    // Ends the session on the server too, not just in this browser
+    await endSession();
     navigate("/login", { replace: true });
   };
 

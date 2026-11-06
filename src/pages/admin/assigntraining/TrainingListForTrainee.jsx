@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,7 +47,7 @@ export function TrainingListForTrainee({ userId }) {
   const [selectedTraining, setSelectedTraining] = useState(null);
   const [user, setUser] = useState({});
   const [activatingId, setActivatingId] = useState(null);
-  const userData = JSON.parse(localStorage.getItem("userInfo"));
+  const userData = getCurrentUser();
 
   useEffect(() => {
     const getUser = async () => {

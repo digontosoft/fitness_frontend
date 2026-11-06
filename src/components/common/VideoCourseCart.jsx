@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 import { useState } from "react";
 import { FaPlay } from "react-icons/fa";
@@ -53,7 +54,7 @@ import womenback from "../../assets/image/woman-back.svg";
 import womenbelly from "../../assets/image/woman-belly.svg";
 
 const VideoCourseCart = ({ exercise }) => {
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   const [isPlaying, setIsPlaying] = useState(false);
 
   // let customIcon = null;

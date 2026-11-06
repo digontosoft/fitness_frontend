@@ -1,8 +1,9 @@
+import { getCurrentUser } from "@/utils/authSession";
 // import { base_url } from "@/api/baseUrl";
 // import { Link } from "react-router-dom";
 // const CourseCart = ({ course }) => {
 //   const imageUrl = `${base_url}/${course?.image}`;
-//   const user = JSON.parse(localStorage.getItem("userInfo"));
+//   const user = getCurrentUser();
 //   const title =
 //     user.gender === "male"
 //       ? course?.male_supermaket || course?.male_kitchen
@@ -37,7 +38,7 @@ import { Link } from "react-router-dom";
 
 const CourseCart = ({ course }) => {
   const imageUrl = `${base_url}/${course?.image}`;
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   // console.log("course", course);
   // // Determine the appropriate title based on course type and user gender
   // const getCourseTitle = () => {

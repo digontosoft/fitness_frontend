@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -33,7 +34,7 @@ const CustomizeWorkoutForm = () => {
   const [isLoadingExercises, setIsLoadingExercises] = useState(false);
   const navigate = useNavigate();
 
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const userInfo = getCurrentUser();
   const user_Id = userInfo._id;
   const trainingId = trainings?._id;
 

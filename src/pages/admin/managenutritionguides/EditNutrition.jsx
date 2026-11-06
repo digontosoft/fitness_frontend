@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import FormTitle from "@/components/admin/components/ui/FormTitle";
 import Loading from "@/components/common/Loading";
@@ -19,7 +20,7 @@ const EditNutrition = () => {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem("userInfo"));
+  const userData = getCurrentUser();
 
   const {
     register,

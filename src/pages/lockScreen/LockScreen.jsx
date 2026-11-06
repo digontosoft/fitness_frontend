@@ -7,6 +7,7 @@ import axios from "axios";
 import { LogOut } from "lucide-react";
 import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getCurrentUser, logout, setCurrentUser } from "@/utils/authSession";
 
 // Full-screen gate shown to a trainee after the onboarding questionnaire is
 // submitted. Admin/superadmin unlock the user from their dashboard
@@ -14,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const LockScreen = () => {
   const navigate = useNavigate();
   useSessionGuard();
-  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+  const userInfo = getCurrentUser() || {};
   const lockImage =
     userInfo?.gender === "male" ? maleLockScreen : femaleLockScreen;
 
@@ -25,7 +26,7 @@ const LockScreen = () => {
       const response = await axios.get(`${base_url}/getUser/${userId}`);
       if (response.status === 200 && response.data?.data?.screen === "unlock") {
         const updatedUser = { ...userInfo, ...response.data.data };
-        localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+        setCurrentUser(updatedUser);
         navigate("/", { replace: true });
       }
     } catch (error) {
@@ -35,7 +36,7 @@ const LockScreen = () => {
   }, [navigate]);
 
   useEffect(() => {
-    if (!localStorage.getItem("authToken")) {
+    if (!getCurrentUser()) {
       navigate("/login", { replace: true });
       return;
     }
@@ -45,9 +46,8 @@ const LockScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("authToken");
+  const handleLogout = async () => {
+    await logout();
     navigate("/login", { replace: true });
   };
 

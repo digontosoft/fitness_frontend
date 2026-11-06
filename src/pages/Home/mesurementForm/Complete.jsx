@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import Title from "@/components/measurements/Tilte";
 import HeroVideo from "@/components/startTraining/HeroVideo";
 
@@ -8,7 +9,7 @@ const Complete = () => {
   const locatin = useLocation();
   const data = locatin.state;
   // console.log("mc", data);
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const userInfo = getCurrentUser();
   return (
     <div>
       <div className="px-4 sm:px-0">

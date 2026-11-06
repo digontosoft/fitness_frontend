@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import DynamicInputField from "./DynamicInputField";
@@ -12,7 +13,7 @@ import { UserInfoContext } from "@/context";
 const InputForm = () => {
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
-  const userDetails = JSON.parse(localStorage.getItem("userInfo"));
+  const userDetails = getCurrentUser();
   const userId = userDetails._id;
   // console.log("user id", userId);
   const navigate = useNavigate();

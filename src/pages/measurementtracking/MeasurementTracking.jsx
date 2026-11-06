@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import butt from "@/assets/image/butt.svg";
 import leftArm from "@/assets/image/left-arm.svg";
@@ -29,7 +30,7 @@ const MeasurementTracking = () => {
   const [measurements, setMeasurements] = useState([]);
   const [open, setOpen] = useState(false);
   const [loadingCardKey, setLoadingCardKey] = useState(null);
-  const userId = JSON.parse(localStorage.getItem("userInfo"));
+  const userId = getCurrentUser();
   const gender = userId?.gender;
 
   useEffect(() => {

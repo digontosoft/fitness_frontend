@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import { Button } from "@/components/ui/button";
 import {
@@ -47,7 +48,7 @@ export function TrainingList() {
   const debouncedSearch = useDebounce(searchValue, 500);
   const [loading, setLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const prevDebouncedSearch = useRef(debouncedSearch);

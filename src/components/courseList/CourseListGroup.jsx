@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import PaginationComp from "@/components/pagination";
 import axios from "axios";
@@ -89,7 +90,7 @@ const equipmentOptions = [
 //   const [body_part, setBodyPart] = useState("");
 //   const [equipment, setEquipment] = useState("");
 //   const [loading, setLoading] = useState(false);
-//   const user = JSON.parse(localStorage.getItem("userInfo"));
+//   const user = getCurrentUser();
 
 //   useEffect(() => {
 //     const fetchExercise = async () => {
@@ -196,7 +197,7 @@ export const CourseListGroup = () => {
   const [body_part, setBodyPart] = useState("");
   const [equipment, setEquipment] = useState("");
   const [loading, setLoading] = useState(false);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
 
   useEffect(() => {
     const fetchExercise = async () => {

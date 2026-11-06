@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 // import { base_url } from "@/api/baseUrl";
 // import ArrowDumbel from "@/assets/image/arrowDumble.svg";
 // import ArrowBurger from "@/assets/image/burger.svg";
@@ -15,7 +16,7 @@
 //   const [recipeUsers, setRecipeUsers] = useState([]);
 
 //   const navigate = useNavigate();
-//   const user = JSON.parse(localStorage.getItem("userInfo"));
+//   const user = getCurrentUser();
 //   const adminId = user?._id;
 //   console.log('adminId',adminId)
 
@@ -212,27 +213,16 @@ const Dashboard = () => {
   const [adminTraineeLists, setAdminTraineeLists] = useState([]);
 
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   const adminId = user?._id;
+
+  const [traineeUsersLength, setTraineeUsersLength] = useState(null);
+  const [recipeUsersLength, setRecipeUsersLength] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const usersResponse = await axios.get(
-          `${base_url}/getUsers?limit=1000&page=1`,
-        );
-        const allUsers = usersResponse.data.data ?? [];
-        setUsers(allUsers);
-
-        const traineeUsers = allUsers.filter((u) => u.userType === "trainee");
-        const recipeUsers = allUsers.filter((u) => u.userType === "recipe");
-        localStorage.setItem(
-          "traineeUsers",
-          JSON.stringify(traineeUsers.length),
-        );
-        localStorage.setItem("recipeUsers", JSON.stringify(recipeUsers.length));
-
-        // Admin: only assigned trainees
+        // Admin: only assigned trainees (the API refuses the full user list)
         // Superadmin: access to all trainee users
         if (user.userType === "admin") {
           const traineeListsResponse = await axios.get(
@@ -240,6 +230,16 @@ const Dashboard = () => {
           );
           setAdminTraineeLists(traineeListsResponse.data.data ?? []);
         } else if (user.userType === "supperadmin") {
+          const usersResponse = await axios.get(
+            `${base_url}/getUsers?limit=1000&page=1`,
+          );
+          const allUsers = usersResponse.data.data ?? [];
+          setUsers(allUsers);
+
+          const traineeUsers = allUsers.filter((u) => u.userType === "trainee");
+          const recipeUsers = allUsers.filter((u) => u.userType === "recipe");
+          setTraineeUsersLength(traineeUsers.length);
+          setRecipeUsersLength(recipeUsers.length);
           setAdminTraineeLists(traineeUsers);
         }
       } catch (error) {
@@ -261,9 +261,6 @@ const Dashboard = () => {
       navigate(path);
     }
   };
-
-  const traineeUsersLength = JSON.parse(localStorage.getItem("traineeUsers"));
-  const recipeUsersLength = JSON.parse(localStorage.getItem("recipeUsers"));
 
   // Custom search function - work with space and full name
   const customSearchFn = ({ props, state }) => {
@@ -298,9 +295,8 @@ const Dashboard = () => {
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 bg-[#7994CB] rounded-full">
               <span className="text-sm font-bold text-white">
-                {user.userType === "admin"
-                  ? recipeUsersLength
-                  : recipeUsersLength}
+                {/* Admins can't see the full user list, so no community count */}
+                {user.userType === "admin" ? "—" : recipeUsersLength}
               </span>
             </div>
             <span className="text-sm md:text-base">משתמשי קהילה</span>

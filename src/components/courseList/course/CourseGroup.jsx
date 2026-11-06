@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import Loading from "@/components/common/Loading";
 import axios from "axios";
@@ -9,7 +10,7 @@ import { Link } from "react-router-dom";
 const CourseGroup = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   const gender = user?.gender;
 
   useEffect(() => {

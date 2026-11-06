@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import Loading from "@/components/common/Loading";
 import ParsonalPdf from "@/components/nutritionGuides/personalNutration/ParsonalPdf";
@@ -8,7 +9,7 @@ const ViewRecipeBook = () => {
   const {id} = useParams();
   const [recipeBook, setRecipeBook] = useState([]);
   const [loading, setLoading] = useState(false);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   useEffect(() => {
     const fetchRecipeBook = async () => {
       setLoading(true);

@@ -1,11 +1,13 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { getCurrentUser } from "@/utils/authSession";
 
 // Routes accessible before the onboarding questionnaire is completed
 const ONBOARDING_ROUTES = ["/gender", "/regulation", "/measurement-women"];
 
 const ProtectedRoutes = ({ children }) => {
-  const token = localStorage.getItem("authToken");
-  const userData = JSON.parse(localStorage.getItem("userInfo") || "{}");
+  // Loaded from the server at app start; null when there's no valid session
+  const token = getCurrentUser();
+  const userData = getCurrentUser() || {};
   const userType = userData?.userType;
   const isQuestionAnswered = userData?.is_question_answered;
   const location = useLocation();

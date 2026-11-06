@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import CustomSearchableSelect from "@/components/common/CustomSearchableSelect";
 import { bodyPartOptions, equipmentOptions } from "@/constants/exerciseData";
@@ -31,7 +32,7 @@ const EditExercise = () => {
   const [newExerciseSets, setNewExerciseSets] = useState("");
   const [newExerciseReps, setNewExerciseReps] = useState("");
   const [newExerciseManipulation, setNewExerciseManipulation] = useState("");
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
 
   const initializedRef = useRef(false);
   const exerciseListRef = useRef([]);

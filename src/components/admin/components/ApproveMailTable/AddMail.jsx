@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/utils/authSession";
 // import { base_url } from "@/api/baseUrl";
 // import { Button } from "@/components/ui/button";
 // import {
@@ -136,17 +137,15 @@ export default function AddMail({ onEmailAdded }) {
     control,
     formState: { errors },
   } = useForm();
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   // console.log("Current user role:", user);
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
       // console.log("Submitted email:", data);
-      const token = JSON.parse(localStorage.getItem("authToken"));
-      await axios.post(`${base_url}/approved-mail`, data, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      // The session cookie identifies the admin, so roles they may assign apply
+      await axios.post(`${base_url}/approved-mail`, data);
       toast.success(UI_TEXT.approvedMailAdded);
       reset();
       if (onEmailAdded) {

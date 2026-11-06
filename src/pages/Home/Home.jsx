@@ -1,3 +1,4 @@
+import { getCurrentUser, setCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import Loading from "@/components/common/Loading";
 import ArrowGroup from "@/components/home/ArrowGroup";
@@ -18,7 +19,7 @@ const Home = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [loading, setLoading] = useState(false);
   const [recurringTasks, setRecurringTasks] = useState([]);
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const user = getCurrentUser();
   const Id = user._id;
 
 
@@ -126,7 +127,7 @@ useEffect(() => {
       const res = await axios.post(`${base_url}/updateUserInfo`, payload);
       if (res.status === 200) {
         const updatedUser = { ...user, is_video_popup: false };
-        localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+        setCurrentUser(updatedUser);
         setIsModalOpen(false); // Close the modal
       }
     } catch (error) {

@@ -1,35 +1,38 @@
-import { verifyToken } from "@/constants/verifyToken";
+import { loadCurrentUser } from "@/utils/authSession";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Landing page after Google login. The server has already set the HttpOnly
+// session cookie; the user is loaded fresh from the server, never from the URL.
 const GlobalLoading = () => {
   const navigate = useNavigate();
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("token");
-
-  const { id } = verifyToken(token);
-
-  localStorage.setItem("userInfo", JSON.stringify(id));
-  localStorage.setItem("authToken", JSON.stringify(token));
-  localStorage.setItem("loginTime", Date.now().toString());
 
   useEffect(() => {
-    if (id?.userType === "admin") {
-      navigate("/admin-dashboard");
-    } else if (id?.userType === "supperadmin") {
-      navigate("/dashboard");
-    } else if (id?.userType === "trainee") {
-      if (id?.isNewUser || id?.is_question_answered == false) {
-        navigate("/gender");
-      } else if (id?.screen !== "unlock") {
-        navigate("/lock-screen");
+    let cancelled = false;
+    loadCurrentUser().then((user) => {
+      if (cancelled) return;
+      if (!user) {
+        navigate("/login", { replace: true });
+      } else if (user.userType === "admin") {
+        navigate("/admin-dashboard", { replace: true });
+      } else if (user.userType === "supperadmin") {
+        navigate("/dashboard", { replace: true });
+      } else if (user.userType === "trainee") {
+        if (user.isNewUser || user.is_question_answered == false) {
+          navigate("/gender", { replace: true });
+        } else if (user.screen !== "unlock") {
+          navigate("/lock-screen", { replace: true });
+        } else {
+          navigate("/", { replace: true });
+        }
       } else {
-        navigate("/");
+        navigate("/recipe", { replace: true });
       }
-    } else {
-      navigate("/recipe");
-    }
-  }, [id, navigate]);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate]);
 
   return (
     <div className="flex justify-center items-center w-full h-screen bg-white">

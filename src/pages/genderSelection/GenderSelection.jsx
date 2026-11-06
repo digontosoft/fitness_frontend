@@ -1,3 +1,4 @@
+import { getCurrentUser, setCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
 import Loading from "@/components/common/Loading";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,7 @@ const GenderSelection = () => {
   const [loading, setLoading] = useState(false);
   const { setUserInfo } = useContext(UserInfoContext);
   const navigate = useNavigate();
-  const id = JSON.parse(localStorage.getItem("userInfo"));
+  const id = getCurrentUser();
 
   const handleGenderSelection = (value) => {
     setGender(value);
@@ -38,7 +39,7 @@ const GenderSelection = () => {
           if (response.status === 200) {
             const userData = response.data.data;
             setUserInfo(userData);
-            localStorage.setItem("userInfo", JSON.stringify(userData));
+            setCurrentUser(userData);
             navigate("/regulation");
           }
         });
