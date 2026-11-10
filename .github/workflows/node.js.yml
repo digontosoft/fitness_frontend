@@ -4,40 +4,105 @@ on:
   push:
     branches:
       - main
+  # "Run workflow" button on the Actions page, to redeploy without a new commit
+  workflow_dispatch:
+
+# Never run two frontend deploys at the same time
+concurrency:
+  group: deploy-frontend
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the code from GitHub repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      # Set up SSH key
-      - name: Set up SSH key
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+
+      # Fail here, before touching the server, if the app doesn't build
+      - name: Verify the build
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+          npm install --no-audit --no-fund
+          npm run build
+          test -f dist/index.html
 
-      # Deploy frontend via SSH
+      # SSH (port 22) is closed to the internet. This runner's own IP is let in
+      # for the deploy only, and removed again in the last step.
+      - name: Allow this runner to SSH
+        id: ssh_access
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEPLOY_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEPLOY_SECRET }}
+          AWS_DEFAULT_REGION: eu-north-1
+          SECURITY_GROUP: ${{ secrets.EC2_SECURITY_GROUP_ID }}
+        run: bash .github/scripts/ssh-access.sh allow
+
       - name: Deploy frontend
-        uses: appleboy/ssh-action@v0.1.9
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
+          command_timeout: 20m
           script: |
+            # Stop at the first failing command, so a failed step can never
+            # leave the live site half replaced behind a green job
+            set -eu
+
+            # One deploy at a time on this server (the backend deploy takes the same lock)
+            exec 9>/tmp/fitalal-deploy.lock
+            flock -w 900 9
+
             cd ~/frontend/fitness_frontend
-            git pull origin main
-            rm -rf node_modules package-lock.json dist
-            npm cache clean --force
-            npm install
+
+            # Whatever was changed by hand on the server is set aside (not lost):
+            # see it with `git stash list`. Commits made only on the server are
+            # kept on a server-local-* branch, then main becomes exactly GitHub's main.
+            if [ -f .git/MERGE_HEAD ]; then git merge --abort || git reset --merge; fi
+            git stash push -m "deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git fetch origin main
+            if ! git merge-base --is-ancestor HEAD origin/main; then
+              keep="server-local-$(date -u +%Y%m%d-%H%M%S)"
+              git branch "$keep" HEAD
+              echo "Commits found only on the server were kept on branch $keep"
+            fi
+            git checkout -B main origin/main
+
+            # The server's own package-lock.json is kept, so every deploy
+            # installs the same versions
+            npm install --no-audit --no-fund
+            rm -rf dist
             npm run build
-            sudo rm -rf /var/www/html/*
-            sudo cp -r dist/* /var/www/html/
-            sudo systemctl restart nginx
-      
+
+            # The live site is only replaced once the new build exists, and in
+            # one step; the previous build stays in /var/www/html.previous
+            test -f dist/index.html
+            sudo rm -rf /var/www/html.new /var/www/html.previous
+            sudo cp -r dist /var/www/html.new
+            # Hidden entries (e.g. .well-known for certificate renewals) carry over
+            for hidden in /var/www/html/.[!.]*; do
+              [ -e "$hidden" ] && sudo cp -a "$hidden" /var/www/html.new/
+            done
+            sudo mv /var/www/html /var/www/html.previous
+            sudo mv /var/www/html.new /var/www/html
+
+            test -f /var/www/html/index.html
+            echo "Frontend is live on commit $(git rev-parse --short HEAD)"
+
+      # Runs even when the deploy failed or was cancelled
+      - name: Remove this runner's SSH access
+        if: always() && steps.ssh_access.outputs.ip != ''
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_DEPLOY_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEPLOY_SECRET }}
+          AWS_DEFAULT_REGION: eu-north-1
+          SECURITY_GROUP: ${{ secrets.EC2_SECURITY_GROUP_ID }}
+          RUNNER_IP: ${{ steps.ssh_access.outputs.ip }}
+        run: bash .github/scripts/ssh-access.sh revoke
