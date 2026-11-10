@@ -85,7 +85,7 @@ import recipe from "./image/recipe.svg";
 import training from "./image/training.svg";
 import women1 from "./image/workout-women-1.png";
 import women2 from "./image/workout-women-2.png";
-import termfile from "./image/ntf.jpeg";
+import fitalTalMualemLogo from "./image/fital-tal-mualem-logo.png";
 import stomache from "./image/man-belly.svg";
 import exerciseLibrary from "./image/userimage/resizeiamge.svg";
 import aceptNewTrainee from"./image/adminimage/acceptnewtrainee.svg";
@@ -146,7 +146,7 @@ export {
   comunityManage,
   stomache,
   exerciseLibrary,
-  termfile,
+  fitalTalMualemLogo,
   ArrowBurger,
   ArrowDumbel, Biceps, blackLogo, bodyBuilder,
   bodyBuilder3, Calories, cartFive, cartFour, cartOne, cartSeven, cartSix, cartThree, cartTwo, course, Course, courseBg, courseFour, courseOne, courseThree, courseTwo, Ellipse, Ellipse88,

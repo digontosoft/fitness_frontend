@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/utils/authSession";
 import { base_url } from "@/api/baseUrl";
-import { termfile } from "@/assets";
+import TermsContent from "@/components/regulation/TermsContent";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -40,20 +40,14 @@ const Container = () => {
 
   return (
     <div className="w-full bg-white px-2 sm:px-4 md:px-8 py-2 sm:py-6 md:py-10">
-      <div className="max-w-6xl mx-auto">
-        {/* Terms and Conditions Image - Full Width with Button Overlay */}
-        <div className="w-full relative">
-          <img
-            src={termfile}
-            alt="Terms and Conditions"
-            className="w-full h-auto rounded-lg shadow-lg object-contain block"
-          />
-          
-          {/* Button - Overlay at bottom of image */}
-          <div className="absolute bottom-2 sm:bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 z-10">
+      <div className="max-w-3xl mx-auto">
+        <div className="w-full rounded-lg shadow-lg bg-white px-4 sm:px-8 md:px-12 py-6 sm:py-10">
+          <TermsContent />
+
+          <div className="flex justify-center mt-8">
             <button
-              type="submit"
-              className="px-4 sm:px-6 md:px-8 py-1.5 sm:py-2 md:py-2.5 bg-[#7994CB] text-white font-bold text-xs sm:text-sm md:text-base rounded-full transition duration-300 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg whitespace-nowrap"
+              type="button"
+              className="px-6 sm:px-8 py-2 sm:py-2.5 bg-[#7994CB] text-white font-bold text-sm md:text-base rounded-full transition duration-300 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg whitespace-nowrap"
               onClick={() => handleNextStep()}
               disabled={loading}
             >
