@@ -6,27 +6,28 @@ const Regulation = () => {
   return (
     <div className="min-h-screen py-12 relative overflow-hidden">
       <div
-        className="absolute top-24 inset-[24%] w-full h-full"
+        className="absolute top-24 inset-[24%] w-full h-full pointer-events-none"
         style={{
           backgroundImage: `url(${Ellipse93})`,
           backgroundRepeat: "no-repeat",
         }}
       ></div>
       <div
-        className="absolute top-48 inset-[30%] w-full h-full"
+        className="absolute top-48 inset-[30%] w-full h-full pointer-events-none"
         style={{
           backgroundImage: `url(${Ellipse92})`,
           backgroundRepeat: "no-repeat",
         }}
       ></div>
       <div
-        className="absolute top-40 inset-[89%] w-full h-full"
+        className="absolute top-40 inset-[89%] w-full h-full pointer-events-none"
         style={{
           backgroundImage: `url(${EllipseE8})`,
           backgroundRepeat: "no-repeat",
         }}
       ></div>
-      <div>
+      {/* Above the decorations, so they never cover the text or the button */}
+      <div className="relative z-10">
         <Title title={"אישור תקנון"} />
         {/* <Paragraph
           text={
